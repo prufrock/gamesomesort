@@ -27,6 +27,10 @@
 		631E2DB72DE90E3200A5F49C /* gamesomesort.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gamesomesort.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		631E2DC52DE90E3400A5F49C /* gamesomesortTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gamesomesortTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		631E2DCF2DE90E3400A5F49C /* gamesomesortUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gamesomesortUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		637CB1492DE9530600A2947D /* .editorconfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = .editorconfig; sourceTree = "<group>"; };
+		637CB14B2DE9531B00A2947D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		637CB14C2DE9532D00A2947D /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
+		637CB14D2DE9534B00A2947D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +79,10 @@
 		631E2DAE2DE90E3200A5F49C = {
 			isa = PBXGroup;
 			children = (
+				637CB14D2DE9534B00A2947D /* README.md */,
+				637CB14C2DE9532D00A2947D /* .swift-format */,
+				637CB14B2DE9531B00A2947D /* .gitignore */,
+				637CB1492DE9530600A2947D /* .editorconfig */,
 				631E2DB92DE90E3200A5F49C /* gamesomesort */,
 				631E2DC82DE90E3400A5F49C /* gamesomesortTests */,
 				631E2DD22DE90E3400A5F49C /* gamesomesortUITests */,
@@ -102,6 +110,7 @@
 				631E2DB32DE90E3200A5F49C /* Sources */,
 				631E2DB42DE90E3200A5F49C /* Frameworks */,
 				631E2DB52DE90E3200A5F49C /* Resources */,
+				637CB14E2DE955CF00A2947D /* swift format lint */,
 			);
 			buildRules = (
 			);
@@ -230,6 +239,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		637CB14E2DE955CF00A2947D /* swift format lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "swift format lint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "swift format lint --recursive --configuration=.swift-format \"${SRCROOT}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		631E2DB32DE90E3200A5F49C /* Sources */ = {
@@ -396,6 +428,7 @@
 				DEVELOPMENT_TEAM = VUGNZY6N5J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -416,10 +449,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2,3,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Debug;
@@ -435,6 +469,7 @@
 				DEVELOPMENT_TEAM = VUGNZY6N5J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -455,10 +490,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2,3,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
 			};
 			name = Release;
