@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+  let appCore: AppCore
   var body: some View {
     VStack {
-      MetalView()
+      MetalView(appCore: appCore)
     }
     .padding()
   }
 }
 
 #Preview {
-  ContentView()
+  ContentView(
+    appCore: AppCore.preview()
+  )
 }

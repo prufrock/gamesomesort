@@ -8,10 +8,12 @@
 import MetalKit
 
 class GameController: NSObject {
+  let appCore: AppCore
   var fps: Double = 0
-  var renderer: ClearColorRenderer
-  init(metalView: MTKView) {
-    renderer = ClearColorRenderer(metalView: metalView)
+  var renderer: RNDRClearColorRenderer
+  init(appCore: AppCore, metalView: MTKView) {
+    self.appCore = appCore
+    renderer = RNDRClearColorRenderer(metalView: metalView)
     super.init()
     metalView.delegate = self
     fps = Double(metalView.preferredFramesPerSecond)
@@ -21,10 +23,12 @@ class GameController: NSObject {
 
 extension GameController: MTKViewDelegate {
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-    renderer.mtkView(view, drawableSizeWillChange: size)
+    renderer.render(to: view)
   }
 
   func draw(in view: MTKView) {
-    renderer.draw(in: view)
+    appCore.sync(
+      RenderCommand(metalView: view)
+    )
   }
 }

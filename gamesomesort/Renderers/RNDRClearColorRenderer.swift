@@ -7,7 +7,7 @@
 
 import MetalKit
 
-class ClearColorRenderer: NSObject {
+class RNDRClearColorRenderer: NSObject, RNDRRenderer {
   static var device: MTLDevice!
   static var commandQueue: MTLCommandQueue!
   static var library: MTLLibrary!
@@ -35,18 +35,12 @@ class ClearColorRenderer: NSObject {
       blue: 1.0,
       alpha: 1.0
     )
-
-    mtkView(metalView, drawableSizeWillChange: metalView.drawableSize)
   }
 
-  func mtkView(
-    _ view: MTKView,
-    drawableSizeWillChange size: CGSize
-  ) {
-
+  func resize(view: MTKView, size: CGSize) {
   }
 
-  func draw(in view: MTKView) {
+  func render(to view: MTKView) {
     guard
       let commandBuffer = Self.commandQueue.makeCommandBuffer(),
       let _ = view.currentRenderPassDescriptor
