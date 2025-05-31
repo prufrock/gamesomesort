@@ -16,7 +16,8 @@ class ClearColorRenderer: NSObject {
   init(metalView: MTKView) {
     guard
       let device = MTLCreateSystemDefaultDevice(),
-      let commandQueue = device.makeCommandQueue() else {
+      let commandQueue = device.makeCommandQueue()
+    else {
       fatalError("GPU not available")
     }
     Self.device = device
@@ -32,9 +33,10 @@ class ClearColorRenderer: NSObject {
       red: 0.93,
       green: 0.97,
       blue: 1.0,
-      alpha: 1.0)
+      alpha: 1.0
+    )
 
-    mtkView(metalView,drawableSizeWillChange: metalView.drawableSize)
+    mtkView(metalView, drawableSizeWillChange: metalView.drawableSize)
   }
 
   func mtkView(
@@ -47,7 +49,8 @@ class ClearColorRenderer: NSObject {
   func draw(in view: MTKView) {
     guard
       let commandBuffer = Self.commandQueue.makeCommandBuffer(),
-      let descriptor = view.currentRenderPassDescriptor else {
+      let _ = view.currentRenderPassDescriptor
+    else {
       return
     }
 

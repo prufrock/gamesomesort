@@ -15,8 +15,8 @@ struct MetalView: View {
   var body: some View {
     MetalViewRepresentable(metalView: $metalView)
       .onAppear {
-      gameController = GameController(metalView: metalView)
-    }
+        gameController = GameController(metalView: metalView)
+      }
   }
 }
 
