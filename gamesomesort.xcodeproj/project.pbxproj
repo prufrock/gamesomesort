@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		631840E02DEE63FE008A8123 /* lecs-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 631840DF2DEE63FE008A8123 /* lecs-swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		631E2DC62DE90E3400A5F49C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -56,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				631840E02DEE63FE008A8123 /* lecs-swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +81,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		631840DE2DEE63FE008A8123 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		631E2DAE2DE90E3200A5F49C = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +98,7 @@
 				631E2DB92DE90E3200A5F49C /* gamesomesort */,
 				631E2DC82DE90E3400A5F49C /* gamesomesortTests */,
 				631E2DD22DE90E3400A5F49C /* gamesomesortUITests */,
+				631840DE2DEE63FE008A8123 /* Frameworks */,
 				631E2DB82DE90E3200A5F49C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -110,7 +123,7 @@
 				631E2DB32DE90E3200A5F49C /* Sources */,
 				631E2DB42DE90E3200A5F49C /* Frameworks */,
 				631E2DB52DE90E3200A5F49C /* Resources */,
-				637CB14E2DE955CF00A2947D /* swift format lint */,
+				637CB14E2DE955CF00A2947D /* swift format lint gamesomesort */,
 			);
 			buildRules = (
 			);
@@ -121,6 +134,7 @@
 			);
 			name = gamesomesort;
 			packageProductDependencies = (
+				631840DF2DEE63FE008A8123 /* lecs-swift */,
 			);
 			productName = gamesomesort;
 			productReference = 631E2DB72DE90E3200A5F49C /* gamesomesort.app */;
@@ -204,6 +218,9 @@
 			);
 			mainGroup = 631E2DAE2DE90E3200A5F49C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				631840DD2DEE63E9008A8123 /* XCLocalSwiftPackageReference "../lecs-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 631E2DB82DE90E3200A5F49C /* Products */;
 			projectDirPath = "";
@@ -241,7 +258,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		637CB14E2DE955CF00A2947D /* swift format lint */ = {
+		637CB14E2DE955CF00A2947D /* swift format lint gamesomesort */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -251,14 +268,14 @@
 			);
 			inputPaths = (
 			);
-			name = "swift format lint";
+			name = "swift format lint gamesomesort";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "swift format lint --recursive --configuration=.swift-format \"${SRCROOT}\"\n";
+			shellScript = "swift format lint --recursive --configuration=.swift-format ${SRCROOT}/gamesomesort*\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -629,6 +646,21 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		631840DD2DEE63E9008A8123 /* XCLocalSwiftPackageReference "../lecs-swift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../lecs-swift";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		631840DF2DEE63FE008A8123 /* lecs-swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 631840DD2DEE63E9008A8123 /* XCLocalSwiftPackageReference "../lecs-swift" */;
+			productName = "lecs-swift";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 631E2DAF2DE90E3200A5F49C /* Project object */;
 }

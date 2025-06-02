@@ -58,3 +58,7 @@ playground.xcworkspace
 # .swiftpm
 
 .build/
+
+# JetBrains
+.idea
+.fleet
