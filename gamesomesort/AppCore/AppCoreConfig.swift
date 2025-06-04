@@ -6,7 +6,15 @@
 //
 
 struct AppCoreConfig {
+  let platform: Platform
+
   let services: Services
+
+  // Configuring how the platform interacts with the Game
+  struct Platform {
+    let maximumTimeStep: Float  // the maximum length of a time step
+    let worldTimeStep: Float  // number of steps to take each frame
+  }
 
   struct Services {
     let renderService: AppCoreConfig.Services.RenderService

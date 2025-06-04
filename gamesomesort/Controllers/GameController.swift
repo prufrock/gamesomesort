@@ -13,6 +13,8 @@ class GameController: NSObject {
   private let view: MTKView
   private var renderer: RNDRClearColorRenderer
 
+  private var lastFrameTime = CACurrentMediaTime()
+
   private var game: GMGame?
 
   init(appCore: AppCore, metalView: MTKView) {
@@ -49,5 +51,18 @@ extension GameController: MTKViewDelegate {
     appCore.sync(
       RenderCommand(metalView: view)
     )
+
+    // run the clock
+    let time = CACurrentMediaTime()
+    // the time that has passed since the last frame, if it's longer than the maximumTimeStep just use that. If the
+    // elapsed time is greater than the maximum it can mess up collision checks.
+    let elapsedTime = min(appCore.config.platform.maximumTimeStep, Float(time - lastFrameTime))
+    // The number of steps that fit into the amount of time elapsed.
+    let worldSteps = (elapsedTime / appCore.config.platform.worldTimeStep).rounded(.up)
+    // The amount of time to move forward per calculation.
+    let timeStep = elapsedTime / worldSteps
+    for _ in 0..<Int(worldSteps) {
+      game?.update(timeStep: timeStep)
+    }
   }
 }

@@ -29,6 +29,10 @@ class AppCore {
   static func preview() -> AppCore {
     AppCore(
       AppCoreConfig(
+        platform: AppCoreConfig.Platform(
+          maximumTimeStep: 1 / 20,  // don't step bigger than this (minimum of 20 fps)
+          worldTimeStep: 1 / 120  // 120 steps a second
+        ),
         services: AppCoreConfig.Services(
           renderService: AppCoreConfig.Services.RenderService(
             type: .ersatz,
