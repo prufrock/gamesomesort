@@ -13,7 +13,6 @@ struct ContentView: View {
     VStack {
       MetalView(appCore: appCore)
     }
-    .padding()
   }
 }
 
