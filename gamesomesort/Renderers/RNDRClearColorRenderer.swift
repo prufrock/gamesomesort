@@ -7,11 +7,12 @@
 
 import MetalKit
 
+@MainActor
 class RNDRClearColorRenderer: NSObject, RNDRRenderer {
-  static var device: MTLDevice!
-  static var commandQueue: MTLCommandQueue!
-  static var library: MTLLibrary!
-  static var viewColorPixelFormat: MTLPixelFormat!
+  var device: MTLDevice!
+  var commandQueue: MTLCommandQueue!
+  var library: MTLLibrary!
+  var viewColorPixelFormat: MTLPixelFormat!
 
   init(metalView: MTKView) {
     guard
@@ -20,13 +21,13 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
     else {
       fatalError("GPU not available")
     }
-    Self.device = device
-    Self.commandQueue = commandQueue
+    self.device = device
+    self.commandQueue = commandQueue
     metalView.device = device
 
     let library = device.makeDefaultLibrary()
-    Self.library = library
-    Self.viewColorPixelFormat = metalView.colorPixelFormat
+    self.library = library
+    self.viewColorPixelFormat = metalView.colorPixelFormat
 
     super.init()
     metalView.clearColor = MTLClearColor(
@@ -42,7 +43,7 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
 
   func render(to view: MTKView) {
     guard
-      let commandBuffer = Self.commandQueue.makeCommandBuffer(),
+      let commandBuffer = self.commandQueue.makeCommandBuffer(),
       let _ = view.currentRenderPassDescriptor
     else {
       return

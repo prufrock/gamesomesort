@@ -8,6 +8,7 @@
 import Foundation
 import MetalKit
 
+@MainActor
 class RenderService {
   private let config: AppCoreConfig
   private var renderer: RNDRRenderer?

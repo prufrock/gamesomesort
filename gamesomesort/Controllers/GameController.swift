@@ -7,6 +7,7 @@
 
 import MetalKit
 
+@MainActor
 class GameController: NSObject {
   private let appCore: AppCore
   private var fps: Double = 0
@@ -17,6 +18,8 @@ class GameController: NSObject {
 
   private var game: GMGame?
 
+  // Going to run on the main actor for now, because I am not super concerned about multiple threads right. This is
+  // setting up the primary controller anyway.
   init(appCore: AppCore, metalView: MTKView) {
     self.appCore = appCore
     renderer = RNDRClearColorRenderer(metalView: metalView)

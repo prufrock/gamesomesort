@@ -8,6 +8,7 @@
 /// The AppCore serves the global state for the application to avoid singletons(if possible):
 ///  - manages the state of the application
 ///  - provides access to services
+@MainActor
 class AppCore {
   private var context: AppCoreContext
 

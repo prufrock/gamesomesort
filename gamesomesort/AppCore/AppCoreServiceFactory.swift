@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 5/30/25.
 
 /// Constructs services on demand from the config.
+@MainActor
 class AppCoreServiceFactory {
   private let config: AppCoreConfig
 
