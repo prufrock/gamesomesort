@@ -34,6 +34,9 @@ class AppCore {
             type: .ersatz,
             clearColor: (0.3, 0.0, 0.3, 1.0)
           ),
+          fileService: AppCoreConfig.Services.FileService(
+            levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json),
+          )
         )
       )
     )

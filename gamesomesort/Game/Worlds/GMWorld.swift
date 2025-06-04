@@ -21,6 +21,6 @@ class GMWorld {
   /// - Parameters:
   ///   - timeStep: The amount of time to move it forward.
   func update(timeStep: Float) {
-    print("world updated")
+//    print("world updated")
   }
 }
