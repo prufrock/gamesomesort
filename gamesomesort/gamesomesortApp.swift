@@ -17,7 +17,7 @@ struct gamesomesortApp: App {
       ),
       services: AppCoreConfig.Services(
         renderService: AppCoreConfig.Services.RenderService(
-          type: .clearColor,
+          type: .square,
           clearColor: (0.3, 0.0, 0.3, 1.0)
         ),
         fileService: AppCoreConfig.Services.FileService(

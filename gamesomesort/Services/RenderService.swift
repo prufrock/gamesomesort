@@ -34,6 +34,8 @@ class RenderService {
       newRenderer = RNDRErsatzRenderer()
     case .metal:
       newRenderer = RNDRErsatzRenderer()
+    case .square:
+      newRenderer = RNDRSquareRenderer(config: config)
     }
     renderer = newRenderer
     return newRenderer
@@ -51,5 +53,5 @@ struct RenderCommand: ServiceCommand {
 }
 
 enum RenderServiceType {
-  case clearColor, ersatz, metal
+  case clearColor, ersatz, metal, square
 }
