@@ -9,7 +9,7 @@ import MetalKit
 
 /// Does nothing, useful for testing in iCloud which doesn't support Metal.
 class RNDRErsatzRenderer: RNDRRenderer {
-  public func render(to view: MTKView) {
+  public func render(to renderDescriptor: RenderDescriptor) {
     //no-op
   }
 

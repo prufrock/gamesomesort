@@ -12,7 +12,6 @@ class RNDRSquareRenderer: RNDRRenderer {
   private let config: AppCoreConfig
   private let device: MTLDevice
   private let commandQueue: MTLCommandQueue
-//  private let library: MTLLibrary
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -35,26 +34,13 @@ class RNDRSquareRenderer: RNDRRenderer {
     }
 
     commandQueue = newCommandQueue
-
-//    guard let newLibrary = device.makeDefaultLibrary() else {
-//      fatalError(
-//        """
-//        What in the what?! The library couldn't be loaded.
-//        """
-//      )
-//    }
-//
-//    library = newLibrary
   }
 
   func resize(view: MTKView, size: CGSize) {
     // no-op
   }
 
-  func render(to view: MTKView) {
-    view.device = device
-    view.clearColor = config.services.renderService.mtlClearColor
-
+  func render(to renderDescriptor: RenderDescriptor) {
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
         """
@@ -63,7 +49,8 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-    guard let descriptor = view.currentRenderPassDescriptor, let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else {
+    guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderDescriptor.currentRenderPassDescriptor)
+    else {
       fatalError(
         """
         Dang it, couldn't create a command encoder.
@@ -71,16 +58,8 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-    guard let drawable = view.currentDrawable else {
-      fatalError(
-        """
-        Wakoom! Attempt to get the view's drawable and everything fell apart! Boo!
-        """
-      )
-    }
-
     encoder.endEncoding()
-    commandBuffer.present(drawable)
+    commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()
   }
 }

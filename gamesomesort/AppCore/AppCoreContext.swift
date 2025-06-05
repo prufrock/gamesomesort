@@ -9,7 +9,6 @@
 /// Right now this is:
 /// - configuration: strings and scalars describing how different objects operate.
 /// - services: objects that take commands and interact with the outside world.
-@MainActor
 class AppCoreContext {
   // The AppCoreConfig shouldn't change while the application is running.
   // If it does need to change, depending on the need, either AppCore could be reloaded or need to figure out a way

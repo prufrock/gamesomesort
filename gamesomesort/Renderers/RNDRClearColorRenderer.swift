@@ -7,52 +7,59 @@
 
 import MetalKit
 
-@MainActor
 class RNDRClearColorRenderer: NSObject, RNDRRenderer {
-  var device: MTLDevice!
-  var commandQueue: MTLCommandQueue!
-  var library: MTLLibrary!
-  var viewColorPixelFormat: MTLPixelFormat!
+  private let config: AppCoreConfig
+  private let device: MTLDevice
+  private let commandQueue: MTLCommandQueue
 
-  init(metalView: MTKView) {
-    guard
-      let device = MTLCreateSystemDefaultDevice(),
-      let commandQueue = device.makeCommandQueue()
-    else {
-      fatalError("GPU not available")
+  init(config: AppCoreConfig) {
+    self.config = config
+
+    guard let newDevice = MTLCreateSystemDefaultDevice() else {
+      fatalError(
+        """
+        I looked in the computer and didn't find a device...sorry
+        """
+      )
     }
-    self.device = device
-    self.commandQueue = commandQueue
-    metalView.device = device
+    device = newDevice
 
-    let library = device.makeDefaultLibrary()
-    self.library = library
-    self.viewColorPixelFormat = metalView.colorPixelFormat
+    guard let newCommandQueue = device.makeCommandQueue() else {
+      fatalError(
+        """
+        What?! No comand queue. Come on!
+        """
+      )
+    }
 
-    super.init()
-    metalView.clearColor = MTLClearColor(
-      red: 0.93,
-      green: 0.97,
-      blue: 1.0,
-      alpha: 1.0
-    )
+    commandQueue = newCommandQueue
   }
 
   func resize(view: MTKView, size: CGSize) {
+    // no-op
   }
 
-  func render(to view: MTKView) {
-    guard
-      let commandBuffer = self.commandQueue.makeCommandBuffer(),
-      let _ = view.currentRenderPassDescriptor
-    else {
-      return
+  func render(to renderDescriptor: RenderDescriptor) {
+
+    guard let commandBuffer = commandQueue.makeCommandBuffer() else {
+      fatalError(
+        """
+        Ugh, no command buffer. They must be fresh out!
+        """
+      )
     }
 
-    guard let drawable = view.currentDrawable else {
-      return
+    guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderDescriptor.currentRenderPassDescriptor)
+    else {
+      fatalError(
+        """
+        Dang it, couldn't create a command encoder.
+        """
+      )
     }
-    commandBuffer.present(drawable)
+
+    encoder.endEncoding()
+    commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()
   }
 }

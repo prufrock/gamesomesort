@@ -8,7 +8,6 @@
 import Foundation
 import MetalKit
 
-@MainActor
 class RenderService {
   private let config: AppCoreConfig
   private var renderer: RNDRRenderer?
@@ -18,18 +17,18 @@ class RenderService {
   }
 
   func sync(_ command: RenderCommand) {
-    let activeRenderer: RNDRRenderer = renderer ?? initRenderer(view: command.metalView)
+    let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
     activeRenderer.render(
-      to: command.metalView,
+      to: command.renderDescriptor,
     )
   }
 
-  private func initRenderer(view: MTKView) -> RNDRRenderer {
+  private func initRenderer() -> RNDRRenderer {
     let newRenderer: RNDRRenderer
     switch config.services.renderService.type {
     case .clearColor:
-      newRenderer = RNDRClearColorRenderer(metalView: view)
+      newRenderer = RNDRClearColorRenderer(config: config)
     case .ersatz:
       newRenderer = RNDRErsatzRenderer()
     case .metal:
@@ -43,15 +42,15 @@ class RenderService {
 }
 
 struct RenderCommand: ServiceCommand {
-  let metalView: MTKView
-
-  init(
-    metalView: MTKView,
-  ) {
-    self.metalView = metalView
-  }
+  let renderDescriptor: RenderDescriptor
 }
 
 enum RenderServiceType {
   case clearColor, ersatz, metal, square
+}
+
+struct RenderDescriptor {
+  let view: MTKView
+  let currentRenderPassDescriptor: MTLRenderPassDescriptor
+  let currentDrawable: MTLDrawable
 }

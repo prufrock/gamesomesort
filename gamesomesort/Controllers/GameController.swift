@@ -11,8 +11,6 @@ import MetalKit
 class GameController: NSObject {
   private let appCore: AppCore
   private var fps: Double = 0
-  private let view: MTKView
-  private var renderer: RNDRClearColorRenderer
 
   private var lastFrameTime = CACurrentMediaTime()
 
@@ -22,38 +20,57 @@ class GameController: NSObject {
   // setting up the primary controller anyway.
   init(appCore: AppCore, metalView: MTKView) {
     self.appCore = appCore
-    renderer = RNDRClearColorRenderer(metalView: metalView)
-    view = metalView
     super.init()
 
     metalView.delegate = self
-    fps = Double(view.preferredFramesPerSecond)
-    mtkView(view, drawableSizeWillChange: metalView.drawableSize)
+    fps = Double(metalView.preferredFramesPerSecond)
+    mtkView(metalView, drawableSizeWillChange: metalView.drawableSize)
   }
 
-  private func bootGame() {
+  private func bootGame(view: MTKView) {
     guard game == nil else { return }
 
     let levels: [GMTileMap] = [GMTileMap(GMMapData(tiles: [], width: 0, things: []), index: 0)]
 
     game = GMGame(config: appCore.config, levels: levels)
+  }
 
-    appCore.sync(RenderCommand(metalView: view))
+  // Moved this into the GameController, so the renderers don't have to be main actor isolated.
+  private func createRenderDescriptor(view: MTKView) -> RenderDescriptor {
+    view.device = MTLCreateSystemDefaultDevice()
+    view.clearColor = appCore.config.services.renderService.mtlClearColor
+
+    guard let descriptor = view.currentRenderPassDescriptor else {
+      fatalError(
+        """
+        Dang it, couldn't get a currentRenderPassDescriptor.
+        """
+      )
+    }
+
+    guard let drawable = view.currentDrawable else {
+      fatalError(
+        """
+        Wakoom! Attempt to get the view's drawable and everything fell apart! Boo!
+        """
+      )
+    }
+
+    return RenderDescriptor(
+      view: view,
+      currentRenderPassDescriptor: descriptor,
+      currentDrawable: drawable
+    )
   }
 }
 
 extension GameController: MTKViewDelegate {
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-    renderer.render(to: view)
+    //no-op
   }
 
   func draw(in view: MTKView) {
-    bootGame()
-
-    game?.update(timeStep: 0)
-    appCore.sync(
-      RenderCommand(metalView: view)
-    )
+    bootGame(view: view)
 
     // run the clock
     let time = CACurrentMediaTime()
@@ -67,5 +84,9 @@ extension GameController: MTKViewDelegate {
     for _ in 0..<Int(worldSteps) {
       game?.update(timeStep: timeStep)
     }
+
+    appCore.sync(
+      RenderCommand(renderDescriptor: createRenderDescriptor(view: view))
+    )
   }
 }
