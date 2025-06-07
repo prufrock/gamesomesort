@@ -13,6 +13,8 @@ class RNDRSquareRenderer: RNDRRenderer {
   private let device: MTLDevice
   private let commandQueue: MTLCommandQueue
 
+  private let indexedVertexPipeline: MTLRenderPipelineState
+
   init(config: AppCoreConfig) {
     self.config = config
 
@@ -32,6 +34,30 @@ class RNDRSquareRenderer: RNDRRenderer {
         """
       )
     }
+
+    guard let library = device.makeDefaultLibrary() else {
+      fatalError(
+        """
+        Heckin' A! The library didn't load!
+        """
+      )
+    }
+
+    indexedVertexPipeline = try! device.makeRenderPipelineState(
+      descriptor: MTLRenderPipelineDescriptor().apply {
+        $0.vertexFunction = library.makeFunction(name: "indexed_main")
+        $0.fragmentFunction = library.makeFunction(name: "fragment_main")
+        $0.colorAttachments[0].pixelFormat = .bgra8Unorm
+        $0.depthAttachmentPixelFormat = .depth32Float
+        $0.vertexDescriptor = MTLVertexDescriptor().apply {
+          // .position
+          $0.attributes[Position.index].format = MTLVertexFormat.float3
+          $0.attributes[Position.index].bufferIndex = VertexBuffer.index
+          $0.attributes[Position.index].offset = 0
+          $0.layouts[Position.index].stride = MemoryLayout<Float3>.stride
+        }
+      }
+    )
 
     commandQueue = newCommandQueue
   }
