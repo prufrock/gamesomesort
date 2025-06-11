@@ -15,6 +15,8 @@ class RNDRSquareRenderer: RNDRRenderer {
 
   private let indexedVertexPipeline: MTLRenderPipelineState
 
+  private var square = RNDRSquare()
+
   init(config: AppCoreConfig) {
     self.config = config
 
@@ -35,6 +37,8 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
+    commandQueue = newCommandQueue
+
     guard let library = device.makeDefaultLibrary() else {
       fatalError(
         """
@@ -47,8 +51,8 @@ class RNDRSquareRenderer: RNDRRenderer {
       descriptor: MTLRenderPipelineDescriptor().apply {
         $0.vertexFunction = library.makeFunction(name: "indexed_main")
         $0.fragmentFunction = library.makeFunction(name: "fragment_main")
+        // TODO: should be the viewColorPixelFormat
         $0.colorAttachments[0].pixelFormat = .bgra8Unorm
-        $0.depthAttachmentPixelFormat = .depth32Float
         $0.vertexDescriptor = MTLVertexDescriptor().apply {
           // .position
           $0.attributes[Position.index].format = MTLVertexFormat.float3
@@ -59,7 +63,7 @@ class RNDRSquareRenderer: RNDRRenderer {
       }
     )
 
-    commandQueue = newCommandQueue
+    square.initBuffers(device: device)
   }
 
   func resize(view: MTKView, size: CGSize) {
@@ -83,6 +87,48 @@ class RNDRSquareRenderer: RNDRRenderer {
         """
       )
     }
+
+    let aspect: Float = 1179 / 2277
+
+    var uniforms = RNDRUniforms(
+      viewMatrix: Float4x4.identity,
+      projectionMatrix: Float4x4.identity.perspectiveProjection(
+        fov: .pi / 2,
+        aspect: aspect,
+        nearPlane: 0.1,
+        farPlane: 20
+      )
+    )
+    var finalTransforms: [Float4x4] = [
+      Float4x4.identity.translate(position: Float3(0.0, 0.0, 1.0)).scaleUniform(0.25)
+    ]
+    encoder.setRenderPipelineState(indexedVertexPipeline)
+    encoder.setVertexBuffer(square.vertexBuffer, offset: 0, index: 0)
+    encoder.setTriangleFillMode(.fill)
+    encoder.setVertexBytes(
+      &uniforms,
+      length: MemoryLayout<RNDRUniforms>.stride,
+      index: UniformsBuffer.index
+    )
+    encoder.setVertexBytes(
+      &finalTransforms,
+      length: MemoryLayout<Float4x4>.stride * finalTransforms.count,
+      index: ModelMatrixBuffer.index
+    )
+
+    var fragmentColor = Float4(1, 0, 0, 1)
+
+    encoder.setFragmentBuffer(square.vertexBuffer, offset: 0, index: 0)
+    encoder.setFragmentBytes(&fragmentColor, length: MemoryLayout<Float4>.stride, index: 0)
+
+    encoder.drawIndexedPrimitives(
+      type: .triangle,
+      indexCount: square.indexes.count,
+      indexType: .uint16,
+      indexBuffer: square.indexBuffer!,
+      indexBufferOffset: 0,
+      instanceCount: 1
+    )
 
     encoder.endEncoding()
     commandBuffer.present(renderDescriptor.currentDrawable)
