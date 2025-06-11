@@ -29,6 +29,8 @@ class AppCoreContext {
     switch command {
     case let actual as RenderCommand:
       renderService.sync(actual)
+    case let actual as ResizeCommand:
+      renderService.sync(actual)
     default:
       fatalError("What in creation is this command!")
     }

@@ -13,7 +13,7 @@ class RNDRErsatzRenderer: RNDRRenderer {
     //no-op
   }
 
-  public func resize(view: MTKView, size: CGSize) {
+  public func resize(size: CGSize) {
     // no-op
   }
 }

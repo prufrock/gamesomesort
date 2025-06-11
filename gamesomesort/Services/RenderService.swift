@@ -24,6 +24,14 @@ class RenderService {
     )
   }
 
+  func sync(_ command: ResizeCommand) {
+    let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
+
+    activeRenderer.resize(
+      size: command.size
+    )
+  }
+
   private func initRenderer() -> RNDRRenderer {
     let newRenderer: RNDRRenderer
     switch config.services.renderService.type {
@@ -43,6 +51,10 @@ class RenderService {
 
 struct RenderCommand: ServiceCommand {
   let renderDescriptor: RenderDescriptor
+}
+
+struct ResizeCommand: ServiceCommand {
+  let size: CGSize
 }
 
 enum RenderServiceType {

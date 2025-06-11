@@ -66,7 +66,8 @@ class GameController: NSObject {
 
 extension GameController: MTKViewDelegate {
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-    print("size: \(size)")
+    print("GameController:mtkView(drawableSizeWillChange: size: \(size)")
+    appCore.sync(ResizeCommand(size: size))
   }
 
   func draw(in view: MTKView) {

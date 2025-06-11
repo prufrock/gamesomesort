@@ -9,6 +9,6 @@ import Foundation
 import MetalKit
 
 protocol RNDRRenderer {
-  func resize(view: MTKView, size: CGSize)
+  func resize(size: CGSize)
   func render(to renderDescriptor: RenderDescriptor)
 }

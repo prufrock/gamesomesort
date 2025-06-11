@@ -35,7 +35,7 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
     commandQueue = newCommandQueue
   }
 
-  func resize(view: MTKView, size: CGSize) {
+  func resize(size: CGSize) {
     // no-op
   }
 

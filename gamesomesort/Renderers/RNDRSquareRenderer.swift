@@ -17,6 +17,9 @@ class RNDRSquareRenderer: RNDRRenderer {
 
   private var square = RNDRSquare()
 
+  private var size: CGSize = .zero
+  private var aspectRatio: Float = 1.0
+
   init(config: AppCoreConfig) {
     self.config = config
 
@@ -66,8 +69,9 @@ class RNDRSquareRenderer: RNDRRenderer {
     square.initBuffers(device: device)
   }
 
-  func resize(view: MTKView, size: CGSize) {
-    // no-op
+  func resize(size newSize: CGSize) {
+    size = newSize
+    aspectRatio = size.aspectRatio().f
   }
 
   func render(to renderDescriptor: RenderDescriptor) {
@@ -88,13 +92,12 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-    let aspect: Float = 1179 / 2277
 
     var uniforms = RNDRUniforms(
       viewMatrix: Float4x4.identity,
       projectionMatrix: Float4x4.identity.perspectiveProjection(
         fov: .pi / 2,
-        aspect: aspect,
+        aspect: aspectRatio,
         nearPlane: 0.1,
         farPlane: 20
       )
