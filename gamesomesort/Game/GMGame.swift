@@ -13,10 +13,10 @@ class GMGame {
   private let levels: [GMTileMap]
   private let config: AppCoreConfig
 
-  init(config: AppCoreConfig, levels: [GMTileMap]) {
+  init(config: AppCoreConfig, levels: [GMTileMap], worldFactory: AppCore.GMWorldFactory) {
     self.config = config
     self.levels = levels
-    world = GMWorld(config: config, map: levels[0])
+    world = worldFactory.create(level: 0, levels: levels)
   }
 
   /// Update the game.

@@ -16,11 +16,13 @@ class AppCoreContext {
   let config: AppCoreConfig
   private let serviceFactory: AppCoreServiceFactory
   private let renderService: RenderService
+  private let fileService: FileService
 
   init(config: AppCoreConfig) {
     self.config = config
     serviceFactory = AppCoreServiceFactory(config)
     renderService = serviceFactory.createRenderService()
+    fileService = serviceFactory.createFileService()
   }
 
   func sync(_ command: ServiceCommand) {
@@ -31,6 +33,8 @@ class AppCoreContext {
       renderService.sync(actual)
     case let actual as ResizeCommand:
       renderService.sync(actual)
+    case let actual as LoadLevelFileCommand:
+      fileService.sync(actual)
     default:
       fatalError("What in creation is this command!")
     }

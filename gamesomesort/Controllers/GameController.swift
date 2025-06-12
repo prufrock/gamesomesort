@@ -30,9 +30,7 @@ class GameController: NSObject {
   private func bootGame(view: MTKView) {
     guard game == nil else { return }
 
-    let levels: [GMTileMap] = [GMTileMap(GMMapData(tiles: [], width: 0, things: []), index: 0)]
-
-    game = GMGame(config: appCore.config, levels: levels)
+    game = appCore.createGMGame()
   }
 
   // Moved this into the GameController, so the renderers don't have to be main actor isolated.

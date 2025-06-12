@@ -92,7 +92,6 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-
     var uniforms = RNDRUniforms(
       viewMatrix: Float4x4.identity,
       projectionMatrix: Float4x4.identity.perspectiveProjection(

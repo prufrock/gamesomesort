@@ -26,24 +26,28 @@ class AppCore {
     context.sync(command)
   }
 
+  func createGMGame() -> GMGame {
+    var levels: [GMTileMap] = []
+    sync(
+      LoadLevelFileCommand { maps in
+        levels = maps
+      }
+    )
+    return GMGame(config: config, levels: levels, worldFactory: GMWorldFactory(config: config))
+  }
+
   static func preview() -> AppCore {
     AppCore(
-      AppCoreConfig(
-        platform: AppCoreConfig.Platform(
-          maximumTimeStep: 1 / 20,  // don't step bigger than this (minimum of 20 fps)
-          worldTimeStep: 1 / 120  // 120 steps a second
-        ),
-        services: AppCoreConfig.Services(
-          renderService: AppCoreConfig.Services.RenderService(
-            type: .ersatz,
-            clearColor: (0.3, 0.0, 0.3, 1.0)
-          ),
-          fileService: AppCoreConfig.Services.FileService(
-            levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json),
-          )
-        )
-      )
+      AppCoreConfig.testDefault
     )
+  }
+
+  struct GMWorldFactory {
+    let config: AppCoreConfig
+
+    func create(level: Int, levels: [GMTileMap]) -> GMWorld {
+      GMWorld(config: config, map: levels[level])
+    }
   }
 }
 

@@ -8,10 +8,10 @@
 import Foundation
 
 class FileService {
-  fileprivate let config: AppCoreConfig
+  fileprivate let levelsFile: AppCoreConfig.Services.FileService.FileDescriptor
 
-  init(_ config: AppCoreConfig) {
-    self.config = config
+  init(levelsFile: AppCoreConfig.Services.FileService.FileDescriptor) {
+    self.levelsFile = levelsFile
   }
 
   func sync(_ command: LoadLevelFileCommand) {
@@ -24,8 +24,8 @@ struct LoadLevelFileCommand: ServiceCommand {
 
   func execute(fileService: FileService) {
     let jsonUrl = Bundle.main.url(
-      forResource: fileService.config.services.fileService.levelsFile.name,
-      withExtension: fileService.config.services.fileService.levelsFile.ext.rawValue
+      forResource: fileService.levelsFile.name,
+      withExtension: fileService.levelsFile.ext.rawValue
     )!
 
     let jsonData = try! Data(contentsOf: jsonUrl)
