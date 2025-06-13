@@ -33,7 +33,11 @@ class AppCore {
         levels = maps
       }
     )
-    return GMGame(config: config, levels: levels, worldFactory: GMWorldFactory(config: config))
+    return GMGame(config: config, levels: levels, worldFactory: createWorldFactory())
+  }
+
+  func createWorldFactory() -> GMWorldFactory {
+    GMWorldFactory(config: config)
   }
 
   static func preview() -> AppCore {
