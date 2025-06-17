@@ -10,6 +10,17 @@ struct AppCoreConfig {
 
   let services: Services
 
+  let game: Game
+
+  struct Game {
+
+    let world: World
+
+    struct World {
+      let ecsArchetypeSize: Int
+    }
+  }
+
   // Configuring how the platform interacts with the Game
   struct Platform {
     let maximumTimeStep: Float  // the maximum length of a time step
@@ -54,6 +65,9 @@ extension AppCoreConfig {
       fileService: AppCoreConfig.Services.FileService(
         levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json),
       )
+    ),
+    game: AppCoreConfig.Game(
+      world: AppCoreConfig.Game.World(ecsArchetypeSize: 500)
     )
   )
 }

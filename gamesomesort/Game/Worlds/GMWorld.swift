@@ -9,11 +9,12 @@ import lecs_swift
 
 class GMWorld {
   private let config: AppCoreConfig
-  public let ecs: LECSWorld = LECSCreateWorld(archetypeSize: 500)
+  public let ecs: LECSWorld
   private(set) var map: GMTileMap
 
-  init(config: AppCoreConfig, map: GMTileMap) {
+  init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap) {
     self.config = config
+    self.ecs = ecs
     self.map = map
   }
 

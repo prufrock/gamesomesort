@@ -23,6 +23,11 @@ struct gamesomesortApp: App {
         fileService: AppCoreConfig.Services.FileService(
           levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json),
         )
+      ),
+      game: AppCoreConfig.Game(
+        world: AppCoreConfig.Game.World(
+          ecsArchetypeSize: 500
+        )
       )
     )
   )

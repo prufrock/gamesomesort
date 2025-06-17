@@ -5,6 +5,8 @@
 //  Created by David Kanenwisher on 5/30/25.
 //
 
+import lecs_swift
+
 /// The AppCore serves the global state for the application to avoid singletons(if possible):
 ///  - manages the state of the application
 ///  - provides access to services
@@ -50,7 +52,11 @@ class AppCore {
     let config: AppCoreConfig
 
     func create(level: Int, levels: [GMTileMap]) -> GMWorld {
-      GMWorld(config: config, map: levels[level])
+      GMWorld(
+        config: config,
+        ecs: LECSCreateWorld(archetypeSize: 500),
+        map: levels[level]
+      )
     }
   }
 }
