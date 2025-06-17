@@ -52,10 +52,12 @@ class AppCore {
     let config: AppCoreConfig
 
     func create(level: Int, levels: [GMTileMap]) -> GMWorld {
-      GMWorld(
+      let level = levels[level]
+      return GMWorld(
         config: config,
         ecs: LECSCreateWorld(archetypeSize: 500),
-        map: levels[level]
+        map: level,
+        ecsStarter: GMStartFromTileMap(map: level)
       )
     }
   }

@@ -11,11 +11,17 @@ class GMWorld {
   private let config: AppCoreConfig
   public let ecs: LECSWorld
   private(set) var map: GMTileMap
+  private let ecsStarter: GMEcsStarter
 
-  init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap) {
+  init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap, ecsStarter: GMEcsStarter) {
     self.config = config
     self.ecs = ecs
     self.map = map
+    self.ecsStarter = ecsStarter
+  }
+
+  private func start() {
+    self.ecsStarter.start(ecs: self.ecs)
   }
 
   /// Update the game.
