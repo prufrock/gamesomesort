@@ -18,6 +18,8 @@ class GMWorld {
     self.ecs = ecs
     self.map = map
     self.ecsStarter = ecsStarter
+
+    self.start()
   }
 
   private func start() {

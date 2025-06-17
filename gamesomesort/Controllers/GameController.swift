@@ -14,7 +14,7 @@ class GameController: NSObject {
 
   private var lastFrameTime = CACurrentMediaTime()
 
-  private var game: GMGame?
+  private(set) var game: GMGame?
 
   // Going to run on the main actor for now, because I am not super concerned about multiple threads right. This is
   // setting up the primary controller anyway.
@@ -85,7 +85,10 @@ extension GameController: MTKViewDelegate {
     }
 
     appCore.sync(
-      RenderCommand(renderDescriptor: createRenderDescriptor(view: view))
+      RenderCommand(
+        renderDescriptor: createRenderDescriptor(view: view),
+        ecs: game!.world.ecs
+      )
     )
   }
 }

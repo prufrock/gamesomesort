@@ -18,8 +18,14 @@ struct GMStartFromTileMap: GMEcsStarter {
 
     for y in 0..<map.height {
       for x in 0..<map.width {
-        let button = ecs.createEntity("button\(x),\(y)")
-        ecs.addComponent(button, LECSPosition2d(Float2(x.f, y.f)))
+        let tile = map[x, y]
+        switch tile {
+        case .wall:
+          let button = ecs.createEntity("button\(x),\(y)")
+          ecs.addComponent(button, LECSPosition2d(Float2(x.f, y.f)))
+        default:
+          break
+        }
       }
     }
   }

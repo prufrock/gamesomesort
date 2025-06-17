@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import lecs_swift
 
 ///  At what point does the processing required to load the renderer require putting it behind a loading screen?
 class RNDRSquareRenderer: RNDRRenderer {
@@ -74,7 +75,7 @@ class RNDRSquareRenderer: RNDRRenderer {
     aspectRatio = size.aspectRatio().f
   }
 
-  func render(to renderDescriptor: RenderDescriptor) {
+  func render(ecs: LECSWorld, to renderDescriptor: RenderDescriptor) {
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
         """
@@ -92,6 +93,12 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
+    var positions: [LECSPosition2d] = []
+    ecs.select([LECSPosition2d.self]) { row, columns in
+      let position = row.component(at: 0, columns, LECSPosition2d.self)
+      positions.append(position)
+    }
+
     var uniforms = RNDRUniforms(
       viewMatrix: Float4x4.identity,
       projectionMatrix: Float4x4.identity.perspectiveProjection(
@@ -101,37 +108,39 @@ class RNDRSquareRenderer: RNDRRenderer {
         farPlane: 20
       )
     )
-    var finalTransforms: [Float4x4] = [
-      Float4x4.identity.translate(position: Float3(0.0, 0.0, 1.0)).scaleUniform(0.25)
-    ]
-    encoder.setRenderPipelineState(indexedVertexPipeline)
-    encoder.setVertexBuffer(square.vertexBuffer, offset: 0, index: 0)
-    encoder.setTriangleFillMode(.fill)
-    encoder.setVertexBytes(
-      &uniforms,
-      length: MemoryLayout<RNDRUniforms>.stride,
-      index: UniformsBuffer.index
-    )
-    encoder.setVertexBytes(
-      &finalTransforms,
-      length: MemoryLayout<Float4x4>.stride * finalTransforms.count,
-      index: ModelMatrixBuffer.index
-    )
+    let finalTransforms: [Float4x4] = positions.map {
+      Float4x4.identity.translate(position: Float3($0.x, $0.y, 1.0)).scaleUniform(0.25)
+    }
 
-    var fragmentColor = Float4(1, 0, 0, 1)
+    finalTransforms.chunked(into: 64).forEach { chunk in
+      encoder.setRenderPipelineState(indexedVertexPipeline)
+      encoder.setVertexBuffer(square.vertexBuffer, offset: 0, index: 0)
+      encoder.setTriangleFillMode(.fill)
+      encoder.setVertexBytes(
+        &uniforms,
+        length: MemoryLayout<RNDRUniforms>.stride,
+        index: UniformsBuffer.index
+      )
+      encoder.setVertexBytes(
+        chunk,
+        length: MemoryLayout<Float4x4>.stride * chunk.count,
+        index: ModelMatrixBuffer.index
+      )
 
-    encoder.setFragmentBuffer(square.vertexBuffer, offset: 0, index: 0)
-    encoder.setFragmentBytes(&fragmentColor, length: MemoryLayout<Float4>.stride, index: 0)
+      var fragmentColor = Float4(1, 0, 0, 1)
 
-    encoder.drawIndexedPrimitives(
-      type: .triangle,
-      indexCount: square.indexes.count,
-      indexType: .uint16,
-      indexBuffer: square.indexBuffer!,
-      indexBufferOffset: 0,
-      instanceCount: 1
-    )
+      encoder.setFragmentBuffer(square.vertexBuffer, offset: 0, index: 0)
+      encoder.setFragmentBytes(&fragmentColor, length: MemoryLayout<Float4>.stride, index: 0)
 
+      encoder.drawIndexedPrimitives(
+        type: .triangle,
+        indexCount: square.indexes.count,
+        indexType: .uint16,
+        indexBuffer: square.indexBuffer!,
+        indexBufferOffset: 0,
+        instanceCount: chunk.count
+      )
+    }
     encoder.endEncoding()
     commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()

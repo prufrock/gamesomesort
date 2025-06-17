@@ -9,7 +9,7 @@
 /// change World or interrupt it. If World wants to change itself, like change levels, or do something to Game it needs to
 /// pass a command up.
 class GMGame {
-  private let world: GMWorld
+  let world: GMWorld
   private let levels: [GMTileMap]
   private let config: AppCoreConfig
 

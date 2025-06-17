@@ -7,6 +7,7 @@
 
 import Foundation
 import MetalKit
+import lecs_swift
 
 class RenderService {
   private let config: AppCoreConfig
@@ -20,6 +21,7 @@ class RenderService {
     let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
     activeRenderer.render(
+      ecs: command.ecs,
       to: command.renderDescriptor,
     )
   }
@@ -51,6 +53,7 @@ class RenderService {
 
 struct RenderCommand: ServiceCommand {
   let renderDescriptor: RenderDescriptor
+  let ecs: LECSWorld
 }
 
 struct ResizeCommand: ServiceCommand {

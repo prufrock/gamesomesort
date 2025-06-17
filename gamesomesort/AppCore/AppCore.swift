@@ -24,7 +24,7 @@ class AppCore {
   }
 
   /// I'm hoping I can provide a sync and async facade over the commands services want to execute.
-  func sync(_ command: ServiceCommand) {
+  func sync(_ command: any ServiceCommand) {
     context.sync(command)
   }
 

@@ -27,4 +27,8 @@ public struct GMTileMap {
 
     self.index = index
   }
+
+  subscript(x: Int, y: Int) -> GMTile {
+    get { tiles[y * width + x] }
+  }
 }

@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import lecs_swift
 
 class RNDRClearColorRenderer: NSObject, RNDRRenderer {
   private let config: AppCoreConfig
@@ -39,7 +40,7 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
     // no-op
   }
 
-  func render(to renderDescriptor: RenderDescriptor) {
+  func render(ecs: LECSWorld, to renderDescriptor: RenderDescriptor) {
 
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
