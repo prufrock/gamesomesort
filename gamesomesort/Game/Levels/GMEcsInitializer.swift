@@ -29,6 +29,10 @@ struct GMStartFromTileMap: GMEcsStarter {
       }
     }
 
+    createPlayerCamera(ecs: ecs)
+  }
+
+  private func createPlayerCamera(ecs: LECSWorld) {
     let playerCamera = ecs.createEntity("playerCamera")
     ecs.addComponent(
       playerCamera,
@@ -39,6 +43,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       )
     )
     ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
-    ecs.addComponent(playerCamera, CTPosition3d(F3(0, 0, 0)))
+    ecs.addComponent(playerCamera, CTPosition3d(F3(8, 8, -10.0)))
+    ecs.addComponent(playerCamera, CTScale3d(F3(1.0, -1.0, 1.0)))
   }
 }

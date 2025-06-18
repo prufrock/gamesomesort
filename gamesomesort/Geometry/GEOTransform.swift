@@ -8,7 +8,7 @@
 struct GEOTransform {
   var position: Float3
   var quaternion: simd_quatf
-  var scale: Float
+  var scale: Float3
 }
 
 extension GEOTransform {

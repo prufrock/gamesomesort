@@ -18,7 +18,7 @@ extension GEOTransformable {
     get { transform.quaternion }
     set { transform.quaternion = newValue }
   }
-  var scale: Float {
+  var scale: Float3 {
     get { transform.scale }
     set { transform.scale = newValue }
   }

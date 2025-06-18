@@ -17,12 +17,17 @@ extension LECSWorld {
       let playerCamera = entity("playerCamera"),
       let cameraComponent = getComponent(playerCamera, CTCameraFirstPerson.self),
       let cameraPosition = getComponent(playerCamera, CTPosition3d.self),
-      let aspectRatio = getComponent(playerCamera, CTAspect.self)
+      let aspectRatio = getComponent(playerCamera, CTAspect.self),
+      let cameraScale = getComponent(playerCamera, CTScale3d.self)
     else {
       return nil
     }
     return GMCameraFirstPerson(
-      transform: GEOTransform(position: cameraPosition.position, quaternion: simd_quatf(Float4x4.identity), scale: 1.0),
+      transform: GEOTransform(
+        position: cameraPosition.position,
+        quaternion: simd_quatf(Float4x4.identity),
+        scale: cameraScale.scale
+      ),
       aspect: aspectRatio.aspect,
       fov: cameraComponent.fov,
       near: cameraComponent.nearPlane,

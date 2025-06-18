@@ -21,24 +21,48 @@ extension Float4x4 {
     )
   }
 
+  func scale(x: Float, y: Float, z: Float) -> Float4x4 {
+    self * Self.scale(x: x, y: y, z: z)
+  }
+
   static func scale(_ value: Float) -> Float4x4 {
     return Self.scale(x: value, y: value, z: value)
+  }
+
+  func scale(_ value: Float) -> Float4x4 {
+    self * Self.scale(x: value, y: value, z: value)
   }
 
   static func scale(_ value: Float3) -> Float4x4 {
     return Self.scale(x: value.x, y: value.y, z: value.z)
   }
 
+  func scale(_ value: Float3) -> Float4x4 {
+    self * Self.scale(x: value.x, y: value.y, z: value.z)
+  }
+
   static func scaleX(_ x: Float) -> Float4x4 {
     scale(x: x, y: 1, z: 1)
+  }
+
+  func scaleX(_ x: Float) -> Float4x4 {
+    self * Self.scaleX(x)
   }
 
   static func scaleY(_ y: Float) -> Float4x4 {
     scale(x: 1, y: y, z: 1)
   }
 
+  func scaleY(_ y: Float) -> Float4x4 {
+    self * Self.scaleY(y)
+  }
+
   static func scaleZ(_ z: Float) -> Float4x4 {
     scale(x: 1, y: 1, z: z)
+  }
+
+  func scaleZ(_ z: Float) -> Float4x4 {
+    self * Self.scaleZ(z)
   }
 
   static func scaleUniform(_ v: Float) -> Float4x4 {

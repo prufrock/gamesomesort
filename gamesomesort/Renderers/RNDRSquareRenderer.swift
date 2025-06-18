@@ -106,7 +106,7 @@ class RNDRSquareRenderer: RNDRRenderer {
       projectionMatrix: camera.projection
     )
     let finalTransforms: [Float4x4] = positions.map {
-      Float4x4.identity.translate(Float3($0.x, $0.y, 1.0)).scaleUniform(0.25)
+      Float4x4.identity.translate(Float3($0.x, $0.y, 1.0)).scaleUniform(0.5)
     }
 
     finalTransforms.chunked(into: 64).forEach { chunk in
