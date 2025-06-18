@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 6/2/25.
 //
 
+import Foundation
 import lecs_swift
 
 class GMWorld {
@@ -12,6 +13,8 @@ class GMWorld {
   public let ecs: LECSWorld
   private(set) var map: GMTileMap
   private let ecsStarter: GMEcsStarter
+  private var aspectRatioSystem: LECSSystemId? = nil
+  private var aspect: Float = 1.0
 
   init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap, ecsStarter: GMEcsStarter) {
     self.config = config
@@ -24,6 +27,9 @@ class GMWorld {
 
   private func start() {
     self.ecsStarter.start(ecs: self.ecs)
+    aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
+      return [CTAspect(aspect: self.aspect)]
+    }
   }
 
   /// Update the game.
@@ -31,5 +37,12 @@ class GMWorld {
   ///   - timeStep: The amount of time to move it forward.
   func update(timeStep: Float) {
     //print("world updated: \(timeStep)")
+  }
+
+  func update(size: CGSize) {
+    aspect = size.aspectRatio().f
+    if let aspectRatioSystem = self.aspectRatioSystem {
+      ecs.process(system: aspectRatioSystem)
+    }
   }
 }

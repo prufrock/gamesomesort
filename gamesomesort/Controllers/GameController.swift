@@ -31,6 +31,7 @@ class GameController: NSObject {
     guard game == nil else { return }
 
     game = appCore.createGMGame()
+    game?.update(size: view.drawableSize)
   }
 
   // Moved this into the GameController, so the renderers don't have to be main actor isolated.
@@ -65,6 +66,7 @@ class GameController: NSObject {
 extension GameController: MTKViewDelegate {
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
     print("GameController:mtkView(drawableSizeWillChange: size: \(size)")
+    game?.update(size: size)
     appCore.sync(ResizeCommand(size: size))
   }
 

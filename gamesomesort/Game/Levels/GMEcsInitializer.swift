@@ -28,5 +28,17 @@ struct GMStartFromTileMap: GMEcsStarter {
         }
       }
     }
+
+    let playerCamera = ecs.createEntity("playerCamera")
+    ecs.addComponent(
+      playerCamera,
+      CTCameraFirstPerson(
+        fov: .pi / 2,
+        nearPlane: 0.1,
+        farPlane: 20
+      )
+    )
+    ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
+    ecs.addComponent(playerCamera, CTPosition3d(F3(0, 0, 0)))
   }
 }

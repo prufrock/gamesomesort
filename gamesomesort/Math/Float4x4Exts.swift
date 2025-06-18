@@ -63,12 +63,71 @@ extension Float4x4 {
     )
   }
 
-  static func translate(position: Float3) -> Float4x4 {
+  static func translate(_ position: Float3) -> Float4x4 {
     Self.translate(x: position.x, y: position.y, z: position.z)
   }
 
-  func translate(position: Float3) -> Float4x4 {
-    self * Self.translate(position: position)
+  func translate(_ position: Float3) -> Float4x4 {
+    self * Self.translate(position)
+  }
+
+  // Rotate about the X axis with Euler angles
+  static func rotateX(_ angle: Float) -> Float4x4 {
+    Float4x4(
+      [1, 0, 0, 0],
+      [0, cos(angle), sin(angle), 0],
+      [0, -sin(angle), cos(angle), 0],
+      [0, 0, 0, 1]
+    )
+  }
+
+  func rotateX(_ angle: Float) -> Float4x4 {
+    self * Self.rotateX(angle)
+  }
+
+  // Rotate about the Y axes with Euler angles.
+  static func rotateY(_ angle: Float) -> Float4x4 {
+    Float4x4(
+      [cos(angle), 0, -sin(angle), 0],
+      [0, 1, 0, 0],
+      [sin(angle), 0, cos(angle), 0],
+      [0, 0, 0, 1]
+    )
+  }
+
+  func rotateY(_ angle: Float) -> Float4x4 {
+    self * Self.rotateY(angle)
+  }
+
+  // Rotate about the Z axes with Euler angles.
+  static func rotateZ(_ angle: Float) -> Float4x4 {
+    Float4x4(
+      [cos(angle), sin(angle), 0, 0],
+      [-sin(angle), cos(angle), 0, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1]
+    )
+  }
+
+  func rotateZ(_ angle: Float) -> Float4x4 {
+    self * Self.rotateZ(angle)
+  }
+
+  /// Rotate in heading pitch bank order
+  static func rotate(_ angles: Float3) -> Float4x4 {
+    rotateY(angles.y) * rotateX(angles.x) * rotateZ(angles.z)
+  }
+
+  func rotate(_ angles: Float3) -> Float4x4 {
+    self * Self.rotate(angles)
+  }
+
+  static func rotate(_ quaternion: simd_quatf) -> Float4x4 {
+    return Float4x4(quaternion)
+  }
+
+  func rotate(_ quaternion: simd_quatf) -> Float4x4 {
+    self * Self.rotate(quaternion)
   }
 
   static func perspectiveProjection(fov: Float, aspect: Float, nearPlane: Float, farPlane: Float) -> Float4x4 {
