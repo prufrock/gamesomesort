@@ -99,17 +99,7 @@ class RNDRSquareRenderer: RNDRRenderer {
       positions.append(position)
     }
 
-    let playerCamera = ecs.entity("playerCamera")!
-    let cameraComponent = ecs.getComponent(playerCamera, CTCameraFirstPerson.self)!
-    let cameraPosition = ecs.getComponent(playerCamera, CTPosition3d.self)!
-    let aspectRatio = ecs.getComponent(playerCamera, CTAspect.self)!
-    let camera = GMCameraFirstPerson(
-      transform: GEOTransform(position: cameraPosition.position, quaternion: simd_quatf(Float4x4.identity), scale: 1.0),
-      aspect: aspectRatio.aspect,
-      fov: cameraComponent.fov,
-      near: cameraComponent.nearPlane,
-      far: cameraComponent.farPlane
-    )
+    let camera = ecs.gmCameraFirstPersion("playerCamera")!
 
     var uniforms = RNDRUniforms(
       viewMatrix: camera.viewMatrix,
