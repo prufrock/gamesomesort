@@ -93,10 +93,19 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-    var positions: [LECSPosition2d] = []
+    var squares: [GMSquare] = []
     ecs.select([LECSPosition2d.self]) { row, columns in
       let position = row.component(at: 0, columns, LECSPosition2d.self)
-      positions.append(position)
+      squares.append(
+        GMSquare(
+          transform: GEOTransform(
+            position: F3(position.position, 1.0),
+            quaternion: simd_quatf(Float4x4.identity),
+            scale: Float3(0.5, 0.5, 0.5)
+          ),
+          color: GMColorA(.red)
+        )
+      )
     }
 
     let camera = ecs.gmCameraFirstPersion("playerCamera")!
@@ -105,9 +114,7 @@ class RNDRSquareRenderer: RNDRRenderer {
       viewMatrix: camera.viewMatrix,
       projectionMatrix: camera.projection
     )
-    let finalTransforms: [Float4x4] = positions.map {
-      Float4x4.identity.translate(Float3($0.x, $0.y, 1.0)).scaleUniform(0.5)
-    }
+    let finalTransforms: [Float4x4] = squares.map { $0.transform.modelMatrix }
 
     finalTransforms.chunked(into: 64).forEach { chunk in
       encoder.setRenderPipelineState(indexedVertexPipeline)
