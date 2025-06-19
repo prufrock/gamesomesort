@@ -7,5 +7,11 @@
 
 import simd
 
-public typealias Float2 = SIMD2<Float>
-public typealias F2 = Float2
+typealias Float2 = SIMD2<Float>
+typealias F2 = Float2
+
+extension Float2 {
+  var length: Float {
+    (x * x + y * y).squareRoot()
+  }
+}
