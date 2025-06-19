@@ -16,7 +16,7 @@ class RNDRSquareRenderer: RNDRRenderer {
 
   private let indexedVertexPipeline: MTLRenderPipelineState
 
-  private var square = RNDRSquare()
+  private var squareRenderer = RNDRSquare()
 
   private var size: CGSize = .zero
   private var aspectRatio: Float = 1.0
@@ -67,7 +67,7 @@ class RNDRSquareRenderer: RNDRRenderer {
       }
     )
 
-    square.initBuffers(device: device)
+    squareRenderer.initBuffers(device: device)
   }
 
   func resize(size newSize: CGSize) {
@@ -93,20 +93,23 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-    var squares: [GMSquare] = []
+    squareRenderer.startFrame()
+
+    var squareCount = 0
     ecs.select([LECSPosition2d.self, CTColor.self]) { row, columns in
       let position = row.component(at: 0, columns, LECSPosition2d.self)
       let color = row.component(at: 1, columns, CTColor.self)
-      squares.append(
-        GMSquare(
-          transform: GEOTransform(
-            position: F3(position.position, 1.0),
-            quaternion: simd_quatf(Float4x4.identity),
-            scale: Float3(0.5, 0.5, 0.5)
-          ),
-          color: color.color
-        )
+      let square = GMSquare(
+        transform: GEOTransform(
+          position: F3(position.position, 1.0),
+          quaternion: simd_quatf(Float4x4.identity),
+          scale: Float3(0.5, 0.5, 0.5)
+        ),
+        color: color.color
       )
+
+      squareRenderer.updateBufferItem(square: square)
+      squareCount += 1
     }
 
     let camera = ecs.gmCameraFirstPersion("playerCamera")!
@@ -117,40 +120,29 @@ class RNDRSquareRenderer: RNDRRenderer {
     )
 
     encoder.setRenderPipelineState(indexedVertexPipeline)
-    encoder.setVertexBuffer(square.vertexBuffer, offset: 0, index: 0)
+    encoder.setVertexBuffer(squareRenderer.vertexBuffer, offset: 0, index: 0)
     encoder.setTriangleFillMode(.fill)
     encoder.setVertexBytes(
       &uniforms,
       length: MemoryLayout<RNDRUniforms>.stride,
       index: UniformsBuffer.index
     )
-    // Switch to a re-usable buffer
-    let modelMatrixBuffer = device.makeBuffer(
-      bytes: squares.map { $0.transform.modelMatrix },
-      length: squares.count * MemoryLayout<Float4x4>.stride,
-      options: [.storageModeShared]
-    )
+
     encoder.setVertexBuffer(
-      modelMatrixBuffer,
+      squareRenderer.modelMatrixBuffer,
       offset: 0,
       index: Int(ModelMatrixBuffer.rawValue)
     )
 
-    // Switch to a re-usable buffer
-    let colorBuffer = device.makeBuffer(
-      bytes: squares.map { $0.color.F4 },
-      length: squares.count * MemoryLayout<Float4>.stride,
-      options: [.storageModeShared]
-    )
-    encoder.setFragmentBuffer(colorBuffer, offset: 0, index: Int(ColorBuffer.rawValue))
+    encoder.setFragmentBuffer(squareRenderer.colorBuffer, offset: 0, index: Int(ColorBuffer.rawValue))
 
     encoder.drawIndexedPrimitives(
       type: .triangle,
-      indexCount: square.indexes.count,
+      indexCount: squareRenderer.indexes.count,
       indexType: .uint16,
-      indexBuffer: square.indexBuffer!,
+      indexBuffer: squareRenderer.indexBuffer!,
       indexBufferOffset: 0,
-      instanceCount: squares.count
+      instanceCount: squareCount
     )
     encoder.endEncoding()
     commandBuffer.present(renderDescriptor.currentDrawable)
