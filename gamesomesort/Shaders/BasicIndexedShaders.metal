@@ -44,6 +44,5 @@ fragment float4 fragment_main(
                               constant float4 &color [[buffer(0)]],
                               constant float4 *colorList [[buffer(ColorBuffer)]]
                               ) {
-  float4 instanceColor = colorList[in.iid];
   return colorList[in.iid];
 }

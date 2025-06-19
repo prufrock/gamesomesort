@@ -116,37 +116,42 @@ class RNDRSquareRenderer: RNDRRenderer {
       projectionMatrix: camera.projection
     )
 
-    squares.chunked(into: 64).forEach { chunk in
-      encoder.setRenderPipelineState(indexedVertexPipeline)
-      encoder.setVertexBuffer(square.vertexBuffer, offset: 0, index: 0)
-      encoder.setTriangleFillMode(.fill)
-      encoder.setVertexBytes(
-        &uniforms,
-        length: MemoryLayout<RNDRUniforms>.stride,
-        index: UniformsBuffer.index
-      )
-      encoder.setVertexBytes(
-        chunk.map { $0.transform.modelMatrix },
-        length: MemoryLayout<Float4x4>.stride * chunk.count,
-        index: ModelMatrixBuffer.index
-      )
+    encoder.setRenderPipelineState(indexedVertexPipeline)
+    encoder.setVertexBuffer(square.vertexBuffer, offset: 0, index: 0)
+    encoder.setTriangleFillMode(.fill)
+    encoder.setVertexBytes(
+      &uniforms,
+      length: MemoryLayout<RNDRUniforms>.stride,
+      index: UniformsBuffer.index
+    )
+    // Switch to a re-usable buffer
+    let modelMatrixBuffer = device.makeBuffer(
+      bytes: squares.map { $0.transform.modelMatrix },
+      length: squares.count * MemoryLayout<Float4x4>.stride,
+      options: [.storageModeShared]
+    )
+    encoder.setVertexBuffer(
+      modelMatrixBuffer,
+      offset: 0,
+      index: Int(ModelMatrixBuffer.rawValue)
+    )
 
-      let colorBuffer = device.makeBuffer(
-        bytes: chunk.map { $0.color.F4 },
-        length: chunk.count * MemoryLayout<Float4>.stride,
-        options: []
-      )
-      encoder.setFragmentBuffer(colorBuffer, offset: 0, index: Int(ColorBuffer.rawValue))
+    // Switch to a re-usable buffer
+    let colorBuffer = device.makeBuffer(
+      bytes: squares.map { $0.color.F4 },
+      length: squares.count * MemoryLayout<Float4>.stride,
+      options: [.storageModeShared]
+    )
+    encoder.setFragmentBuffer(colorBuffer, offset: 0, index: Int(ColorBuffer.rawValue))
 
-      encoder.drawIndexedPrimitives(
-        type: .triangle,
-        indexCount: square.indexes.count,
-        indexType: .uint16,
-        indexBuffer: square.indexBuffer!,
-        indexBufferOffset: 0,
-        instanceCount: chunk.count
-      )
-    }
+    encoder.drawIndexedPrimitives(
+      type: .triangle,
+      indexCount: square.indexes.count,
+      indexType: .uint16,
+      indexBuffer: square.indexBuffer!,
+      indexBufferOffset: 0,
+      instanceCount: squares.count
+    )
     encoder.endEncoding()
     commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()
