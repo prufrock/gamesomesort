@@ -42,6 +42,14 @@ enum GMColor: Int {
   func bFloat() -> Float {
     Float(b()) / 255.0
   }
+
+  func a() -> GMColorA {
+    GMColorA(self)
+  }
+
+  func a(_ a: Float) -> GMColorA {
+    GMColorA(self, a: a)
+  }
 }
 
 extension F3 {
@@ -76,6 +84,10 @@ class GMColorA {
   let g: Float
   let b: Float
   let a: Float
+
+  var F4: F4 {
+    Float4(r, g, b, a)
+  }
 
   init(r: Float, g: Float, b: Float, a: Float) {
     self.r = r

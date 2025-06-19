@@ -94,8 +94,9 @@ class RNDRSquareRenderer: RNDRRenderer {
     }
 
     var squares: [GMSquare] = []
-    ecs.select([LECSPosition2d.self]) { row, columns in
+    ecs.select([LECSPosition2d.self, CTColor.self]) { row, columns in
       let position = row.component(at: 0, columns, LECSPosition2d.self)
+      let color = row.component(at: 1, columns, CTColor.self)
       squares.append(
         GMSquare(
           transform: GEOTransform(
@@ -103,7 +104,7 @@ class RNDRSquareRenderer: RNDRRenderer {
             quaternion: simd_quatf(Float4x4.identity),
             scale: Float3(0.5, 0.5, 0.5)
           ),
-          color: GMColorA(.red)
+          color: color.color
         )
       )
     }
@@ -114,9 +115,8 @@ class RNDRSquareRenderer: RNDRRenderer {
       viewMatrix: camera.viewMatrix,
       projectionMatrix: camera.projection
     )
-    let finalTransforms: [Float4x4] = squares.map { $0.transform.modelMatrix }
 
-    finalTransforms.chunked(into: 64).forEach { chunk in
+    squares.chunked(into: 64).forEach { chunk in
       encoder.setRenderPipelineState(indexedVertexPipeline)
       encoder.setVertexBuffer(square.vertexBuffer, offset: 0, index: 0)
       encoder.setTriangleFillMode(.fill)
@@ -126,15 +126,17 @@ class RNDRSquareRenderer: RNDRRenderer {
         index: UniformsBuffer.index
       )
       encoder.setVertexBytes(
-        chunk,
+        chunk.map { $0.transform.modelMatrix },
         length: MemoryLayout<Float4x4>.stride * chunk.count,
         index: ModelMatrixBuffer.index
       )
 
-      var fragmentColor = Float4(1, 0, 0, 1)
-
-      encoder.setFragmentBuffer(square.vertexBuffer, offset: 0, index: 0)
-      encoder.setFragmentBytes(&fragmentColor, length: MemoryLayout<Float4>.stride, index: 0)
+      let colorBuffer = device.makeBuffer(
+        bytes: chunk.map { $0.color.F4 },
+        length: chunk.count * MemoryLayout<Float4>.stride,
+        options: []
+      )
+      encoder.setFragmentBuffer(colorBuffer, offset: 0, index: Int(ColorBuffer.rawValue))
 
       encoder.drawIndexedPrimitives(
         type: .triangle,

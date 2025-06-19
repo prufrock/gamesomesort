@@ -19,6 +19,7 @@ struct RNDRVertexIn
 struct RNDRVertexOut {
   float4 position [[position]];
   float point_size [[point_size]];
+  uint iid;
 };
 
 vertex RNDRVertexOut indexed_main(
@@ -31,12 +32,18 @@ vertex RNDRVertexOut indexed_main(
 {
   RNDRVertexOut vertex_out {
     .position = uniforms.projectionMatrix * uniforms.viewMatrix * indexedModelMatrix[iid] * float4(in.position, 1),
-    .point_size = 20.0
+    .point_size = 20.0,
+    .iid = iid
   };
 
   return vertex_out;
 }
 
-fragment float4 fragment_main(constant float4 &color [[buffer(0)]]) {
-  return color;
+fragment float4 fragment_main(
+                              RNDRVertexOut in [[stage_in]],
+                              constant float4 &color [[buffer(0)]],
+                              constant float4 *colorList [[buffer(ColorBuffer)]]
+                              ) {
+  float4 instanceColor = colorList[in.iid];
+  return colorList[in.iid];
 }

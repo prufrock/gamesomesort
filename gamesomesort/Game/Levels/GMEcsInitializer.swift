@@ -23,8 +23,11 @@ struct GMStartFromTileMap: GMEcsStarter {
         case .wall:
           let button = ecs.createEntity("button\(x),\(y)")
           ecs.addComponent(button, LECSPosition2d(Float2(x.f, y.f)))
-        default:
-          break
+          ecs.addComponent(button, CTColor(.green))
+        case .floor:
+          let floor = ecs.createEntity("floor\(x),\(y)")
+          ecs.addComponent(floor, LECSPosition2d(Float2(x.f, y.f)))
+          ecs.addComponent(floor, CTColor(.blue))
         }
       }
     }
