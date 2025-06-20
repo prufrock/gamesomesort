@@ -96,14 +96,15 @@ class RNDRSquareRenderer: RNDRRenderer {
     squareRenderer.startFrame()
 
     var squareCount = 0
-    ecs.select([LECSPosition2d.self, CTColor.self]) { row, columns in
+    ecs.select([LECSPosition2d.self, CTColor.self, CTRadius.self]) { row, columns in
       let position = row.component(at: 0, columns, LECSPosition2d.self)
       let color = row.component(at: 1, columns, CTColor.self)
+      let radius = row.component(at: 2, columns, CTRadius.self)
       let square = GMSquare(
         transform: GEOTransform(
           position: F3(position.position, 1.0),
           quaternion: simd_quatf(Float4x4.identity),
-          scale: Float3(0.5, 0.5, 0.5)
+          scale: Float3(repeating: radius.radius)
         ),
         color: color.color
       )
