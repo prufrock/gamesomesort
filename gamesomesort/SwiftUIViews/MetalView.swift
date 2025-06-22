@@ -14,13 +14,17 @@ struct MetalView: View {
   @State private var gameController: GameController?
 
   var body: some View {
-    MetalViewRepresentable(metalView: $metalView)
-      .onAppear {
-        gameController = GameController(
-          appCore: appCore,
-          metalView: metalView
-        )
-      }
+    ZStack {
+      MetalViewRepresentable(metalView: $metalView)
+        .onAppear {
+          gameController = GameController(
+            appCore: appCore,
+            metalView: metalView
+          )
+        }
+    }.onTapGesture { location in
+      gameController?.updateTapLocation(location)
+    }
   }
 }
 
@@ -52,8 +56,4 @@ struct MetalViewRepresentable: ViewRepresentable {
   func updateMetalView() {
 
   }
-}
-
-#Preview {
-  MetalView(appCore: AppCore.preview())
 }

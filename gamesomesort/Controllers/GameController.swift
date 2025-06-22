@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import Combine
 
 @MainActor
 class GameController: NSObject {
@@ -15,16 +16,31 @@ class GameController: NSObject {
   private var lastFrameTime = CACurrentMediaTime()
 
   private(set) var game: GMGame?
+  private var tapLocation: CGPoint = .zero
+
+  private var tapLocationSubject: PassthroughSubject<CGPoint, Never> = PassthroughSubject<CGPoint, Never>()
+  private var cancellables = Set<AnyCancellable>()
 
   // Going to run on the main actor for now, because I am not super concerned about multiple threads right. This is
   // setting up the primary controller anyway.
   init(appCore: AppCore, metalView: MTKView) {
     self.appCore = appCore
     super.init()
+    setupTapLocationSubscribers()
 
     metalView.delegate = self
     fps = Double(metalView.preferredFramesPerSecond)
     mtkView(metalView, drawableSizeWillChange: metalView.drawableSize)
+  }
+
+  private func setupTapLocationSubscribers() {
+    tapLocationSubject
+      .debounce(for: .milliseconds(appCore.config.game.tapDelay), scheduler: RunLoop.main)
+      .sink { location in
+        self.tapLocation = location
+        print("recieved tap at \(location)")
+      }
+      .store(in: &cancellables)
   }
 
   private func bootGame(view: MTKView) {
@@ -60,6 +76,10 @@ class GameController: NSObject {
       currentRenderPassDescriptor: descriptor,
       currentDrawable: drawable
     )
+  }
+
+  func updateTapLocation(_ location: CGPoint) {
+    tapLocationSubject.send(location)
   }
 }
 

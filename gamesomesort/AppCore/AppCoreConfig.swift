@@ -14,6 +14,7 @@ struct AppCoreConfig {
 
   struct Game {
 
+    let tapDelay: Int = 50
     let world: World
 
     struct World {
