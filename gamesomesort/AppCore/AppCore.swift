@@ -42,6 +42,10 @@ class AppCore {
     GMWorldFactory(config: config)
   }
 
+  func createControllerInput() -> ControllerInput {
+    ControllerInput(config: config)
+  }
+
   static func preview() -> AppCore {
     AppCore(
       AppCoreConfig.testDefault

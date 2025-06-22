@@ -19,6 +19,7 @@ struct MetalView: View {
         .onAppear {
           gameController = GameController(
             appCore: appCore,
+            controllerInput: appCore.createControllerInput(),
             metalView: metalView
           )
         }
