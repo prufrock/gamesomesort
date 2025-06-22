@@ -11,7 +11,7 @@ import MetalKit
 struct MetalView: View {
   let appCore: AppCore
   @State private var metalView = MTKView()
-  @State private var gameController: GameController?
+  @State private var gameController: ControllerGame?
 
   var body: some View {
     ZStack {

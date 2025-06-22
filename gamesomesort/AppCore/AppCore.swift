@@ -48,7 +48,7 @@ class AppCore {
   }
 
   @MainActor
-  func createControllerGame(view: MTKView) -> GameController {
+  func createControllerGame(view: MTKView) -> ControllerGame {
     .init(
       appCore: self,
       controllerInput: createControllerInput(),
