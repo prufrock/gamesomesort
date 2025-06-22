@@ -6,6 +6,7 @@
 //
 
 import lecs_swift
+import MetalKit
 
 /// The AppCore serves the global state for the application to avoid singletons(if possible):
 ///  - manages the state of the application
@@ -44,6 +45,15 @@ class AppCore {
 
   func createControllerInput() -> ControllerInput {
     ControllerInput(config: config)
+  }
+
+  @MainActor
+  func createControllerGame(view: MTKView) -> GameController {
+    .init(
+      appCore: self,
+      controllerInput: createControllerInput(),
+      metalView: view
+    )
   }
 
   static func preview() -> AppCore {

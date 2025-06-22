@@ -17,11 +17,7 @@ struct MetalView: View {
     ZStack {
       MetalViewRepresentable(metalView: $metalView)
         .onAppear {
-          gameController = GameController(
-            appCore: appCore,
-            controllerInput: appCore.createControllerInput(),
-            metalView: metalView
-          )
+          gameController = appCore.createControllerGame(view: metalView)
         }
     }.onTapGesture { location in
       gameController?.updateTapLocation(location)
