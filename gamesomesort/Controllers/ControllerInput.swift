@@ -17,6 +17,7 @@ class ControllerInput {
 
   private var lastTouchedTime: Double = 0.0
   private var touchCoords: F2 = F2()
+  private var touched: Bool = false
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -46,6 +47,7 @@ class ControllerInput {
           guard let self else { return }
           self.touchCoords = F2(location.x.f, location.y.f)
           self.lastTouchedTime = CACurrentMediaTime()
+          self.touched = true
           print("recieved tap at \(location)")
         }
       )
@@ -55,12 +57,17 @@ class ControllerInput {
     tapLocationSubject.send(location)
   }
 
-  func asGMGameInput() -> GMGameInput {
-    .init(touchCoords: touchCoords, lastTouchedTime: lastTouchedTime)
+  func update() -> GMGameInput {
+    defer {
+      touched = false
+    }
+
+    return GMGameInput(tapLocation: touchCoords, lastTapTime: lastTouchedTime, tapped: touched)
   }
 }
 
 struct GMGameInput {
-  var touchCoords: F2
-  var lastTouchedTime: Double = 0.0
+  let tapLocation: F2
+  let lastTapTime: Double
+  let tapped: Bool
 }

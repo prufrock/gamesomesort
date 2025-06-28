@@ -24,8 +24,8 @@ class GMGame {
   /// Update the game.
   /// - Parameters:
   ///   - timeStep: The amount of time to move forward.
-  func update(timeStep: Float) {
-    world.update(timeStep: timeStep)
+  func update(timeStep: Float, input: GMGameInput) {
+    world.update(timeStep: timeStep, input: input)
   }
 
   func update(size: CGSize) {

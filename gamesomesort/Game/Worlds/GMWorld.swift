@@ -35,7 +35,10 @@ class GMWorld {
   /// Update the game.
   /// - Parameters:
   ///   - timeStep: The amount of time to move it forward.
-  func update(timeStep: Float) {
+  func update(timeStep: Float, input: GMGameInput) {
+    if input.tapped {
+      print("tap at \(input.tapLocation)")
+    }
     //print("world updated: \(timeStep)")
   }
 

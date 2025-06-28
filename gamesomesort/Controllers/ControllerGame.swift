@@ -96,7 +96,8 @@ extension ControllerGame: MTKViewDelegate {
     // The amount of time to move forward per calculation.
     let timeStep = elapsedTime / worldSteps
     for _ in 0..<Int(worldSteps) {
-      game?.update(timeStep: timeStep)
+      let input = controllerInput.update()
+      game?.update(timeStep: timeStep, input: input)
     }
 
     appCore.sync(
