@@ -18,6 +18,7 @@ class ControllerInput {
   private var lastTouchedTime: Double = 0.0
   private var touchCoords: F2 = F2()
   private var touched: Bool = false
+  private var events: any CTSQueue<GMGameInput.Events> = CTSQueueArray<GMGameInput.Events>()
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -48,6 +49,7 @@ class ControllerInput {
           self.touchCoords = F2(location.x.f, location.y.f)
           self.lastTouchedTime = CACurrentMediaTime()
           self.touched = true
+          _ = self.events.enqueue(.tap(tapLocation: self.touchCoords, lastTapTime: self.lastTouchedTime))
           print("recieved tap at \(location)")
         }
       )
@@ -60,9 +62,10 @@ class ControllerInput {
   func update() -> GMGameInput {
     defer {
       touched = false
+      events = CTSQueueArray<GMGameInput.Events>()
     }
 
-    return GMGameInput(tapLocation: touchCoords, lastTapTime: lastTouchedTime, tapped: touched)
+    return GMGameInput(tapLocation: touchCoords, lastTapTime: lastTouchedTime, tapped: touched, events: events)
   }
 }
 
@@ -70,4 +73,18 @@ struct GMGameInput {
   let tapLocation: F2
   let lastTapTime: Double
   let tapped: Bool
+  let events: any CTSQueue<Events>
+
+  enum Events {
+    case tap(tapLocation: F2, lastTapTime: Double)
+  }
+}
+
+extension GMGameInput {
+  init() {
+    tapLocation = .init(0, 0)
+    lastTapTime = 0
+    tapped = false
+    events = CTSQueueArray<Events>()
+  }
 }

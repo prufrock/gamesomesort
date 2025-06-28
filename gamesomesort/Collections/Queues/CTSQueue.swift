@@ -6,7 +6,7 @@
 //
 
 /// All the basic functionality you want in a queue.
-protocol CTSQueue: CustomStringConvertible, ScopeFunction {
+protocol CTSQueue<T>: CustomStringConvertible, ScopeFunction {
   associatedtype T
 
   var isEmpty: Bool { get }

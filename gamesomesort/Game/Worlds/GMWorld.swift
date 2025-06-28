@@ -36,9 +36,15 @@ class GMWorld {
   /// - Parameters:
   ///   - timeStep: The amount of time to move it forward.
   func update(timeStep: Float, input: GMGameInput) {
-    if input.tapped {
-      print("tap at \(input.tapLocation)")
+    var inputEvents: any CTSQueue<GMGameInput.Events> = input.events
+    while !inputEvents.isEmpty {
+      let event: GMGameInput.Events = inputEvents.dequeue()!
+      switch event {
+      case .tap(tapLocation: let loc, lastTapTime: _):
+        print("tap at \(loc)")
+      }
     }
+
     //print("world updated: \(timeStep)")
   }
 

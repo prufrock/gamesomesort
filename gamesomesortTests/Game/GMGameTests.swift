@@ -22,7 +22,7 @@ struct GMGameTests {
     )
 
     #expect(throws: Never.self) {
-      game.update(timeStep: 0.1)
+      game.update(timeStep: 0.1, input: GMGameInput())
     }
   }
 }
