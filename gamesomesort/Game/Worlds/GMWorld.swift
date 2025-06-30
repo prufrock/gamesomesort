@@ -15,6 +15,8 @@ class GMWorld {
   private let ecsStarter: GMEcsStarter
   private var aspectRatioSystem: LECSSystemId? = nil
   private var aspect: Float = 1.0
+  private var size: CGSize = .zero
+  private var screenSize: CGSize = .zero
 
   init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap, ecsStarter: GMEcsStarter) {
     self.config = config
@@ -41,7 +43,12 @@ class GMWorld {
       let event: GMGameInput.Events = inputEvents.dequeue()!
       switch event {
       case .tap(tapLocation: let loc, lastTapTime: _):
-        print("tap at \(loc)")
+        let tapLocation = INTapLocation(location: loc)
+        let ndcLocation = tapLocation.screenToNdc(screenWidth: screenSize.width.f, screenHeight: screenSize.height.f)
+        print("W:ndc: \(ndcLocation)")
+      case .screenSizeChanged(size: let newSize):
+        print("W:screen size changed\(newSize)")
+        screenSize = newSize
       }
     }
 
@@ -50,6 +57,7 @@ class GMWorld {
 
   func update(size: CGSize) {
     aspect = size.aspectRatio().f
+    self.size = size
     if let aspectRatioSystem = self.aspectRatioSystem {
       ecs.process(system: aspectRatioSystem)
     }

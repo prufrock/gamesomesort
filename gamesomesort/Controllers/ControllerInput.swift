@@ -15,14 +15,15 @@ class ControllerInput {
   private var tapLocationSubject: PassthroughSubject<CGPoint, Never> = PassthroughSubject<CGPoint, Never>()
   private var tapLocationCancelable: AnyCancellable?
 
-  private var lastTouchedTime: Double = 0.0
-  private var touchCoords: F2 = F2()
-  private var touched: Bool = false
+  private var updateFrameSizeSubject: PassthroughSubject<CGSize, Never> = PassthroughSubject()
+  private var updateFrameSizeCancelable: AnyCancellable?
+
   private var events: any CTSQueue<GMGameInput.Events> = CTSQueueArray<GMGameInput.Events>()
 
   init(config: AppCoreConfig) {
     self.config = config
     setupTapLocationSubscribers()
+    setupUpdateFrameSizeSubscribers()
   }
 
   /// Only initializes the subject if the cancellable does not exist. If for some reason tapping stops working it may because it was cancelled when
@@ -46,11 +47,30 @@ class ControllerInput {
         },
         receiveValue: { [weak self] location in
           guard let self else { return }
-          self.touchCoords = F2(location.x.f, location.y.f)
-          self.lastTouchedTime = CACurrentMediaTime()
-          self.touched = true
-          _ = self.events.enqueue(.tap(tapLocation: self.touchCoords, lastTapTime: self.lastTouchedTime))
-          print("recieved tap at \(location)")
+          _ = self.events.enqueue(.tap(tapLocation: F2(location.x.f, location.y.f), lastTapTime: CACurrentMediaTime()))
+        }
+      )
+  }
+
+  private func setupUpdateFrameSizeSubscribers() {
+    if updateFrameSizeCancelable != nil {
+      return
+    }
+
+    updateFrameSizeCancelable =
+      updateFrameSizeSubject
+      .sink(
+        receiveCompletion: { completion in
+          fatalError(
+            "ControllerInput::updateFrameSizeSubject received completion: \(completion)."
+              + "You left this here, so you would know when the subscription dies."
+              + "A likely fix might be to either nil the cancellable or store in a set of cancellables."
+              + "Either way you need to make sure the subscription is started again."
+          )
+        },
+        receiveValue: { [weak self] size in
+          guard let self else { return }
+          _ = self.events.enqueue(.screenSizeChanged(size: size))
         }
       )
   }
@@ -59,32 +79,30 @@ class ControllerInput {
     tapLocationSubject.send(location)
   }
 
+  func updateFrameSize(_ size: CGSize) {
+    updateFrameSizeSubject.send(size)
+  }
+
   func update() -> GMGameInput {
     defer {
-      touched = false
       events = CTSQueueArray<GMGameInput.Events>()
     }
 
-    return GMGameInput(tapLocation: touchCoords, lastTapTime: lastTouchedTime, tapped: touched, events: events)
+    return GMGameInput(events: events)
   }
 }
 
 struct GMGameInput {
-  let tapLocation: F2
-  let lastTapTime: Double
-  let tapped: Bool
   let events: any CTSQueue<Events>
 
   enum Events {
     case tap(tapLocation: F2, lastTapTime: Double)
+    case screenSizeChanged(size: CGSize)
   }
 }
 
 extension GMGameInput {
   init() {
-    tapLocation = .init(0, 0)
-    lastTapTime = 0
-    tapped = false
     events = CTSQueueArray<Events>()
   }
 }

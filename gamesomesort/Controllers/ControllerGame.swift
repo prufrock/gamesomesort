@@ -74,6 +74,10 @@ class ControllerGame: NSObject {
   func updateTapLocation(_ location: CGPoint) {
     controllerInput.updateTapLocation(location)
   }
+
+  func updateFrameSize(_ size: CGSize) {
+    controllerInput.updateFrameSize(size)
+  }
 }
 
 extension ControllerGame: MTKViewDelegate {

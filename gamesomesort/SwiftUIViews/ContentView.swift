@@ -13,6 +13,7 @@ struct ContentView: View {
     VStack {
       MetalView(appCore: appCore)
     }
+    .ignoresSafeArea(.all)
   }
 }
 
