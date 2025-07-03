@@ -18,6 +18,8 @@ class GMWorld {
   private var size: CGSize = .zero
   private var screenSize: CGSize = .zero
 
+  private var tapSquare: LECSEntityId? = nil
+
   init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap, ecsStarter: GMEcsStarter) {
     self.config = config
     self.ecs = ecs
@@ -29,6 +31,12 @@ class GMWorld {
 
   private func start() {
     self.ecsStarter.start(ecs: self.ecs)
+
+    let tapSquare = ecs.createEntity("tapSquare")
+    ecs.addComponent(tapSquare, CTRadius(0.5))
+    ecs.addComponent(tapSquare, CTColor(.red))
+    self.tapSquare = tapSquare
+
     aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
       return [CTAspect(aspect: self.aspect)]
     }
@@ -38,16 +46,23 @@ class GMWorld {
   /// - Parameters:
   ///   - timeStep: The amount of time to move it forward.
   func update(timeStep: Float, input: GMGameInput) {
+    let playerCamera = ecs.gmCameraFirstPerson("playerCamera")!
+
     var inputEvents: any CTSQueue<GMGameInput.Events> = input.events
     while !inputEvents.isEmpty {
       let event: GMGameInput.Events = inputEvents.dequeue()!
       switch event {
       case .tap(tapLocation: let loc, lastTapTime: _):
         let tapLocation = INTapLocation(location: loc)
-        let ndcLocation = tapLocation.screenToNdc(screenWidth: screenSize.width.f, screenHeight: screenSize.height.f)
-        print("W:ndc: \(ndcLocation)")
+
+        let worldLocation = tapLocation.screenToWorldOnZPlane(
+          viewportSize: screenSize,
+          targetZPlaneWorldCoord: 1,
+          camera: playerCamera
+        )!
+
+        ecs.addComponent(tapSquare!, LECSPosition2d(x: worldLocation.x, y: worldLocation.y))
       case .screenSizeChanged(size: let newSize):
-        print("W:screen size changed\(newSize)")
         screenSize = newSize
       }
     }
@@ -63,3 +78,5 @@ class GMWorld {
     }
   }
 }
+
+

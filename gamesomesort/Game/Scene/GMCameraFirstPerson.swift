@@ -18,4 +18,8 @@ struct GMCameraFirstPerson: GMCamera {
   var viewMatrix: Float4x4 {
     (Float4x4.translate(position).rotate(quaternion).scale(scale)).inverse
   }
+
+  var world: Float4x4 {
+    Float4x4.translate(position).rotate(quaternion).scale(scale)
+  }
 }

@@ -173,6 +173,11 @@ extension Float4x4 {
     return Float4x4(X, Y, Z, W)
   }
 
+  // Column major
+  var translation: simd_float3 {
+    return simd_float3(self.columns.3.x, self.columns.3.y, self.columns.3.z)
+  }
+
   func perspectiveProjection(fov: Float, aspect: Float, nearPlane: Float, farPlane: Float) -> Float4x4 {
     self * Self.perspectiveProjection(fov: fov, aspect: aspect, nearPlane: nearPlane, farPlane: farPlane)
   }

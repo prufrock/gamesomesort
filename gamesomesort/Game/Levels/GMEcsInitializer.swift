@@ -23,12 +23,12 @@ struct GMStartFromTileMap: GMEcsStarter {
         case .wall:
           let wall = ecs.createEntity("wall\(x),\(y)")
           ecs.addComponent(wall, LECSPosition2d(Float2(x.f, y.f)))
-          ecs.addComponent(wall, CTRadius(0.5))
+          ecs.addComponent(wall, CTRadius(0.1))
           ecs.addComponent(wall, CTColor(.green))
         case .floor:
           let floor = ecs.createEntity("floor\(x),\(y)")
           ecs.addComponent(floor, LECSPosition2d(Float2(x.f, y.f)))
-          ecs.addComponent(floor, CTRadius(0.5))
+          ecs.addComponent(floor, CTRadius(0.1))
           ecs.addComponent(floor, CTColor(.blue))
         }
       }

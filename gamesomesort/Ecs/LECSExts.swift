@@ -12,7 +12,7 @@ extension LECSWorld {
     entity(named: LECSName(name))
   }
 
-  func gmCameraFirstPersion(_ name: String) -> GMCameraFirstPerson? {
+  func gmCameraFirstPerson(_ name: String) -> GMCameraFirstPerson? {
     guard
       let playerCamera = entity("playerCamera"),
       let cameraComponent = getComponent(playerCamera, CTCameraFirstPerson.self),

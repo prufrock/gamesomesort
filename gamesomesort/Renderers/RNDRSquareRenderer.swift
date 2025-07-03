@@ -113,7 +113,7 @@ class RNDRSquareRenderer: RNDRRenderer {
       squareCount += 1
     }
 
-    let camera = ecs.gmCameraFirstPersion("playerCamera")!
+    let camera = ecs.gmCameraFirstPerson("playerCamera")!
 
     var uniforms = RNDRUniforms(
       viewMatrix: camera.viewMatrix,
