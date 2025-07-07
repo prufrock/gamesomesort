@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		631840E02DEE63FE008A8123 /* lecs-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 631840DF2DEE63FE008A8123 /* lecs-swift */; };
+		6390715C2E1B728100FE7DEE /* lecs-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6390715B2E1B728100FE7DEE /* lecs-swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				631840E02DEE63FE008A8123 /* lecs-swift in Frameworks */,
+				6390715C2E1B728100FE7DEE /* lecs-swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +147,7 @@
 			);
 			name = gamesomesort;
 			packageProductDependencies = (
-				631840DF2DEE63FE008A8123 /* lecs-swift */,
+				6390715B2E1B728100FE7DEE /* lecs-swift */,
 			);
 			productName = gamesomesort;
 			productReference = 631E2DB72DE90E3200A5F49C /* gamesomesort.app */;
@@ -232,7 +232,7 @@
 			mainGroup = 631E2DAE2DE90E3200A5F49C;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				631840DD2DEE63E9008A8123 /* XCLocalSwiftPackageReference "../lecs-swift" */,
+				6390715A2E1B728100FE7DEE /* XCLocalSwiftPackageReference "lecs-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 631E2DB82DE90E3200A5F49C /* Products */;
@@ -663,16 +663,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		631840DD2DEE63E9008A8123 /* XCLocalSwiftPackageReference "../lecs-swift" */ = {
+		6390715A2E1B728100FE7DEE /* XCLocalSwiftPackageReference "lecs-swift" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = "../lecs-swift";
+			relativePath = "lecs-swift";
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		631840DF2DEE63FE008A8123 /* lecs-swift */ = {
+		6390715B2E1B728100FE7DEE /* lecs-swift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 631840DD2DEE63E9008A8123 /* XCLocalSwiftPackageReference "../lecs-swift" */;
 			productName = "lecs-swift";
 		};
 /* End XCSwiftPackageProductDependency section */
