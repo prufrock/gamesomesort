@@ -73,7 +73,7 @@ struct INTapLocation {
     if abs(denominator) < 1e-6 {
       print(
         "Ray is parallel to the Z=\(targetZPlaneWorldCoord) plane, so it can't intersect it. "
-        + "If you need this you likely need to handle rotation differently."
+          + "If you need this you likely need to handle rotation differently."
       )
       return nil
     }
@@ -84,7 +84,7 @@ struct INTapLocation {
     if t < 0 {
       print(
         "Intersection point is behind the ray origin. "
-        + "If you need to support this you likely have to handle rotation differently."
+          + "If you need to support this you likely have to handle rotation differently."
       )
       return nil
     }
