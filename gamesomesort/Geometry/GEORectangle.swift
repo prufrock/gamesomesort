@@ -47,6 +47,11 @@ struct GEORectangle {
     max = F2(maxX, maxY)
   }
 
+  init(position: F2, radius: Float = 1) {
+    self.min = position - F2(x: radius, y: radius)
+    self.max = position + F2(x: radius, y: radius)
+  }
+
   func intersection(with rect: Self) -> F2? {
     let left = F2(x: max.x - rect.min.x, y: 0)  // world
     if left.x <= 0 {

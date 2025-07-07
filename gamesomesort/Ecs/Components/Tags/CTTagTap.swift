@@ -7,6 +7,6 @@
 
 import lecs_swift
 
-struct CTTagCollides: LECSComponent {
+struct CTTagTap: LECSComponent {
   let exists = true
 }

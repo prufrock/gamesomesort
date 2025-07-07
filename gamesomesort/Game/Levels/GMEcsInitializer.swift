@@ -16,6 +16,25 @@ struct GMStartFromTileMap: GMEcsStarter {
 
   func start(ecs: LECSWorld) {
 
+    let componentTypes: [LECSComponent.Type] = [
+      CTAspect.self,
+      CTCameraFirstPerson.self,
+      CTColor.self,
+      CTTagTap.self,
+      CTRadius.self,
+      CTScale3d.self,
+      LECSPosition2d.self,
+    ]
+
+    // use all of the components once, so they exist in the system
+    let placeHolderName = "placeHolder"
+    let placeHolderId = ecs.createEntity(placeHolderName)
+
+    componentTypes.forEach {
+      ecs.addComponent(placeHolderId, $0.init())
+      ecs.removeComponent(placeHolderId, component: $0)
+    }
+
     for y in 0..<map.height {
       for x in 0..<map.width {
         let tile = map[x, y]
