@@ -38,4 +38,17 @@ struct GMTileMapTests {
       #expect(expectedCoordinates.dequeue()! == (x, y))
     }
   }
+
+  @Test func testTiles() {
+    let tileMap = simpleTileMap
+
+    var expectedCoordinates = CTSQueueArray<(GMTile, (Int, Int))>()
+    expectedCoordinates.enqueue((.wall, (0, 0)))
+
+    tileMap.tiles { tile, xy in
+      let expected = expectedCoordinates.dequeue()!
+      #expect(expected.0 == tile)
+      #expect(expected.1 == xy)
+    }
+  }
 }
