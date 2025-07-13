@@ -114,8 +114,6 @@ class GMWorld {
       case .screenSizeChanged(size: let newSize):
         screenSize = newSize
       }
-
-
     }
 
     //print("world updated: \(timeStep)")
