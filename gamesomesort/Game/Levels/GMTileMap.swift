@@ -28,15 +28,15 @@ public struct GMTileMap {
     self.index = index
   }
 
-  subscript(x: Int, y: Int) -> GMTile {
+  private subscript(x: Int, y: Int) -> GMTile {
     get { tiles[y * width + x] }
   }
 
-  subscript(thing x: Int, y: Int) -> GMThing {
+  private subscript(thing x: Int, y: Int) -> GMThing {
     get { things[y * width + x] }
   }
 
-  func coordinates(_ body: (Int, Int) -> Void) {
+  private func coordinates(_ body: (Int, Int) -> Void) {
     for y in 0..<height {
       for x in 0..<width {
         body(x, y)
@@ -44,6 +44,7 @@ public struct GMTileMap {
     }
   }
 
+  /// Pass each tile and thing and it's coordinates to the provided closure.
   func locations(_ body: (GMTile, GMThing, (Int, Int)) -> Void) {
     coordinates { x, y in
       let tile = self[x, y]
