@@ -51,18 +51,4 @@ public struct GMTileMap {
       body(tile, thing, (x, y))
     }
   }
-
-  func tiles(_ body: (GMTile, (Int, Int)) -> Void) {
-    coordinates { x, y in
-      let tile = self[x, y]
-      body(tile, (x, y))
-    }
-  }
-
-  func things(_ body: (GMThing, (Int, Int)) -> Void) {
-    coordinates { x, y in
-      let thing = self[thing: x, y]
-      body(thing, (x, y))
-    }
-  }
 }
