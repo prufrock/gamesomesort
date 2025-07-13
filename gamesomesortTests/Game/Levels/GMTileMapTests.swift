@@ -12,16 +12,30 @@ import Foundation
 import lecs_swift
 
 struct GMTileMapTests {
+
+  let simpleTileMap = GMTileMap(
+    GMMapData(tiles: [.wall], width: 1, things: [.nothing]),
+    index: 0
+  )
+
   @Test func testSubscriptForTilesAndThings() {
-    let tileMap = GMTileMap(
-      GMMapData(tiles: [.wall], width: 1, things: [.nothing]),
-      index: 0
-    )
+    let tileMap = simpleTileMap
 
     let coordinates: [(Int, Int)] = [(0, 0)]
     coordinates.forEach { (x, y) in
       #expect(tileMap[x, y] == .wall)
       #expect(tileMap[thing: x, y] == .nothing)
+    }
+  }
+
+  @Test func testCoordinates() {
+    let tileMap = simpleTileMap
+
+    var expectedCoordinates = CTSQueueArray<(Int, Int)>()
+    expectedCoordinates.enqueue((0, 0))
+
+    tileMap.coordinates { x, y in
+      #expect(expectedCoordinates.dequeue()! == (x, y))
     }
   }
 }

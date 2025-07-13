@@ -36,7 +36,7 @@ public struct GMTileMap {
     get { things[y * width + x] }
   }
 
-  func forEachCoordinate(_ body: (Int, Int) -> Void) {
+  func coordinates(_ body: (Int, Int) -> Void) {
     for y in 0..<height {
       for x in 0..<width {
         body(x, y)
