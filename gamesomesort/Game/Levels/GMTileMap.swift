@@ -50,4 +50,11 @@ public struct GMTileMap {
       body(tile, (x, y))
     }
   }
+
+  func things(_ body: (GMThing, (Int, Int)) -> Void) {
+    coordinates { x, y in
+      let thing = self[thing: x, y]
+      body(thing, (x, y))
+    }
+  }
 }

@@ -51,4 +51,17 @@ struct GMTileMapTests {
       #expect(expected.1 == xy)
     }
   }
+
+  @Test func testThings() {
+    let tileMap = simpleTileMap
+
+    var expectedCoordinates = CTSQueueArray<(GMThing, (Int, Int))>()
+    expectedCoordinates.enqueue((.nothing, (0, 0)))
+
+    tileMap.things { thing, xy in
+      let expected: (GMThing, (Int, Int)) = expectedCoordinates.dequeue()!
+      #expect(expected.0 == thing)
+      #expect(expected.1 == xy)
+    }
+  }
 }
