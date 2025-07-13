@@ -8,5 +8,5 @@
 enum GMThing: Int, Decodable {
   case nothing  // 0
   case player  // 1
-  case item  // 2
+  case balloon  // 2
 }

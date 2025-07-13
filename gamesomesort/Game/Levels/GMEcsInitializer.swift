@@ -47,11 +47,31 @@ struct GMStartFromTileMap: GMEcsStarter {
         case .floor:
           let floor = ecs.createEntity("floor\(x),\(y)")
           ecs.addComponent(floor, LECSPosition2d(Float2(x.f, y.f)))
-          ecs.addComponent(floor, CTRadius(0.5))
-          ecs.addComponent(floor, CTColor(.blue))
         }
       }
     }
+
+    func initThings() {
+      for y in 0..<map.height {
+        for x in 0..<map.width {
+          let thing = map[thing: x, y]
+          switch thing {
+          case .balloon:
+            let balloon = ecs.createEntity("balloon\(x),\(y)")
+            ecs.addComponent(balloon, LECSPosition2d(Float2(x.f, y.f)))
+            ecs.addComponent(balloon, CTRadius(1.0))
+            ecs.addComponent(balloon, CTColor(.yellow))
+            ecs.addComponent(balloon, CTTagBalloon())
+          case .nothing:
+            //no-op
+            break
+          default:
+            print("Oh dang, unknown thing at (\(x),\(y))")
+          }
+        }
+      }
+    }
+    initThings()
 
     createPlayerCamera(ecs: ecs)
   }

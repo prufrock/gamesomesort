@@ -17,7 +17,7 @@ struct GMStartFromTileMapTests {
     let ecs = LECSCreateWorld(archetypeSize: 10)
 
     let tileMap = GMTileMap(
-      GMMapData(tiles: [.wall], width: 1, things: []),
+      GMMapData(tiles: [.wall], width: 1, things: [.nothing]),
       index: 0
     )
 

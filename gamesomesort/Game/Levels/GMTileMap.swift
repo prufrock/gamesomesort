@@ -31,4 +31,16 @@ public struct GMTileMap {
   subscript(x: Int, y: Int) -> GMTile {
     get { tiles[y * width + x] }
   }
+
+  subscript(thing x: Int, y: Int) -> GMThing {
+    get { things[y * width + x] }
+  }
+
+  func forEachCoordinate(_ body: (Int, Int) -> Void) {
+    for y in 0..<height {
+      for x in 0..<width {
+        body(x, y)
+      }
+    }
+  }
 }
