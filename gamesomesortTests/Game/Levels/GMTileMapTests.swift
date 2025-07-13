@@ -39,6 +39,21 @@ struct GMTileMapTests {
     }
   }
 
+  @Test func testLocations() {
+    let tileMap = simpleTileMap
+
+    var expectedCoordinates = CTSQueueArray<(GMTile, GMThing, (Int, Int))>()
+    expectedCoordinates.enqueue((.wall, .nothing, (0, 0)))
+
+    tileMap.locations { tile, thing, xy in
+      let expected: (GMTile, GMThing, (Int, Int)) = expectedCoordinates.dequeue()!
+
+      #expect(expected.0 == tile)
+      #expect(expected.1 == thing)
+      #expect(expected.2 == xy)
+    }
+  }
+
   @Test func testTiles() {
     let tileMap = simpleTileMap
 
