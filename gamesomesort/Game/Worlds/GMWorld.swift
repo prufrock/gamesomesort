@@ -52,10 +52,7 @@ class GMWorld {
         LECSPosition2d.self,
         CTTagTap.self,
       ]
-    ) {
-      world,
-      row,
-      columns in
+    ) { world, row, columns in
       let tapEntityId = row.component(at: 0, columns, LECSId.self)
       let tapPosition = row.component(at: 1, columns, LECSPosition2d.self)
 
@@ -75,7 +72,7 @@ class GMWorld {
           }
 
           if let selectedEntityId {
-            world.removeComponent(selectedEntityId.id, component: CTTagVisible.self)
+            world.deleteEntity(selectedEntityId.id)
           }
           selectedEntityId = nil
         }
@@ -106,6 +103,7 @@ class GMWorld {
 
         ecs.addComponent(tapSquare!, LECSPosition2d(x: worldLocation.x, y: worldLocation.y))
         ecs.addComponent(tapSquare!, CTTagTap())
+        ecs.addComponent(tapSquare!, CTTagVisible())
         if let tapSystem = self.tapSystem {
           ecs.processSystemWorldScoped(system: tapSystem)
         }
