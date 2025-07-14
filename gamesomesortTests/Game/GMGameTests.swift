@@ -16,9 +16,8 @@ struct GMGameTests {
     let appCore = AppCore.preview()
 
     let game = GMGame(
-      config: appCore.config,
+      appCore: appCore,
       levels: [GMTileMap(GMMapData(tiles: [], width: 1, things: []), index: 0)],
-      worldFactory: appCore.createWorldFactory()
     )
 
     #expect(throws: Never.self) {

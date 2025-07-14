@@ -36,7 +36,7 @@ class AppCore {
         levels = maps
       }
     )
-    return GMGame(config: config, levels: levels, worldFactory: createWorldFactory())
+    return GMGame(appCore: self, levels: levels)
   }
 
   func createWorldFactory() -> GMWorldFactory {

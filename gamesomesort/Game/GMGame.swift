@@ -13,13 +13,13 @@ import Foundation
 class GMGame {
   let world: GMWorld
   private let levels: [GMTileMap]
-  private let config: AppCoreConfig
+  private let appCore: AppCore
   private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
 
-  init(config: AppCoreConfig, levels: [GMTileMap], worldFactory: AppCore.GMWorldFactory) {
-    self.config = config
+  init(appCore: AppCore, levels: [GMTileMap]) {
+    self.appCore = appCore
     self.levels = levels
-    world = worldFactory.create(level: 0, levels: levels)
+    world = appCore.createWorldFactory().create(level: 0, levels: levels)
   }
 
   /// Update the game.
