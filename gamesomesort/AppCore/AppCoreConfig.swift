@@ -26,6 +26,7 @@ struct AppCoreConfig {
   struct Platform {
     let maximumTimeStep: Float  // the maximum length of a time step
     let worldTimeStep: Float  // number of steps to take each frame
+    let scaleFactor: Float  // Used to convert points to pixels, depends on the platform
   }
 
   struct Services {
@@ -56,7 +57,8 @@ extension AppCoreConfig {
   static let testDefault: AppCoreConfig = .init(
     platform: AppCoreConfig.Platform(
       maximumTimeStep: 1 / 20,  // don't step bigger than this (minimum of 20 fps)
-      worldTimeStep: 1 / 120  // 120 steps a second
+      worldTimeStep: 1 / 120, // 120 steps a second
+      scaleFactor: 1.0
     ),
     services: AppCoreConfig.Services(
       renderService: AppCoreConfig.Services.RenderService(
