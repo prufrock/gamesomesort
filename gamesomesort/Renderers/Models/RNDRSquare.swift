@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import lecs_swift
 
 struct RNDRSquare {
   let v: [F3] = [  // model space
@@ -30,14 +31,10 @@ struct RNDRSquare {
   var modelMatrixBuffer: MTLBuffer? = nil
   var colorBuffer: MTLBuffer? = nil
 
-  var bufferIndex: Int = 0
+  private var indexedVertexPipeline: MTLRenderPipelineState? = nil
 
   init(bufferSize: Int = 500) {
     self.bufferSize = bufferSize
-  }
-
-  mutating func startFrame() {
-    bufferIndex = 0
   }
 
   mutating func initBuffers(device: MTLDevice) {
@@ -68,20 +65,27 @@ struct RNDRSquare {
     )
   }
 
-  func updateBuffers(squares: [GMSquare]) {
-    guard let modelMatrixBuffer = modelMatrixBuffer, let colorBuffer = colorBuffer else { return }
-    var modelMatrixPointer = modelMatrixBuffer.contents().bindMemory(to: Float4x4.self, capacity: bufferSize)
-    var colorPointer = colorBuffer.contents().bindMemory(to: F4.self, capacity: bufferSize)
-    squares.forEach { square in
-      modelMatrixPointer.pointee = square.transform.modelMatrix
-      modelMatrixPointer = modelMatrixPointer.advanced(by: 1)
-
-      colorPointer.pointee = square.color.F4
-      colorPointer = colorPointer.advanced(by: 1)
-    }
+  mutating func initPipelines(device: MTLDevice, library: MTLLibrary) {
+    indexedVertexPipeline = try! device.makeRenderPipelineState(
+      descriptor: MTLRenderPipelineDescriptor().apply {
+        $0.vertexFunction = library.makeFunction(name: "indexed_main")
+        $0.fragmentFunction = library.makeFunction(name: "fragment_main")
+        // TODO: should be the viewColorPixelFormat
+        $0.colorAttachments[0].pixelFormat = .bgra8Unorm
+        $0.vertexDescriptor = MTLVertexDescriptor().apply {
+          // .position
+          $0.attributes[Position.index].format = MTLVertexFormat.float3
+          $0.attributes[Position.index].bufferIndex = VertexBuffer.index
+          $0.attributes[Position.index].offset = 0
+          $0.layouts[Position.index].stride = MemoryLayout<Float3>.stride
+        }
+      }
+    )
   }
 
-  mutating func updateBufferItem(square: GMSquare) {
+  mutating func updateBufferItem(square: GMSquare, bufferIndex: Int) {
+    // I think I can get away without clearing the buffers on each frame, because the shader knows the number of
+    // instances to draw.
     guard let modelMatrixBuffer = modelMatrixBuffer, let colorBuffer = colorBuffer else {
       fatalError("Oh buffer! The buffers aren't initialized!")
     }
@@ -92,6 +96,64 @@ struct RNDRSquare {
     var colorPointer = colorBuffer.contents().bindMemory(to: F4.self, capacity: bufferSize)
     colorPointer = colorPointer.advanced(by: bufferIndex)
     colorPointer.pointee = square.color.F4
-    bufferIndex += 1
+  }
+
+  mutating func draw(ecs: LECSWorld, encoder: MTLRenderCommandEncoder) {
+    guard let indexedVertexPipeline else { return }
+
+    var squareCount = 0
+    ecs.select([LECSPosition2d.self, CTColor.self, CTRadius.self, CTTagVisible.self]) { row, columns in
+      let position = row.component(at: 0, columns, LECSPosition2d.self)
+      let color = row.component(at: 1, columns, CTColor.self)
+      let radius = row.component(at: 2, columns, CTRadius.self)
+      let square = GMSquare(
+        transform: GEOTransform(
+          position: F3(position.position, 1.0),
+          quaternion: simd_quatf(Float4x4.identity),
+          scale: Float3(repeating: radius.radius)
+        ),
+        color: color.color
+      )
+
+      updateBufferItem(square: square, bufferIndex: squareCount)
+      squareCount += 1
+    }
+
+    if squareCount == 0 {
+      return
+    }
+
+    let camera = ecs.gmCameraFirstPerson("playerCamera")!
+
+    var uniforms = RNDRUniforms(
+      viewMatrix: camera.viewMatrix,
+      projectionMatrix: camera.projection
+    )
+
+    encoder.setRenderPipelineState(indexedVertexPipeline)
+    encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+    encoder.setTriangleFillMode(.fill)
+    encoder.setVertexBytes(
+      &uniforms,
+      length: MemoryLayout<RNDRUniforms>.stride,
+      index: UniformsBuffer.index
+    )
+
+    encoder.setVertexBuffer(
+      modelMatrixBuffer,
+      offset: 0,
+      index: Int(ModelMatrixBuffer.rawValue)
+    )
+
+    encoder.setFragmentBuffer(colorBuffer, offset: 0, index: Int(ColorBuffer.rawValue))
+
+    encoder.drawIndexedPrimitives(
+      type: .triangle,
+      indexCount: indexes.count,
+      indexType: .uint16,
+      indexBuffer: indexBuffer!,
+      indexBufferOffset: 0,
+      instanceCount: squareCount
+    )
   }
 }

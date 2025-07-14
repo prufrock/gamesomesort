@@ -14,8 +14,6 @@ class RNDRSquareRenderer: RNDRRenderer {
   private let device: MTLDevice
   private let commandQueue: MTLCommandQueue
 
-  private let indexedVertexPipeline: MTLRenderPipelineState
-
   private var squareRenderer = RNDRSquare()
 
   private var size: CGSize = .zero
@@ -51,23 +49,8 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-    indexedVertexPipeline = try! device.makeRenderPipelineState(
-      descriptor: MTLRenderPipelineDescriptor().apply {
-        $0.vertexFunction = library.makeFunction(name: "indexed_main")
-        $0.fragmentFunction = library.makeFunction(name: "fragment_main")
-        // TODO: should be the viewColorPixelFormat
-        $0.colorAttachments[0].pixelFormat = .bgra8Unorm
-        $0.vertexDescriptor = MTLVertexDescriptor().apply {
-          // .position
-          $0.attributes[Position.index].format = MTLVertexFormat.float3
-          $0.attributes[Position.index].bufferIndex = VertexBuffer.index
-          $0.attributes[Position.index].offset = 0
-          $0.layouts[Position.index].stride = MemoryLayout<Float3>.stride
-        }
-      }
-    )
-
     squareRenderer.initBuffers(device: device)
+    squareRenderer.initPipelines(device: device, library: library)
   }
 
   func resize(size newSize: CGSize) {
@@ -93,58 +76,8 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-    squareRenderer.startFrame()
+    squareRenderer.draw(ecs: ecs, encoder: encoder)
 
-    var squareCount = 0
-    ecs.select([LECSPosition2d.self, CTColor.self, CTRadius.self]) { row, columns in
-      let position = row.component(at: 0, columns, LECSPosition2d.self)
-      let color = row.component(at: 1, columns, CTColor.self)
-      let radius = row.component(at: 2, columns, CTRadius.self)
-      let square = GMSquare(
-        transform: GEOTransform(
-          position: F3(position.position, 1.0),
-          quaternion: simd_quatf(Float4x4.identity),
-          scale: Float3(repeating: radius.radius)
-        ),
-        color: color.color
-      )
-
-      squareRenderer.updateBufferItem(square: square)
-      squareCount += 1
-    }
-
-    let camera = ecs.gmCameraFirstPerson("playerCamera")!
-
-    var uniforms = RNDRUniforms(
-      viewMatrix: camera.viewMatrix,
-      projectionMatrix: camera.projection
-    )
-
-    encoder.setRenderPipelineState(indexedVertexPipeline)
-    encoder.setVertexBuffer(squareRenderer.vertexBuffer, offset: 0, index: 0)
-    encoder.setTriangleFillMode(.fill)
-    encoder.setVertexBytes(
-      &uniforms,
-      length: MemoryLayout<RNDRUniforms>.stride,
-      index: UniformsBuffer.index
-    )
-
-    encoder.setVertexBuffer(
-      squareRenderer.modelMatrixBuffer,
-      offset: 0,
-      index: Int(ModelMatrixBuffer.rawValue)
-    )
-
-    encoder.setFragmentBuffer(squareRenderer.colorBuffer, offset: 0, index: Int(ColorBuffer.rawValue))
-
-    encoder.drawIndexedPrimitives(
-      type: .triangle,
-      indexCount: squareRenderer.indexes.count,
-      indexType: .uint16,
-      indexBuffer: squareRenderer.indexBuffer!,
-      indexBufferOffset: 0,
-      instanceCount: squareCount
-    )
     encoder.endEncoding()
     commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()

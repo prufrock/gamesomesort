@@ -52,14 +52,18 @@ class GMWorld {
         LECSPosition2d.self,
         CTTagTap.self,
       ]
-    ) { world, row, columns in
+    ) {
+      world,
+      row,
+      columns in
       let tapEntityId = row.component(at: 0, columns, LECSId.self)
       let tapPosition = row.component(at: 1, columns, LECSPosition2d.self)
 
       var selectedEntityId: LECSId? = nil
-      world.select([LECSId.self, CTColor.self, LECSPosition2d.self, CTRadius.self]) { otherRow, otherColumns in
+      world.select(
+        [LECSId.self, CTColor.self, LECSPosition2d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
+      ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
-        let otherColor = otherRow.component(at: 1, otherColumns, CTColor.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, LECSPosition2d.self)
         let otherRadius = otherRow.component(at: 3, otherColumns, CTRadius.self)
         let otherRectangle = GEORectangle(position: otherPosition.position, radius: otherRadius.radius)
@@ -71,18 +75,13 @@ class GMWorld {
           }
 
           if let selectedEntityId {
-            let orange = GMColorA(.orange)
-            if otherColor.color.F4 == orange.F4 {
-              world.addComponent(selectedEntityId.id, CTColor(.blue))
-            } else {
-              world.addComponent(selectedEntityId.id, CTColor(.orange))
-            }
+            world.removeComponent(selectedEntityId.id, component: CTTagVisible.self)
           }
           selectedEntityId = nil
         }
       }
 
-      return [tapEntityId, tapPosition, CTTagTap()]
+      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), CTTagVisible()]
     }
   }
 

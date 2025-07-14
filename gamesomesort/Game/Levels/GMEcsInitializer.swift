@@ -20,7 +20,9 @@ struct GMStartFromTileMap: GMEcsStarter {
       CTAspect.self,
       CTCameraFirstPerson.self,
       CTColor.self,
+      CTTagBalloon.self,
       CTTagTap.self,
+      CTTagVisible.self,
       CTRadius.self,
       CTScale3d.self,
       LECSPosition2d.self,
@@ -81,6 +83,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       ecs.addComponent(balloon, LECSPosition2d(Float2(x.f, y.f)))
       ecs.addComponent(balloon, CTRadius(1.0))
       ecs.addComponent(balloon, CTColor(.yellow))
+      ecs.addComponent(balloon, CTTagVisible())
       ecs.addComponent(balloon, CTTagBalloon())
     case .nothing:
       //no-op
