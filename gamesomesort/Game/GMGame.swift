@@ -11,10 +11,11 @@ import Foundation
 /// change World or interrupt it. If World wants to change itself, like change levels, or do something to Game it needs to
 /// pass a command up.
 class GMGame {
-  let world: GMWorld
+  var world: GMWorld
   private let levels: [GMTileMap]
   private let appCore: AppCore
   private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
+  private var elapsedTime: Float = 0
 
   init(appCore: AppCore, levels: [GMTileMap]) {
     self.appCore = appCore
@@ -26,7 +27,16 @@ class GMGame {
   /// - Parameters:
   ///   - timeStep: The amount of time to move forward.
   func update(timeStep: Float, input: GMGameInput) {
-    world.update(timeStep: timeStep, input: input)
+
+    // reset frequently, just for testing
+    if elapsedTime < appCore.config.game.timeLimit {
+      world.update(timeStep: timeStep, input: input)
+      elapsedTime += timeStep
+    } else {
+      world = appCore.createWorldFactory().create(level: 0, levels: levels)
+      world.update(screenDimensions)
+      elapsedTime = 0
+    }
   }
 
   func update(_ dimensions: ScreenDimensions) {
