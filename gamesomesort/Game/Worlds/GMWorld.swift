@@ -15,7 +15,7 @@ class GMWorld {
   private let ecsStarter: GMEcsStarter
   private var aspect: Float = 1.0
   private var size: CGSize = .zero
-  private var screenSize: CGSize = .zero
+  private var frameSize: CGSize = .zero
 
   private var tapSquare: LECSEntityId? = nil
 
@@ -96,7 +96,7 @@ class GMWorld {
         let tapLocation = INTapLocation(location: loc)
 
         let worldLocation = tapLocation.screenToWorldOnZPlane(
-          viewportSize: screenSize,
+          viewportSize: frameSize,
           targetZPlaneWorldCoord: 1,
           camera: playerCamera
         )!
@@ -109,16 +109,15 @@ class GMWorld {
         }
         ecs.removeComponent(tapSquare!, component: CTTagTap.self)
       case .screenSizeChanged(size: let newSize):
-        screenSize = newSize
+        frameSize = newSize
       }
     }
 
     //print("world updated: \(timeStep)")
   }
 
-  func update(size: CGSize) {
-    aspect = size.aspectRatio().f
-    self.size = size
+  func update(aspectRatio: Float) {
+    aspect = aspectRatio
     if let aspectRatioSystem = self.aspectRatioSystem {
       ecs.process(system: aspectRatioSystem)
     }

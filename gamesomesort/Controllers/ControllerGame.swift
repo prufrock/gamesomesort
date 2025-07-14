@@ -40,7 +40,7 @@ class ControllerGame: NSObject {
     guard game == nil else { return }
 
     game = appCore.createGMGame()
-    game?.update(size: view.drawableSize)
+    game?.update(aspectRatio: view.drawableSize.aspectRatio().f)
   }
 
   // Moved this into the GameController, so the renderers don't have to be main actor isolated.
@@ -83,7 +83,7 @@ class ControllerGame: NSObject {
 extension ControllerGame: MTKViewDelegate {
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
     print("GameController:mtkView(drawableSizeWillChange: size: \(size)")
-    game?.update(size: size)
+    game?.update(aspectRatio: view.drawableSize.aspectRatio().f)
     appCore.sync(ResizeCommand(size: size))
   }
 

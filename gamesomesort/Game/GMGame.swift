@@ -28,7 +28,7 @@ class GMGame {
     world.update(timeStep: timeStep, input: input)
   }
 
-  func update(size: CGSize) {
-    world.update(size: size)
+  func update(aspectRatio: Float) {
+    world.update(aspectRatio: aspectRatio)
   }
 }
