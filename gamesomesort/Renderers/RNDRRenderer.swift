@@ -10,6 +10,6 @@ import MetalKit
 import lecs_swift
 
 protocol RNDRRenderer {
-  func resize(size: CGSize)
+  func resize(_ dimensions: ScreenDimensions)
   func render(ecs: LECSWorld, to renderDescriptor: RenderDescriptor)
 }

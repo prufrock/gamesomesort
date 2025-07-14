@@ -18,7 +18,7 @@ struct AppCoreContextTests {
     #expect(throws: Never.self) {
       context.sync(
         ResizeCommand(
-          size: CGSize()
+          screenDimensions: ScreenDimensions()
         )
       )
     }

@@ -87,7 +87,7 @@ extension ControllerGame: MTKViewDelegate {
       scaleFactor: appCore.config.platform.scaleFactor
     )
     game?.update(dimensions)
-    appCore.sync(ResizeCommand(size: size))
+    appCore.sync(ResizeCommand(screenDimensions: dimensions))
   }
 
   func draw(in view: MTKView) {

@@ -30,7 +30,7 @@ class RenderService {
     let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
     activeRenderer.resize(
-      size: command.size
+      command.screenDimensions
     )
   }
 
@@ -57,7 +57,7 @@ struct RenderCommand: ServiceCommand {
 }
 
 struct ResizeCommand: ServiceCommand {
-  let size: CGSize
+  let screenDimensions: ScreenDimensions
 }
 
 enum RenderServiceType {

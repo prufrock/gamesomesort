@@ -36,4 +36,11 @@ struct ScreenDimensions {
     pixelHeight = pixelSize.height.f
     self.scaleFactor = scaleFactor
   }
+
+  init() {
+    self.aspectRatio = 1.0
+    pixelWidth = 1.0
+    pixelHeight = 1.0
+    scaleFactor = 1.0
+  }
 }

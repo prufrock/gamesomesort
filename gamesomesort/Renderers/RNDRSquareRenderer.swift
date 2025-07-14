@@ -16,8 +16,7 @@ class RNDRSquareRenderer: RNDRRenderer {
 
   private var squareRenderer = RNDRSquare()
 
-  private var size: CGSize = .zero
-  private var aspectRatio: Float = 1.0
+  private var screenDimensions = ScreenDimensions()
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -53,9 +52,8 @@ class RNDRSquareRenderer: RNDRRenderer {
     squareRenderer.initPipelines(device: device, library: library)
   }
 
-  func resize(size newSize: CGSize) {
-    size = newSize
-    aspectRatio = size.aspectRatio().f
+  func resize(_ dimensions: ScreenDimensions) {
+    screenDimensions = dimensions
   }
 
   func render(ecs: LECSWorld, to renderDescriptor: RenderDescriptor) {
