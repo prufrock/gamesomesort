@@ -14,6 +14,7 @@ class GMGame {
   let world: GMWorld
   private let levels: [GMTileMap]
   private let config: AppCoreConfig
+  private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
 
   init(config: AppCoreConfig, levels: [GMTileMap], worldFactory: AppCore.GMWorldFactory) {
     self.config = config
@@ -28,7 +29,8 @@ class GMGame {
     world.update(timeStep: timeStep, input: input)
   }
 
-  func update(aspectRatio: Float) {
-    world.update(aspectRatio: aspectRatio)
+  func update(_ dimensions: ScreenDimensions) {
+    self.screenDimensions = dimensions
+    world.update(dimensions)
   }
 }

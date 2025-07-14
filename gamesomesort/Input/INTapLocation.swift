@@ -35,13 +35,13 @@ struct INTapLocation {
   }
 
   func screenToWorldOnZPlane(
-    viewportSize: CGSize,
+    screenDimensions: ScreenDimensions,
     targetZPlaneWorldCoord: Float = 1.0,
     camera: GMCameraFirstPerson
   ) -> simd_float3? {
 
     // Convert to ND
-    let ndc = screenToNdc(screenWidth: viewportSize.width.f, screenHeight: viewportSize.height.f)
+    let ndc = screenToNdc(screenWidth: screenDimensions.pointWidth, screenHeight: screenDimensions.pointHeight)
 
     // Create a point(w=1.0) on the near plane
     let ndcPoint = F4(ndc.x, ndc.y, camera.near, 1.0)

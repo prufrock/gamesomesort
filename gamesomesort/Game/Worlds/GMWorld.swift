@@ -13,9 +13,7 @@ class GMWorld {
   public let ecs: LECSWorld
   private(set) var map: GMTileMap
   private let ecsStarter: GMEcsStarter
-  private var aspect: Float = 1.0
-  private var size: CGSize = .zero
-  private var frameSize: CGSize = .zero
+  private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
 
   private var tapSquare: LECSEntityId? = nil
 
@@ -42,7 +40,7 @@ class GMWorld {
     self.tapSquare = tapSquare
 
     aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
-      return [CTAspect(aspect: self.aspect)]
+      return [CTAspect(aspect: self.screenDimensions.aspectRatio)]
     }
 
     tapSystem = ecs.addSystemWorldScoped(
@@ -96,7 +94,7 @@ class GMWorld {
         let tapLocation = INTapLocation(location: loc)
 
         let worldLocation = tapLocation.screenToWorldOnZPlane(
-          viewportSize: frameSize,
+          screenDimensions: screenDimensions,
           targetZPlaneWorldCoord: 1,
           camera: playerCamera
         )!
@@ -108,16 +106,17 @@ class GMWorld {
           ecs.processSystemWorldScoped(system: tapSystem)
         }
         ecs.removeComponent(tapSquare!, component: CTTagTap.self)
-      case .screenSizeChanged(size: let newSize):
-        frameSize = newSize
+      case .screenSizeChanged:
+        break
       }
     }
 
     //print("world updated: \(timeStep)")
   }
 
-  func update(aspectRatio: Float) {
-    aspect = aspectRatio
+  func update(_ dimensions: ScreenDimensions) {
+    screenDimensions = dimensions
+
     if let aspectRatioSystem = self.aspectRatioSystem {
       ecs.process(system: aspectRatioSystem)
     }

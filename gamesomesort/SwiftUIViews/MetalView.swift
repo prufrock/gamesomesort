@@ -16,23 +16,14 @@ struct MetalView: View {
   var body: some View {
     ZStack {
       MetalViewRepresentable(metalView: $metalView)
+        .onAppear {
+          if gameController == nil {
+            initGameController()
+          }
+        }
     }.onTapGesture { location in
       gameController?.updateTapLocation(location)
-      // The Geometry Change happens before the ZStack appears, so use onGeometryChange to initalize GameController
-      // rather than onAppear.
-    }.onGeometryChange(
-      for: CGRect.self,
-      of: { proxy in
-        proxy.frame(in: .global)
-      },
-      action: { newValue in
-        if gameController == nil {
-          initGameController()
-        }
-
-        gameController?.updateFrameSize(newValue.size)
-      }
-    )
+    }
   }
 
   func initGameController() {

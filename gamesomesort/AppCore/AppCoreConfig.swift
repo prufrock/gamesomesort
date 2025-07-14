@@ -57,7 +57,7 @@ extension AppCoreConfig {
   static let testDefault: AppCoreConfig = .init(
     platform: AppCoreConfig.Platform(
       maximumTimeStep: 1 / 20,  // don't step bigger than this (minimum of 20 fps)
-      worldTimeStep: 1 / 120, // 120 steps a second
+      worldTimeStep: 1 / 120,  // 120 steps a second
       scaleFactor: 1.0
     ),
     services: AppCoreConfig.Services(

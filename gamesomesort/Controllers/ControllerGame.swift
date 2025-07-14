@@ -40,7 +40,11 @@ class ControllerGame: NSObject {
     guard game == nil else { return }
 
     game = appCore.createGMGame()
-    game?.update(aspectRatio: view.drawableSize.aspectRatio().f)
+    let dimensions = ScreenDimensions(
+      pixelSize: view.drawableSize,
+      scaleFactor: appCore.config.platform.scaleFactor
+    )
+    game?.update(dimensions)
   }
 
   // Moved this into the GameController, so the renderers don't have to be main actor isolated.
@@ -74,16 +78,15 @@ class ControllerGame: NSObject {
   func updateTapLocation(_ location: CGPoint) {
     controllerInput.updateTapLocation(location)
   }
-
-  func updateFrameSize(_ size: CGSize) {
-    controllerInput.updateFrameSize(size)
-  }
 }
 
 extension ControllerGame: MTKViewDelegate {
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-    print("GameController:mtkView(drawableSizeWillChange: size: \(size)")
-    game?.update(aspectRatio: view.drawableSize.aspectRatio().f)
+    let dimensions = ScreenDimensions(
+      pixelSize: view.drawableSize,
+      scaleFactor: appCore.config.platform.scaleFactor
+    )
+    game?.update(dimensions)
     appCore.sync(ResizeCommand(size: size))
   }
 
