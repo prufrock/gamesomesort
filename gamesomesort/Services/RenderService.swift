@@ -51,6 +51,8 @@ class RenderService {
       newRenderer = RNDRErsatzRenderer()
     case .square:
       newRenderer = RNDRSquareRenderer(config: config)
+    case .tileBased:
+      newRenderer = RNDRTileBasedDeferredRenderer(config: config)
     }
     renderer = newRenderer
     return newRenderer
@@ -58,5 +60,5 @@ class RenderService {
 }
 
 enum RenderServiceType {
-  case clearColor, ersatz, metal, square
+  case clearColor, ersatz, metal, square, tileBased
 }
