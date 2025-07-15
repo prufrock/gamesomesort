@@ -14,6 +14,22 @@
 // https://forums.kodeco.com/t/xcode-16-errata-for-metal-by-tutorials-4th-edition/205784
 typedef uint32_t uint;
 
+typedef struct {
+  matrix_float4x4 modelMatrix;
+  matrix_float4x4 viewMatrix;
+  matrix_float4x4 projectionMatrix;
+  matrix_float3x3 normalMatrix;
+} SHDRUniforms;
+
+typedef struct {
+  uint width;
+  uint height;
+  uint tiling;
+  uint lightCount;
+  vector_float3 cameraPosition;
+  float scaleFactor;
+} SHDRParams;
+
 typedef enum {
   VertexBuffer = 0,
   UVBuffer = 1,

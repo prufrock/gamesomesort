@@ -13,6 +13,9 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
   private let commandQueue: MTLCommandQueue
   private let library: MTLLibrary
 
+  private var uniforms = SHDRUniforms()
+  private var params = SHDRParams()
+
   private var squareRenderer = RNDRSquare()
 
   private var screenDimensions = ScreenDimensions()
