@@ -60,5 +60,3 @@ class RenderService {
 enum RenderServiceType {
   case clearColor, ersatz, metal, square
 }
-
-
