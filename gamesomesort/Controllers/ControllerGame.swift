@@ -45,7 +45,7 @@ class ControllerGame: NSObject {
       scaleFactor: appCore.config.platform.scaleFactor
     )
     game?.update(dimensions)
-    appCore.sync(CommandRender.InitializePipelines(pixelFormat: view.colorPixelFormat))
+    appCore.sync(SVCCommandRender.InitializePipelines(pixelFormat: view.colorPixelFormat))
   }
 
   // Moved this into the GameController, so the renderers don't have to be main actor isolated.
@@ -88,7 +88,7 @@ extension ControllerGame: MTKViewDelegate {
       scaleFactor: appCore.config.platform.scaleFactor
     )
     game?.update(dimensions)
-    appCore.sync(ResizeCommand(screenDimensions: dimensions))
+    appCore.sync(SVCCommandRender.Resize(screenDimensions: dimensions))
   }
 
   func draw(in view: MTKView) {
@@ -109,7 +109,7 @@ extension ControllerGame: MTKViewDelegate {
     }
 
     appCore.sync(
-      RenderCommand(
+      SVCCommandRender.Render(
         renderDescriptor: createRenderDescriptor(view: view),
         ecs: game!.world.ecs
       )

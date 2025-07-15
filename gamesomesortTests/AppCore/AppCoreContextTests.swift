@@ -17,7 +17,7 @@ struct AppCoreContextTests {
 
     #expect(throws: Never.self) {
       context.sync(
-        ResizeCommand(
+        SVCCommandRender.Resize(
           screenDimensions: ScreenDimensions()
         )
       )

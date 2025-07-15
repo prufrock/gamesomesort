@@ -17,7 +17,7 @@ class RenderService {
     self.config = config
   }
 
-  func sync(_ command: RenderCommand) {
+  func sync(_ command: SVCCommandRender.Render) {
     let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
     activeRenderer.render(
@@ -26,7 +26,7 @@ class RenderService {
     )
   }
 
-  func sync(_ command: ResizeCommand) {
+  func sync(_ command: SVCCommandRender.Resize) {
     let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
     activeRenderer.resize(
@@ -34,7 +34,7 @@ class RenderService {
     )
   }
 
-  func sync(_ command: CommandRender.InitializePipelines) {
+  func sync(_ command: SVCCommandRender.InitializePipelines) {
     let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
     activeRenderer.initializePipelines(pixelFormat: command.pixelFormat)
@@ -54,21 +54,6 @@ class RenderService {
     }
     renderer = newRenderer
     return newRenderer
-  }
-}
-
-struct RenderCommand: ServiceCommand {
-  let renderDescriptor: RenderDescriptor
-  let ecs: LECSWorld
-}
-
-struct ResizeCommand: ServiceCommand {
-  let screenDimensions: ScreenDimensions
-}
-
-enum CommandRender {
-  struct InitializePipelines: ServiceCommand {
-    let pixelFormat: MTLPixelFormat
   }
 }
 

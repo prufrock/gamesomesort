@@ -29,11 +29,11 @@ class AppCoreContext {
     // Mostly just an example.
     // May eventually need a way to register commands with services.
     switch command {
-    case let actual as RenderCommand:
+    case let actual as SVCCommandRender.Render:
       renderService.sync(actual)
-    case let actual as ResizeCommand:
+    case let actual as SVCCommandRender.Resize:
       renderService.sync(actual)
-    case let actual as CommandRender.InitializePipelines:
+    case let actual as SVCCommandRender.InitializePipelines:
       renderService.sync(actual)
     case let actual as LoadLevelFileCommand:
       fileService.sync(actual)
