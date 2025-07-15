@@ -49,7 +49,7 @@ class ControllerGame: NSObject {
   }
 
   // Moved this into the GameController, so the renderers don't have to be main actor isolated.
-  private func createRenderDescriptor(view: MTKView) -> RenderDescriptor {
+  private func createRenderDescriptor(view: MTKView) -> SVCRenderDescriptor {
     view.device = MTLCreateSystemDefaultDevice()
     view.clearColor = appCore.config.services.renderService.mtlClearColor
 
@@ -69,7 +69,7 @@ class ControllerGame: NSObject {
       )
     }
 
-    return RenderDescriptor(
+    return SVCRenderDescriptor(
       view: view,
       currentRenderPassDescriptor: descriptor,
       currentDrawable: drawable

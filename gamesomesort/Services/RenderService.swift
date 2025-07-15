@@ -61,8 +61,4 @@ enum RenderServiceType {
   case clearColor, ersatz, metal, square
 }
 
-struct RenderDescriptor {
-  let view: MTKView
-  let currentRenderPassDescriptor: MTLRenderPassDescriptor
-  let currentDrawable: MTLDrawable
-}
+

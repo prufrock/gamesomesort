@@ -18,7 +18,7 @@ enum SVCCommandRender {
   }
 
   struct Render: ServiceCommand {
-    let renderDescriptor: RenderDescriptor
+    let renderDescriptor: SVCRenderDescriptor
     let ecs: LECSWorld
   }
 }

@@ -10,7 +10,7 @@ import lecs_swift
 
 /// Does nothing, useful for testing in iCloud which doesn't support Metal.
 class RNDRErsatzRenderer: RNDRRenderer {
-  public func render(ecs: LECSWorld, to renderDescriptor: RenderDescriptor) {
+  public func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor) {
     //no-op
   }
 

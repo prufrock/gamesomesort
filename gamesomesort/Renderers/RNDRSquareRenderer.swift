@@ -59,7 +59,7 @@ class RNDRSquareRenderer: RNDRRenderer {
     squareRenderer.initPipelines(device: device, library: library, pixelFormat: pixelFormat)
   }
 
-  func render(ecs: LECSWorld, to renderDescriptor: RenderDescriptor) {
+  func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor) {
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
         """
