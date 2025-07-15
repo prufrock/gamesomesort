@@ -7,13 +7,13 @@
 
 // These extensions make it so you can write Position.index rather than Int(Position.rawValue)
 
-extension RNDRBufferIndices {
+extension SHDRBufferIndices {
   var index: Int {
     Int(self.rawValue)
   }
 }
 
-extension RNDRAttributes {
+extension SHDRAttributes {
   var index: Int {
     return Int(self.rawValue)
   }

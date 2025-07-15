@@ -129,9 +129,11 @@ struct RNDRSquare {
 
     let camera = ecs.gmCameraFirstPerson("playerCamera")!
 
-    var uniforms = RNDRUniforms(
+    var uniforms = SHDRUniforms(
+      modelMatrix: Float4x4.identity,
       viewMatrix: camera.viewMatrix,
-      projectionMatrix: camera.projection
+      projectionMatrix: camera.projection,
+      normalMatrix: .init(diagonal: [1, 1, 1])
     )
 
     encoder.setRenderPipelineState(indexedVertexPipeline)
@@ -139,7 +141,7 @@ struct RNDRSquare {
     encoder.setTriangleFillMode(.fill)
     encoder.setVertexBytes(
       &uniforms,
-      length: MemoryLayout<RNDRUniforms>.stride,
+      length: MemoryLayout<SHDRUniforms>.stride,
       index: UniformsBuffer.index
     )
 

@@ -24,7 +24,7 @@ struct RNDRVertexOut {
 
 vertex RNDRVertexOut indexed_main(
                                   RNDRVertexIn in [[stage_in]],
-                                  constant RNDRUniforms &uniforms [[buffer(UniformsBuffer)]],
+                                  constant SHDRUniforms &uniforms [[buffer(UniformsBuffer)]],
                                   constant matrix_float4x4 *indexedModelMatrix [[buffer(ModelMatrixBuffer)]],
                                   uint vid [[vertex_id]],
                                   uint iid [[instance_id]]
