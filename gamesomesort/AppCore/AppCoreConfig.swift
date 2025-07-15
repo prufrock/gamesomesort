@@ -5,6 +5,8 @@
 //  Created by David Kanenwisher on 5/30/25.
 //
 
+import MetalKit
+
 struct AppCoreConfig {
   let platform: Platform
 
@@ -37,6 +39,7 @@ struct AppCoreConfig {
     struct RenderService {
       let type: RenderServiceType
       let clearColor: (Double, Double, Double, Double)
+      let depthStencilPixelFormat: MTLPixelFormat = .depth32Float // The pixel format for the MTLViews depth stencil.
     }
 
     struct FileService {

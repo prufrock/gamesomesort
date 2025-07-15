@@ -32,6 +32,7 @@ struct RNDRSquare {
   var colorBuffer: MTLBuffer? = nil
 
   private var indexedVertexPipeline: MTLRenderPipelineState? = nil
+  private var depthStencilState: MTLDepthStencilState? = nil
 
   init(bufferSize: Int = 500) {
     self.bufferSize = bufferSize
@@ -76,6 +77,7 @@ struct RNDRSquare {
         $0.fragmentFunction = library.makeFunction(name: "fragment_main")
         // TODO: should be the viewColorPixelFormat
         $0.colorAttachments[0].pixelFormat = pixelFormat
+        $0.depthAttachmentPixelFormat = .depth32Float
         $0.vertexDescriptor = MTLVertexDescriptor().apply {
           // .position
           $0.attributes[Position.index].format = MTLVertexFormat.float3
@@ -85,6 +87,11 @@ struct RNDRSquare {
         }
       }
     )
+
+    let descriptor = MTLDepthStencilDescriptor()
+    descriptor.depthCompareFunction = .less
+    descriptor.isDepthWriteEnabled = true
+    depthStencilState = device.makeDepthStencilState(descriptor: descriptor)
   }
 
   mutating func updateBufferItem(square: GMSquare, bufferIndex: Int) {
@@ -136,6 +143,7 @@ struct RNDRSquare {
       normalMatrix: .init(diagonal: [1, 1, 1])
     )
 
+    encoder.setDepthStencilState(depthStencilState)
     encoder.setRenderPipelineState(indexedVertexPipeline)
     encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
     encoder.setTriangleFillMode(.fill)

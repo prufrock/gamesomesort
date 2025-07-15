@@ -52,6 +52,7 @@ class ControllerGame: NSObject {
   private func createRenderDescriptor(view: MTKView) -> SVCRenderDescriptor {
     view.device = MTLCreateSystemDefaultDevice()
     view.clearColor = appCore.config.services.renderService.mtlClearColor
+    view.depthStencilPixelFormat = appCore.config.services.renderService.depthStencilPixelFormat
 
     guard let descriptor = view.currentRenderPassDescriptor else {
       fatalError(
