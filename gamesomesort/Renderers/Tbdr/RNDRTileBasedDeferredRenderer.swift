@@ -13,9 +13,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
   private let commandQueue: MTLCommandQueue
   private let library: MTLLibrary
 
-  private var uniforms = SHDRUniforms()
-  private var params = SHDRParams()
-
   private var squareRenderer = RNDRSquare()
 
   private var screenDimensions = ScreenDimensions()
@@ -62,6 +59,27 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
     squareRenderer.initPipelines(device: device, library: library, pixelFormat: pixelFormat)
   }
 
+  func createUniforms(_ ecs: LECSWorld) -> SHDRUniforms {
+    let camera = ecs.gmCameraFirstPerson("playerCamera")!
+    var uniforms = SHDRUniforms()
+
+    uniforms.viewMatrix = camera.viewMatrix
+    uniforms.projectionMatrix = camera.projection
+
+    return uniforms
+  }
+
+  func createParams(_ ecs: LECSWorld) -> SHDRParams {
+    let camera = ecs.gmCameraFirstPerson("playerCamera")!
+
+    var params = SHDRParams()
+
+    params.lightCount = 0
+    params.cameraPosition = camera.position
+
+    return params
+  }
+
   func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor) {
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
@@ -79,6 +97,9 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
         """
       )
     }
+
+    let uniforms = self.createUniforms(ecs)
+    let params = self.createParams(ecs)
 
     squareRenderer.draw(ecs: ecs, encoder: encoder)
 

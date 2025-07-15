@@ -39,7 +39,7 @@ struct AppCoreConfig {
     struct RenderService {
       let type: RenderServiceType
       let clearColor: (Double, Double, Double, Double)
-      let depthStencilPixelFormat: MTLPixelFormat = .depth32Float // The pixel format for the MTLViews depth stencil.
+      let depthStencilPixelFormat: MTLPixelFormat = .depth32Float  // The pixel format for the MTLViews depth stencil.
     }
 
     struct FileService {
