@@ -65,13 +65,17 @@ struct RNDRSquare {
     )
   }
 
-  mutating func initPipelines(device: MTLDevice, library: MTLLibrary) {
+  mutating func initPipelines(
+    device: MTLDevice,
+    library: MTLLibrary,
+    pixelFormat: MTLPixelFormat
+  ) {
     indexedVertexPipeline = try! device.makeRenderPipelineState(
       descriptor: MTLRenderPipelineDescriptor().apply {
         $0.vertexFunction = library.makeFunction(name: "indexed_main")
         $0.fragmentFunction = library.makeFunction(name: "fragment_main")
         // TODO: should be the viewColorPixelFormat
-        $0.colorAttachments[0].pixelFormat = .bgra8Unorm
+        $0.colorAttachments[0].pixelFormat = pixelFormat
         $0.vertexDescriptor = MTLVertexDescriptor().apply {
           // .position
           $0.attributes[Position.index].format = MTLVertexFormat.float3

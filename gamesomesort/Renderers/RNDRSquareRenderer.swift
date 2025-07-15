@@ -40,6 +40,14 @@ class RNDRSquareRenderer: RNDRRenderer {
 
     commandQueue = newCommandQueue
 
+    squareRenderer.initBuffers(device: device)
+  }
+
+  func resize(_ dimensions: ScreenDimensions) {
+    screenDimensions = dimensions
+  }
+
+  func initializePipelines(pixelFormat: MTLPixelFormat) {
     guard let library = device.makeDefaultLibrary() else {
       fatalError(
         """
@@ -48,12 +56,7 @@ class RNDRSquareRenderer: RNDRRenderer {
       )
     }
 
-    squareRenderer.initBuffers(device: device)
-    squareRenderer.initPipelines(device: device, library: library)
-  }
-
-  func resize(_ dimensions: ScreenDimensions) {
-    screenDimensions = dimensions
+    squareRenderer.initPipelines(device: device, library: library, pixelFormat: pixelFormat)
   }
 
   func render(ecs: LECSWorld, to renderDescriptor: RenderDescriptor) {

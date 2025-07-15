@@ -45,6 +45,7 @@ class ControllerGame: NSObject {
       scaleFactor: appCore.config.platform.scaleFactor
     )
     game?.update(dimensions)
+    appCore.sync(CommandRender.InitializePipelines(pixelFormat: view.colorPixelFormat))
   }
 
   // Moved this into the GameController, so the renderers don't have to be main actor isolated.

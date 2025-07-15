@@ -34,6 +34,12 @@ class RenderService {
     )
   }
 
+  func sync(_ command: CommandRender.InitializePipelines) {
+    let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
+
+    activeRenderer.initializePipelines(pixelFormat: command.pixelFormat)
+  }
+
   private func initRenderer() -> RNDRRenderer {
     let newRenderer: RNDRRenderer
     switch config.services.renderService.type {
@@ -58,6 +64,12 @@ struct RenderCommand: ServiceCommand {
 
 struct ResizeCommand: ServiceCommand {
   let screenDimensions: ScreenDimensions
+}
+
+enum CommandRender {
+  struct InitializePipelines: ServiceCommand {
+    let pixelFormat: MTLPixelFormat
+  }
 }
 
 enum RenderServiceType {

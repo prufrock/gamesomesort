@@ -33,6 +33,8 @@ class AppCoreContext {
       renderService.sync(actual)
     case let actual as ResizeCommand:
       renderService.sync(actual)
+    case let actual as CommandRender.InitializePipelines:
+      renderService.sync(actual)
     case let actual as LoadLevelFileCommand:
       fileService.sync(actual)
     default:
