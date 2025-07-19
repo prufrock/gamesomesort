@@ -71,4 +71,24 @@ typedef struct {
   float ambientOcclusion;
 } SHDRMaterial;
 
+typedef enum {
+  unused = 0,
+  Sun = 1,
+  Spot = 2,
+  Point = 3,
+  Ambient = 4
+} LightType;
+
+typedef struct {
+  LightType type;
+  vector_float3 position;
+  vector_float3 color;
+  vector_float3 specularColor;
+  float radius;
+  vector_float3 attenuation;
+  float coneAngle;
+  vector_float3 coneDirection;
+  float coneAttenutation;
+} SHDRLight;
+
 #endif

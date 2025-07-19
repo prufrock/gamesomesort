@@ -20,7 +20,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
 
   private let controllerTexture = ControllerTexture()
 
-
   // model controller?
   // private let sphere: GEOModel
   private let sphere: GEOModel
