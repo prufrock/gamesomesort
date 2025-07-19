@@ -15,9 +15,12 @@ protocol RNDRRenderer {
   // The pixel format has to be derived from the view, where it's main actor isolated, so just passing the pixelFormat
   // without the whole view avoid problems with that.
   func initializePipelines(pixelFormat: MTLPixelFormat)
+
+  func initializeRenderPasses(pixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat)
 }
 
 extension RNDRRenderer {
   // Default no-op implementation, to make it easier to add a bunch of RNDRRenderers
   func initializePipelines(pixelFormat: MTLPixelFormat) {}
+  func initializeRenderPasses(pixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) {}
 }

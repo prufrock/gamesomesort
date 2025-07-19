@@ -56,4 +56,19 @@ typedef enum {
   Bitangent = 4
 } SHDRAttributes;
 
+typedef enum {
+  BaseColor = 0,
+  NormalTexture = 1,
+  RoughnessTexture = 2,
+  MetallicTexture = 3,
+  AOTexture = 4
+} SHDRTextureIndices;
+
+typedef struct {
+  vector_float3 baseColor;
+  float roughness;
+  float metallic;
+  float ambientOcclusion;
+} SHDRMaterial;
+
 #endif

@@ -12,10 +12,18 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
   private let device: MTLDevice
   private let commandQueue: MTLCommandQueue
   private let library: MTLLibrary
+  private var forwardRenderPass: ForwardRenderPass? = nil
 
   private var squareRenderer = RNDRSquare()
 
   private var screenDimensions = ScreenDimensions()
+
+  private let controllerTexture = ControllerTexture()
+
+
+  // model controller?
+  // private let sphere: GEOModel
+  private let sphere: GEOModel
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -49,6 +57,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
     self.library = library
 
     squareRenderer.initBuffers(device: device)
+
+    sphere = GEOModel(name: "sphere", primitiveType: .sphere, controllerTexture: controllerTexture, device: device)
   }
 
   func resize(_ dimensions: ScreenDimensions) {
@@ -57,6 +67,15 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
 
   func initializePipelines(pixelFormat: MTLPixelFormat) {
     squareRenderer.initPipelines(device: device, library: library, pixelFormat: pixelFormat)
+  }
+
+  func initializeRenderPasses(pixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) {
+    forwardRenderPass = ForwardRenderPass(
+      device: device,
+      colorPixelFormat: pixelFormat,
+      depthPixelFormat: depthStencilPixelFormat,
+      library: library
+    )
   }
 
   func createUniforms(_ ecs: LECSWorld) -> SHDRUniforms {

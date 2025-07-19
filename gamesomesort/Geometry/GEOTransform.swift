@@ -6,9 +6,9 @@
 //
 
 struct GEOTransform {
-  var position: Float3
-  var quaternion: simd_quatf
-  var scale: Float3
+  var position: Float3 = [0, 0, 0]
+  var quaternion: simd_quatf = .init()
+  var scale: Float3 = [1, 1, 1]
 }
 
 extension GEOTransform {
