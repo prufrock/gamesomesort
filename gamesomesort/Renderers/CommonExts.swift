@@ -18,3 +18,9 @@ extension SHDRAttributes {
     return Int(self.rawValue)
   }
 }
+
+extension SHDRTextureIndices {
+  var index: Int {
+    return Int(self.rawValue)
+  }
+}

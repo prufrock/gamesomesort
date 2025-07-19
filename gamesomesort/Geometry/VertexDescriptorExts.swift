@@ -41,7 +41,7 @@ extension MDLVertexDescriptor {
       name: MDLVertexAttributeTextureCoordinate,
       format: .float2,
       offset: 0,
-      bufferIndex: VertexBuffer.index
+      bufferIndex: UVBuffer.index
     )
     vertexDescriptor.layouts[UVBuffer.index] = MDLVertexBufferLayout(stride: MemoryLayout<Float2>.stride)
 

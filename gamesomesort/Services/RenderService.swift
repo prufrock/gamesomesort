@@ -38,6 +38,7 @@ class RenderService {
     let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
     activeRenderer.initializePipelines(pixelFormat: command.pixelFormat)
+    activeRenderer.initializeRenderPasses(pixelFormat: command.pixelFormat, depthStencilPixelFormat: config.services.renderService.depthStencilPixelFormat)
   }
 
   private func initRenderer() -> RNDRRenderer {

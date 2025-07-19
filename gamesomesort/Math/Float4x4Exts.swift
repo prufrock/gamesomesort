@@ -181,4 +181,11 @@ extension Float4x4 {
   func perspectiveProjection(fov: Float, aspect: Float, nearPlane: Float, farPlane: Float) -> Float4x4 {
     self * Self.perspectiveProjection(fov: fov, aspect: aspect, nearPlane: nearPlane, farPlane: farPlane)
   }
+
+  var upperLeft: float3x3 {
+    let x = columns.0.xyz
+    let y = columns.1.xyz
+    let z = columns.2.xyz
+    return float3x3(columns: (x, y, z))
+  }
 }

@@ -13,16 +13,35 @@ struct ForwardRenderPass {
   var descriptor: MTLRenderPassDescriptor?
 
   var pipelineState: MTLRenderPipelineState
+  private let tbrPipelineState: MTLRenderPipelineState
   let depthStencilState: MTLDepthStencilState?
 
-  init(device: MTLDevice, colorPixelFormat: MTLPixelFormat, depthPixelFormat: MTLPixelFormat, library: MTLLibrary) {
+  // model controller?
+  private let sphere: GEOModel
+  private var spheres: [GEOModel] = []
+
+  init(
+    device: MTLDevice,
+    colorPixelFormat: MTLPixelFormat,
+    depthPixelFormat: MTLPixelFormat,
+    library: MTLLibrary,
+    controllerTexture: ControllerTexture
+  ) {
     pipelineState = Self.buildPipelineState(
       device: device,
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
       library: library
     )
+    tbrPipelineState = Self.buildTbrPipelineState(
+      device: device,
+      colorPixelFormat: colorPixelFormat,
+      depthPixelFormat: depthPixelFormat,
+      library: library
+    )
     depthStencilState = Self.buildDepthStencilState(device: device)
+    //sphere = GEOModel(name: "sphere", primitiveType: .sphere, controllerTexture: controllerTexture, device: device)
+    sphere = GEOModel(name: "final-sphere.usdz", controllerTexture: controllerTexture, device: device)
   }
 
   private static func buildPipelineState(
@@ -44,6 +63,23 @@ struct ForwardRenderPass {
           $0.attributes[Position.index].offset = 0
           $0.layouts[Position.index].stride = MemoryLayout<Float3>.stride
         }
+      }
+    )
+  }
+
+  private static func buildTbrPipelineState(
+    device: MTLDevice,
+    colorPixelFormat: MTLPixelFormat,
+    depthPixelFormat: MTLPixelFormat,
+    library: MTLLibrary
+  ) -> MTLRenderPipelineState {
+    return try! device.makeRenderPipelineState(
+      descriptor: MTLRenderPipelineDescriptor().apply {
+        $0.vertexFunction = library.makeFunction(name: "tbr_vertex_main")
+        $0.fragmentFunction = library.makeFunction(name: "tbr_fragment_main")
+        $0.colorAttachments[0].pixelFormat = colorPixelFormat
+        $0.depthAttachmentPixelFormat = depthPixelFormat
+        $0.vertexDescriptor = MTLVertexDescriptor.defaultLayout
       }
     )
   }
@@ -71,12 +107,24 @@ struct ForwardRenderPass {
     }
     renderEncoder.label = label
     renderEncoder.setDepthStencilState(depthStencilState)
-    renderEncoder.setRenderPipelineState(pipelineState)
+    renderEncoder.setRenderPipelineState(tbrPipelineState)
 
+    var sun = SHDRLight()
+    sun.type = LightType(1)
+    sun.color = [1, 1, 1]
+    sun.position = [0, 0, 0]
     // lights...
+    var lights: [SHDRLight] = [sun]
+    renderEncoder.setFragmentBytes(
+      &lights,
+      length: MemoryLayout<SHDRLight>.stride * lights.count,
+      index: LightBuffer.index
+    )
 
-    for model in ecs.models {
-      model.render(
+    let squares = ecs.squares
+    for square in squares {
+      sphere.transform = square.transform
+      sphere.render(
         encoder: renderEncoder,
         uniforms: uniforms,
         params: params
@@ -87,16 +135,67 @@ struct ForwardRenderPass {
 }
 
 extension LECSWorld {
-  var models: [RNDRModel] {
-    []
+  fileprivate var squares: [GMSquare] {
+    var squares = [GMSquare]()
+    select([LECSPosition2d.self, CTColor.self, CTRadius.self, CTTagVisible.self]) { row, columns in
+      let position = row.component(at: 0, columns, LECSPosition2d.self)
+      let color = row.component(at: 1, columns, CTColor.self)
+      let radius = row.component(at: 2, columns, CTRadius.self)
+      let square = GMSquare(
+        transform: GEOTransform(
+          position: F3(position.position, 1.0),
+          quaternion: simd_quatf(Float4x4.identity),
+          scale: Float3(repeating: radius.radius)
+        ),
+        color: color.color
+      )
+      squares.append(square)
+    }
+    return squares
   }
 }
 
-struct RNDRModel {
+extension GEOModel {
   func render(
     encoder: MTLRenderCommandEncoder,
     uniforms: SHDRUniforms,
     params: SHDRParams
   ) {
+    var uniforms = uniforms
+    var params = params
+    params.tiling = tiling
+
+    uniforms.modelMatrix = transform.modelMatrix
+    uniforms.normalMatrix = uniforms.modelMatrix.upperLeft
+
+    encoder.setVertexBytes(&uniforms, length: MemoryLayout<SHDRUniforms>.stride, index: UniformsBuffer.index)
+
+    encoder.setFragmentBytes(&params, length: MemoryLayout<SHDRParams>.stride, index: ParamsBuffer.index)
+
+    for mesh in meshes {
+      for (index, verteBuffer) in mesh.vertexBuffers.enumerated() {
+        encoder.setVertexBuffer(verteBuffer, offset: 0, index: index)
+      }
+
+      for submesh in mesh.submeshes {
+
+        var material = submesh.material
+        encoder.setFragmentBytes(&material, length: MemoryLayout<SHDRMaterial>.stride, index: MaterialBuffer.index)
+
+        encoder.setFragmentTexture(submesh.textures.baseColor, index: BaseColor.index)
+        encoder.setFragmentTexture(submesh.textures.normal, index: NormalTexture.index)
+        encoder.setFragmentTexture(submesh.textures.roughness, index: RoughnessTexture.index)
+        encoder.setFragmentTexture(submesh.textures.metallic, index: MetallicTexture.index)
+        encoder.setFragmentTexture(submesh.textures.aoTexture, index: AOTexture.index)
+
+        encoder.drawIndexedPrimitives(
+          type: .triangle,
+          indexCount: submesh.indexCount,
+          indexType: submesh.indexType,
+          indexBuffer: submesh.indexBuffer,
+          indexBufferOffset: submesh.indexBufferOffset
+        )
+      }
+    }
   }
 }

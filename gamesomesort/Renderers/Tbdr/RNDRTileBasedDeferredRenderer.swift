@@ -20,10 +20,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
 
   private let controllerTexture = ControllerTexture()
 
-  // model controller?
-  // private let sphere: GEOModel
-  private let sphere: GEOModel
-
   init(config: AppCoreConfig) {
     self.config = config
 
@@ -56,8 +52,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
     self.library = library
 
     squareRenderer.initBuffers(device: device)
-
-    sphere = GEOModel(name: "sphere", primitiveType: .sphere, controllerTexture: controllerTexture, device: device)
   }
 
   func resize(_ dimensions: ScreenDimensions) {
@@ -73,7 +67,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
       device: device,
       colorPixelFormat: pixelFormat,
       depthPixelFormat: depthStencilPixelFormat,
-      library: library
+      library: library,
+      controllerTexture: controllerTexture
     )
   }
 
@@ -107,21 +102,23 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
       )
     }
 
-    guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderDescriptor.currentRenderPassDescriptor)
-    else {
-      fatalError(
-        """
-        Dang it, couldn't create a command encoder.
-        """
-      )
-    }
+//    guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderDescriptor.currentRenderPassDescriptor)
+//    else {
+//      fatalError(
+//        """
+//        Dang it, couldn't create a command encoder.
+//        """
+//      )
+//    }
 
     let uniforms = self.createUniforms(ecs)
     let params = self.createParams(ecs)
 
-    squareRenderer.draw(ecs: ecs, encoder: encoder)
+//    squareRenderer.draw(ecs: ecs, encoder: encoder)
+    forwardRenderPass?.descriptor = renderDescriptor.currentRenderPassDescriptor
+    forwardRenderPass?.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params)
 
-    encoder.endEncoding()
+//    encoder.endEncoding()
     commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()
   }
