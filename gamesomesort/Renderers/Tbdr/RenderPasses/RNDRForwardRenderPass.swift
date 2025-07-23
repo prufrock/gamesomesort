@@ -8,7 +8,7 @@
 import MetalKit
 import lecs_swift
 
-struct ForwardRenderPass {
+struct RNDRForwardRenderPass {
   let label = "Forward Render Pass"
   var descriptor: MTLRenderPassDescriptor?
 
@@ -18,7 +18,6 @@ struct ForwardRenderPass {
 
   // model controller?
   private let sphere: GEOModel
-  private var spheres: [GEOModel] = []
 
   init(
     device: MTLDevice,
@@ -41,7 +40,7 @@ struct ForwardRenderPass {
     )
     depthStencilState = Self.buildDepthStencilState(device: device)
     //sphere = GEOModel(name: "sphere", primitiveType: .sphere, controllerTexture: controllerTexture, device: device)
-    sphere = GEOModel(name: "final-sphere.usdz", controllerTexture: controllerTexture, device: device)
+    sphere = GEOModel(name: "brick-sphere.usdz", controllerTexture: controllerTexture, device: device)
   }
 
   private static func buildPipelineState(
@@ -109,12 +108,17 @@ struct ForwardRenderPass {
     renderEncoder.setDepthStencilState(depthStencilState)
     renderEncoder.setRenderPipelineState(tbrPipelineState)
 
+    var params = params
+
     var sun = SHDRLight()
     sun.type = LightType(1)
     sun.color = [1, 1, 1]
-    sun.position = [0, 0, 0]
+    sun.position = [0, 0, -10]
+
     // lights...
     var lights: [SHDRLight] = [sun]
+    params.lightCount = UInt32(lights.count)
+
     renderEncoder.setFragmentBytes(
       &lights,
       length: MemoryLayout<SHDRLight>.stride * lights.count,

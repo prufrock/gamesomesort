@@ -20,6 +20,7 @@ class GMWorld {
   // systems
   private var aspectRatioSystem: LECSSystemId? = nil
   private var tapSystem: LECSSystemId? = nil
+  private var velocitySystem: LECSSystemId? = nil
 
   init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap, ecsStarter: GMEcsStarter) {
     self.config = config
@@ -78,8 +79,24 @@ class GMWorld {
 
       return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), CTTagVisible()]
     }
-  }
 
+    velocitySystem = ecs.addSystemWorldScoped(
+      "velocity",
+      selector: [
+        LECSId.self,
+        LECSPosition2d.self,
+        LECSVelocity2d.self,
+      ],
+    ) { world, row, columns in
+      let entityId = row.component(at: 0, columns, LECSId.self)
+      let position = row.component(at: 1, columns, LECSPosition2d.self)
+      let velocity = row.component(at: 2, columns, LECSVelocity2d.self)
+
+      let newPosition = position.position + velocity.velocity
+
+      return [entityId, LECSPosition2d(newPosition), velocity]
+    }
+  }
   /// Update the game.
   /// - Parameters:
   ///   - timeStep: The amount of time to move it forward.
@@ -111,6 +128,9 @@ class GMWorld {
       }
     }
 
+    if let velocitySystem {
+      ecs.processSystemWorldScoped(system: velocitySystem)
+    }
     //print("world updated: \(timeStep)")
   }
 

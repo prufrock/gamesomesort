@@ -12,7 +12,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
   private let device: MTLDevice
   private let commandQueue: MTLCommandQueue
   private let library: MTLLibrary
-  private var forwardRenderPass: ForwardRenderPass? = nil
+  private var forwardRenderPass: RNDRForwardRenderPass? = nil
 
   private var squareRenderer = RNDRSquare()
 
@@ -63,7 +63,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
   }
 
   func initializeRenderPasses(pixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) {
-    forwardRenderPass = ForwardRenderPass(
+    forwardRenderPass = RNDRForwardRenderPass(
       device: device,
       colorPixelFormat: pixelFormat,
       depthPixelFormat: depthStencilPixelFormat,
@@ -87,7 +87,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
 
     var params = SHDRParams()
 
-    params.lightCount = 0
     params.cameraPosition = camera.position
 
     return params
@@ -102,23 +101,12 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
       )
     }
 
-//    guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderDescriptor.currentRenderPassDescriptor)
-//    else {
-//      fatalError(
-//        """
-//        Dang it, couldn't create a command encoder.
-//        """
-//      )
-//    }
-
     let uniforms = self.createUniforms(ecs)
     let params = self.createParams(ecs)
 
-//    squareRenderer.draw(ecs: ecs, encoder: encoder)
     forwardRenderPass?.descriptor = renderDescriptor.currentRenderPassDescriptor
     forwardRenderPass?.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params)
 
-//    encoder.endEncoding()
     commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()
   }

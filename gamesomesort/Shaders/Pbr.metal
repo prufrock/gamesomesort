@@ -27,8 +27,9 @@ float3 computeSpecular(
     SHDRLight light = lights[i];
     float3 lightDirection = normalize(light.position);
     float3 F0 = mix(0.04, material.baseColor, material.metallic);
-    // a tiny bit of bias makes it so you can see some shine when there's zero roughness
-    float bias = 0.01;
+    // a little bit of bias makes it so you can see some shine when there's zero roughness
+    // adjusting this higher reduces some flickering on the surface of objects
+    float bias = 0.9;
     float roughness = material.roughness + bias;
     float alpha = roughness * roughness;
     float3 halfVector = normalize(viewDirection + lightDirection);

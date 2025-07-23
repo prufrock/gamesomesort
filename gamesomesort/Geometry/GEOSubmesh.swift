@@ -22,6 +22,10 @@ struct GEOSubmesh {
 
     init(material: MDLMaterial?, textureController: ControllerTexture, device: MTLDevice) {
       baseColor = material?.texture(type: .baseColor, textureController: textureController, device: device)
+      roughness = material?.texture(type: .roughness, textureController: textureController, device: device)
+      normal = material?.texture(type: .tangentSpaceNormal, textureController: textureController, device: device)
+      metallic = material?.texture(type: .metallic, textureController: textureController, device: device)
+      aoTexture = material?.texture(type: .ambientOcclusion, textureController: textureController, device: device)
     }
   }
 

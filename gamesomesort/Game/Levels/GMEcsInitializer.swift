@@ -26,6 +26,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       CTRadius.self,
       CTScale3d.self,
       LECSPosition2d.self,
+      LECSVelocity2d.self,
     ]
 
     // use all of the components once, so they exist in the system
@@ -85,6 +86,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       ecs.addComponent(balloon, CTColor(.yellow))
       ecs.addComponent(balloon, CTTagVisible())
       ecs.addComponent(balloon, CTTagBalloon())
+      ecs.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -0.005))
     case .nothing:
       //no-op
       break

@@ -97,5 +97,5 @@ fragment float4 tbr_fragment_main(
 
   float3 specularColor = computeSpecular(lights, params, material, normal);
 
-  return float4(material.baseColor, 1);
+  return float4(diffuseColor + specularColor, 1);
 }
