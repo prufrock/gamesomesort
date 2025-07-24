@@ -12,8 +12,12 @@ struct RNDRForwardRenderPass {
   let label = "Forward Render Pass"
   var descriptor: MTLRenderPassDescriptor?
 
+  private let device: MTLDevice
+
   var pipelineState: MTLRenderPipelineState
   private let tbrPipelineState: MTLRenderPipelineState
+  private let linePipelineState: MTLRenderPipelineState
+  private let pointPipelineState: MTLRenderPipelineState
   let depthStencilState: MTLDepthStencilState?
 
   // model controller?
@@ -26,6 +30,8 @@ struct RNDRForwardRenderPass {
     library: MTLLibrary,
     controllerTexture: ControllerTexture
   ) {
+    self.device = device
+
     pipelineState = Self.buildPipelineState(
       device: device,
       colorPixelFormat: colorPixelFormat,
@@ -33,6 +39,18 @@ struct RNDRForwardRenderPass {
       library: library
     )
     tbrPipelineState = Self.buildTbrPipelineState(
+      device: device,
+      colorPixelFormat: colorPixelFormat,
+      depthPixelFormat: depthPixelFormat,
+      library: library
+    )
+    linePipelineState = Self.buildLightDebugLinePipelineState(
+      device: device,
+      colorPixelFormat: colorPixelFormat,
+      depthPixelFormat: depthPixelFormat,
+      library: library
+    )
+    pointPipelineState = Self.buildLightDebugPointPipelineState(
       device: device,
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
@@ -63,6 +81,36 @@ struct RNDRForwardRenderPass {
           $0.layouts[Position.index].stride = MemoryLayout<Float3>.stride
         }
       }
+    )
+  }
+
+  private static func buildLightDebugLinePipelineState(
+    device: MTLDevice,
+    colorPixelFormat: MTLPixelFormat,
+    depthPixelFormat: MTLPixelFormat,
+    library: MTLLibrary
+  ) -> MTLRenderPipelineState {
+    try! device.makeRenderPipelineState(
+      descriptor: RNDRDebugLights.linePipelineStateDescriptor(
+        library: library,
+        colorPixelFormat: colorPixelFormat,
+        depthPixelFormat: depthPixelFormat
+      )
+    )
+  }
+
+  private static func buildLightDebugPointPipelineState(
+    device: MTLDevice,
+    colorPixelFormat: MTLPixelFormat,
+    depthPixelFormat: MTLPixelFormat,
+    library: MTLLibrary
+  ) -> MTLRenderPipelineState {
+    try! device.makeRenderPipelineState(
+      descriptor: RNDRDebugLights.pointPipelineStateDescriptor(
+        library: library,
+        colorPixelFormat: colorPixelFormat,
+        depthPixelFormat: depthPixelFormat
+      )
     )
   }
 
@@ -113,10 +161,21 @@ struct RNDRForwardRenderPass {
     var sun = SHDRLight()
     sun.type = LightType(1)
     sun.color = [1, 1, 1]
-    sun.position = [0, 0, -10]
+    sun.position = [0, 6, -9]
+
+    var spot = SHDRLight()
+    spot.type = LightType(2)
+    spot.color = [1, 0.5, 0.5]
+    spot.coneDirection = [1, 1, 0]
+    spot.position = [10, 7, 7]
+
+    var point = SHDRLight()
+    point.type = LightType(3)
+    point.color = [0, 0.5, 0.5]
+    point.position = [1, 3, 3]
 
     // lights...
-    var lights: [SHDRLight] = [sun]
+    var lights: [SHDRLight] = [sun, spot, point]
     params.lightCount = UInt32(lights.count)
 
     renderEncoder.setFragmentBytes(
@@ -134,6 +193,16 @@ struct RNDRForwardRenderPass {
         params: params
       )
     }
+
+    RNDRDebugLights
+      .draw(
+        device: device,
+        lights: lights,
+        encoder: renderEncoder,
+        uniforms: uniforms,
+        linePipelineState: linePipelineState,
+        pointPipelineState: pointPipelineState
+      )
     renderEncoder.endEncoding()
   }
 }
