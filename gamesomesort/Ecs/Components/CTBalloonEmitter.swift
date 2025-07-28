@@ -28,12 +28,16 @@ struct CTBalloonEmitter: LECSComponent {
   }
 
   mutating func emit() -> Bool {
+    var result = false
+
     if timer >= rate {
       timer = 0.0
-      return true
+      result = true
     } else {
-      return false
+      result = false
     }
+
+    return result
   }
 
   private mutating func reset() {

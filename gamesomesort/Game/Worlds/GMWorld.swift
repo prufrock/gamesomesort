@@ -72,7 +72,7 @@ class GMWorld {
           }
 
           // quick work around to clear balloons that are off the screen...
-          if otherPosition.y < -1.0 {
+          if otherPosition.y < -5.0 {
             world.deleteEntity(otherEntityId.id)
           }
 
