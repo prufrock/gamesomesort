@@ -27,6 +27,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       CTScale3d.self,
       LECSPosition2d.self,
       LECSVelocity2d.self,
+      CTBalloonEmitter.self,
     ]
 
     // use all of the components once, so they exist in the system
@@ -47,6 +48,36 @@ struct GMStartFromTileMap: GMEcsStarter {
     }
 
     createPlayerCamera(ecs: ecs)
+
+    let firstEmitter = ecs.createEntity("firstEmitter")
+    ecs.addComponent(firstEmitter, LECSPosition2d(x: 5, y: 20))
+    ecs.addComponent(
+      firstEmitter,
+      CTBalloonEmitter(
+        rate: 20.1,
+        timer: 0.0
+      )
+    )
+
+    let secondEmitter = ecs.createEntity("secondEmitter")
+    ecs.addComponent(secondEmitter, LECSPosition2d(x: 8, y: 20))
+    ecs.addComponent(
+      secondEmitter,
+      CTBalloonEmitter(
+        rate: 10.3,
+        timer: 0.0
+      )
+    )
+
+    let thirdEmitter = ecs.createEntity("thirdEmitter")
+    ecs.addComponent(thirdEmitter, LECSPosition2d(x: 12, y: 20))
+    ecs.addComponent(
+      thirdEmitter,
+      CTBalloonEmitter(
+        rate: 18.7,
+        timer: 0.0
+      )
+    )
   }
 
   private func createPlayerCamera(ecs: LECSWorld) {
@@ -60,7 +91,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       )
     )
     ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
-    ecs.addComponent(playerCamera, CTPosition3d(F3(8, 8, -10.0)))
+    ecs.addComponent(playerCamera, CTPosition3d(F3(8, 8, -8.0)))
     ecs.addComponent(playerCamera, CTScale3d(F3(1.0, -1.0, 1.0)))
   }
 
