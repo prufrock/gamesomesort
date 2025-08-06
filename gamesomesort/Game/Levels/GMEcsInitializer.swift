@@ -20,6 +20,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       CTAspect.self,
       CTCameraFirstPerson.self,
       CTColor.self,
+      CTLight.self,
       CTTagBalloon.self,
       CTTagTap.self,
       CTTagVisible.self,
@@ -78,6 +79,8 @@ struct GMStartFromTileMap: GMEcsStarter {
         timer: 0.0
       )
     )
+
+    createLights(ecs: ecs)
   }
 
   private func createPlayerCamera(ecs: LECSWorld) {
@@ -124,5 +127,41 @@ struct GMStartFromTileMap: GMEcsStarter {
     default:
       print("Oh dang, unknown thing at (\(x),\(y))")
     }
+  }
+
+  private func createLights(ecs: LECSWorld) {
+    _ = {
+      var sun = CTLight()
+      sun.type = LightType(1)
+      let color = CTColor([1, 1, 1])
+      let position = CTPosition3d([0, 6, -9])
+      let id = ecs.createEntity("sun")
+      ecs.addComponent(id, sun)
+      ecs.addComponent(id, color)
+      ecs.addComponent(id, position)
+    }()
+
+    _ = {
+      var light = CTLight()
+      light.type = Spot
+      light.coneDirection = [1, 1, 0]
+      let color = CTColor([1, 0.5, 0.5])
+      let position = CTPosition3d([10, 7, 7])
+      let id = ecs.createEntity("spotLight")
+      ecs.addComponent(id, light)
+      ecs.addComponent(id, color)
+      ecs.addComponent(id, position)
+    }()
+
+    _ = {
+      var light = CTLight()
+      light.type = Point
+      let color = CTColor([0, 0.5, 0.5])
+      let position = CTPosition3d([1, 3, 3])
+      let id = ecs.createEntity("pointLight")
+      ecs.addComponent(id, light)
+      ecs.addComponent(id, color)
+      ecs.addComponent(id, position)
+    }()
   }
 }

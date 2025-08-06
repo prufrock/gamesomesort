@@ -7,18 +7,21 @@
 import MetalKit
 import lecs_swift
 
-class RNDRTileBasedDeferredRenderer: RNDRRenderer {
+class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let config: AppCoreConfig
   private let device: MTLDevice
   private let commandQueue: MTLCommandQueue
   private let library: MTLLibrary
   private var forwardRenderPass: RNDRForwardRenderPass? = nil
+  private var shadowRenderPass: RNDRShadowRenderPass? = nil
 
   private var squareRenderer = RNDRSquare()
 
   private var screenDimensions = ScreenDimensions()
 
-  private let controllerTexture = ControllerTexture()
+  var controllerTexture = ControllerTexture()
+  var lightBuffer: MTLBuffer? = nil
+  var lights: [SHDRLight] = []
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -63,6 +66,14 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
   }
 
   func initializeRenderPasses(pixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) {
+
+    shadowRenderPass = RNDRShadowRenderPass(
+      device: device,
+      depthPixelFormat: depthStencilPixelFormat,
+      library: library,
+      controllerTexture: controllerTexture
+    )
+
     forwardRenderPass = RNDRForwardRenderPass(
       device: device,
       colorPixelFormat: pixelFormat,
@@ -102,12 +113,56 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer {
     }
 
     let uniforms = self.createUniforms(ecs)
-    let params = self.createParams(ecs)
+    var params = self.createParams(ecs)
+
+    updateLighting(ecs: ecs, params: &params)
+
+    shadowRenderPass?.draw(commandBuffer: commandBuffer, world: ecs, uniforms: uniforms, params: params, context: self)
 
     forwardRenderPass?.descriptor = renderDescriptor.currentRenderPassDescriptor
-    forwardRenderPass?.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params)
+    forwardRenderPass?.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params, context: self)
 
     commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()
   }
+
+  func updateLighting(ecs: LECSWorld, params: inout SHDRParams) {
+    lights = ecs.lights
+    lightBuffer = device.makeBuffer(bytes: &lights, length: MemoryLayout<SHDRLight>.stride * lights.count, options: [])!
+    params.lightCount = UInt32(lights.count)
+  }
+}
+
+extension LECSWorld {
+  var lights: [SHDRLight] {
+    var lights: [SHDRLight] = []
+    select([CTPosition3d.self, CTLight.self, CTColor.self]) { row, columns in
+      let position = row.component(at: 0, columns, CTPosition3d.self)
+      let light = row.component(at: 1, columns, CTLight.self)
+      let color = row.component(at: 2, columns, CTColor.self)
+
+      var shdrLight = SHDRLight()
+
+      shdrLight.position = position.position
+      shdrLight.radius = 0
+      shdrLight.color = color.f3
+      shdrLight.type = light.type
+      shdrLight.coneDirection = light.coneDirection
+      shdrLight.attenuation = light.attenuation
+      shdrLight.coneAngle = light.coneAngle
+      shdrLight.coneAttenutation = light.coneAttenuation
+      shdrLight.coneDirection = light.coneDirection
+
+      lights.append(shdrLight)
+    }
+
+    return lights
+  }
+}
+
+// Shared information needed for rendering.
+protocol RNDRContext {
+  var lights: [SHDRLight] { get }
+  var lightBuffer: MTLBuffer? { get }
+  var controllerTexture: ControllerTexture { get }
 }

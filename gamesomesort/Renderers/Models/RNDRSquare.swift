@@ -140,7 +140,9 @@ struct RNDRSquare {
       modelMatrix: Float4x4.identity,
       viewMatrix: camera.viewMatrix,
       projectionMatrix: camera.projection,
-      normalMatrix: .init(diagonal: [1, 1, 1])
+      normalMatrix: .init(diagonal: [1, 1, 1]),
+      shadowProjectionMatrix: Float4x4.identity,
+      shadowViewMatrix: Float4x4.identity
     )
 
     encoder.setDepthStencilState(depthStencilState)

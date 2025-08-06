@@ -8,7 +8,7 @@
 import MetalKit
 import lecs_swift
 
-struct RNDRForwardRenderPass {
+struct RNDRForwardRenderPass: RNDRRenderPass {
   let label = "Forward Render Pass"
   var descriptor: MTLRenderPassDescriptor?
 
@@ -131,18 +131,12 @@ struct RNDRForwardRenderPass {
     )
   }
 
-  private static func buildDepthStencilState(device: MTLDevice) -> MTLDepthStencilState? {
-    let descriptor = MTLDepthStencilDescriptor()
-    descriptor.depthCompareFunction = .less
-    descriptor.isDepthWriteEnabled = true
-    return device.makeDepthStencilState(descriptor: descriptor)
-  }
-
   func draw(
     commandBuffer: MTLCommandBuffer,
     ecs: LECSWorld,
     uniforms: SHDRUniforms,
-    params: SHDRParams
+    params: SHDRParams,
+    context: RNDRContext
   ) {
     guard let descriptor = descriptor,
       let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
@@ -156,35 +150,13 @@ struct RNDRForwardRenderPass {
     renderEncoder.setDepthStencilState(depthStencilState)
     renderEncoder.setRenderPipelineState(tbrPipelineState)
 
-    var params = params
-
-    var sun = SHDRLight()
-    sun.type = LightType(1)
-    sun.color = [1, 1, 1]
-    sun.position = [0, 6, -9]
-
-    var spot = SHDRLight()
-    spot.type = LightType(2)
-    spot.color = [1, 0.5, 0.5]
-    spot.coneDirection = [1, 1, 0]
-    spot.position = [10, 7, 7]
-
-    var point = SHDRLight()
-    point.type = LightType(3)
-    point.color = [0, 0.5, 0.5]
-    point.position = [1, 3, 3]
-
-    // lights...
-    var lights: [SHDRLight] = [sun, spot, point]
-    params.lightCount = UInt32(lights.count)
-
-    renderEncoder.setFragmentBytes(
-      &lights,
-      length: MemoryLayout<SHDRLight>.stride * lights.count,
+    renderEncoder.setFragmentBuffer(
+      context.lightBuffer!,
+      offset: 0,
       index: LightBuffer.index
     )
 
-    let squares = ecs.squares
+    let squares = ecs.models
     for square in squares {
       sphere.transform = square.transform
       sphere.render(
@@ -197,34 +169,13 @@ struct RNDRForwardRenderPass {
     RNDRDebugLights
       .draw(
         device: device,
-        lights: lights,
+        lights: context.lights,
         encoder: renderEncoder,
         uniforms: uniforms,
         linePipelineState: linePipelineState,
         pointPipelineState: pointPipelineState
       )
     renderEncoder.endEncoding()
-  }
-}
-
-extension LECSWorld {
-  fileprivate var squares: [GMSquare] {
-    var squares = [GMSquare]()
-    select([LECSPosition2d.self, CTColor.self, CTRadius.self, CTTagVisible.self]) { row, columns in
-      let position = row.component(at: 0, columns, LECSPosition2d.self)
-      let color = row.component(at: 1, columns, CTColor.self)
-      let radius = row.component(at: 2, columns, CTRadius.self)
-      let square = GMSquare(
-        transform: GEOTransform(
-          position: F3(position.position, 1.0),
-          quaternion: simd_quatf(Float4x4.identity),
-          scale: Float3(repeating: radius.radius)
-        ),
-        color: color.color
-      )
-      squares.append(square)
-    }
-    return squares
   }
 }
 
