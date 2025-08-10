@@ -188,4 +188,38 @@ extension Float4x4 {
     let z = columns.2.xyz
     return float3x3(columns: (x, y, z))
   }
+
+  static func orthographicProjection(rect: GEORectangle, near: Float, far: Float) -> Float4x4 {
+    let left = Float(rect.min.x)
+    let right = Float(rect.min.x + rect.width)
+    let top = Float(rect.min.y)
+    let bottom = Float(rect.min.y - rect.height)
+    let X = F4(2 / (right - left), 0, 0, 0)
+    let Y = F4(0, 2 / (top - bottom), 0, 0)
+    let Z = F4(0, 0, 1 / (far - near), 0)
+    let W = F4((left + right) / (left - right), (top + bottom) / (bottom - top), near / (near - far), 1)
+
+    return Float4x4(X, Y, Z, W)
+  }
+
+  func orthographicProjection(rect: GEORectangle, near: Float, far: Float) -> Float4x4 {
+    self * Self.orthographicProjection(rect: rect, near: near, far: far)
+  }
+
+  static func lookAtProjection(eye: F3, center: F3, up: F3) -> Float4x4 {
+    let z = normalize(center - eye)
+    let x = normalize(cross(up, z))
+    let y = cross(z, x)
+
+    let X = F4(x.x, y.x, z.x, 0)
+    let Y = F4(x.y, y.y, z.y, 0)
+    let Z = F4(x.z, y.z, z.z, 0)
+    let W = F4(-dot(x, eye), -dot(y, eye), -dot(z, eye), 1)
+
+    return Float4x4(X, Y, Z, W)
+  }
+
+  func lookAtProjection(eye: F3, center: F3, up: F3) -> Float4x4 {
+    self * Self.lookAtProjection(eye: eye, center: center, up: up)
+  }
 }

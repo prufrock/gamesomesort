@@ -19,6 +19,7 @@ struct AppCoreConfig {
     let tapDelay: Int = 50
     let world: World
     let timeLimit: Float = Float.infinity
+    let upVector: F3 = [0, -1, 0]
 
     struct World {
       let ecsArchetypeSize: Int

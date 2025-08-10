@@ -90,6 +90,17 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     uniforms.viewMatrix = camera.viewMatrix
     uniforms.projectionMatrix = camera.projection
 
+    let sunlight = ecs.entity("sun")!
+    let position = ecs.getComponent(sunlight, CTPosition3d.self)!
+    let shadowCamera = camera.createShadowCamera(lightPosition: position.position)
+    uniforms.shadowProjectionMatrix = shadowCamera.projection
+    let upVector = config.game.upVector
+    uniforms.shadowViewMatrix = Float4x4.lookAtProjection(
+      eye: shadowCamera.position,
+      center: shadowCamera.center,
+      up: upVector
+    )
+
     return uniforms
   }
 
