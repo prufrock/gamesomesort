@@ -20,6 +20,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private var screenDimensions = ScreenDimensions()
 
   var controllerTexture = ControllerTexture()
+  var controllerModel: ControllerModel
   var lightBuffer: MTLBuffer? = nil
   var lights: [SHDRLight] = []
 
@@ -55,6 +56,14 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     self.library = library
 
     squareRenderer.initBuffers(device: device)
+    controllerModel = ControllerModel(
+      device: device,
+      controllerTexture: controllerTexture
+    )
+
+    config.services.renderService.models.forEach {
+      controllerModel.loadModel($0)
+    }
   }
 
   func resize(_ dimensions: ScreenDimensions) {
@@ -176,4 +185,5 @@ protocol RNDRContext {
   var lights: [SHDRLight] { get }
   var lightBuffer: MTLBuffer? { get }
   var controllerTexture: ControllerTexture { get }
+  var controllerModel: ControllerModel { get }
 }

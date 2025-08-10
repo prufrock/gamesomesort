@@ -20,9 +20,6 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
   private let pointPipelineState: MTLRenderPipelineState
   let depthStencilState: MTLDepthStencilState?
 
-  // model controller?
-  private let sphere: GEOModel
-
   init(
     device: MTLDevice,
     colorPixelFormat: MTLPixelFormat,
@@ -57,8 +54,6 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
       library: library
     )
     depthStencilState = Self.buildDepthStencilState(device: device)
-    //sphere = GEOModel(name: "sphere", primitiveType: .sphere, controllerTexture: controllerTexture, device: device)
-    sphere = GEOModel(name: "brick-sphere.usdz", controllerTexture: controllerTexture, device: device)
   }
 
   private static func buildPipelineState(
@@ -157,6 +152,7 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
     )
 
     let squares = ecs.models
+    let sphere = context.controllerModel.models["brick-sphere.usdz"]!
     for square in squares {
       sphere.transform = square.transform
       sphere.render(

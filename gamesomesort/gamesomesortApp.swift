@@ -27,7 +27,8 @@ struct gamesomesortApp: App {
         services: AppCoreConfig.Services(
           renderService: AppCoreConfig.Services.RenderService(
             type: .tileBased,
-            clearColor: (0.3, 0.0, 0.3, 1.0)
+            clearColor: (0.3, 0.0, 0.3, 1.0),
+            models: ["brick-sphere.usdz"]
           ),
           fileService: AppCoreConfig.Services.FileService(
             levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json),

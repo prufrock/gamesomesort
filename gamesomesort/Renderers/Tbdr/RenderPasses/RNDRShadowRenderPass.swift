@@ -15,9 +15,6 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
   var pipelineState: MTLRenderPipelineState
   var shadowTexture: MTLTexture?
 
-  // model controller?
-  private let sphere: GEOModel
-
   init(
     device: MTLDevice,
     depthPixelFormat: MTLPixelFormat,
@@ -33,8 +30,6 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
       pixelFormat: depthPixelFormat,
       label: "Shadow Depth Texture"
     )
-
-    sphere = GEOModel(name: "brick-sphere.usdz", controllerTexture: controllerTexture, device: device)
   }
 
   private static func buildPipelineState(
@@ -78,6 +73,7 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
       index: LightBuffer.index
     )
 
+    let sphere = context.controllerModel.models["brick-sphere.usdz"]!
     for square in world.models {
       sphere.transform = square.transform
       sphere.render(
