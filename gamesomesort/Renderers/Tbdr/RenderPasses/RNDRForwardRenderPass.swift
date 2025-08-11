@@ -20,6 +20,9 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
   private let pointPipelineState: MTLRenderPipelineState
   let depthStencilState: MTLDepthStencilState?
 
+  // Don't let a reference to the shadow textue here keep it alive.
+  weak var shadowTexture: MTLTexture?
+
   init(
     device: MTLDevice,
     colorPixelFormat: MTLPixelFormat,
@@ -150,6 +153,7 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
       offset: 0,
       index: LightBuffer.index
     )
+    renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
     let squares = ecs.models
     let sphere = context.controllerModel.models["brick-sphere.usdz"]!

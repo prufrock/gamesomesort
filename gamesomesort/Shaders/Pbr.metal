@@ -25,6 +25,10 @@ float3 computeSpecular(
   float3 specularTotal = 0;
   for (uint i = 0; i < params.lightCount; i++) {
     SHDRLight light = lights[i];
+    // only sunlight for now
+    if (light.type != Sun) {
+      continue;
+    }
     float3 lightDirection = normalize(light.position);
     float3 F0 = mix(0.04, material.baseColor, material.metallic);
     // a little bit of bias makes it so you can see some shine when there's zero roughness
@@ -71,6 +75,10 @@ float3 computeDiffuse(
   float3 diffuseTotal = 0;
   for (uint i = 0; i < params.lightCount; i++) {
     SHDRLight light = lights[i];
+    // only Sun light for now
+    if (light.type != Sun) {
+      continue;
+    }
     float3 lightDirection = normalize(light.position);
     float nDotL = saturate(dot(normal, lightDirection));
     float3 diffuse = float3(material.baseColor) * (1.0 - material.metallic);

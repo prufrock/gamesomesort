@@ -141,8 +141,11 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
     shadowRenderPass?.draw(commandBuffer: commandBuffer, world: ecs, uniforms: uniforms, params: params, context: self)
 
-    forwardRenderPass?.descriptor = renderDescriptor.currentRenderPassDescriptor
-    forwardRenderPass?.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params, context: self)
+    if var forwardRenderPass {
+      forwardRenderPass.shadowTexture = shadowRenderPass?.shadowTexture
+      forwardRenderPass.descriptor = renderDescriptor.currentRenderPassDescriptor
+      forwardRenderPass.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params, context: self)
+    }
 
     commandBuffer.present(renderDescriptor.currentDrawable)
     commandBuffer.commit()

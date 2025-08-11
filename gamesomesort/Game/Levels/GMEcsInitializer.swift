@@ -134,10 +134,10 @@ struct GMStartFromTileMap: GMEcsStarter {
 
   private func createBackPlane(ecs: LECSWorld) {
     let backPlane = ecs.createEntity("backPlane")
-    ecs.addComponent(backPlane, CTPosition3d(10, 10, 10))
-    ecs.addComponent(backPlane, CTScale3d(uniform: 30))
+    ecs.addComponent(backPlane, CTPosition3d(10, 10, 1.5))
+    ecs.addComponent(backPlane, CTScale3d(uniform: 35))
     ecs.addComponent(backPlane, CTColor([0.6, 0.6, 0.6]))
-    ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
+    ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
     ecs.addComponent(backPlane, CTModel("back-plane"))
     ecs.addComponent(backPlane, CTTagVisible())
   }
@@ -145,9 +145,9 @@ struct GMStartFromTileMap: GMEcsStarter {
   private func createLights(ecs: LECSWorld) {
     _ = {
       var sun = CTLight()
-      sun.type = LightType(1)
-      let color = CTColor([1, 1, 1])
-      let position = CTPosition3d([0, 6, -9])
+      sun.type = Sun
+      let color = CTColor([0, 1, 1])
+      let position = CTPosition3d([0, 0, -1])
       let id = ecs.createEntity("sun")
       ecs.addComponent(id, sun)
       ecs.addComponent(id, color)
@@ -159,7 +159,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       light.type = Spot
       light.coneDirection = [1, 1, 0]
       let color = CTColor([1, 0.5, 0.5])
-      let position = CTPosition3d([10, 7, 7])
+      let position = CTPosition3d([10, 7, 0.2])
       let id = ecs.createEntity("spotLight")
       ecs.addComponent(id, light)
       ecs.addComponent(id, color)
@@ -170,7 +170,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       var light = CTLight()
       light.type = Point
       let color = CTColor([0, 0.5, 0.5])
-      let position = CTPosition3d([1, 3, 3])
+      let position = CTPosition3d([1, 3, 1.4])
       let id = ecs.createEntity("pointLight")
       ecs.addComponent(id, light)
       ecs.addComponent(id, color)

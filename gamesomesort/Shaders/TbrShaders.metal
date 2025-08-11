@@ -27,6 +27,7 @@ struct VertexOut {
   float3 worldNormal;
   float3 worldTangent;
   float3 worldBitangent;
+  float4 shadowPosition;
 };
 
 vertex VertexOut tbr_vertex_main(
@@ -43,7 +44,8 @@ vertex VertexOut tbr_vertex_main(
     .worldPosition = worldPosition.xyz / worldPosition.w,
     .worldNormal = uniforms.normalMatrix * in.normal,
     .worldTangent = uniforms.normalMatrix * in.tangent,
-    .worldBitangent = uniforms.normalMatrix * in.bitangent
+    .worldBitangent = uniforms.normalMatrix * in.bitangent,
+    .shadowPosition = uniforms.shadowProjectionMatrix * uniforms.shadowViewMatrix * uniforms.modelMatrix * in.position
   };
   return out;
 }
@@ -57,7 +59,8 @@ fragment float4 tbr_fragment_main(
                               texture2d<float> normalTexture [[texture(NormalTexture)]],
                               texture2d<float> roughnessTexture [[texture(RoughnessTexture)]],
                               texture2d<float> metallicTexture [[texture(MetallicTexture)]],
-                              texture2d<float> aoTexture [[texture(AOTexture)]]
+                              texture2d<float> aoTexture [[texture(AOTexture)]],
+                              depth2d<float> shadowTexture [[texture(ShadowTexture)]]
                               )
 {
   SHDRMaterial material = _material;
@@ -96,6 +99,11 @@ fragment float4 tbr_fragment_main(
   float3 diffuseColor = computeDiffuse(lights, params, material, normal);
 
   float3 specularColor = computeSpecular(lights, params, material, normal);
+
+  if(!is_null_texture(shadowTexture)) {
+    float shadow = calculateShadow(in.shadowPosition, shadowTexture);
+    diffuseColor *= shadow;
+  }
 
   return float4(diffuseColor + specularColor, 1);
 }

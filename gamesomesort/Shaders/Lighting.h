@@ -10,6 +10,11 @@
 
 #import "Common.h"
 
+float calculateShadow(
+                      float4 shadowPosition,
+                      depth2d<float> shadowTexture
+                      );
+
 // PBR functions
 float3 computeSpecular(
                        constant SHDRLight *lights,
