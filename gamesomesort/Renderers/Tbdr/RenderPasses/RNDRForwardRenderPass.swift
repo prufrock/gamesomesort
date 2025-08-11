@@ -162,6 +162,11 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
       )
     }
 
+    let models = ecs.geoModels(context: context)
+    for model in models {
+      model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
+    }
+
     RNDRDebugLights
       .draw(
         device: device,

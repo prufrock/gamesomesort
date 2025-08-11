@@ -64,6 +64,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     config.services.renderService.models.forEach {
       controllerModel.loadModel($0)
     }
+
+    controllerModel.loadPrimitive("back-plane", primitiveType: .plane)
   }
 
   func resize(_ dimensions: ScreenDimensions) {

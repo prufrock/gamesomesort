@@ -18,17 +18,19 @@ struct GMStartFromTileMap: GMEcsStarter {
 
     let componentTypes: [LECSComponent.Type] = [
       CTAspect.self,
+      CTBalloonEmitter.self,
       CTCameraFirstPerson.self,
       CTColor.self,
       CTLight.self,
+      CTModel.self,
       CTTagBalloon.self,
       CTTagTap.self,
       CTTagVisible.self,
+      CTQuaternion.self,
       CTRadius.self,
       CTScale3d.self,
       LECSPosition2d.self,
       LECSVelocity2d.self,
-      CTBalloonEmitter.self,
     ]
 
     // use all of the components once, so they exist in the system
@@ -81,6 +83,7 @@ struct GMStartFromTileMap: GMEcsStarter {
     )
 
     createLights(ecs: ecs)
+    createBackPlane(ecs: ecs)
   }
 
   private func createPlayerCamera(ecs: LECSWorld) {
@@ -127,6 +130,16 @@ struct GMStartFromTileMap: GMEcsStarter {
     default:
       print("Oh dang, unknown thing at (\(x),\(y))")
     }
+  }
+
+  private func createBackPlane(ecs: LECSWorld) {
+    let backPlane = ecs.createEntity("backPlane")
+    ecs.addComponent(backPlane, CTPosition3d(10, 10, 10))
+    ecs.addComponent(backPlane, CTScale3d(uniform: 30))
+    ecs.addComponent(backPlane, CTColor([0.6, 0.6, 0.6]))
+    ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
+    ecs.addComponent(backPlane, CTModel("back-plane"))
+    ecs.addComponent(backPlane, CTTagVisible())
   }
 
   private func createLights(ecs: LECSWorld) {

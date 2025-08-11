@@ -24,4 +24,17 @@ class ControllerModel {
     let model = GEOModel(name: name, controllerTexture: controllerTexture, device: device)
     models[name] = model
   }
+
+  @discardableResult
+  func loadPrimitive(_ name: String, primitiveType: GEOPrimitive) -> GEOModel {
+    let model = GEOModel(
+      name: name,
+      primitiveType: primitiveType,
+      controllerTexture: controllerTexture,
+      device: device
+    )
+    models[name] = model
+
+    return model
+  }
 }

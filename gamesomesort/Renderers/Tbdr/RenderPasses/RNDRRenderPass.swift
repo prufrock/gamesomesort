@@ -67,4 +67,33 @@ extension LECSWorld {
     }
     return squares
   }
+
+  func geoModels(context: RNDRContext) -> [GEOModel] {
+    var models = [GEOModel]()
+    select(
+      [
+        CTModel.self,
+        CTPosition3d.self,
+        CTScale3d.self,
+        CTQuaternion.self,
+        CTColor.self,
+        CTTagVisible.self,
+      ]
+    ) { row, columns in
+      let ctModel = row.component(at: 0, columns, CTModel.self)
+      let position = row.component(at: 1, columns, CTPosition3d.self)
+      let scale = row.component(at: 2, columns, CTScale3d.self)
+      let quaternion = row.component(at: 3, columns, CTQuaternion.self)
+      let color = row.component(at: 4, columns, CTColor.self)
+
+      let model = context.controllerModel.models[ctModel.name]!
+      model.transform.scale = scale.scale
+      model.transform.quaternion = quaternion.quaternion
+      model.transform.position = position.position
+      model.meshes[0].submeshes[0].material.baseColor = color.f3
+
+      models.append(model)
+    }
+    return models
+  }
 }
