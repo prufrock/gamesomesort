@@ -15,6 +15,20 @@ float calculateShadow(
                       depth2d<float> shadowTexture
                       );
 
+float3 calculateSun(
+                    SHDRLight light,
+                    float3 normal,
+                    SHDRParams params,
+                    SHDRMaterial material
+                    );
+
+float3 calculatePoint(
+                      SHDRLight light,
+                      float3 fragmentWorldPosition,
+                      float3 normal,
+                      SHDRMaterial material
+                      );
+
 // PBR functions
 float3 computeSpecular(
                        constant SHDRLight *lights,
@@ -24,6 +38,7 @@ float3 computeSpecular(
 
 float3 computeDiffuse(
                       constant SHDRLight *lights,
+                      float3 fragmentWorldPosition,
                       constant SHDRParams &params,
                       SHDRMaterial material,
                       float3 normal);

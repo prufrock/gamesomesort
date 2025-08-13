@@ -146,7 +146,7 @@ struct GMStartFromTileMap: GMEcsStarter {
     _ = {
       var sun = CTLight()
       sun.type = Sun
-      let color = CTColor([0, 1, 1])
+      let color = CTColor([1, 1, 1])
       let position = CTPosition3d([0, 0, -1])
       let id = ecs.createEntity("sun")
       ecs.addComponent(id, sun)
@@ -169,9 +169,24 @@ struct GMStartFromTileMap: GMEcsStarter {
     _ = {
       var light = CTLight()
       light.type = Point
+      light.attenuation = [1, 0, 0]
+      light.specularColor = F3(repeating: 0.6)
       let color = CTColor([0, 0.5, 0.5])
-      let position = CTPosition3d([1, 3, 1.4])
+      let position = CTPosition3d([6, 3, 1.4])
       let id = ecs.createEntity("pointLight")
+      ecs.addComponent(id, light)
+      ecs.addComponent(id, color)
+      ecs.addComponent(id, position)
+    }()
+
+    _ = {
+      var light = CTLight()
+      light.type = Point
+      light.attenuation = [1, 0, 0]
+      light.specularColor = F3(repeating: 0.6)
+      let color = CTColor([0.5, 0, 0.5])
+      let position = CTPosition3d([12, 8, 1.4])
+      let id = ecs.createEntity("pointLightTwo")
       ecs.addComponent(id, light)
       ecs.addComponent(id, color)
       ecs.addComponent(id, position)

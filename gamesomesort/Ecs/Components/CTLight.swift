@@ -9,7 +9,7 @@ import lecs_swift
 
 struct CTLight: LECSComponent {
   var type: LightType
-  var specularColor: Float
+  var specularColor: Float3
   var attenuation: Float3
   var coneAngle: Float
   var coneDirection: Float3
@@ -17,7 +17,7 @@ struct CTLight: LECSComponent {
 
   init() {
     type = Point
-    specularColor = 1
+    specularColor = [1, 1, 1]
     attenuation = .zero
     coneAngle = 0
     coneDirection = .zero

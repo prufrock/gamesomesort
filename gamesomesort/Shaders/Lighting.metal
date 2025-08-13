@@ -9,6 +9,40 @@
 using namespace metal;
 #import "Lighting.h"
 
+float3 calculateSun(
+                    SHDRLight light,
+                    float3 normal,
+                    SHDRParams params,
+                    SHDRMaterial material
+                    )
+{
+    float3 lightDirection = normalize(light.position);
+    float nDotL = saturate(dot(normal, lightDirection));
+    float3 diffuse = float3(material.baseColor) * (1.0 - material.metallic);
+    return diffuse * nDotL * material.ambientOcclusion * light.color;
+}
+
+float3 calculatePoint(
+                      SHDRLight light,
+                      float3 fragmentWorldPosition,
+                      float3 normal,
+                      SHDRMaterial material
+                      )
+{
+    float d = distance(light.position, fragmentWorldPosition);
+    float3 lightDirection = normalize(light.position - fragmentWorldPosition);
+
+    float attentuation = 1.0 /
+    (light.attenuation.x + light.attenuation.y * d + light.attenuation.z * d * d);
+    float diffuseIntensity = saturate(dot(normal, lightDirection));
+    float3 color = light.color * material.baseColor * diffuseIntensity;
+    color *= attentuation;
+    if (color.r + color.g + color.b < 0.01) {
+        color = 0;
+    }
+    return color;
+}
+
 float calculateShadow(
                       float4 shadowPosition,
                       depth2d<float> shadowTexture

@@ -67,6 +67,7 @@ float3 computeSpecular(
 
 float3 computeDiffuse(
                       constant SHDRLight *lights,
+                      float3 fragmentWorldPosition,
                       constant SHDRParams &params,
                       SHDRMaterial material,
                       float3 normal
@@ -75,14 +76,25 @@ float3 computeDiffuse(
   float3 diffuseTotal = 0;
   for (uint i = 0; i < params.lightCount; i++) {
     SHDRLight light = lights[i];
-    // only Sun light for now
-    if (light.type != Sun) {
-      continue;
+    switch (light.type) {
+      case Sun: {
+        diffuseTotal += calculateSun(light, normal, params, material);
+        break;
+      }
+      case Point: {
+        diffuseTotal += calculatePoint(light, fragmentWorldPosition, normal, material);
+        break;
+      }
+      case Spot: {
+        break;
+      }
+      case Ambient: {
+        break;
+      }
+      case unused: {
+        break;
+      }
     }
-    float3 lightDirection = normalize(light.position);
-    float nDotL = saturate(dot(normal, lightDirection));
-    float3 diffuse = float3(material.baseColor) * (1.0 - material.metallic);
-    diffuseTotal += diffuse * nDotL * material.ambientOcclusion;
   }
   return diffuseTotal;
 }

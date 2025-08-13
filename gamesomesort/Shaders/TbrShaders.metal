@@ -96,7 +96,7 @@ fragment float4 tbr_fragment_main(
   }
   normal = normalize(normal);
 
-  float3 diffuseColor = computeDiffuse(lights, params, material, normal);
+  float3 diffuseColor = computeDiffuse(lights, in.worldPosition, params, material, normal);
 
   float3 specularColor = computeSpecular(lights, params, material, normal);
 

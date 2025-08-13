@@ -11,6 +11,7 @@ import lecs_swift
 struct RNDRForwardRenderPass: RNDRRenderPass {
   let label = "Forward Render Pass"
   var descriptor: MTLRenderPassDescriptor?
+  let debugLights: Bool
 
   private let device: MTLDevice
 
@@ -28,9 +29,11 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
     colorPixelFormat: MTLPixelFormat,
     depthPixelFormat: MTLPixelFormat,
     library: MTLLibrary,
-    controllerTexture: ControllerTexture
+    controllerTexture: ControllerTexture,
+    debugLights: Bool = false
   ) {
     self.device = device
+    self.debugLights = debugLights
 
     pipelineState = Self.buildPipelineState(
       device: device,
@@ -171,15 +174,17 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
       model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
     }
 
-    RNDRDebugLights
-      .draw(
-        device: device,
-        lights: context.lights,
-        encoder: renderEncoder,
-        uniforms: uniforms,
-        linePipelineState: linePipelineState,
-        pointPipelineState: pointPipelineState
-      )
+    if debugLights {
+      RNDRDebugLights
+        .draw(
+          device: device,
+          lights: context.lights,
+          encoder: renderEncoder,
+          uniforms: uniforms,
+          linePipelineState: linePipelineState,
+          pointPipelineState: pointPipelineState
+        )
+    }
     renderEncoder.endEncoding()
   }
 }
