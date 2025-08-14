@@ -46,6 +46,7 @@ class ControllerGame: NSObject {
     )
     game?.update(dimensions)
     appCore.sync(SVCCommandRender.InitializePipelines(pixelFormat: view.colorPixelFormat))
+    appCore.sync(SVCCommandRender.Resize(screenDimensions: dimensions))
   }
 
   // Moved this into the GameController, so the renderers don't have to be main actor isolated.

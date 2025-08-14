@@ -24,3 +24,9 @@ extension SHDRTextureIndices {
     return Int(self.rawValue)
   }
 }
+
+extension SHDRRenderTargetIndices {
+  var index: Int {
+    return Int(self.rawValue)
+  }
+}

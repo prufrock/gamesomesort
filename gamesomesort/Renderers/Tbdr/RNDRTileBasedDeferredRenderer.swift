@@ -13,6 +13,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let commandQueue: MTLCommandQueue
   private let library: MTLLibrary
   private var forwardRenderPass: RNDRForwardRenderPass? = nil
+  private var gBufferRenderPass: RNDRGBufferRenderPass? = nil
   private var shadowRenderPass: RNDRShadowRenderPass? = nil
 
   private var squareRenderer = RNDRSquare()
@@ -70,6 +71,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
   func resize(_ dimensions: ScreenDimensions) {
     screenDimensions = dimensions
+    gBufferRenderPass?.resize(dimensions)
   }
 
   func initializePipelines(pixelFormat: MTLPixelFormat) {
@@ -86,6 +88,14 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     )
 
     forwardRenderPass = RNDRForwardRenderPass(
+      device: device,
+      colorPixelFormat: pixelFormat,
+      depthPixelFormat: depthStencilPixelFormat,
+      library: library,
+      controllerTexture: controllerTexture
+    )
+
+    gBufferRenderPass = RNDRGBufferRenderPass(
       device: device,
       colorPixelFormat: pixelFormat,
       depthPixelFormat: depthStencilPixelFormat,
@@ -141,10 +151,18 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
     shadowRenderPass?.draw(commandBuffer: commandBuffer, world: ecs, uniforms: uniforms, params: params, context: self)
 
-    if var forwardRenderPass {
-      forwardRenderPass.shadowTexture = shadowRenderPass?.shadowTexture
-      forwardRenderPass.descriptor = renderDescriptor.currentRenderPassDescriptor
-      forwardRenderPass.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params, context: self)
+    switch config.services.renderService.tbdrRender {
+    case .forward:
+      if var forwardRenderPass {
+        forwardRenderPass.shadowTexture = shadowRenderPass?.shadowTexture
+        forwardRenderPass.descriptor = renderDescriptor.currentRenderPassDescriptor
+        forwardRenderPass.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params, context: self)
+      }
+    case .gbuffer:
+      if var gBufferRenderPass {
+        gBufferRenderPass.shadowTexture = shadowRenderPass?.shadowTexture
+        gBufferRenderPass.draw(commandBuffer: commandBuffer, ecs: ecs, uniforms: uniforms, params: params, context: self)
+      }
     }
 
     commandBuffer.present(renderDescriptor.currentDrawable)
@@ -191,4 +209,8 @@ protocol RNDRContext {
   var lightBuffer: MTLBuffer? { get }
   var controllerTexture: ControllerTexture { get }
   var controllerModel: ControllerModel { get }
+}
+
+enum RNDRTBDRRenderType: Int {
+  case forward, gbuffer
 }

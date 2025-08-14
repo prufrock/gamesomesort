@@ -95,4 +95,10 @@ typedef struct {
   float coneAttenutation;
 } SHDRLight;
 
+typedef enum {
+    RenderTargetAlbedo = 1,
+    RenderTargetNormal = 2,
+    RenderTargetPosition = 3
+} SHDRRenderTargetIndices;
+
 #endif

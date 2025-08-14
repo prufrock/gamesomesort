@@ -107,3 +107,12 @@ fragment float4 tbr_fragment_main(
 
   return float4(diffuseColor + specularColor, 1);
 }
+
+fragment float4 fragment_gBuffer(
+                                 VertexOut in [[stage_in]],
+                                 depth2d<float> shadowTexture [[texture(ShadowTexture)]],
+                                 constant SHDRMaterial &material [[buffer(MaterialBuffer)]]
+                                 )
+{
+  return float4(material.baseColor, 1);
+}
