@@ -53,7 +53,7 @@ class GEOModel: GEOTransformable {
 }
 
 enum GEOPrimitive {
-  case plane, sphere
+  case plane, sphere, icosahedron
 }
 
 extension GEOModel {
@@ -75,6 +75,13 @@ extension GEOModel {
   static func createMesh(primitiveType: GEOPrimitive, device: MTLDevice) -> MDLMesh {
     let allocator = MTKMeshBufferAllocator(device: device)
     switch primitiveType {
+    case .icosahedron:
+      return MDLMesh(
+        icosahedronWithExtent: [1, 1, 1],
+        inwardNormals: false,
+        geometryType: .triangles,
+        allocator: allocator
+      )
     case .plane:
       return MDLMesh(
         planeWithExtent: [1, 1, 1],
