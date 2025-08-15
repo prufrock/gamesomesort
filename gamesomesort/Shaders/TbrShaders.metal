@@ -11,6 +11,12 @@ using namespace metal;
 #import "Common.h"
 #import "Lighting.h"
 
+struct GBufferOut {
+  float4 albedo [[color(RenderTargetAlbedo)]];
+  float4 normal [[color(RenderTargetNormal)]];
+  float4 position [[color(RenderTargetPosition)]];
+};
+
 struct VertexIn {
   float4 position [[attribute(Position)]];
   float3 normal [[attribute(Normal)]];
@@ -108,11 +114,20 @@ fragment float4 tbr_fragment_main(
   return float4(diffuseColor + specularColor, 1);
 }
 
-fragment float4 fragment_gBuffer(
+fragment GBufferOut tbr_fragment_gBuffer(
                                  VertexOut in [[stage_in]],
                                  depth2d<float> shadowTexture [[texture(ShadowTexture)]],
                                  constant SHDRMaterial &material [[buffer(MaterialBuffer)]]
                                  )
 {
-  return float4(material.baseColor, 1);
+  GBufferOut out;
+
+  out.albedo = float4(material.baseColor, 1.0);
+  // Figure out if the fragment is in shadow.
+  // The alpha value of the albedo isn't used, so the shadow value can be stored there.
+  out.albedo.a = calculateShadow(in.shadowPosition, shadowTexture);
+  out.normal = float4(normalize(in.worldNormal), 1.0);
+  out.position = float4(in.worldPosition, 1.0);
+
+  return out;
 }
