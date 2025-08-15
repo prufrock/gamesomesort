@@ -65,6 +65,7 @@ typedef enum {
   RoughnessTexture = 2,
   MetallicTexture = 3,
   AOTexture = 4,
+  PositionTexture = 5,
   ShadowTexture = 11
 } SHDRTextureIndices;
 

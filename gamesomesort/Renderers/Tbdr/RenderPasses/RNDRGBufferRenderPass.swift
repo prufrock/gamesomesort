@@ -14,7 +14,6 @@ struct RNDRGBufferRenderPass: RNDRRenderPass {
 
   private let device: MTLDevice
 
-  var pipelineState: MTLRenderPipelineState
   private let tbrPipelineState: MTLRenderPipelineState
   let depthStencilState: MTLDepthStencilState?
 
@@ -47,12 +46,6 @@ struct RNDRGBufferRenderPass: RNDRRenderPass {
     self.device = device
     self.debugLights = debugLights
 
-    pipelineState = Self.buildPipelineState(
-      device: device,
-      colorPixelFormat: colorPixelFormat,
-      depthPixelFormat: depthPixelFormat,
-      library: library
-    )
     tbrPipelineState = Self.buildTbrPipelineState(
       device: device,
       colorPixelFormat: colorPixelFormat,
@@ -73,29 +66,6 @@ struct RNDRGBufferRenderPass: RNDRRenderPass {
     )
     depthStencilState = Self.buildDepthStencilState(device: device)
     descriptor = MTLRenderPassDescriptor()
-  }
-
-  private static func buildPipelineState(
-    device: MTLDevice,
-    colorPixelFormat: MTLPixelFormat,
-    depthPixelFormat: MTLPixelFormat,
-    library: MTLLibrary
-  ) -> MTLRenderPipelineState {
-    return try! device.makeRenderPipelineState(
-      descriptor: MTLRenderPipelineDescriptor().apply {
-        $0.vertexFunction = library.makeFunction(name: "indexed_main")
-        $0.fragmentFunction = library.makeFunction(name: "fragment_main")
-        $0.colorAttachments[0].pixelFormat = colorPixelFormat
-        $0.depthAttachmentPixelFormat = depthPixelFormat
-        $0.vertexDescriptor = MTLVertexDescriptor().apply {
-          // .position
-          $0.attributes[Position.index].format = MTLVertexFormat.float3
-          $0.attributes[Position.index].bufferIndex = VertexBuffer.index
-          $0.attributes[Position.index].offset = 0
-          $0.layouts[Position.index].stride = MemoryLayout<Float3>.stride
-        }
-      }
-    )
   }
 
   private static func buildLightDebugLinePipelineState(

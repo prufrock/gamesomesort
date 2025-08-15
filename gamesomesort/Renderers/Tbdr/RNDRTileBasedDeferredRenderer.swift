@@ -14,6 +14,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let library: MTLLibrary
   private var forwardRenderPass: RNDRForwardRenderPass? = nil
   private var gBufferRenderPass: RNDRGBufferRenderPass? = nil
+  private var lightingRenderPass: RNDRLightingRenderPass? = nil
   private var shadowRenderPass: RNDRShadowRenderPass? = nil
 
   private var squareRenderer = RNDRSquare()
@@ -22,8 +23,11 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
   var controllerTexture = ControllerTexture()
   var controllerModel: ControllerModel
-  var lightBuffer: MTLBuffer? = nil
+  // TODO: remove once moved to the separate light buffers
   var lights: [SHDRLight] = []
+  var lightBuffer: MTLBuffer? = nil
+  var sunLights: [SHDRLight] = []
+  var sunLightBuffer: MTLBuffer? = nil
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -102,6 +106,13 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       library: library,
       controllerTexture: controllerTexture
     )
+
+    lightingRenderPass = RNDRLightingRenderPass(
+      device: device,
+      colorPixelFormat: pixelFormat,
+      depthPixelFormat: depthStencilPixelFormat,
+      library: library
+    )
   }
 
   func createUniforms(_ ecs: LECSWorld) -> SHDRUniforms {
@@ -165,9 +176,21 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
         )
       }
     case .gbuffer:
-      if var gBufferRenderPass {
+      if var gBufferRenderPass, var lightingRenderPass {
         gBufferRenderPass.shadowTexture = shadowRenderPass?.shadowTexture
         gBufferRenderPass.draw(
+          commandBuffer: commandBuffer,
+          ecs: ecs,
+          uniforms: uniforms,
+          params: params,
+          context: self
+        )
+        lightingRenderPass.albedoTexture = gBufferRenderPass.albedoTexture
+        lightingRenderPass.normalTexture = gBufferRenderPass.normalTexture
+        lightingRenderPass.positionTexture = gBufferRenderPass.positionTexture
+        // render to the view
+        lightingRenderPass.descriptor = renderDescriptor.currentRenderPassDescriptor
+        lightingRenderPass.draw(
           commandBuffer: commandBuffer,
           ecs: ecs,
           uniforms: uniforms,
@@ -183,7 +206,17 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
   func updateLighting(ecs: LECSWorld, params: inout SHDRParams) {
     lights = ecs.lights
-    lightBuffer = device.makeBuffer(bytes: &lights, length: MemoryLayout<SHDRLight>.stride * lights.count, options: [])!
+    sunLights = lights.filter { $0.type == Sun }
+    lightBuffer = device.makeBuffer(
+      bytes: &lights,
+      length: MemoryLayout<SHDRLight>.stride * lights.count,
+      options: []
+    )!
+    sunLightBuffer = device.makeBuffer(
+      bytes: &sunLights,
+      length: MemoryLayout<SHDRLight>.stride * sunLights.count,
+      options: []
+    )!
     params.lightCount = UInt32(lights.count)
   }
 }
@@ -217,8 +250,12 @@ extension LECSWorld {
 
 // Shared information needed for rendering.
 protocol RNDRContext {
+  // TODO: remove once moved to the separate light buffers
   var lights: [SHDRLight] { get }
+  // TODO: remove once moved to the separate light buffers
   var lightBuffer: MTLBuffer? { get }
+  var sunLights: [SHDRLight] { get }
+  var sunLightBuffer: MTLBuffer? { get }
   var controllerTexture: ControllerTexture { get }
   var controllerModel: ControllerModel { get }
 }

@@ -117,12 +117,24 @@ fragment float4 tbr_fragment_main(
 fragment GBufferOut tbr_fragment_gBuffer(
                                  VertexOut in [[stage_in]],
                                  depth2d<float> shadowTexture [[texture(ShadowTexture)]],
-                                 constant SHDRMaterial &material [[buffer(MaterialBuffer)]]
+                                 constant SHDRMaterial &material [[buffer(MaterialBuffer)]],
+                                 texture2d<float> baseColorTexture [[texture(BaseColor)]]
                                  )
 {
   GBufferOut out;
 
-  out.albedo = float4(material.baseColor, 1.0);
+  constexpr sampler textureSampler(
+                                   filter::linear,
+                                   mip_filter::linear,
+                                   max_anisotropy(8),
+                                   address::repeat
+                                   );
+  if (!is_null_texture(baseColorTexture)) {
+    out.albedo = baseColorTexture.sample(textureSampler, in.uv).rgba;
+  } else {
+    out.albedo = float4(material.baseColor, 1.0);
+  }
+
   // Figure out if the fragment is in shadow.
   // The alpha value of the albedo isn't used, so the shadow value can be stored there.
   out.albedo.a = calculateShadow(in.shadowPosition, shadowTexture);
@@ -130,4 +142,51 @@ fragment GBufferOut tbr_fragment_gBuffer(
   out.position = float4(in.worldPosition, 1.0);
 
   return out;
+}
+
+// A quad to render to.
+constant float3 quadVertices[6] = {
+  float3(-1,  1,  0),
+  float3( 1, -1,  0),
+  float3(-1, -1,  0),
+  float3(-1,  1,  0),
+  float3( 1,  1,  0),
+  float3( 1, -1,  0)
+};
+
+vertex VertexOut tbr_vertex_quad(uint vertexID [[vertex_id]]) {
+  VertexOut out {
+    .position = float4(quadVertices[vertexID], 1)
+  };
+
+  return out;
+}
+
+fragment float4 tbr_fragment_deferredSun(
+                                     VertexOut in [[stage_in]],
+                                     constant SHDRParams &params [[buffer(ParamsBuffer)]],
+                                     constant SHDRLight *lights [[buffer(LightBuffer)]],
+                                     texture2d<float> albedoTexture [[texture(BaseColor)]],
+                                     texture2d<float> normalTexture [[texture(NormalTexture)]]
+                                     ) {
+  // read the textures at the current position of the fragment
+  uint2 coord = uint2(in.position.xy);
+  float4 albedo = albedoTexture.read(coord);
+  float3 normal = normalTexture.read(coord).xyz;
+
+  // create a simple material based the texture
+  SHDRMaterial material {
+    .baseColor = albedo.xyz,
+    .ambientOcclusion = 1.0
+  };
+
+  // calculate the sun light on the fragment
+  float3 color = 0;
+  for (uint i = 0; i < params.lightCount; i++) {
+    SHDRLight light = lights[i];
+    color += calculateSun(light, normal, params, material);
+  }
+  // mix in the shadow that was stuff into the alpha channel
+  color *= albedo.a;
+  return float4(color, 1);
 }
