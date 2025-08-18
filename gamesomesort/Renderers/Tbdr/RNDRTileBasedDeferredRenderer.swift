@@ -28,6 +28,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   var lightBuffer: MTLBuffer? = nil
   var sunLights: [SHDRLight] = []
   var sunLightBuffer: MTLBuffer? = nil
+  var pointLights: [SHDRLight] = []
+  var pointLightBuffer: MTLBuffer? = nil
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -71,6 +73,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     }
 
     controllerModel.loadPrimitive("back-plane", primitiveType: .plane)
+    controllerModel.loadPrimitive("icosahedron", primitiveType: .icosahedron)
   }
 
   func resize(_ dimensions: ScreenDimensions) {
@@ -206,17 +209,23 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
   func updateLighting(ecs: LECSWorld, params: inout SHDRParams) {
     lights = ecs.lights
-    sunLights = lights.filter { $0.type == Sun }
     lightBuffer = device.makeBuffer(
       bytes: &lights,
       length: MemoryLayout<SHDRLight>.stride * lights.count,
       options: []
     )!
+    sunLights = lights.filter { $0.type == Sun }
     sunLightBuffer = device.makeBuffer(
       bytes: &sunLights,
       length: MemoryLayout<SHDRLight>.stride * sunLights.count,
       options: []
     )!
+    pointLights = lights.filter { $0.type == Point }
+    pointLightBuffer = device.makeBuffer(
+      bytes: &pointLights,
+      length: MemoryLayout<SHDRLight>.stride * pointLights.count,
+      options: []
+    )
     params.lightCount = UInt32(lights.count)
   }
 }
@@ -254,6 +263,8 @@ protocol RNDRContext {
   var lights: [SHDRLight] { get }
   // TODO: remove once moved to the separate light buffers
   var lightBuffer: MTLBuffer? { get }
+  var pointLights: [SHDRLight] { get }
+  var pointLightBuffer: MTLBuffer? { get }
   var sunLights: [SHDRLight] { get }
   var sunLightBuffer: MTLBuffer? { get }
   var controllerTexture: ControllerTexture { get }

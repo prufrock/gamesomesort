@@ -174,7 +174,7 @@ fragment float4 tbr_fragment_deferredSun(
   float4 albedo = albedoTexture.read(coord);
   float3 normal = normalTexture.read(coord).xyz;
 
-  // create a simple material based the texture
+  // create a simple material based on the texture
   SHDRMaterial material {
     .baseColor = albedo.xyz,
     .ambientOcclusion = 1.0
@@ -186,7 +186,63 @@ fragment float4 tbr_fragment_deferredSun(
     SHDRLight light = lights[i];
     color += calculateSun(light, normal, params, material);
   }
-  // mix in the shadow that was stuff into the alpha channel
+  // mix in the shadow that was stuffed into the alpha channel
   color *= albedo.a;
+  return float4(color, 1);
+}
+
+
+struct PointLightIn {
+  float4 position [[attribute(Position)]];
+};
+
+struct PointLightOut {
+  float4 position [[position]];
+  // don't interpolate the instanceId, so mark it as flat
+  uint instanceId [[flat]];
+};
+
+vertex PointLightOut tbr_vertex_pointLight(
+                                           PointLightIn in [[stage_in]],
+                                           constant SHDRUniforms &uniforms [[buffer(UniformsBuffer)]],
+                                           constant SHDRLight *lights [[buffer(LightBuffer)]],
+                                           uint instanceId [[instance_id]]
+                                           ) {
+  // use the instanceId to find the light
+  float4 lightPosition = float4(lights[instanceId].position, 0);
+  // no scaling or rotation, so skip the model matrix
+  float4 position = uniforms.projectionMatrix * uniforms.viewMatrix * (in.position + lightPosition);
+
+  PointLightOut out {
+    .position = position,
+    .instanceId = instanceId
+  };
+  return out;
+}
+
+fragment float4 tbr_fragment_pointLight(
+                                    PointLightOut in [[stage_in]],
+                                    constant SHDRParams &params [[buffer(ParamsBuffer)]],
+                                    texture2d<float> normalTexture [[texture(NormalTexture)]],
+                                    texture2d<float> positionTexture [[texture(PositionTexture)]],
+                                    constant SHDRLight *lights [[buffer(LightBuffer)]]
+                                    ) {
+  uint2 coords = uint2(in.position.xy);
+  float3 normal = normalTexture.read(coords).xyz;
+  float3 worldPosition = positionTexture.read(coords).xyz;
+
+  SHDRMaterial material {
+    .baseColor = 1
+  };
+
+  SHDRLight light = lights[in.instanceId];
+  float3 color = calculatePoint(
+                                light,
+                                worldPosition,
+                                normal,
+                                material
+                                );
+  // reduce the intensity a bit, because blending makes them brighter
+  color *= 0.5;
   return float4(color, 1);
 }

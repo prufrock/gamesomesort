@@ -169,7 +169,7 @@ struct GMStartFromTileMap: GMEcsStarter {
     _ = {
       var light = CTLight()
       light.type = Point
-      light.attenuation = [1, 0, 0]
+      light.attenuation = [0.2, 10, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = CTColor([0, 0.5, 0.5])
       let position = CTPosition3d([6, 3, 1.4])
@@ -182,7 +182,7 @@ struct GMStartFromTileMap: GMEcsStarter {
     _ = {
       var light = CTLight()
       light.type = Point
-      light.attenuation = [1, 0, 0]
+      light.attenuation = [0.8, 20, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = CTColor([0.5, 0, 0.5])
       let position = CTPosition3d([12, 8, 1.4])
