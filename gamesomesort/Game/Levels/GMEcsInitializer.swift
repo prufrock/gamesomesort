@@ -185,7 +185,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       light.attenuation = [0.8, 20, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = CTColor([0.5, 0, 0.5])
-      let position = CTPosition3d([12, 8, 1.4])
+      let position = CTPosition3d([8, 14, 0.0])
       let id = ecs.createEntity("pointLightTwo")
       ecs.addComponent(id, light)
       ecs.addComponent(id, color)
