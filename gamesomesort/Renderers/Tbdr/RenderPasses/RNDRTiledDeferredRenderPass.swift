@@ -191,7 +191,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         $0.vertexFunction = vertexFunction
 
         let fragment = tiled ? "tbr_fragment_tiled_pointLight" : "tbr_fragment_pointLight"
-        guard let fragmentFunction = library.makeFunction(name: "tbr_fragment_pointLight") else {
+        guard let fragmentFunction = library.makeFunction(name: fragment) else {
           fatalError("tbr_fragment_pointLight function not found")
         }
         $0.fragmentFunction = fragmentFunction
@@ -297,7 +297,15 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     }
     renderEncoder.endEncoding()
 
-
+    // Render the lights
+    drawLightingRenderPass(
+      renderEncoder: renderEncoder,
+      ecs: ecs,
+      uniforms: uniforms,
+      params: params,
+      context: context
+    )
+    renderEncoder.endEncoding()
   }
 
   private func drawGBufferRenderPass(
@@ -332,5 +340,125 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
       renderEncoder.popDebugGroup()
     }
+  }
+
+  private func drawLightingRenderPass(
+    renderEncoder: MTLRenderCommandEncoder,
+    ecs: LECSWorld,
+    uniforms: SHDRUniforms,
+    params: SHDRParams,
+    context: RNDRContext
+  ) {
+    renderEncoder.label = "Tiled Lighting render pass"
+    renderEncoder.setDepthStencilState(lightingDepthStencilState)
+    var uniforms = uniforms
+
+    renderEncoder.setFragmentTexture(
+      albedoTexture,
+      index: BaseColor.index
+    )
+    renderEncoder.setFragmentTexture(
+      normalTexture,
+      index: NormalTexture.index
+    )
+    renderEncoder.setFragmentTexture(
+      positionTexture,
+      index: PositionTexture.index
+    )
+
+    drawSunLight(
+      renderEncoder: renderEncoder,
+      ecs: ecs,
+      params: params,
+      context: context
+    )
+
+    drawPointLight(
+      renderEncoder: renderEncoder,
+      ecs: ecs,
+      params: params,
+      context: context
+    )
+  }
+
+  private func drawSunLight(
+    renderEncoder: MTLRenderCommandEncoder,
+    ecs: LECSWorld,
+    params: SHDRParams,
+    context: RNDRContext
+  ) {
+    renderEncoder.pushDebugGroup("Sun Light")
+    renderEncoder.setRenderPipelineState(sunlightPipeline)
+    var params = params
+    params.lightCount = UInt32(context.sunLights.count)
+    renderEncoder.setFragmentBytes(
+      &params,
+      length: MemoryLayout<SHDRParams>.stride,
+      index: ParamsBuffer.index
+    )
+    renderEncoder.setFragmentBuffer(
+      context.sunLightBuffer,
+      offset: 0,
+      index: LightBuffer.index
+    )
+    // draw the six verices of the quad
+    renderEncoder.drawPrimitives(
+      type: .triangle,
+      vertexStart: 0,
+      vertexCount: 6
+    )
+    renderEncoder.popDebugGroup()
+  }
+
+  func drawPointLight(
+    renderEncoder: MTLRenderCommandEncoder,
+    ecs: LECSWorld,
+    params: SHDRParams,
+    context: RNDRContext
+  ) {
+    renderEncoder.pushDebugGroup("Point Lights")
+    renderEncoder.setRenderPipelineState(pointLightPipeline)
+
+    renderEncoder.setVertexBuffer(
+      context.pointLightBuffer,
+      offset: 0,
+      index: LightBuffer.index
+    )
+    renderEncoder.setFragmentBuffer(
+      context.pointLightBuffer,
+      offset: 0,
+      index: LightBuffer.index
+    )
+
+    var params = params
+    params.lightCount = UInt32(context.pointLights.count)
+    renderEncoder.setFragmentBytes(
+      &params,
+      length: MemoryLayout<SHDRParams>.stride,
+      index: ParamsBuffer.index
+    )
+
+    // pass the icosahedron to the vertex shader to render the light volume
+    let icosahedron = context.controllerModel.models["icosahedron"]
+    guard let mesh = icosahedron?.meshes.first, let submesh = mesh.submeshes.first else {
+      fatalError("Ah dang, the something went wrong when getting the mesh or submesh out of the icosahedron.")
+    }
+    for (index, vertexBuffer) in mesh.vertexBuffers.enumerated() {
+      renderEncoder.setVertexBuffer(
+        vertexBuffer,
+        offset: 0,
+        index: index
+      )
+    }
+
+    renderEncoder.drawIndexedPrimitives(
+      type: .triangle,
+      indexCount: submesh.indexCount,
+      indexType: submesh.indexType,
+      indexBuffer: submesh.indexBuffer,
+      indexBufferOffset: submesh.indexBufferOffset,
+      instanceCount: context.pointLights.count
+    )
+    renderEncoder.popDebugGroup()
   }
 }
