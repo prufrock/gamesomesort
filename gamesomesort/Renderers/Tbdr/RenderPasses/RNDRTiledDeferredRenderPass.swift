@@ -10,7 +10,7 @@ import lecs_swift
 
 struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   let label = "Tiled Deferred Render Pass"
-  private var descriptor: MTLRenderPassDescriptor?
+  var descriptor: MTLRenderPassDescriptor?
 
   private let device: MTLDevice
 
@@ -21,7 +21,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   private let sunlightPipeline: MTLRenderPipelineState
   private let pointLightPipeline: MTLRenderPipelineState
   private let lightingDepthStencilState: MTLDepthStencilState?
-
 
   // MARK: Debug lights vars
   let debugLights: Bool
@@ -254,12 +253,14 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       fatalError("The descriptor is null, get out of my house!")
     }
 
+    let gBufferDescriptor = MTLRenderPassDescriptor()
+
     // GBuffer pass
     let textures = [albedoTexture, normalTexture, positionTexture]
 
     for (index, texture) in textures.enumerated() {
       // RenderTargetAlbedo is the first one, so add from there.
-      let attachment = descriptor?.colorAttachments[RenderTargetAlbedo.index + index]
+      let attachment = gBufferDescriptor.colorAttachments[RenderTargetAlbedo.index + index]
       attachment?.texture = texture
       // clear on the load action applys the clear color when adding the attachment
       attachment?.loadAction = .clear
@@ -268,10 +269,10 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       // TODO: configure this clear color or use the configured clear color
       attachment?.clearColor = MTLClearColor(red: 0.73, green: 0.92, blue: 1, alpha: 1)
     }
-    descriptor?.depthAttachment.texture = depthTexture
-    descriptor?.depthAttachment.storeAction = .dontCare
+    gBufferDescriptor.depthAttachment.texture = depthTexture
+    gBufferDescriptor.depthAttachment.storeAction = .dontCare
 
-    guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: currentDescriptor)
+    guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: gBufferDescriptor)
     else {
       fatalError("What in the world, the render command encoder couldn't be created!")
     }
@@ -296,6 +297,11 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         )
     }
     renderEncoder.endEncoding()
+
+    guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: currentDescriptor)
+    else {
+      fatalError("What in the world, the render command encoder couldn't be created!")
+    }
 
     // Render the lights
     drawLightingRenderPass(
@@ -352,6 +358,11 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     renderEncoder.label = "Tiled Lighting render pass"
     renderEncoder.setDepthStencilState(lightingDepthStencilState)
     var uniforms = uniforms
+    renderEncoder.setVertexBytes(
+      &uniforms,
+      length: MemoryLayout<SHDRUniforms>.stride,
+      index: UniformsBuffer.index
+    )
 
     renderEncoder.setFragmentTexture(
       albedoTexture,

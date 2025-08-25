@@ -16,6 +16,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private var gBufferRenderPass: RNDRGBufferRenderPass? = nil
   private var lightingRenderPass: RNDRLightingRenderPass? = nil
   private var shadowRenderPass: RNDRShadowRenderPass? = nil
+  private var tbdrPass: RNDRTiledDeferredRenderPass? = nil
 
   private var squareRenderer = RNDRSquare()
 
@@ -79,6 +80,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   func resize(_ dimensions: ScreenDimensions) {
     screenDimensions = dimensions
     gBufferRenderPass?.resize(dimensions)
+    tbdrPass?.resize(dimensions)
   }
 
   func initializePipelines(pixelFormat: MTLPixelFormat) {
@@ -115,6 +117,15 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       colorPixelFormat: pixelFormat,
       depthPixelFormat: depthStencilPixelFormat,
       library: library
+    )
+
+    tbdrPass = RNDRTiledDeferredRenderPass(
+      device: device,
+      colorPixelFormat: pixelFormat,
+      depthPixelFormat: depthStencilPixelFormat,
+      library: library,
+      controllerTexture: controllerTexture,
+      tiled: false
     )
   }
 
@@ -201,6 +212,18 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
           context: self
         )
       }
+    case .tbdr:
+      if var tbdrPass {
+        tbdrPass.shadowTexture = shadowRenderPass!.shadowTexture
+        tbdrPass.descriptor = renderDescriptor.currentRenderPassDescriptor
+        tbdrPass.draw(
+          commandBuffer: commandBuffer,
+          ecs: ecs,
+          uniforms: uniforms,
+          params: params,
+          context: self,
+        )
+      }
     }
 
     commandBuffer.present(renderDescriptor.currentDrawable)
@@ -272,5 +295,5 @@ protocol RNDRContext {
 }
 
 enum RNDRTBDRRenderType: Int {
-  case forward, gbuffer
+  case forward, gbuffer, tbdr
 }
