@@ -250,6 +250,11 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     params: SHDRParams,
     context: RNDRContext
   ) {
+    guard let currentDescriptor = descriptor else {
+      fatalError("The descriptor is null, get out of my house!")
+    }
+
+    // GBuffer pass
     let textures = [albedoTexture, normalTexture, positionTexture]
 
     for (index, texture) in textures.enumerated() {
@@ -266,35 +271,18 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     descriptor?.depthAttachment.texture = depthTexture
     descriptor?.depthAttachment.storeAction = .dontCare
 
-    guard let descriptor = descriptor,
-      let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor)
+    guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: currentDescriptor)
     else {
-      fatalError(
-        "Oh sheep on the beach! Couldn't draw from the forward render pass,"
-          + " because the descriptor or render encoder was nil!"
-      )
-    }
-    renderEncoder.label = label
-    renderEncoder.setDepthStencilState(depthStencilState)
-    renderEncoder.setRenderPipelineState(gBufferPipelineState)
-
-    renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
-
-    let squares = ecs.models
-    let sphere = context.controllerModel.models["brick-sphere.usdz"]!
-    for square in squares {
-      sphere.transform = square.transform
-      sphere.render(
-        encoder: renderEncoder,
-        uniforms: uniforms,
-        params: params
-      )
+      fatalError("What in the world, the render command encoder couldn't be created!")
     }
 
-    let models = ecs.geoModels(context: context)
-    for model in models {
-      model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
-    }
+    drawGBufferRenderPass(
+      renderEncoder: renderEncoder,
+      ecs: ecs,
+      uniforms: uniforms,
+      params: params,
+      context: context
+    )
 
     if debugLights {
       RNDRDebugLights
@@ -308,5 +296,41 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         )
     }
     renderEncoder.endEncoding()
+
+
+  }
+
+  private func drawGBufferRenderPass(
+    renderEncoder: MTLRenderCommandEncoder,
+    ecs: LECSWorld,
+    uniforms: SHDRUniforms,
+    params: SHDRParams,
+    context: RNDRContext
+  ) {
+    renderEncoder.label = label
+    renderEncoder.setDepthStencilState(depthStencilState)
+    renderEncoder.setRenderPipelineState(gBufferPipelineState)
+
+    renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
+
+    let squares = ecs.models
+    let sphere = context.controllerModel.models["brick-sphere.usdz"]!
+    for square in squares {
+      renderEncoder.pushDebugGroup("sphere \(sphere.position)")
+      sphere.transform = square.transform
+      sphere.render(
+        encoder: renderEncoder,
+        uniforms: uniforms,
+        params: params
+      )
+      renderEncoder.popDebugGroup()
+    }
+
+    let models = ecs.geoModels(context: context)
+    for model in models {
+      renderEncoder.pushDebugGroup("model \(model.name)")
+      model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
+      renderEncoder.popDebugGroup()
+    }
   }
 }
