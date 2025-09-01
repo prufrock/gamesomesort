@@ -144,7 +144,8 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         if tiled {
           $0.colorAttachments[0].pixelFormat = colorPixelFormat
         }
-        $0.depthAttachmentPixelFormat = depthPixelFormat
+        $0.depthAttachmentPixelFormat = .depth32Float_stencil8
+        $0.stencilAttachmentPixelFormat = .depth32Float_stencil8
         $0.vertexDescriptor = MTLVertexDescriptor.defaultLayout
         $0.setGBufferPixelFormats()
       }
@@ -172,7 +173,8 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         }
         $0.fragmentFunction = fragmentFunction
         $0.colorAttachments[0].pixelFormat = colorPixelFormat
-        $0.depthAttachmentPixelFormat = depthPixelFormat
+        $0.depthAttachmentPixelFormat = .depth32Float_stencil8
+        $0.stencilAttachmentPixelFormat = .depth32Float_stencil8
         if tiled {
           $0.setGBufferPixelFormats()
         }
@@ -200,7 +202,8 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         }
         $0.fragmentFunction = fragmentFunction
         $0.colorAttachments[0].pixelFormat = colorPixelFormat
-        $0.depthAttachmentPixelFormat = depthPixelFormat
+        $0.depthAttachmentPixelFormat = .depth32Float_stencil8
+        $0.stencilAttachmentPixelFormat = .depth32Float_stencil8
         $0.vertexDescriptor = MTLVertexDescriptor.defaultLayout
         let attachment = $0.colorAttachments[0]!
         attachment.isBlendingEnabled = true
@@ -248,7 +251,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     depthTexture = Self.makeTexture(
       device: device,
       size: dimensions.cgSize,
-      pixelFormat: .depth32Float,
+      pixelFormat: .depth32Float_stencil8,
       label: "Depth Texture",
       storageMode: .memoryless,
     )
@@ -281,6 +284,8 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     }
     currentDescriptor.depthAttachment.texture = depthTexture
     currentDescriptor.depthAttachment.storeAction = .dontCare
+    currentDescriptor.stencilAttachment.texture = depthTexture
+    currentDescriptor.stencilAttachment.storeAction = .dontCare
 
     guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: currentDescriptor)
     else {
@@ -468,7 +473,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 extension MTLRenderPipelineDescriptor {
   func setGBufferPixelFormats() {
     // Add pixel formats for the additional GBuffer textures
-    colorAttachments[RenderTargetAlbedo.index].pixelFormat = .bgra8Unorm
+  	colorAttachments[RenderTargetAlbedo.index].pixelFormat = .bgra8Unorm
     colorAttachments[RenderTargetNormal.index].pixelFormat = .rgba16Float
     colorAttachments[RenderTargetPosition.index].pixelFormat = .rgba16Float
   }
