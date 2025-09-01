@@ -56,7 +56,8 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       device: device,
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
-      library: library
+      library: library,
+      tiled: tiled
     )
     depthStencilState = Self.buildDepthStencilState(device: device)
 
@@ -67,7 +68,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
       library: library,
-      tiled: tiled
+      tiled: tiled,
     )
     pointLightPipeline = Self.buildPointLightPipelineState(
       device: device,
@@ -132,19 +133,20 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     device: MTLDevice,
     colorPixelFormat: MTLPixelFormat,
     depthPixelFormat: MTLPixelFormat,
-    library: MTLLibrary
+    library: MTLLibrary,
+    tiled: Bool = false
   ) -> MTLRenderPipelineState {
     return try! device.makeRenderPipelineState(
       descriptor: MTLRenderPipelineDescriptor().apply {
         $0.vertexFunction = library.makeFunction(name: "tbr_vertex_main")
         $0.fragmentFunction = library.makeFunction(name: "tbr_fragment_gBuffer")
         $0.colorAttachments[0].pixelFormat = .invalid
+        if tiled {
+          $0.colorAttachments[0].pixelFormat = colorPixelFormat
+        }
         $0.depthAttachmentPixelFormat = depthPixelFormat
         $0.vertexDescriptor = MTLVertexDescriptor.defaultLayout
-        // Add pixel formats for the additional GBuffer textures
-        $0.colorAttachments[RenderTargetAlbedo.index].pixelFormat = .bgra8Unorm
-        $0.colorAttachments[RenderTargetNormal.index].pixelFormat = .rgba16Float
-        $0.colorAttachments[RenderTargetPosition.index].pixelFormat = .rgba16Float
+        $0.setGBufferPixelFormats()
       }
     )
   }
@@ -171,6 +173,9 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         $0.fragmentFunction = fragmentFunction
         $0.colorAttachments[0].pixelFormat = colorPixelFormat
         $0.depthAttachmentPixelFormat = depthPixelFormat
+        if tiled {
+          $0.setGBufferPixelFormats()
+        }
       }
     )
   }
@@ -207,6 +212,9 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         attachment.destinationAlphaBlendFactor = .zero
         attachment.sourceRGBBlendFactor = .one
         attachment.sourceAlphaBlendFactor = .one
+        if tiled {
+          $0.setGBufferPixelFormats()
+        }
       }
     )
   }
@@ -218,6 +226,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       size: dimensions.cgSize,
       pixelFormat: .bgra8Unorm,  // colors can get away with lower precision
       label: "Albedo Texture",
+      storageMode: .memoryless,
     )
 
     normalTexture = Self.makeTexture(
@@ -225,6 +234,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       size: dimensions.cgSize,
       pixelFormat: .rgba16Float,
       label: "Normal Texture",
+      storageMode: .memoryless,
     )
 
     positionTexture = Self.makeTexture(
@@ -232,6 +242,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       size: dimensions.cgSize,
       pixelFormat: .rgba16Float,
       label: "Position Texture",
+      storageMode: .memoryless,
     )
 
     depthTexture = Self.makeTexture(
@@ -239,6 +250,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       size: dimensions.cgSize,
       pixelFormat: .depth32Float,
       label: "Depth Texture",
+      storageMode: .memoryless,
     )
   }
 
@@ -253,26 +265,24 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       fatalError("The descriptor is null, get out of my house!")
     }
 
-    let gBufferDescriptor = MTLRenderPassDescriptor()
-
     // GBuffer pass
     let textures = [albedoTexture, normalTexture, positionTexture]
 
     for (index, texture) in textures.enumerated() {
       // RenderTargetAlbedo is the first one, so add from there.
-      let attachment = gBufferDescriptor.colorAttachments[RenderTargetAlbedo.index + index]
+      let attachment = currentDescriptor.colorAttachments[RenderTargetAlbedo.index + index]
       attachment?.texture = texture
       // clear on the load action applys the clear color when adding the attachment
       attachment?.loadAction = .clear
-      // store keeps the color texture between render passes
-      attachment?.storeAction = .store
+      // don't store the attachment, because tile based rendering keeps it in the GPU's memory
+      attachment?.storeAction = .dontCare
       // TODO: configure this clear color or use the configured clear color
       attachment?.clearColor = MTLClearColor(red: 0.73, green: 0.92, blue: 1, alpha: 1)
     }
-    gBufferDescriptor.depthAttachment.texture = depthTexture
-    gBufferDescriptor.depthAttachment.storeAction = .dontCare
+    currentDescriptor.depthAttachment.texture = depthTexture
+    currentDescriptor.depthAttachment.storeAction = .dontCare
 
-    guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: gBufferDescriptor)
+    guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: currentDescriptor)
     else {
       fatalError("What in the world, the render command encoder couldn't be created!")
     }
@@ -295,12 +305,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
           linePipelineState: linePipelineState,
           pointPipelineState: pointPipelineState
         )
-    }
-    renderEncoder.endEncoding()
-
-    guard let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: currentDescriptor)
-    else {
-      fatalError("What in the world, the render command encoder couldn't be created!")
     }
 
     // Render the lights
@@ -362,19 +366,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       &uniforms,
       length: MemoryLayout<SHDRUniforms>.stride,
       index: UniformsBuffer.index
-    )
-
-    renderEncoder.setFragmentTexture(
-      albedoTexture,
-      index: BaseColor.index
-    )
-    renderEncoder.setFragmentTexture(
-      normalTexture,
-      index: NormalTexture.index
-    )
-    renderEncoder.setFragmentTexture(
-      positionTexture,
-      index: PositionTexture.index
     )
 
     drawSunLight(
@@ -471,5 +462,14 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       instanceCount: context.pointLights.count
     )
     renderEncoder.popDebugGroup()
+  }
+}
+
+extension MTLRenderPipelineDescriptor {
+  func setGBufferPixelFormats() {
+    // Add pixel formats for the additional GBuffer textures
+    colorAttachments[RenderTargetAlbedo.index].pixelFormat = .bgra8Unorm
+    colorAttachments[RenderTargetNormal.index].pixelFormat = .rgba16Float
+    colorAttachments[RenderTargetPosition.index].pixelFormat = .rgba16Float
   }
 }

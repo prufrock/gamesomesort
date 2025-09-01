@@ -191,6 +191,33 @@ fragment float4 tbr_fragment_deferredSun(
   return float4(color, 1);
 }
 
+fragment float4 tbr_fragment_tiled_deferredSun(
+                                     VertexOut in [[stage_in]],
+                                     constant SHDRParams &params [[buffer(ParamsBuffer)]],
+                                     constant SHDRLight *lights [[buffer(LightBuffer)]],
+                                     GBufferOut gBuffer
+                                     ) {
+  // read the the values from tile memory
+  float4 albedo = gBuffer.albedo;
+  float3 normal = gBuffer.normal.xyz;
+
+  // create a simple material based on the texture
+  SHDRMaterial material {
+    .baseColor = albedo.xyz,
+    .ambientOcclusion = 1.0
+  };
+
+  // calculate the sun light on the fragment
+  float3 color = 0;
+  for (uint i = 0; i < params.lightCount; i++) {
+    SHDRLight light = lights[i];
+    color += calculateSun(light, normal, params, material);
+  }
+  // mix in the shadow that was stuffed into the alpha channel
+  color *= albedo.a;
+  return float4(color, 1);
+}
+
 
 struct PointLightIn {
   float4 position [[attribute(Position)]];
@@ -230,6 +257,31 @@ fragment float4 tbr_fragment_pointLight(
   uint2 coords = uint2(in.position.xy);
   float3 normal = normalTexture.read(coords).xyz;
   float3 worldPosition = positionTexture.read(coords).xyz;
+
+  SHDRMaterial material {
+    .baseColor = 1
+  };
+
+  SHDRLight light = lights[in.instanceId];
+  float3 color = calculatePoint(
+                                light,
+                                worldPosition,
+                                normal,
+                                material
+                                );
+  // reduce the intensity a bit, because blending makes them brighter
+  color *= 0.5;
+  return float4(color, 1);
+}
+
+fragment float4 tbr_fragment_tiled_pointLight(
+                                    PointLightOut in [[stage_in]],
+                                    constant SHDRParams &params [[buffer(ParamsBuffer)]],
+                                    GBufferOut gBuffer,
+                                    constant SHDRLight *lights [[buffer(LightBuffer)]]
+                                    ) {
+  float3 normal = gBuffer.normal.xyz;
+  float3 worldPosition = gBuffer.position.xyz;
 
   SHDRMaterial material {
     .baseColor = 1

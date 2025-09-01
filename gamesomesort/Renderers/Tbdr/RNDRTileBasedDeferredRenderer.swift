@@ -93,7 +93,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       device: device,
       depthPixelFormat: depthStencilPixelFormat,
       library: library,
-      controllerTexture: controllerTexture
+      controllerTexture: controllerTexture,
     )
 
     forwardRenderPass = RNDRForwardRenderPass(
@@ -125,7 +125,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       depthPixelFormat: depthStencilPixelFormat,
       library: library,
       controllerTexture: controllerTexture,
-      tiled: false
+      tiled: true
     )
   }
 
