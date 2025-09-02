@@ -93,9 +93,28 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     )
   }
 
+  static func buildDepthStencilState(device: MTLDevice) -> MTLDepthStencilState? {
+    let descriptor = MTLDepthStencilDescriptor()
+    descriptor.depthCompareFunction = .less
+    descriptor.isDepthWriteEnabled = true
+    let frontFaceStencil = MTLStencilDescriptor()
+    frontFaceStencil.stencilCompareFunction = .always
+    frontFaceStencil.stencilFailureOperation = .keep
+    frontFaceStencil.depthFailureOperation = .keep
+    frontFaceStencil.depthStencilPassOperation = .incrementClamp
+    descriptor.frontFaceStencil = frontFaceStencil
+    return device.makeDepthStencilState(descriptor: descriptor)
+  }
+
   private static func buildLightingDepthStencilState(device: MTLDevice) -> MTLDepthStencilState {
     let descriptor = MTLDepthStencilDescriptor()
     descriptor.isDepthWriteEnabled = false
+    let frontFaceStencil = MTLStencilDescriptor()
+    frontFaceStencil.stencilCompareFunction = .notEqual
+    frontFaceStencil.stencilFailureOperation = .keep
+    frontFaceStencil.depthFailureOperation = .keep
+    frontFaceStencil.depthStencilPassOperation = .keep
+    descriptor.frontFaceStencil = frontFaceStencil
     return device.makeDepthStencilState(descriptor: descriptor)!
   }
 
@@ -252,7 +271,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       device: device,
       size: dimensions.cgSize,
       pixelFormat: .depth32Float_stencil8,
-      label: "Depth Texture",
+      label: "Depth and Stencil Texture",
       storageMode: .memoryless,
     )
   }
@@ -330,15 +349,16 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     params: SHDRParams,
     context: RNDRContext
   ) {
-    renderEncoder.label = label
+    renderEncoder.label = "Tiled Geometry Buffer Render Pass"
     renderEncoder.setDepthStencilState(depthStencilState)
     renderEncoder.setRenderPipelineState(gBufferPipelineState)
+    renderEncoder.setStencilReferenceValue(0)
 
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
-    let squares = ecs.models
+    let spheres = ecs.models
     let sphere = context.controllerModel.models["brick-sphere.usdz"]!
-    for square in squares {
+    for square in spheres {
       renderEncoder.pushDebugGroup("sphere \(sphere.position)")
       sphere.transform = square.transform
       sphere.render(
@@ -473,7 +493,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 extension MTLRenderPipelineDescriptor {
   func setGBufferPixelFormats() {
     // Add pixel formats for the additional GBuffer textures
-  	colorAttachments[RenderTargetAlbedo.index].pixelFormat = .bgra8Unorm
+    colorAttachments[RenderTargetAlbedo.index].pixelFormat = .bgra8Unorm
     colorAttachments[RenderTargetNormal.index].pixelFormat = .rgba16Float
     colorAttachments[RenderTargetPosition.index].pixelFormat = .rgba16Float
   }
