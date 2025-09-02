@@ -98,7 +98,7 @@ struct GMStartFromTileMap: GMEcsStarter {
     )
     ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
     ecs.addComponent(playerCamera, CTPosition3d(F3(8, 8, -8.0)))
-    ecs.addComponent(playerCamera, CTScale3d(F3(1.0, -1.0, 1.0)))
+    ecs.addComponent(playerCamera, CTScale3d(F3(1.0, 1.0, 1.0)))
   }
 
   private func createTile(ecs: LECSWorld, tile: GMTile, x: Int, y: Int) {
