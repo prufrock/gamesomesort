@@ -13,8 +13,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let commandQueue: MTLCommandQueue
   private let library: MTLLibrary
   private var forwardRenderPass: RNDRForwardRenderPass? = nil
-  private var gBufferRenderPass: RNDRGBufferRenderPass? = nil
-  private var lightingRenderPass: RNDRLightingRenderPass? = nil
   private var shadowRenderPass: RNDRShadowRenderPass? = nil
   private var tbdrPass: RNDRTiledDeferredRenderPass? = nil
 
@@ -79,7 +77,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
   func resize(_ dimensions: ScreenDimensions) {
     screenDimensions = dimensions
-    gBufferRenderPass?.resize(dimensions)
     tbdrPass?.resize(dimensions)
   }
 
@@ -102,21 +99,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       depthPixelFormat: depthStencilPixelFormat,
       library: library,
       controllerTexture: controllerTexture
-    )
-
-    gBufferRenderPass = RNDRGBufferRenderPass(
-      device: device,
-      colorPixelFormat: pixelFormat,
-      depthPixelFormat: depthStencilPixelFormat,
-      library: library,
-      controllerTexture: controllerTexture
-    )
-
-    lightingRenderPass = RNDRLightingRenderPass(
-      device: device,
-      colorPixelFormat: pixelFormat,
-      depthPixelFormat: depthStencilPixelFormat,
-      library: library
     )
 
     tbdrPass = RNDRTiledDeferredRenderPass(
@@ -182,29 +164,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
         forwardRenderPass.shadowTexture = shadowRenderPass?.shadowTexture
         forwardRenderPass.descriptor = renderDescriptor.currentRenderPassDescriptor
         forwardRenderPass.draw(
-          commandBuffer: commandBuffer,
-          ecs: ecs,
-          uniforms: uniforms,
-          params: params,
-          context: self
-        )
-      }
-    case .gbuffer:
-      if var gBufferRenderPass, var lightingRenderPass {
-        gBufferRenderPass.shadowTexture = shadowRenderPass?.shadowTexture
-        gBufferRenderPass.draw(
-          commandBuffer: commandBuffer,
-          ecs: ecs,
-          uniforms: uniforms,
-          params: params,
-          context: self
-        )
-        lightingRenderPass.albedoTexture = gBufferRenderPass.albedoTexture
-        lightingRenderPass.normalTexture = gBufferRenderPass.normalTexture
-        lightingRenderPass.positionTexture = gBufferRenderPass.positionTexture
-        // render to the view
-        lightingRenderPass.descriptor = renderDescriptor.currentRenderPassDescriptor
-        lightingRenderPass.draw(
           commandBuffer: commandBuffer,
           ecs: ecs,
           uniforms: uniforms,
@@ -295,5 +254,5 @@ protocol RNDRContext {
 }
 
 enum RNDRTBDRRenderType: Int {
-  case forward, gbuffer, tbdr
+  case forward, tbdr
 }

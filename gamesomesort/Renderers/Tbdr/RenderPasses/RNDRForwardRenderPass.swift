@@ -221,7 +221,7 @@ extension GEOModel {
         encoder.setFragmentTexture(submesh.textures.roughness, index: RoughnessTexture.index)
         encoder.setFragmentTexture(submesh.textures.metallic, index: MetallicTexture.index)
         encoder.setFragmentTexture(submesh.textures.aoTexture, index: AOTexture.index)
-        // Being explict for a little bit, because of an unexpected issue with stencils...
+        // Being explicit for a little bit, because of an unexpected issue with stencils...
         encoder.setFrontFacing(.clockwise)
         encoder.setCullMode(.back)
 
