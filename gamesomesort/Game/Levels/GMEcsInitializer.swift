@@ -91,7 +91,8 @@ struct GMStartFromTileMap: GMEcsStarter {
     ecs.addComponent(
       playerCamera,
       CTCameraFirstPerson(
-        fov: .pi / 2,
+        // negate fov to flip the y-axis, without messing with the winding order
+        fov: -1 * (.pi / 2),
         nearPlane: 0.1,
         farPlane: 20
       )
