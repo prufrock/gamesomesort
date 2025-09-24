@@ -86,6 +86,7 @@ extension LECSWorld {
       let quaternion = row.component(at: 3, columns, CTQuaternion.self)
       let color = row.component(at: 4, columns, CTColor.self)
 
+      //TODO: models need to be separate from transforms and eventually textures
       let model = context.controllerModel.models[ctModel.name]!
       model.transform.scale = scale.scale
       model.transform.quaternion = quaternion.quaternion

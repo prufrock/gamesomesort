@@ -72,6 +72,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     }
 
     controllerModel.loadPrimitive("back-plane", primitiveType: .plane)
+    controllerModel.loadPrimitive("button-one", primitiveType: .plane)
     controllerModel.loadPrimitive("icosahedron", primitiveType: .icosahedron)
   }
 

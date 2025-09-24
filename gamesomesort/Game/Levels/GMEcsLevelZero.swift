@@ -36,6 +36,7 @@ struct GMEcsLevelZero: GMEcsStarter {
 
     createPlayerCamera(ecs: ecs)
     createLights(ecs: ecs)
+    createFirstGameButton(ecs: ecs)
     createBackPlane(ecs: ecs)
   }
 
@@ -55,9 +56,19 @@ struct GMEcsLevelZero: GMEcsStarter {
     ecs.addComponent(playerCamera, CTScale3d(F3(1.0, 1.0, 1.0)))
   }
 
+  private func createFirstGameButton(ecs: LECSWorld) {
+    let button = ecs.createEntity("buttonone")
+    ecs.addComponent(button, CTPosition3d(8, 8, 1.0))
+    ecs.addComponent(button, CTScale3d(uniform: 3))
+    ecs.addComponent(button, CTColor([0.6, 0.6, 0.0]))
+    ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
+    ecs.addComponent(button, CTModel("button-one"))
+    ecs.addComponent(button, CTTagVisible())
+  }
+
   private func createBackPlane(ecs: LECSWorld) {
     let backPlane = ecs.createEntity("backPlane")
-    ecs.addComponent(backPlane, CTPosition3d(10, 10, 1.5))
+    ecs.addComponent(backPlane, CTPosition3d(10, 10, 3.0))
     ecs.addComponent(backPlane, CTScale3d(uniform: 35))
     ecs.addComponent(backPlane, CTColor([0.0, 0.6, 0.6]))
     ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
