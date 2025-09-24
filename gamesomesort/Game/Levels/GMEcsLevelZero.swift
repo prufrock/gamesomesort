@@ -45,21 +45,22 @@ struct GMEcsLevelZero: GMEcsStarter {
     ecs.addComponent(
       playerCamera,
       CTCameraFirstPerson(
-        // negate fov to flip the y-axis, without messing with the winding order
-        fov: -1 * (.pi / 2),
+        fov: (.pi / 2),
         nearPlane: 0.1,
         farPlane: 20
       )
     )
     ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
     ecs.addComponent(playerCamera, CTPosition3d(F3(8, 8, -8.0)))
-    ecs.addComponent(playerCamera, CTScale3d(F3(1.0, 1.0, 1.0)))
+    // move the origin to the upper left with y=-1.0
+    ecs.addComponent(playerCamera, CTScale3d(F3(1.0, -1.0, 1.0)))
   }
 
   private func createFirstGameButton(ecs: LECSWorld) {
     let button = ecs.createEntity("buttonone")
     ecs.addComponent(button, CTPosition3d(8, 8, 1.0))
-    ecs.addComponent(button, CTScale3d(uniform: 3))
+    // y * -1.0 to move the model into upright space
+    ecs.addComponent(button, CTScale3d(F3(3, -3, 3)))
     ecs.addComponent(button, CTColor([0.6, 0.6, 0.0]))
     ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
     ecs.addComponent(button, CTModel("button-one"))
@@ -69,7 +70,8 @@ struct GMEcsLevelZero: GMEcsStarter {
   private func createBackPlane(ecs: LECSWorld) {
     let backPlane = ecs.createEntity("backPlane")
     ecs.addComponent(backPlane, CTPosition3d(10, 10, 3.0))
-    ecs.addComponent(backPlane, CTScale3d(uniform: 35))
+    // y * -1.0 to move the model into upright space
+    ecs.addComponent(backPlane, CTScale3d(F3(35, -35, 35)))
     ecs.addComponent(backPlane, CTColor([0.0, 0.6, 0.6]))
     ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
     ecs.addComponent(backPlane, CTModel("back-plane"))
