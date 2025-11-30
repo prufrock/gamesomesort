@@ -127,8 +127,9 @@ class GMWorld {
   /// Update the game.
   /// - Parameters:
   ///   - timeStep: The amount of time to move it forward.
-  func update(timeStep: Float, input: GMGameInput) {
+  func update(timeStep: Float, input: GMGameInput) -> any CTSQueue<GMWorldCommands> {
     let playerCamera = ecs.gmCameraFirstPerson("playerCamera")!
+    var gameCommands: any CTSQueue<GMWorldCommands> = CTSQueueArray<GMWorldCommands>()
 
     var inputEvents: any CTSQueue<GMGameInput.Events> = input.events
     while !inputEvents.isEmpty {
@@ -150,6 +151,7 @@ class GMWorld {
           ecs.processSystemWorldScoped(system: tapSystem)
         }
         ecs.removeComponent(tapSquare!, component: CTTagTap.self)
+        gameCommands.enqueue(.start(level: 1))
       case .screenSizeChanged:
         break
       }
@@ -163,6 +165,7 @@ class GMWorld {
       ecs.processSystemWorldScoped(system: emitterSystem)
     }
     //print("world updated: \(timeStep)")
+    return gameCommands
   }
 
   func update(_ dimensions: ScreenDimensions) {
@@ -172,4 +175,8 @@ class GMWorld {
       ecs.process(system: aspectRatioSystem)
     }
   }
+}
+
+enum GMWorldCommands: Equatable {
+  case start(level: Int)
 }

@@ -14,6 +14,7 @@ protocol CTSQueue<T>: CustomStringConvertible, ScopeFunction {
   var count: Int { get }
 
   /// Add an element at the back of the queue.
+  @discardableResult
   mutating func enqueue(_ item: T) -> Bool
 
   /// Remove an element from the front of the queue.

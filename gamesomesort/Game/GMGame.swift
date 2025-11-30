@@ -16,6 +16,7 @@ class GMGame {
   private let appCore: AppCore
   private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
   private var elapsedTime: Float = 0
+  private var selectedLevel: Int
 
   init(appCore: AppCore, levels: [GMTileMap]) {
     self.appCore = appCore
@@ -24,6 +25,7 @@ class GMGame {
       level: appCore.config.game.world.initialLevel,
       levels: levels
     )
+    selectedLevel = appCore.config.game.world.initialLevel
   }
 
   /// Update the game.
@@ -33,10 +35,19 @@ class GMGame {
 
     // reset frequently, just for testing
     if elapsedTime < appCore.config.game.timeLimit {
-      world.update(timeStep: timeStep, input: input)
+      var commands = world.update(timeStep: timeStep, input: input)
       elapsedTime += timeStep
+      if !commands.isEmpty {
+        if case let .start(level) = commands.dequeue() {
+          if selectedLevel != level {
+            selectedLevel = level
+            world = appCore.createWorldFactory().create(level: selectedLevel, levels: levels)
+            world.update(screenDimensions)
+          }
+        }
+      }
     } else {
-      world = appCore.createWorldFactory().create(level: 0, levels: levels)
+      world = appCore.createWorldFactory().create(level: selectedLevel, levels: levels)
       world.update(screenDimensions)
       elapsedTime = 0
     }
