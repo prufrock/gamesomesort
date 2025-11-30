@@ -20,7 +20,10 @@ class GMGame {
   init(appCore: AppCore, levels: [GMTileMap]) {
     self.appCore = appCore
     self.levels = levels
-    world = appCore.createWorldFactory().create(level: 0, levels: levels)
+    world = appCore.createWorldFactory().create(
+      level: appCore.config.game.world.initialLevel,
+      levels: levels
+    )
   }
 
   /// Update the game.

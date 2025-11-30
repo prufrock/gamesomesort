@@ -37,6 +37,7 @@ struct gamesomesortApp: App {
         ),
         game: AppCoreConfig.Game(
           world: AppCoreConfig.Game.World(
+            initialLevel: 1,
             ecsArchetypeSize: 500,
           )
         )

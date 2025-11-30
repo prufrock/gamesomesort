@@ -22,6 +22,7 @@ struct AppCoreConfig {
     let upVector: F3 = [0, -1, 0]
 
     struct World {
+      let initialLevel: Int
       let ecsArchetypeSize: Int
     }
   }
@@ -79,7 +80,10 @@ extension AppCoreConfig {
       )
     ),
     game: AppCoreConfig.Game(
-      world: AppCoreConfig.Game.World(ecsArchetypeSize: 500)
+      world: AppCoreConfig.Game.World(
+        initialLevel: 0,
+        ecsArchetypeSize: 500
+      )
     )
   )
 }
