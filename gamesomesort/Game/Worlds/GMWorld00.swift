@@ -20,8 +20,6 @@ class GMWorld00: GMWorld {
   // systems
   private var aspectRatioSystem: LECSSystemId? = nil
   private var tapSystem: LECSSystemId? = nil
-  private var velocitySystem: LECSSystemId? = nil
-  private var emitterSystem: LECSSystemId? = nil
 
   init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap, ecsStarter: GMEcsStarter) {
     self.config = config
@@ -71,57 +69,11 @@ class GMWorld00: GMWorld {
             selectedEntityId = otherEntityId
           }
 
-          // quick work around to clear balloons that are off the screen...
-          if otherPosition.y < -5.0 {
-            world.deleteEntity(otherEntityId.id)
-          }
-
-          if let selectedEntityId {
-            world.deleteEntity(selectedEntityId.id)
-          }
           selectedEntityId = nil
         }
       }
 
       return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), CTTagVisible()]
-    }
-
-    emitterSystem = ecs.addSystemWorldScoped(
-      "emitterSystem",
-      selector: [LECSPosition2d.self, CTBalloonEmitter.self],
-    ) { world, row, columns in
-      let position = row.component(at: 0, columns, LECSPosition2d.self)
-      var emitter = row.component(at: 1, columns, CTBalloonEmitter.self)
-
-      // TODO: get the delta from outer update loop
-      emitter.update(0.01)
-      if emitter.emit() {
-        let balloon = world.createEntity(UUID.init().uuidString)
-        world.addComponent(balloon, position)
-        world.addComponent(balloon, CTRadius(1.0))
-        world.addComponent(balloon, CTColor(.yellow))
-        world.addComponent(balloon, CTTagVisible())
-        world.addComponent(balloon, CTTagBalloon())
-        world.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -1 * (emitter.rate * 0.0004)))
-      }
-      return [position, emitter]
-    }
-
-    velocitySystem = ecs.addSystemWorldScoped(
-      "velocity",
-      selector: [
-        LECSId.self,
-        LECSPosition2d.self,
-        LECSVelocity2d.self,
-      ],
-    ) { world, row, columns in
-      let entityId = row.component(at: 0, columns, LECSId.self)
-      let position = row.component(at: 1, columns, LECSPosition2d.self)
-      let velocity = row.component(at: 2, columns, LECSVelocity2d.self)
-
-      let newPosition = position.position + velocity.velocity
-
-      return [entityId, LECSPosition2d(newPosition), velocity]
     }
   }
   /// Update the game.
@@ -157,14 +109,6 @@ class GMWorld00: GMWorld {
       }
     }
 
-    if let velocitySystem {
-      ecs.processSystemWorldScoped(system: velocitySystem)
-    }
-
-    if let emitterSystem {
-      ecs.processSystemWorldScoped(system: emitterSystem)
-    }
-    //print("world updated: \(timeStep)")
     return gameCommands
   }
 
