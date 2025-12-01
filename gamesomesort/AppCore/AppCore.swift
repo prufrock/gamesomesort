@@ -65,14 +65,25 @@ class AppCore {
   struct GMWorldFactory {
     let config: AppCoreConfig
 
-    func create(level: Int, levels: [GMTileMap]) -> GMWorld {
+    func create(level: Int, levels: [GMTileMap]) -> any GMWorld {
       let map = levels[level]
-      return GMWorld(
-        config: config,
-        ecs: LECSCreateWorld(archetypeSize: 500),
-        map: map,
-        ecsStarter: selectStarter(level: level, levels: levels)
-      )
+      switch level {
+      case 1:
+        return GMWorld01(
+          config: config,
+          ecs: LECSCreateWorld(archetypeSize: 500),
+          map: map,
+          ecsStarter: selectStarter(level: level, levels: levels)
+        )
+      default:
+        return GMWorld00(
+          config: config,
+          ecs: LECSCreateWorld(archetypeSize: 500),
+          map: map,
+          ecsStarter: selectStarter(level: level, levels: levels)
+        )
+      }
+
     }
 
     func selectStarter(level: Int, levels: [GMTileMap]) -> GMEcsStarter {

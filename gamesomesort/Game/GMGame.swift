@@ -11,7 +11,7 @@ import Foundation
 /// change World or interrupt it. If World wants to change itself, like change levels, or do something to Game it needs to
 /// pass a command up.
 class GMGame {
-  var world: GMWorld
+  var world: any GMWorld
   private let levels: [GMTileMap]
   private let appCore: AppCore
   private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
