@@ -20,6 +20,7 @@ struct GMEcsLevelZero: GMEcsStarter {
       CTTagBalloon.self,
       CTTagTap.self,
       CTTagVisible.self,
+      CTTappable.self,
       CTQuaternion.self,
       CTRadius.self,
       CTScale3d.self,
@@ -63,9 +64,11 @@ struct GMEcsLevelZero: GMEcsStarter {
     ecs.addComponent(button, CTPosition3d(8, 8, 1.0))
     // y * -1.0 to move the model into upright space
     ecs.addComponent(button, CTScale3d(F3(3, -3, 3)))
-    ecs.addComponent(button, CTColor([0.6, 0.6, 0.0]))
+    ecs.addComponent(button, CTColor([0.1, 0.6, 0.0]))
     ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
+    ecs.addComponent(button, CTRadius(1.5))
     ecs.addComponent(button, CTModel("button-one"))
+    ecs.addComponent(button, CTTappable())
     ecs.addComponent(button, CTTagVisible())
   }
 
