@@ -369,7 +369,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       renderEncoder.popDebugGroup()
     }
 
-    let models = ecs.geoModels(context: context)
+    let models = ecs.gameObjects(context: context)
     for model in models {
       renderEncoder.pushDebugGroup("model \(model.name)")
       model.render(encoder: renderEncoder, uniforms: uniforms, params: params)

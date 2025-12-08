@@ -28,6 +28,7 @@ struct AppCoreConfig {
 
       struct World00Level00 {
         let worldOneButtonName: String = "worldOneButton"
+        let worldTwoButtonName: String = "worldTwoButton"
       }
     }
   }

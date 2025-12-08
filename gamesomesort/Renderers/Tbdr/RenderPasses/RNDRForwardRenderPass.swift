@@ -193,13 +193,21 @@ extension GEOModel {
   func render(
     encoder: MTLRenderCommandEncoder,
     uniforms: SHDRUniforms,
-    params: SHDRParams
+    params: SHDRParams,
+    gameObject: RNDRGameObject? = nil
   ) {
     var uniforms = uniforms
     var params = params
     params.tiling = tiling
 
-    uniforms.modelMatrix = transform.modelMatrix
+    let baseColor: F3? = gameObject?.baseColor
+    let transforms = gameObject?.transform ?? self.transform
+
+    if let baseColor {
+      meshes[0].submeshes[0].material.baseColor = baseColor
+    }
+
+    uniforms.modelMatrix = transforms.modelMatrix
     uniforms.normalMatrix = uniforms.modelMatrix.upperLeft
 
     encoder.setVertexBytes(&uniforms, length: MemoryLayout<SHDRUniforms>.stride, index: UniformsBuffer.index)

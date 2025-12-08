@@ -40,6 +40,7 @@ struct GMEcsLevelZero: GMEcsStarter {
     createPlayerCamera(ecs: ecs)
     createLights(ecs: ecs)
     createFirstGameButton(ecs: ecs)
+    createSecondGameButton(ecs: ecs)
     createBackPlane(ecs: ecs)
   }
 
@@ -65,6 +66,19 @@ struct GMEcsLevelZero: GMEcsStarter {
     // y * -1.0 to move the model into upright space
     ecs.addComponent(button, CTScale3d(F3(3, -3, 3)))
     ecs.addComponent(button, CTColor([0.1, 0.6, 0.0]))
+    ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
+    ecs.addComponent(button, CTRadius(1.5))
+    ecs.addComponent(button, CTModel("button-one"))
+    ecs.addComponent(button, CTTappable())
+    ecs.addComponent(button, CTTagVisible())
+  }
+
+  private func createSecondGameButton(ecs: LECSWorld) {
+    let button = ecs.createEntity(config.game.world.world00Level00.worldTwoButtonName)
+    ecs.addComponent(button, CTPosition3d(8, 12, 1.0))
+    // y * -1.0 to move the model into upright space
+    ecs.addComponent(button, CTScale3d(F3(3, -3, 3)))
+    ecs.addComponent(button, CTColor([0.6, 0.1, 0.4]))
     ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
     ecs.addComponent(button, CTRadius(1.5))
     ecs.addComponent(button, CTModel("button-one"))
