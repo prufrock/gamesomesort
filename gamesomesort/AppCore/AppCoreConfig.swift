@@ -24,6 +24,11 @@ struct AppCoreConfig {
     struct World {
       let initialLevel: Int
       let ecsArchetypeSize: Int
+      let world00Level00 = World00Level00()
+
+      struct World00Level00 {
+        let worldOneButtonName: String = "worldOneButton"
+      }
     }
   }
 

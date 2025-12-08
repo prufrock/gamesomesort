@@ -7,6 +7,8 @@
 import lecs_swift
 
 struct GMEcsLevelZero: GMEcsStarter {
+  let config: AppCoreConfig
+
   func start(ecs: any LECSWorld) {
     let componentTypes: [LECSComponent.Type] = [
       CTAspect.self,
@@ -57,7 +59,7 @@ struct GMEcsLevelZero: GMEcsStarter {
   }
 
   private func createFirstGameButton(ecs: LECSWorld) {
-    let button = ecs.createEntity("buttonone")
+    let button = ecs.createEntity(config.game.world.world00Level00.worldOneButtonName)
     ecs.addComponent(button, CTPosition3d(8, 8, 1.0))
     // y * -1.0 to move the model into upright space
     ecs.addComponent(button, CTScale3d(F3(3, -3, 3)))

@@ -89,7 +89,7 @@ class AppCore {
     func selectStarter(level: Int, levels: [GMTileMap]) -> GMEcsStarter {
       switch level {
       case 0:
-        return GMEcsLevelZero()
+        return GMEcsLevelZero(config: config)
       default:
         return GMStartFromTileMap(map: levels[level])
       }
