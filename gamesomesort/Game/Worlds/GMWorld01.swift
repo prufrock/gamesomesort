@@ -33,7 +33,7 @@ class GMWorld01: GMWorld {
   }
 
   private func start() {
-    print("start")
+    print("start world 01")
     self.ecsStarter.start(ecs: self.ecs)
 
     let tapSquare = ecs.createEntity("tapSquare")

@@ -75,6 +75,13 @@ class AppCore {
           map: map,
           ecsStarter: selectStarter(level: level, levels: levels)
         )
+      case 2:
+        return GMWorld02(
+          config: config,
+          ecs: LECSCreateWorld(archetypeSize: 500),
+          map: map,
+          ecsStarter: selectStarter(level: level, levels: levels)
+        )
       default:
         return GMWorld00(
           config: config,
@@ -90,6 +97,8 @@ class AppCore {
       switch level {
       case 0:
         return GMEcsLevelZero(config: config)
+      case 2:
+        return GMEcsInitW02(map: levels[level])
       default:
         return GMStartFromTileMap(map: levels[level])
       }
