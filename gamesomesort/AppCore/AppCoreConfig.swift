@@ -25,10 +25,20 @@ struct AppCoreConfig {
       let initialLevel: Int
       let ecsArchetypeSize: Int
       let world00Level00 = World00Level00()
+      let world01 = World01()
+      let world02 = World02()
 
       struct World00Level00 {
         let worldOneButtonName: String = "worldOneButton"
         let worldTwoButtonName: String = "worldTwoButton"
+      }
+
+      struct World01 {
+        let exitButton: String = "exitButton"
+      }
+
+      struct World02 {
+        let exitButton: String = "exitButton"
       }
     }
   }

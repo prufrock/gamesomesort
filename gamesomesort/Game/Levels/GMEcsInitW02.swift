@@ -8,6 +8,7 @@ import lecs_swift
 
 struct GMEcsInitW02: GMEcsStarter {
   let map: GMTileMap
+  let config: AppCoreConfig
 
   func start(ecs: LECSWorld) {
 
@@ -79,6 +80,7 @@ struct GMEcsInitW02: GMEcsStarter {
 
     createLights(ecs: ecs)
     createBackPlane(ecs: ecs)
+    createExitButton(ecs: ecs)
   }
 
   private func createPlayerCamera(ecs: LECSWorld) {
@@ -191,19 +193,6 @@ struct GMEcsInitW02: GMEcsStarter {
     _ = {
       var light = CTLight()
       light.type = Point
-      light.attenuation = [0.2, 10, 50]
-      light.specularColor = F3(repeating: 0.6)
-      let color = CTColor([0, 0.5, 0.5])
-      let position = CTPosition3d([4, 3, 1.4])
-      let id = ecs.createEntity("pointLightanother")
-      ecs.addComponent(id, light)
-      ecs.addComponent(id, color)
-      ecs.addComponent(id, position)
-    }()
-
-    _ = {
-      var light = CTLight()
-      light.type = Point
       light.attenuation = [0.8, 20, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = CTColor([0.5, 0, 0.5])
@@ -213,5 +202,19 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(id, color)
       ecs.addComponent(id, position)
     }()
+  }
+
+  private func createExitButton(ecs: LECSWorld) {
+    let button = ecs.createEntity(config.game.world.world02.exitButton)
+    ecs.addComponent(button, CTPosition3d(10, 1, 1.0))
+    // y * -1.0 to move the model into upright space
+    // ecs.addComponent(button, CTScale3d(F3(1, -1, 1)))
+    ecs.addComponent(button, CTScale3d(F3(1, 1, 1)))
+    ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
+    ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
+    ecs.addComponent(button, CTRadius(1.5))
+    ecs.addComponent(button, CTModel("back-plane"))
+    ecs.addComponent(button, CTTappable())
+    ecs.addComponent(button, CTTagVisible())
   }
 }

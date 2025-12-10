@@ -13,6 +13,7 @@ protocol GMEcsStarter {
 
 struct GMStartFromTileMap: GMEcsStarter {
   let map: GMTileMap
+  let config: AppCoreConfig
 
   func start(ecs: LECSWorld) {
 
@@ -84,6 +85,7 @@ struct GMStartFromTileMap: GMEcsStarter {
 
     createLights(ecs: ecs)
     createBackPlane(ecs: ecs)
+    createExitButton(ecs: ecs)
   }
 
   private func createPlayerCamera(ecs: LECSWorld) {
@@ -192,5 +194,19 @@ struct GMStartFromTileMap: GMEcsStarter {
       ecs.addComponent(id, color)
       ecs.addComponent(id, position)
     }()
+  }
+
+  private func createExitButton(ecs: LECSWorld) {
+    let button = ecs.createEntity(config.game.world.world02.exitButton)
+    ecs.addComponent(button, CTPosition3d(10, 1, 1.0))
+    // y * -1.0 to move the model into upright space
+    // ecs.addComponent(button, CTScale3d(F3(1, -1, 1)))
+    ecs.addComponent(button, CTScale3d(F3(1, 1, 1)))
+    ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
+    ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
+    ecs.addComponent(button, CTRadius(1.5))
+    ecs.addComponent(button, CTModel("back-plane"))
+    ecs.addComponent(button, CTTappable())
+    ecs.addComponent(button, CTTagVisible())
   }
 }

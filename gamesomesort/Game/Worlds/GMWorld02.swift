@@ -20,6 +20,7 @@ class GMWorld02: GMWorld {
   // systems
   private var aspectRatioSystem: LECSSystemId? = nil
   private var tapSystem: LECSSystemId? = nil
+  private var collisionSystem: LECSSystemId? = nil
   private var velocitySystem: LECSSystemId? = nil
   private var emitterSystem: LECSSystemId? = nil
 
@@ -45,7 +46,7 @@ class GMWorld02: GMWorld {
       return [CTAspect(aspect: self.screenDimensions.aspectRatio)]
     }
 
-    tapSystem = ecs.addSystemWorldScoped(
+    collisionSystem = ecs.addSystemWorldScoped(
       "collides",
       selector: [
         LECSId.self,
@@ -84,6 +85,39 @@ class GMWorld02: GMWorld {
       }
 
       return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), CTTagVisible()]
+    }
+
+    tapSystem = ecs.addSystemWorldScoped(
+      "tapSystem",
+      selector: [
+        LECSId.self,
+        LECSPosition2d.self,
+        CTTagTap.self,
+      ]
+    ) { world, row, columns in
+      let tapEntityId = row.component(at: 0, columns, LECSId.self)
+      let tapPosition = row.component(at: 1, columns, LECSPosition2d.self)
+
+      world.select(
+        [LECSId.self, CTPosition3d.self, CTRadius.self, CTTappable.self]
+      ) { otherRow, otherColumns in
+        let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
+        let otherPosition = otherRow.component(at: 1, otherColumns, CTPosition3d.self)
+        let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
+        let otherRectangle = GEORectangle(
+          position: otherPosition.position.xy,
+          radius: otherRadius.radius
+        )
+
+        if otherEntityId != tapEntityId {
+
+          if otherRectangle.contains(tapPosition.position) {
+            world.addComponent(otherEntityId.id, CTTappable(tapped: true))
+          }
+        }
+      }
+
+      return [tapEntityId, tapPosition, CTTagTap()]
     }
 
     emitterSystem = ecs.addSystemWorldScoped(
@@ -151,9 +185,22 @@ class GMWorld02: GMWorld {
           ecs.processSystemWorldScoped(system: tapSystem)
         }
         ecs.removeComponent(tapSquare!, component: CTTagTap.self)
-        gameCommands.enqueue(.start(level: 1))
       case .screenSizeChanged:
         break
+      }
+
+      let buttonTappable = ecs.getComponent(
+        ecs.entity(config.game.world.world02.exitButton)!,
+        CTTappable.self
+      )!
+
+      if buttonTappable.tapped {
+        print("exit button tapped")
+        ecs.addComponent(
+          ecs.entity(config.game.world.world02.exitButton)!,
+          CTTappable(tapped: false)
+        )
+        gameCommands.enqueue(.start(level: 0))
       }
     }
 

@@ -98,9 +98,9 @@ class AppCore {
       case 0:
         return GMEcsLevelZero(config: config)
       case 2:
-        return GMEcsInitW02(map: levels[level])
+        return GMEcsInitW02(map: levels[level], config: config)
       default:
-        return GMStartFromTileMap(map: levels[level])
+        return GMStartFromTileMap(map: levels[level], config: config)
       }
     }
   }
