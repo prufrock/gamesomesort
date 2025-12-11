@@ -40,6 +40,7 @@ class GMWorld01: GMWorld {
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, CTRadius(0.1))
     ecs.addComponent(tapSquare, CTColor(.red))
+    ecs.addComponent(tapSquare, CTScale3d(config.game.world.world02.worldVector))
     self.tapSquare = tapSquare
 
     aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
@@ -137,6 +138,7 @@ class GMWorld01: GMWorld {
         world.addComponent(balloon, CTTagVisible())
         world.addComponent(balloon, CTTagBalloon())
         world.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -1 * (emitter.rate * 0.0004)))
+        world.addComponent(balloon, CTScale3d(self.config.game.world.world01.worldVector))
       }
       return [position, emitter]
     }
@@ -183,6 +185,9 @@ class GMWorld01: GMWorld {
         ecs.addComponent(tapSquare!, CTTagVisible())
         if let tapSystem = self.tapSystem {
           ecs.processSystemWorldScoped(system: tapSystem)
+        }
+        if let collisionSystem = self.collisionSystem {
+          ecs.processSystemWorldScoped(system: collisionSystem)
         }
         ecs.removeComponent(tapSquare!, component: CTTagTap.self)
       case .screenSizeChanged:

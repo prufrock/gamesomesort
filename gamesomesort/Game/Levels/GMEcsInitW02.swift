@@ -9,6 +9,13 @@ import lecs_swift
 struct GMEcsInitW02: GMEcsStarter {
   let map: GMTileMap
   let config: AppCoreConfig
+  private let worldVector: F3
+
+  init(map: GMTileMap, config: AppCoreConfig) {
+    self.map = map
+    self.config = config
+    self.worldVector = config.game.world.world02.worldVector
+  }
 
   func start(ecs: LECSWorld) {
 
@@ -96,7 +103,7 @@ struct GMEcsInitW02: GMEcsStarter {
     )
     ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
     ecs.addComponent(playerCamera, CTPosition3d(F3(8, 8, -8.0)))
-    ecs.addComponent(playerCamera, CTScale3d(F3(1.0, 1.0, 1.0)))
+    ecs.addComponent(playerCamera, CTScale3d(worldVector))
   }
 
   private func createTile(ecs: LECSWorld, tile: GMTile, x: Int, y: Int) {
@@ -122,6 +129,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(balloon, CTTagVisible())
       ecs.addComponent(balloon, CTTagBalloon())
       ecs.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -0.005))
+      ecs.addComponent(balloon, CTScale3d(worldVector))
     case .nothing:
       //no-op
       break
@@ -133,9 +141,9 @@ struct GMEcsInitW02: GMEcsStarter {
   private func createBackPlane(ecs: LECSWorld) {
     let backPlane = ecs.createEntity("backPlane")
     ecs.addComponent(backPlane, CTPosition3d(10, 10, 1.5))
-    ecs.addComponent(backPlane, CTScale3d(uniform: 35))
+    ecs.addComponent(backPlane, CTScale3d(worldVector * F3(x: 35, y: 35, z: 35)))
     ecs.addComponent(backPlane, CTColor([0.6, 0.6, 0.6]))
-    ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
+    ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
     ecs.addComponent(backPlane, CTModel("back-plane"))
     ecs.addComponent(backPlane, CTTagVisible())
   }
@@ -207,11 +215,9 @@ struct GMEcsInitW02: GMEcsStarter {
   private func createExitButton(ecs: LECSWorld) {
     let button = ecs.createEntity(config.game.world.world02.exitButton)
     ecs.addComponent(button, CTPosition3d(10, 1, 1.0))
-    // y * -1.0 to move the model into upright space
-    // ecs.addComponent(button, CTScale3d(F3(1, -1, 1)))
-    ecs.addComponent(button, CTScale3d(F3(1, 1, 1)))
+    ecs.addComponent(button, CTScale3d(worldVector))
     ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
-    ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(-.pi / 2))))
+    ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
     ecs.addComponent(button, CTRadius(1.5))
     ecs.addComponent(button, CTModel("back-plane"))
     ecs.addComponent(button, CTTappable())

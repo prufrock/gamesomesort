@@ -19,7 +19,7 @@ struct AppCoreConfig {
     let tapDelay: Int = 50
     let world: World
     let timeLimit: Float = Float.infinity
-    let upVector: F3 = [0, -1, 0]
+    let upVector: F3 = [0, 1, 0]
 
     struct World {
       let initialLevel: Int
@@ -34,10 +34,12 @@ struct AppCoreConfig {
       }
 
       struct World01 {
+        let worldVector: F3 = [-1, 1, 1]
         let exitButton: String = "exitButton"
       }
 
       struct World02 {
+        let worldVector: F3 = [-1, 1, 1]
         let exitButton: String = "exitButton"
       }
     }

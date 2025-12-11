@@ -51,15 +51,26 @@ extension RNDRRenderPass {
 extension LECSWorld {
   var models: [GMSquare] {
     var squares = [GMSquare]()
-    select([LECSPosition2d.self, CTColor.self, CTRadius.self, CTTagVisible.self]) { row, columns in
+    select([
+      LECSPosition2d.self,
+      CTColor.self,
+      CTRadius.self,
+      CTTagVisible.self,
+      CTScale3d.self,
+    ]) { row, columns in
       let position = row.component(at: 0, columns, LECSPosition2d.self)
       let color = row.component(at: 1, columns, CTColor.self)
       let radius = row.component(at: 2, columns, CTRadius.self)
+      let scale = row.component(at: 4, columns, CTScale3d.self)
       let square = GMSquare(
         transform: GEOTransform(
           position: F3(position.position, 1.0),
           quaternion: simd_quatf(Float4x4.identity),
-          scale: Float3(repeating: radius.radius)
+          scale: F3(
+            x: scale.scale.x * radius.radius,
+            y: scale.scale.y * radius.radius,
+            z: scale.scale.z * radius.radius
+          )
         ),
         color: color.color
       )
