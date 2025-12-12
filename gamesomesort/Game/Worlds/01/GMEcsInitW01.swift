@@ -145,7 +145,7 @@ struct GMEcsInitW01: GMEcsStarter {
   private func createBackPlane(ecs: LECSWorld) {
     let backPlane = ecs.createEntity("backPlane")
     ecs.addComponent(backPlane, CTPosition3d(10, 10, 2.5))
-    ecs.addComponent(backPlane, CTScale3d(worldVector * F3(repeating: 35)))
+    ecs.addComponent(backPlane, CTScale3d(F3(repeating: 35)))
     ecs.addComponent(backPlane, CTColor([0.6, 0.6, 0.6]))
     ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
     ecs.addComponent(backPlane, CTModel("back-plane"))
@@ -206,7 +206,7 @@ struct GMEcsInitW01: GMEcsStarter {
   private func createExitButton(ecs: LECSWorld) {
     let button = ecs.createEntity(config.game.world.world02.exitButton)
     ecs.addComponent(button, CTPosition3d(10, 1, 1.0))
-    ecs.addComponent(button, CTScale3d(worldVector))
+    ecs.addComponent(button, CTScale3d(F3(repeating: 1)))
     ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
     ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
     ecs.addComponent(button, CTRadius(1.5))

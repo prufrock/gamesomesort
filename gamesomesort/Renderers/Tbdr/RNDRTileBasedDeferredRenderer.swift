@@ -64,7 +64,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     squareRenderer.initBuffers(device: device)
     controllerModel = ControllerModel(
       device: device,
-      controllerTexture: controllerTexture
+      controllerTexture: controllerTexture,
+      worldBasis: [-1, 1, 1]
     )
 
     config.services.renderService.models.forEach {

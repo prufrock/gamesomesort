@@ -99,9 +99,9 @@ extension LECSWorld {
 
       //TODO: models need to be separate from transforms and eventually textures
       let model = context.controllerModel.models[ctModel.name]!
-      model.transform.scale = scale.scale
-      model.transform.quaternion = quaternion.quaternion
-      model.transform.position = position.position
+      model.upright.scale = scale.scale
+      model.upright.quaternion = quaternion.quaternion
+      model.upright.position = position.position
       model.meshes[0].submeshes[0].material.baseColor = color.f3
 
       models.append(model)

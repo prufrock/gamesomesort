@@ -161,7 +161,7 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
     let squares = ecs.models
     let sphere = context.controllerModel.models["brick-sphere.usdz"]!
     for square in squares {
-      sphere.transform = square.transform
+      sphere.upright = square.transform
       sphere.render(
         encoder: renderEncoder,
         uniforms: uniforms,
@@ -201,7 +201,7 @@ extension GEOModel {
     params.tiling = tiling
 
     let baseColor: F3? = gameObject?.baseColor
-    let transforms = gameObject?.transform ?? self.transform
+    let transforms = (gameObject?.transform ?? GEOTransform()) * self.upright
 
     if let baseColor {
       meshes[0].submeshes[0].material.baseColor = baseColor

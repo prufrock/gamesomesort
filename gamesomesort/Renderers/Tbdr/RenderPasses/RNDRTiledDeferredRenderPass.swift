@@ -360,7 +360,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     let sphere = context.controllerModel.models["brick-sphere.usdz"]!
     for square in spheres {
       renderEncoder.pushDebugGroup("sphere \(sphere.position)")
-      sphere.transform = square.transform
+      sphere.upright = square.transform
       sphere.render(
         encoder: renderEncoder,
         uniforms: uniforms,

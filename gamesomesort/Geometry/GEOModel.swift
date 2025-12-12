@@ -7,15 +7,26 @@
 
 import MetalKit
 
-class GEOModel: GEOTransformable {
-  var transform = GEOTransform()
+class GEOModel: GEOUprightable {
+  var upright = GEOTransform()
   var meshes: [GEOMesh] = []
   var name: String = "Untitled"
   var tiling: UInt32 = 1
 
   init() {}
 
-  init(name: String, controllerTexture: ControllerTexture, device: MTLDevice) {
+  /// Create a new GEOModel instance.
+  /// - Parameters:
+  ///   - name: The name of the model.
+  ///   - controllerTexture: The texture controller to read textures from.
+  ///   - device: The device used to load and render the model.
+  ///   - upright: The transformation needed to bring the model into upright space.
+  init(
+    name: String,
+    controllerTexture: ControllerTexture,
+    device: MTLDevice,
+    upright: GEOTransform
+  ) {
     guard let assertUrl = Bundle.main.url(forResource: name, withExtension: nil) else {
       fatalError("Model \(name) not found")
     }
@@ -38,6 +49,7 @@ class GEOModel: GEOTransformable {
       GEOMesh(mdlMesh: $0.0, mtkMesh: $0.1, controllerTexture: controllerTexture, device: device)
     }
     self.name = name
+    self.upright = upright
   }
 
   func setTexture(name: String, type: SHDRTextureIndices, controllerTexture: ControllerTexture, device: MTLDevice) {
@@ -57,7 +69,13 @@ enum GEOPrimitive {
 }
 
 extension GEOModel {
-  convenience init(name: String, primitiveType: GEOPrimitive, controllerTexture: ControllerTexture, device: MTLDevice) {
+  convenience init(
+    name: String,
+    primitiveType: GEOPrimitive,
+    controllerTexture: ControllerTexture,
+    device: MTLDevice,
+    upright: GEOTransform
+  ) {
     let mdlMesh = Self.createMesh(primitiveType: primitiveType, device: device)
     mdlMesh.vertexDescriptor = MDLVertexDescriptor.defaultLayout
     mdlMesh.addTangentBasis(
@@ -70,6 +88,7 @@ extension GEOModel {
     self.init()
     self.meshes = [mesh]
     self.name = name
+    self.upright = upright
   }
 
   static func createMesh(primitiveType: GEOPrimitive, device: MTLDevice) -> MDLMesh {

@@ -20,3 +20,13 @@ extension GEOTransform {
     return modelMatrix
   }
 }
+
+extension GEOTransform {
+  static func * (lhs: GEOTransform, rhs: GEOTransform) -> GEOTransform {
+    var result = lhs
+    result.position += rhs.position
+    result.scale *= rhs.scale
+    result.quaternion *= rhs.quaternion
+    return result
+  }
+}

@@ -75,7 +75,7 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
 
     let sphere = context.controllerModel.models["brick-sphere.usdz"]!
     for square in world.models {
-      sphere.transform = square.transform
+      sphere.upright = square.transform
       sphere.render(
         encoder: renderEncoder,
         uniforms: uniforms,
