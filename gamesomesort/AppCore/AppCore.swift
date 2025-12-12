@@ -96,7 +96,7 @@ class AppCore {
     func selectStarter(level: Int, levels: [GMTileMap]) -> GMEcsStarter {
       switch level {
       case 0:
-        return GMEcsLevelZero(config: config)
+        return GMEcsInitW00(config: config)
       case 2:
         return GMEcsInitW02(map: levels[level], config: config)
       default:

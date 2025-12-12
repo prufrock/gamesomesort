@@ -6,7 +6,7 @@
 //
 import lecs_swift
 
-struct GMEcsLevelZero: GMEcsStarter {
+struct GMEcsInitW00: GMEcsStarter {
   let config: AppCoreConfig
 
   func start(ecs: any LECSWorld) {
