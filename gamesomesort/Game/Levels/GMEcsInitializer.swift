@@ -144,7 +144,7 @@ struct GMStartFromTileMap: GMEcsStarter {
 
   private func createBackPlane(ecs: LECSWorld) {
     let backPlane = ecs.createEntity("backPlane")
-    ecs.addComponent(backPlane, CTPosition3d(10, 10, 1.5))
+    ecs.addComponent(backPlane, CTPosition3d(10, 10, 2.5))
     ecs.addComponent(backPlane, CTScale3d(worldVector * F3(repeating: 35)))
     ecs.addComponent(backPlane, CTColor([0.6, 0.6, 0.6]))
     ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
@@ -182,7 +182,7 @@ struct GMStartFromTileMap: GMEcsStarter {
       light.attenuation = [0.2, 10, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = CTColor([0, 0.5, 0.5])
-      let position = CTPosition3d([6, 3, 1.4])
+      let position = CTPosition3d([6, 3, 2.4])
       let id = ecs.createEntity("pointLight")
       ecs.addComponent(id, light)
       ecs.addComponent(id, color)
