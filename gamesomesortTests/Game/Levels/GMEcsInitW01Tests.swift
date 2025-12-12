@@ -11,7 +11,7 @@ import Testing
 import Foundation
 import lecs_swift
 
-struct GMStartFromTileMapTests {
+struct GMEcsInitW01Tests {
 
   @Test func oneTileTileMap() throws {
     let ecs = LECSCreateWorld(archetypeSize: 10)
@@ -21,7 +21,7 @@ struct GMStartFromTileMapTests {
       index: 0
     )
 
-    let starter = GMStartFromTileMap(map: tileMap)
+    let starter = GMEcsInitW01(map: tileMap, config: AppCoreConfig.testDefault)
 
     starter.start(ecs: ecs)
 

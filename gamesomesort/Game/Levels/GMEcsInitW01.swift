@@ -11,7 +11,7 @@ protocol GMEcsStarter {
   func start(ecs: LECSWorld)
 }
 
-struct GMStartFromTileMap: GMEcsStarter {
+struct GMEcsInitW01: GMEcsStarter {
   let map: GMTileMap
   let config: AppCoreConfig
   let worldVector: F3
