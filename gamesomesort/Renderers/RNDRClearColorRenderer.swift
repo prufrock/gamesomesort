@@ -40,6 +40,10 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
     // no-op
   }
 
+  func worldChanged(worldBasis: F3) {
+    // no-op
+  }
+
   func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor) {
 
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {

@@ -14,7 +14,7 @@ struct GMEcsInitW02: GMEcsStarter {
   init(map: GMTileMap, config: AppCoreConfig) {
     self.map = map
     self.config = config
-    self.worldVector = config.game.world.world02.worldVector
+    self.worldVector = config.game.world.world02.worldBasis
   }
 
   func start(ecs: LECSWorld) {

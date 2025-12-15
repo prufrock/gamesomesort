@@ -16,7 +16,7 @@ class GMGame {
   private let appCore: AppCore
   private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
   private var elapsedTime: Float = 0
-  private var selectedLevel: Int
+  private var selectedLevel: Int? = nil
 
   init(appCore: AppCore, levels: [GMTileMap]) {
     self.appCore = appCore
@@ -25,13 +25,16 @@ class GMGame {
       level: appCore.config.game.world.initialLevel,
       levels: levels
     )
-    selectedLevel = appCore.config.game.world.initialLevel
   }
 
   /// Update the game.
   /// - Parameters:
   ///   - timeStep: The amount of time to move forward.
   func update(timeStep: Float, input: GMGameInput) {
+
+    if selectedLevel == nil {
+      initWorld(worldNumber: appCore.config.game.world.initialLevel)
+    }
 
     // reset frequently, just for testing
     if elapsedTime < appCore.config.game.timeLimit {
@@ -40,17 +43,23 @@ class GMGame {
       if !commands.isEmpty {
         if case let .start(level) = commands.dequeue() {
           if selectedLevel != level {
-            selectedLevel = level
-            world = appCore.createWorldFactory().create(level: selectedLevel, levels: levels)
-            world.update(screenDimensions)
+            initWorld(worldNumber: level)
           }
         }
       }
     } else {
-      world = appCore.createWorldFactory().create(level: selectedLevel, levels: levels)
-      world.update(screenDimensions)
+      initWorld(worldNumber: selectedLevel ?? appCore.config.game.world.initialLevel)
       elapsedTime = 0
     }
+  }
+
+  private func initWorld(worldNumber: Int) {
+    selectedLevel = worldNumber
+    world = appCore.createWorldFactory().create(level: worldNumber, levels: levels)
+    world.update(screenDimensions)
+    appCore.sync(
+      SVCCommandRender.ChangeWorld(worldBasis: world.basis)
+    )
   }
 
   func update(_ dimensions: ScreenDimensions) {

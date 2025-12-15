@@ -17,6 +17,10 @@ protocol RNDRRenderer {
   func initializePipelines(pixelFormat: MTLPixelFormat)
 
   func initializeRenderPasses(pixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat)
+
+  /// Called when the world changes, right now so the models can change their upright
+  /// transform as needed.
+  func worldChanged(worldBasis: F3)
 }
 
 extension RNDRRenderer {

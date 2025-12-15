@@ -62,10 +62,25 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     self.library = library
 
     squareRenderer.initBuffers(device: device)
+
+    // Place holder controller, without models.
     controllerModel = ControllerModel(
       device: device,
       controllerTexture: controllerTexture,
-      worldBasis: [-1, 1, 1]
+      worldBasis: [1, 1, 1]
+    )
+  }
+
+  func resize(_ dimensions: ScreenDimensions) {
+    screenDimensions = dimensions
+    tbdrPass?.resize(dimensions)
+  }
+
+  func worldChanged(worldBasis: F3) {
+    controllerModel = ControllerModel(
+      device: device,
+      controllerTexture: controllerTexture,
+      worldBasis: worldBasis
     )
 
     config.services.renderService.models.forEach {
@@ -75,11 +90,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     controllerModel.loadPrimitive("back-plane", primitiveType: .plane)
     controllerModel.loadPrimitive("button-one", primitiveType: .plane)
     controllerModel.loadPrimitive("icosahedron", primitiveType: .icosahedron)
-  }
-
-  func resize(_ dimensions: ScreenDimensions) {
-    screenDimensions = dimensions
-    tbdrPass?.resize(dimensions)
   }
 
   func initializePipelines(pixelFormat: MTLPixelFormat) {

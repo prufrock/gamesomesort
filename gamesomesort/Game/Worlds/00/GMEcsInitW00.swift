@@ -61,7 +61,7 @@ struct GMEcsInitW00: GMEcsStarter {
   }
 
   private func createFirstGameButton(ecs: LECSWorld) {
-    let button = ecs.createEntity(config.game.world.world00Level00.worldOneButtonName)
+    let button = ecs.createEntity(config.game.world.world00.worldOneButtonName)
     ecs.addComponent(button, CTPosition3d(8, 8, 1.0))
     // y * -1.0 to move the model into upright space
     ecs.addComponent(button, CTScale3d(F3(3, 3, 3)))
@@ -74,7 +74,7 @@ struct GMEcsInitW00: GMEcsStarter {
   }
 
   private func createSecondGameButton(ecs: LECSWorld) {
-    let button = ecs.createEntity(config.game.world.world00Level00.worldTwoButtonName)
+    let button = ecs.createEntity(config.game.world.world00.worldTwoButtonName)
     ecs.addComponent(button, CTPosition3d(8, 12, 1.0))
     // y * -1.0 to move the model into upright space
     ecs.addComponent(button, CTScale3d(F3(3, 3, 3)))

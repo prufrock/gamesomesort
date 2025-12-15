@@ -44,6 +44,12 @@ class RenderService {
     )
   }
 
+  func sync(_ command: SVCCommandRender.ChangeWorld) {
+    let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
+
+    activeRenderer.worldChanged(worldBasis: command.worldBasis)
+  }
+
   private func initRenderer() -> RNDRRenderer {
     let newRenderer: RNDRRenderer
     switch config.services.renderService.type {

@@ -17,4 +17,8 @@ class RNDRErsatzRenderer: RNDRRenderer {
   public func resize(_ dimensions: ScreenDimensions) {
     // no-op
   }
+
+  func worldChanged(worldBasis: F3) {
+    // no-op
+  }
 }

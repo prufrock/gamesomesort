@@ -14,6 +14,9 @@ class GMWorld01: GMWorld {
   private(set) var map: GMTileMap
   private let ecsStarter: GMEcsStarter
   private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
+  public var basis: F3 {
+    config.game.world.world01.worldBasis
+  }
 
   private var tapSquare: LECSEntityId? = nil
 
@@ -40,7 +43,7 @@ class GMWorld01: GMWorld {
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, CTRadius(0.1))
     ecs.addComponent(tapSquare, CTColor(.red))
-    ecs.addComponent(tapSquare, CTScale3d(config.game.world.world02.worldVector))
+    ecs.addComponent(tapSquare, CTScale3d(config.game.world.world02.worldBasis))
     self.tapSquare = tapSquare
 
     aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
@@ -138,7 +141,7 @@ class GMWorld01: GMWorld {
         world.addComponent(balloon, CTTagVisible())
         world.addComponent(balloon, CTTagBalloon())
         world.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -1 * (emitter.rate * 0.0004)))
-        world.addComponent(balloon, CTScale3d(self.config.game.world.world01.worldVector))
+        world.addComponent(balloon, CTScale3d(self.config.game.world.world01.worldBasis))
       }
       return [position, emitter]
     }

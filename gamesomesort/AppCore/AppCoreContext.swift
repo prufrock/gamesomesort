@@ -35,6 +35,8 @@ class AppCoreContext {
       renderService.sync(actual)
     case let actual as SVCCommandRender.InitializePipelines:
       renderService.sync(actual)
+    case let actual as SVCCommandRender.ChangeWorld:
+      renderService.sync(actual)
     case let actual as LoadLevelFileCommand:
       fileService.sync(actual)
     default:

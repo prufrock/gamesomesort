@@ -47,6 +47,10 @@ class RNDRSquareRenderer: RNDRRenderer {
     screenDimensions = dimensions
   }
 
+  func worldChanged(worldBasis: F3) {
+    // no-op
+  }
+
   func initializePipelines(pixelFormat: MTLPixelFormat) {
     guard let library = device.makeDefaultLibrary() else {
       fatalError(

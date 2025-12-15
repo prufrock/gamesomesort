@@ -9,6 +9,10 @@ import MetalKit
 import lecs_swift
 
 enum SVCCommandRender {
+  struct ChangeWorld: ServiceCommand {
+    let worldBasis: F3
+  }
+
   struct InitializePipelines: ServiceCommand {
     let pixelFormat: MTLPixelFormat
   }

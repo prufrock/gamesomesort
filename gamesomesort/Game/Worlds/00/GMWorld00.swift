@@ -14,6 +14,9 @@ class GMWorld00: GMWorld {
   private(set) var map: GMTileMap
   private let ecsStarter: GMEcsStarter
   private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
+  public var basis: F3 {
+    config.game.world.world00.worldBasis
+  }
 
   private var tapSquare: LECSEntityId? = nil
 
@@ -109,28 +112,28 @@ class GMWorld00: GMWorld {
     }
 
     let buttonTappable = ecs.getComponent(
-      ecs.entity(config.game.world.world00Level00.worldOneButtonName)!,
+      ecs.entity(config.game.world.world00.worldOneButtonName)!,
       CTTappable.self
     )!
 
     if buttonTappable.tapped {
       print("button one tapped")
       ecs.addComponent(
-        ecs.entity(config.game.world.world00Level00.worldOneButtonName)!,
+        ecs.entity(config.game.world.world00.worldOneButtonName)!,
         CTTappable(tapped: false)
       )
       gameCommands.enqueue(.start(level: 1))
     }
 
     let button02Tappable = ecs.getComponent(
-      ecs.entity(config.game.world.world00Level00.worldTwoButtonName)!,
+      ecs.entity(config.game.world.world00.worldTwoButtonName)!,
       CTTappable.self
     )!
 
     if button02Tappable.tapped {
       print("button two tapped")
       ecs.addComponent(
-        ecs.entity(config.game.world.world00Level00.worldTwoButtonName)!,
+        ecs.entity(config.game.world.world00.worldTwoButtonName)!,
         CTTappable(tapped: false)
       )
       gameCommands.enqueue(.start(level: 2))

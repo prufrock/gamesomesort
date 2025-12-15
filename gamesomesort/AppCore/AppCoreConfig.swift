@@ -24,22 +24,23 @@ struct AppCoreConfig {
     struct World {
       let initialLevel: Int
       let ecsArchetypeSize: Int
-      let world00Level00 = World00Level00()
+      let world00 = World00()
       let world01 = World01()
       let world02 = World02()
 
-      struct World00Level00 {
+      struct World00 {
+        let worldBasis: F3 = [-1, 1, 1]
         let worldOneButtonName: String = "worldOneButton"
         let worldTwoButtonName: String = "worldTwoButton"
       }
 
       struct World01 {
-        let worldVector: F3 = [-1, 1, 1]
+        let worldBasis: F3 = [-1, 1, 1]
         let exitButton: String = "exitButton"
       }
 
       struct World02 {
-        let worldVector: F3 = [-1, 1, 1]
+        let worldBasis: F3 = [-1, 1, 1]
         let exitButton: String = "exitButton"
       }
     }
