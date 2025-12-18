@@ -17,6 +17,7 @@ class GMWorld01: GMWorld {
   public var basis: F3 {
     config.game.world.world01.worldBasis
   }
+  public var uprightTransforms: [String: GEOTransform] = [:]
 
   private var tapSquare: LECSEntityId? = nil
 

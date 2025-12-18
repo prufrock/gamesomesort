@@ -47,7 +47,10 @@ class RenderService {
   func sync(_ command: SVCCommandRender.ChangeWorld) {
     let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
-    activeRenderer.worldChanged(worldBasis: command.worldBasis)
+    activeRenderer.worldChanged(
+      worldBasis: command.worldBasis,
+      worldUprightTransforms: command.worldUprightTransforms
+    )
   }
 
   private func initRenderer() -> RNDRRenderer {

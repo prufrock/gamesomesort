@@ -67,7 +67,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     controllerModel = ControllerModel(
       device: device,
       controllerTexture: controllerTexture,
-      worldBasis: [1, 1, 1]
+      worldBasis: [1, 1, 1],
+      worldUprightTransforms: [:]
     )
   }
 
@@ -76,11 +77,15 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     tbdrPass?.resize(dimensions)
   }
 
-  func worldChanged(worldBasis: F3) {
+  func worldChanged(
+    worldBasis: F3,
+    worldUprightTransforms: [String: GEOTransform]
+  ) {
     controllerModel = ControllerModel(
       device: device,
       controllerTexture: controllerTexture,
-      worldBasis: worldBasis
+      worldBasis: worldBasis,
+      worldUprightTransforms: worldUprightTransforms
     )
 
     config.services.renderService.models.forEach {

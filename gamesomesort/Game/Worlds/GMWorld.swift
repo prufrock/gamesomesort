@@ -11,6 +11,7 @@ protocol GMWorld {
   var ecs: LECSWorld { get }
 
   var basis: F3 { get }
+  var uprightTransforms: [String: GEOTransform] { get }
 
   func update(timeStep: Float, input: GMGameInput) -> any CTSQueue<GMWorldCommands>
 

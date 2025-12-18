@@ -58,7 +58,10 @@ class GMGame {
     world = appCore.createWorldFactory().create(level: worldNumber, levels: levels)
     world.update(screenDimensions)
     appCore.sync(
-      SVCCommandRender.ChangeWorld(worldBasis: world.basis)
+      SVCCommandRender.ChangeWorld(
+        worldBasis: world.basis,
+        worldUprightTransforms: world.uprightTransforms
+      )
     )
   }
 

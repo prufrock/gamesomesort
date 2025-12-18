@@ -18,7 +18,7 @@ class RNDRErsatzRenderer: RNDRRenderer {
     // no-op
   }
 
-  func worldChanged(worldBasis: F3) {
+  func worldChanged(worldBasis: F3, worldUprightTransforms: [String:GEOTransform]) {
     // no-op
   }
 }

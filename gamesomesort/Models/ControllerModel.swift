@@ -13,17 +13,20 @@ class ControllerModel {
   private var device: MTLDevice
   private var controllerTexture: ControllerTexture
   private var worldBasis: F3
+  private var worldUprightTransforms: [String: GEOTransform]
 
   private(set) var models: [String: GEOModel] = [:]
 
   init(
     device: MTLDevice,
     controllerTexture: ControllerTexture,
-    worldBasis: F3
+    worldBasis: F3,
+    worldUprightTransforms: [String: GEOTransform]
   ) {
     self.device = device
     self.controllerTexture = controllerTexture
     self.worldBasis = worldBasis
+    self.worldUprightTransforms = worldUprightTransforms
   }
 
   func loadModel(_ name: String) {
@@ -41,7 +44,7 @@ class ControllerModel {
 
   @discardableResult
   func loadPrimitive(_ name: String, primitiveType: GEOPrimitive) -> GEOModel {
-    var upright = GEOTransform()
+    var upright = self.worldUprightTransforms[name] ?? GEOTransform()
     upright.scale = self.worldBasis
 
     let model = GEOModel(

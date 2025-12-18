@@ -29,9 +29,21 @@ struct AppCoreConfig {
       let world02 = World02()
 
       struct World00 {
-        let worldBasis: F3 = [-1, 1, 1]
+        let worldBasis: F3 = [1, -1, 1]
         let worldOneButtonName: String = "worldOneButton"
         let worldTwoButtonName: String = "worldTwoButton"
+        let uprightTransforms: [String: GEOTransform] = [
+          "back-plane": GEOTransform(
+            position: [0, 0, 0],
+            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            scale: [1, 1, 1]
+          ),
+          "button-one": GEOTransform(
+            position: [0, 0, 0],
+            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            scale: [1, 1, 1]
+          ),
+        ]
       }
 
       struct World01 {
