@@ -47,7 +47,10 @@ class RNDRSquareRenderer: RNDRRenderer {
     screenDimensions = dimensions
   }
 
-  func worldChanged(worldBasis: F3, worldUprightTransforms: [String:GEOTransform]) {
+  func worldChanged(
+    worldBasis: F3,
+    worldUprightTransforms: [String: GEOTransform]
+  ) {
     // no-op
   }
 

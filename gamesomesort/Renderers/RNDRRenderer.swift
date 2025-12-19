@@ -20,7 +20,10 @@ protocol RNDRRenderer {
 
   /// Called when the world changes, right now so the models can change their upright
   /// transform as needed.
-  func worldChanged(worldBasis: F3, worldUprightTransforms: [String:GEOTransform])
+  func worldChanged(
+    worldBasis: F3,
+    worldUprightTransforms: [String: GEOTransform]
+  )
 }
 
 extension RNDRRenderer {

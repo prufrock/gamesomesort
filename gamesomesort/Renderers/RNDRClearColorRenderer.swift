@@ -40,7 +40,10 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
     // no-op
   }
 
-  func worldChanged(worldBasis: F3, worldUprightTransforms: [String:GEOTransform]) {
+  func worldChanged(
+    worldBasis: F3,
+    worldUprightTransforms: [String: GEOTransform]
+  ) {
     // no-op
   }
 
