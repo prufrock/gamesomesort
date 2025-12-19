@@ -47,13 +47,37 @@ struct AppCoreConfig {
       }
 
       struct World01 {
-        let worldBasis: F3 = [-1, 1, 1]
+        let worldBasis: F3 = [1, -1, 1]
         let exitButton: String = "exitButton"
+        let uprightTransforms: [String: GEOTransform] = [
+          "back-plane": GEOTransform(
+            position: [0, 0, 0],
+            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            scale: [1, 1, 1]
+          ),
+          "button-one": GEOTransform(
+            position: [0, 0, 0],
+            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            scale: [1, 1, 1]
+          ),
+        ]
       }
 
       struct World02 {
-        let worldBasis: F3 = [-1, 1, 1]
+        let worldBasis: F3 = [1, -1, 1]
         let exitButton: String = "exitButton"
+        let uprightTransforms: [String: GEOTransform] = [
+          "back-plane": GEOTransform(
+            position: [0, 0, 0],
+            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            scale: [1, 1, 1]
+          ),
+          "button-one": GEOTransform(
+            position: [0, 0, 0],
+            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            scale: [1, 1, 1]
+          ),
+        ]
       }
     }
   }

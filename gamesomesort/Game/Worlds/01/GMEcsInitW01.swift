@@ -147,7 +147,7 @@ struct GMEcsInitW01: GMEcsStarter {
     ecs.addComponent(backPlane, CTPosition3d(10, 10, 2.5))
     ecs.addComponent(backPlane, CTScale3d(F3(repeating: 35)))
     ecs.addComponent(backPlane, CTColor([0.6, 0.6, 0.6]))
-    ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
+    ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
     ecs.addComponent(backPlane, CTModel("back-plane"))
     ecs.addComponent(backPlane, CTTagVisible())
   }
@@ -208,7 +208,7 @@ struct GMEcsInitW01: GMEcsStarter {
     ecs.addComponent(button, CTPosition3d(10, 1, 1.0))
     ecs.addComponent(button, CTScale3d(F3(repeating: 1)))
     ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
-    ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(.pi / 2))))
+    ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
     ecs.addComponent(button, CTRadius(1.5))
     ecs.addComponent(button, CTModel("back-plane"))
     ecs.addComponent(button, CTTappable())
