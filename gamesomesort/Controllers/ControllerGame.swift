@@ -86,7 +86,7 @@ class ControllerGame: NSObject {
 extension ControllerGame: MTKViewDelegate {
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
     let dimensions = ScreenDimensions(
-      pixelSize: view.drawableSize,
+      pixelSize: size,
       scaleFactor: appCore.config.platform.scaleFactor
     )
     game?.update(dimensions)
