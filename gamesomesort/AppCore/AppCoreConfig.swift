@@ -78,6 +78,25 @@ struct AppCoreConfig {
             scale: [1, 1, 1]
           ),
         ]
+        let buttons: [Button] = [
+          Button(
+            name: "button-one",
+            position: [5, 5.0, 1.0],
+            scale: [1, 1, 1],
+            color: [0.5, 1.0, 1.0],
+            radius: 1.5,
+            model: "button-one"
+          )
+        ]
+      }
+
+      struct Button {
+        let name: String
+        let position: F3
+        let scale: F3
+        let color: F3
+        let radius: Float
+        let model: String
       }
     }
   }

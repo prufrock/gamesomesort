@@ -88,6 +88,7 @@ struct GMEcsInitW02: GMEcsStarter {
     createLights(ecs: ecs)
     createBackPlane(ecs: ecs)
     createExitButton(ecs: ecs)
+    createButtons(ecs: ecs)
   }
 
   private func createPlayerCamera(ecs: LECSWorld) {
@@ -95,8 +96,7 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(
       playerCamera,
       CTCameraFirstPerson(
-        // negate fov to flip the y-axis, without messing with the winding order
-        fov: -1 * (.pi / 2),
+        fov: 1 * (.pi / 2),
         nearPlane: 0.1,
         farPlane: 20
       )
@@ -212,9 +212,23 @@ struct GMEcsInitW02: GMEcsStarter {
     }()
   }
 
+  private func createButtons(ecs: LECSWorld) {
+    for button in config.game.world.world02.buttons {
+      let entity = ecs.createEntity(button.name)
+      ecs.addComponent(entity, CTPosition3d(button.position))
+      ecs.addComponent(entity, CTScale3d(button.scale))
+      ecs.addComponent(entity, CTColor(button.color))
+      ecs.addComponent(entity, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
+      ecs.addComponent(entity, CTRadius(button.radius))
+      ecs.addComponent(entity, CTModel(button.model))
+      ecs.addComponent(entity, CTTappable())
+      ecs.addComponent(entity, CTTagVisible())
+    }
+  }
+
   private func createExitButton(ecs: LECSWorld) {
     let button = ecs.createEntity(config.game.world.world02.exitButton)
-    ecs.addComponent(button, CTPosition3d(10, 1, 1.0))
+    ecs.addComponent(button, CTPosition3d(5, 2, 1.0))
     ecs.addComponent(button, CTScale3d(F3(repeating: 1)))
     ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
     ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
