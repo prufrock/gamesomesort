@@ -55,40 +55,11 @@ struct GMEcsInitW02: GMEcsStarter {
 
     createPlayerCamera(ecs: ecs)
 
-    let firstEmitter = ecs.createEntity("firstEmitter")
-    ecs.addComponent(firstEmitter, LECSPosition2d(x: 5, y: 20))
-    ecs.addComponent(
-      firstEmitter,
-      CTBalloonEmitter(
-        rate: 20.1,
-        timer: 0.0
-      )
-    )
-
-    let secondEmitter = ecs.createEntity("secondEmitter")
-    ecs.addComponent(secondEmitter, LECSPosition2d(x: 8, y: 20))
-    ecs.addComponent(
-      secondEmitter,
-      CTBalloonEmitter(
-        rate: 30.3,
-        timer: 0.0
-      )
-    )
-
-    let thirdEmitter = ecs.createEntity("thirdEmitter")
-    ecs.addComponent(thirdEmitter, LECSPosition2d(x: 12, y: 20))
-    ecs.addComponent(
-      thirdEmitter,
-      CTBalloonEmitter(
-        rate: 18.7,
-        timer: 0.0
-      )
-    )
-
     createLights(ecs: ecs)
     createBackPlane(ecs: ecs)
     createExitButton(ecs: ecs)
     createButtons(ecs: ecs)
+    createPlayer(ecs: ecs)
   }
 
   private func createPlayerCamera(ecs: LECSWorld) {
@@ -146,6 +117,16 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(backPlane, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
     ecs.addComponent(backPlane, CTModel("back-plane"))
     ecs.addComponent(backPlane, CTTagVisible())
+  }
+
+  private func createPlayer(ecs: LECSWorld) {
+    let player = ecs.createEntity("player01")
+    ecs.addComponent(player, LECSPosition2d(x: 8.0, y: 10.0))
+    ecs.addComponent(player, CTColor())
+    ecs.addComponent(player, CTRadius(1.0))
+    ecs.addComponent(player, CTTagVisible())
+    ecs.addComponent(player, CTScale3d())
+    ecs.addComponent(player, CTScale3d(self.config.game.world.world02.worldBasis))
   }
 
   private func createLights(ecs: LECSWorld) {

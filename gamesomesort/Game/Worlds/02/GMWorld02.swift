@@ -28,7 +28,6 @@ class GMWorld02: GMWorld {
   private var tapSystem: LECSSystemId? = nil
   private var collisionSystem: LECSSystemId? = nil
   private var velocitySystem: LECSSystemId? = nil
-  private var emitterSystem: LECSSystemId? = nil
 
   init(config: AppCoreConfig, ecs: LECSWorld, map: GMTileMap, ecsStarter: GMEcsStarter) {
     self.config = config
@@ -127,34 +126,6 @@ class GMWorld02: GMWorld {
       return [tapEntityId, tapPosition, CTTagTap()]
     }
 
-    emitterSystem = ecs.addSystemWorldScoped(
-      "emitterSystem",
-      selector: [LECSPosition2d.self, CTBalloonEmitter.self],
-    ) { world, row, columns in
-      let position = row.component(at: 0, columns, LECSPosition2d.self)
-      var emitter = row.component(at: 1, columns, CTBalloonEmitter.self)
-
-      // TODO: get the delta from outer update loop
-      emitter.update(0.01)
-      if emitter.emit() {
-        let balloon = world.createEntity(UUID.init().uuidString)
-        world.addComponent(balloon, position)
-        world.addComponent(balloon, CTRadius(1.0))
-        world.addComponent(balloon, CTColor(.yellow))
-        world.addComponent(balloon, CTTagVisible())
-        world.addComponent(balloon, CTTagBalloon())
-        world.addComponent(
-          balloon,
-          LECSVelocity2d(
-            x: 0.0,
-            y: -1 * (emitter.rate * 0.0004)
-          )
-        )
-        world.addComponent(balloon, CTScale3d(self.config.game.world.world02.worldBasis))
-      }
-      return [position, emitter]
-    }
-
     velocitySystem = ecs.addSystemWorldScoped(
       "velocity",
       selector: [
@@ -219,15 +190,33 @@ class GMWorld02: GMWorld {
         )
         gameCommands.enqueue(.start(level: 0))
       }
+
+      let upButton = ecs.getComponent(
+        ecs.entity("upButton")!,
+        CTTappable.self
+      )!
+
+      if upButton.tapped {
+        print("up button tapped")
+        ecs.addComponent(
+          ecs.entity("upButton")!,
+          CTTappable(tapped: false)
+        )
+        let playerPosition = ecs.getComponent(
+          ecs.entity("player01")!,
+          LECSPosition2d.self
+        )!
+        ecs.addComponent(
+          ecs.entity("player01")!,
+          LECSPosition2d(x: playerPosition.x, y: playerPosition.y - 0.5)
+        )
+      }
     }
 
     if let velocitySystem {
       ecs.processSystemWorldScoped(system: velocitySystem)
     }
 
-    if let emitterSystem {
-      ecs.processSystemWorldScoped(system: emitterSystem)
-    }
     //print("world updated: \(timeStep)")
     return gameCommands
   }
