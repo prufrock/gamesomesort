@@ -201,6 +201,16 @@ class GMWorld02: GMWorld {
         CTTappable.self
       )!
 
+      let leftButton = ecs.getComponent(
+        ecs.entity("leftButton")!,
+        CTTappable.self
+      )!
+
+      let rightButton = ecs.getComponent(
+        ecs.entity("rightButton")!,
+        CTTappable.self
+      )!
+
       if upButton.tapped {
         print("up button tapped")
         ecs.addComponent(
@@ -230,6 +240,38 @@ class GMWorld02: GMWorld {
         ecs.addComponent(
           ecs.entity("player01")!,
           LECSPosition2d(x: playerPosition.x, y: playerPosition.y + 0.5)
+        )
+      }
+
+      if leftButton.tapped {
+        print("left button tapped")
+        ecs.addComponent(
+          ecs.entity("leftButton")!,
+          CTTappable(tapped: false)
+        )
+        let playerPosition = ecs.getComponent(
+          ecs.entity("player01")!,
+          LECSPosition2d.self
+        )!
+        ecs.addComponent(
+          ecs.entity("player01")!,
+          LECSPosition2d(x: playerPosition.x - 0.5, y: playerPosition.y)
+        )
+      }
+
+      if rightButton.tapped {
+        print("right button tapped")
+        ecs.addComponent(
+          ecs.entity("rightButton")!,
+          CTTappable(tapped: false)
+        )
+        let playerPosition = ecs.getComponent(
+          ecs.entity("player01")!,
+          LECSPosition2d.self
+        )!
+        ecs.addComponent(
+          ecs.entity("player01")!,
+          LECSPosition2d(x: playerPosition.x + 0.5, y: playerPosition.y)
         )
       }
 

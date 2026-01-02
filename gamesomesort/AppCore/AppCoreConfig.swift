@@ -95,6 +95,22 @@ struct AppCoreConfig {
             radius: 1.5,
             model: "button-one"
           ),
+          Button(
+            name: "leftButton",
+            position: [9, 14.0, 1.0],
+            scale: [1, 1, 1],
+            color: [0.5, 0.8, 1.0],
+            radius: 1.5,
+            model: "button-one"
+          ),
+          Button(
+            name: "rightButton",
+            position: [11, 14.0, 1.0],
+            scale: [1, 1, 1],
+            color: [0.5, 0.8, 1.0],
+            radius: 1.5,
+            model: "button-one"
+          ),
         ]
       }
 
