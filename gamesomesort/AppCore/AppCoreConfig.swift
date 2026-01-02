@@ -81,12 +81,20 @@ struct AppCoreConfig {
         let buttons: [Button] = [
           Button(
             name: "upButton",
-            position: [5, 5.0, 1.0],
+            position: [5, 14.0, 1.0],
             scale: [1, 1, 1],
             color: [0.5, 1.0, 1.0],
             radius: 1.5,
             model: "button-one"
-          )
+          ),
+          Button(
+            name: "downButton",
+            position: [7, 14.0, 1.0],
+            scale: [1, 1, 1],
+            color: [0.5, 0.8, 1.0],
+            radius: 1.5,
+            model: "button-one"
+          ),
         ]
       }
 

@@ -196,6 +196,11 @@ class GMWorld02: GMWorld {
         CTTappable.self
       )!
 
+      let downButton = ecs.getComponent(
+        ecs.entity("downButton")!,
+        CTTappable.self
+      )!
+
       if upButton.tapped {
         print("up button tapped")
         ecs.addComponent(
@@ -211,6 +216,23 @@ class GMWorld02: GMWorld {
           LECSPosition2d(x: playerPosition.x, y: playerPosition.y - 0.5)
         )
       }
+
+      if downButton.tapped {
+        print("down button tapped")
+        ecs.addComponent(
+          ecs.entity("downButton")!,
+          CTTappable(tapped: false)
+        )
+        let playerPosition = ecs.getComponent(
+          ecs.entity("player01")!,
+          LECSPosition2d.self
+        )!
+        ecs.addComponent(
+          ecs.entity("player01")!,
+          LECSPosition2d(x: playerPosition.x, y: playerPosition.y + 0.5)
+        )
+      }
+
     }
 
     if let velocitySystem {
