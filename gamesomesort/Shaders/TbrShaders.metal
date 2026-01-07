@@ -122,6 +122,7 @@ fragment GBufferOut tbr_fragment_gBuffer(
                                  texture2d<float> normalTexture [[texture(NormalTexture)]]
                                  )
 {
+  // additional textures like metalillic & roughness likely added to GBufferOut
   GBufferOut out;
 
   constexpr sampler textureSampler(
