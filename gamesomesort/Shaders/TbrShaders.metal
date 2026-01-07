@@ -118,7 +118,8 @@ fragment GBufferOut tbr_fragment_gBuffer(
                                  VertexOut in [[stage_in]],
                                  depth2d<float> shadowTexture [[texture(ShadowTexture)]],
                                  constant SHDRMaterial &material [[buffer(MaterialBuffer)]],
-                                 texture2d<float> baseColorTexture [[texture(BaseColor)]]
+                                 texture2d<float> baseColorTexture [[texture(BaseColor)]],
+                                 texture2d<float> normalTexture [[texture(NormalTexture)]]
                                  )
 {
   GBufferOut out;
@@ -135,10 +136,20 @@ fragment GBufferOut tbr_fragment_gBuffer(
     out.albedo = float4(material.baseColor, 1.0);
   }
 
+  float3 normal;
+  if (is_null_texture(normalTexture)) {
+    normal = in.worldNormal;
+  } else {
+    normal = normalTexture.sample(textureSampler, in.uv).rgb;
+    normal = normal * 2 - 1;
+    normal = float3x3(in.worldTangent, in.worldBitangent, in.worldNormal) * normal;
+  }
+  normal = normalize(normal);
+
   // Figure out if the fragment is in shadow.
   // The alpha value of the albedo isn't used, so the shadow value can be stored there.
   out.albedo.a = calculateShadow(in.shadowPosition, shadowTexture);
-  out.normal = float4(normalize(in.worldNormal), 1.0);
+  out.normal = float4(normal, 1.0);
   out.position = float4(in.worldPosition, 1.0);
 
   return out;
@@ -167,7 +178,10 @@ fragment float4 tbr_fragment_deferredSun(
                                      constant SHDRParams &params [[buffer(ParamsBuffer)]],
                                      constant SHDRLight *lights [[buffer(LightBuffer)]],
                                      texture2d<float> albedoTexture [[texture(BaseColor)]],
-                                     texture2d<float> normalTexture [[texture(NormalTexture)]]
+                                     texture2d<float> normalTexture [[texture(NormalTexture)]],
+                                         texture2d<float> roughnessTexture [[texture(RoughnessTexture)]],
+                                         texture2d<float> metallicTexture [[texture(MetallicTexture)]],
+                                         texture2d<float> aoTexture [[texture(AOTexture)]]
                                      ) {
   // read the textures at the current position of the fragment
   uint2 coord = uint2(in.position.xy);
