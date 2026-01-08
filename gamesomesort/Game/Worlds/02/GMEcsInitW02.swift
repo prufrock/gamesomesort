@@ -121,12 +121,13 @@ struct GMEcsInitW02: GMEcsStarter {
 
   private func createPlayer(ecs: LECSWorld) {
     let player = ecs.createEntity("player01")
-    ecs.addComponent(player, LECSPosition2d(x: 8.0, y: 10.0))
-    ecs.addComponent(player, CTColor())
+    ecs.addComponent(player, CTPosition3d(x: 8.0, y: 10.0, z: 1.0))
+    ecs.addComponent(player, CTColor(.black))
     ecs.addComponent(player, CTRadius(1.0))
     ecs.addComponent(player, CTTagVisible())
-    ecs.addComponent(player, CTScale3d())
-    ecs.addComponent(player, CTScale3d(self.config.game.world.world02.worldBasis))
+    ecs.addComponent(player, CTModel("brick-sphere.usdz"))
+    ecs.addComponent(player, CTQuaternion(simd_quatf(Float4x4.identity)))
+    ecs.addComponent(player, CTScale3d(F3(repeating: 1)))
   }
 
   private func createLights(ecs: LECSWorld) {
@@ -213,7 +214,7 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(button, CTScale3d(F3(repeating: 1)))
     ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
     ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
-    ecs.addComponent(button, CTRadius(1.5))
+    ecs.addComponent(button, CTRadius(0.5))
     ecs.addComponent(button, CTModel("back-plane"))
     ecs.addComponent(button, CTTappable())
     ecs.addComponent(button, CTTagVisible())

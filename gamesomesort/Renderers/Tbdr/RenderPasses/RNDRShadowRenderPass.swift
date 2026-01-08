@@ -73,14 +73,11 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
       index: LightBuffer.index
     )
 
-    let sphere = context.controllerModel.models["brick-sphere.usdz"]!
-    for square in world.models {
-      sphere.upright = square.transform
-      sphere.render(
-        encoder: renderEncoder,
-        uniforms: uniforms,
-        params: params
-      )
+    let models = world.gameObjects(context: context)
+    for model in models {
+      renderEncoder.pushDebugGroup("model \(model.name)")
+      model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
+      renderEncoder.popDebugGroup()
     }
 
     renderEncoder.endEncoding()

@@ -45,7 +45,10 @@ class GMWorld02: GMWorld {
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, CTRadius(0.1))
     ecs.addComponent(tapSquare, CTColor(.red))
-    ecs.addComponent(tapSquare, CTScale3d(config.game.world.world02.worldBasis))
+    ecs.addComponent(tapSquare, CTTagVisible())
+    ecs.addComponent(tapSquare, CTModel("button-one"))
+    ecs.addComponent(tapSquare, CTQuaternion(simd_quatf(Float4x4.identity)))
+    ecs.addComponent(tapSquare, CTScale3d(F3(repeating: 0.1)))
     self.tapSquare = tapSquare
 
     aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
@@ -97,12 +100,12 @@ class GMWorld02: GMWorld {
       "tapSystem",
       selector: [
         LECSId.self,
-        LECSPosition2d.self,
+        CTPosition3d.self,
         CTTagTap.self,
       ]
     ) { world, row, columns in
       let tapEntityId = row.component(at: 0, columns, LECSId.self)
-      let tapPosition = row.component(at: 1, columns, LECSPosition2d.self)
+      let tapPosition = row.component(at: 1, columns, CTPosition3d.self)
 
       world.select(
         [LECSId.self, CTPosition3d.self, CTRadius.self, CTTappable.self]
@@ -117,7 +120,7 @@ class GMWorld02: GMWorld {
 
         if otherEntityId != tapEntityId {
 
-          if otherRectangle.contains(tapPosition.position) {
+          if otherRectangle.contains(Float2(tapPosition.x, tapPosition.y)) {
             world.addComponent(otherEntityId.id, CTTappable(tapped: true))
           }
         }
@@ -163,7 +166,7 @@ class GMWorld02: GMWorld {
           camera: playerCamera
         )!
 
-        ecs.addComponent(tapSquare!, LECSPosition2d(x: worldLocation.x, y: worldLocation.y))
+        ecs.addComponent(tapSquare!, CTPosition3d(x: worldLocation.x, y: worldLocation.y, z: 1.0))
         ecs.addComponent(tapSquare!, CTTagTap())
         ecs.addComponent(tapSquare!, CTTagVisible())
         if let tapSystem = self.tapSystem {
@@ -219,11 +222,15 @@ class GMWorld02: GMWorld {
         )
         let playerPosition = ecs.getComponent(
           ecs.entity("player01")!,
-          LECSPosition2d.self
+          CTPosition3d.self
         )!
         ecs.addComponent(
           ecs.entity("player01")!,
-          LECSPosition2d(x: playerPosition.x, y: playerPosition.y - 0.5)
+          CTPosition3d(
+            x: playerPosition.x,
+            y: playerPosition.y - 0.5,
+            z: playerPosition.z
+          )
         )
       }
 
@@ -235,11 +242,15 @@ class GMWorld02: GMWorld {
         )
         let playerPosition = ecs.getComponent(
           ecs.entity("player01")!,
-          LECSPosition2d.self
+          CTPosition3d.self
         )!
         ecs.addComponent(
           ecs.entity("player01")!,
-          LECSPosition2d(x: playerPosition.x, y: playerPosition.y + 0.5)
+          CTPosition3d(
+            x: playerPosition.x,
+            y: playerPosition.y + 0.5,
+            z: playerPosition.z
+          )
         )
       }
 
@@ -251,11 +262,15 @@ class GMWorld02: GMWorld {
         )
         let playerPosition = ecs.getComponent(
           ecs.entity("player01")!,
-          LECSPosition2d.self
+          CTPosition3d.self
         )!
         ecs.addComponent(
           ecs.entity("player01")!,
-          LECSPosition2d(x: playerPosition.x - 0.5, y: playerPosition.y)
+          CTPosition3d(
+            x: playerPosition.x - 0.5,
+            y: playerPosition.y,
+            z: playerPosition.z
+          )
         )
       }
 
@@ -267,11 +282,15 @@ class GMWorld02: GMWorld {
         )
         let playerPosition = ecs.getComponent(
           ecs.entity("player01")!,
-          LECSPosition2d.self
+          CTPosition3d.self
         )!
         ecs.addComponent(
           ecs.entity("player01")!,
-          LECSPosition2d(x: playerPosition.x + 0.5, y: playerPosition.y)
+          CTPosition3d(
+            x: playerPosition.x + 0.5,
+            y: playerPosition.y,
+            z: playerPosition.z
+          )
         )
       }
 

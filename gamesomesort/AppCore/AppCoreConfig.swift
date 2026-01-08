@@ -84,7 +84,7 @@ struct AppCoreConfig {
             position: [8, 13.0, 1.0],
             scale: [1, 1, 1],
             color: [0.5, 1.0, 1.0],
-            radius: 1.5,
+            radius: 0.5,
             model: "button-one"
           ),
           Button(
@@ -92,7 +92,7 @@ struct AppCoreConfig {
             position: [7, 14.0, 1.0],
             scale: [1, 1, 1],
             color: [0.5, 0.8, 1.0],
-            radius: 1.5,
+            radius: 0.5,
             model: "button-one"
           ),
           Button(
@@ -100,7 +100,7 @@ struct AppCoreConfig {
             position: [9, 14.0, 1.0],
             scale: [1, 1, 1],
             color: [0.5, 0.8, 1.0],
-            radius: 1.5,
+            radius: 0.5,
             model: "button-one"
           ),
           Button(
@@ -108,7 +108,7 @@ struct AppCoreConfig {
             position: [8, 15.0, 1.0],
             scale: [1, 1, 1],
             color: [0.5, 0.8, 1.0],
-            radius: 1.5,
+            radius: 0.5,
             model: "button-one"
           ),
         ]

@@ -356,19 +356,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
-    let spheres = ecs.models
-    let sphere = context.controllerModel.models["brick-sphere.usdz"]!
-    for square in spheres {
-      renderEncoder.pushDebugGroup("sphere \(sphere.position)")
-      sphere.upright = square.transform
-      sphere.render(
-        encoder: renderEncoder,
-        uniforms: uniforms,
-        params: params
-      )
-      renderEncoder.popDebugGroup()
-    }
-
     let models = ecs.gameObjects(context: context)
     for model in models {
       renderEncoder.pushDebugGroup("model \(model.name)")
