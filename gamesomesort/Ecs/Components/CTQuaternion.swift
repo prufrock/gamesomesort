@@ -11,7 +11,7 @@ struct CTQuaternion: LECSComponent {
   var quaternion: simd_quatf
 
   init() {
-    self.quaternion = .init()
+    self.quaternion = .init(Float4x4.identity)
   }
 
   init(_ quaternion: simd_quatf) {

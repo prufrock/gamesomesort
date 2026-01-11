@@ -61,7 +61,7 @@ struct GMEcsInitW01: GMEcsStarter {
     createPlayerCamera(ecs: ecs)
 
     let firstEmitter = ecs.createEntity("firstEmitter")
-    ecs.addComponent(firstEmitter, LECSPosition2d(x: 5, y: 20))
+    ecs.addComponent(firstEmitter, CTPosition3d(x: 5, y: 20, z: 1))
     ecs.addComponent(
       firstEmitter,
       CTBalloonEmitter(
@@ -71,7 +71,7 @@ struct GMEcsInitW01: GMEcsStarter {
     )
 
     let secondEmitter = ecs.createEntity("secondEmitter")
-    ecs.addComponent(secondEmitter, LECSPosition2d(x: 8, y: 20))
+    ecs.addComponent(secondEmitter, CTPosition3d(x: 8, y: 20, z: 1))
     ecs.addComponent(
       secondEmitter,
       CTBalloonEmitter(
@@ -81,7 +81,7 @@ struct GMEcsInitW01: GMEcsStarter {
     )
 
     let thirdEmitter = ecs.createEntity("thirdEmitter")
-    ecs.addComponent(thirdEmitter, LECSPosition2d(x: 12, y: 20))
+    ecs.addComponent(thirdEmitter, CTPosition3d(x: 12, y: 20, z: 1))
     ecs.addComponent(
       thirdEmitter,
       CTBalloonEmitter(

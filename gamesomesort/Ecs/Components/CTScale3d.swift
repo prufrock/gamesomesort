@@ -44,7 +44,7 @@ struct CTScale3d: LECSComponent {
   }
 
   public init() {
-    scale = F3(0, 0, 0)
+    scale = F3(1, 1, 1)
   }
 
   public init(_ position: F3) {

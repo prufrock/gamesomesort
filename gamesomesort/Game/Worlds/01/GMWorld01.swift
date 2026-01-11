@@ -46,7 +46,10 @@ class GMWorld01: GMWorld {
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, CTRadius(0.1))
     ecs.addComponent(tapSquare, CTColor(.red))
-    ecs.addComponent(tapSquare, CTScale3d(config.game.world.world02.worldBasis))
+    ecs.addComponent(tapSquare, CTTagVisible())
+    ecs.addComponent(tapSquare, CTModel("button-one"))
+    ecs.addComponent(tapSquare, CTQuaternion(simd_quatf(Float4x4.identity)))
+    ecs.addComponent(tapSquare, CTScale3d(F3(repeating: 0.1)))
     self.tapSquare = tapSquare
 
     aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
@@ -57,25 +60,25 @@ class GMWorld01: GMWorld {
       "collides",
       selector: [
         LECSId.self,
-        LECSPosition2d.self,
+        CTPosition3d.self,
         CTTagTap.self,
       ]
     ) { world, row, columns in
       let tapEntityId = row.component(at: 0, columns, LECSId.self)
-      let tapPosition = row.component(at: 1, columns, LECSPosition2d.self)
+      let tapPosition = row.component(at: 1, columns, CTPosition3d.self)
 
       var selectedEntityId: LECSId? = nil
       world.select(
-        [LECSId.self, CTColor.self, LECSPosition2d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
+        [LECSId.self, CTColor.self, CTPosition3d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
-        let otherPosition = otherRow.component(at: 2, otherColumns, LECSPosition2d.self)
+        let otherPosition = otherRow.component(at: 2, otherColumns, CTPosition3d.self)
         let otherRadius = otherRow.component(at: 3, otherColumns, CTRadius.self)
-        let otherRectangle = GEORectangle(position: otherPosition.position, radius: otherRadius.radius)
+        let otherRectangle = GEORectangle(position: otherPosition.position.xy, radius: otherRadius.radius)
 
         if otherEntityId != tapEntityId {
 
-          if otherRectangle.contains(tapPosition.position) {
+          if otherRectangle.contains(tapPosition.position.xy) {
             selectedEntityId = otherEntityId
           }
 
@@ -98,12 +101,12 @@ class GMWorld01: GMWorld {
       "tapSystem",
       selector: [
         LECSId.self,
-        LECSPosition2d.self,
+        CTPosition3d.self,
         CTTagTap.self,
       ]
     ) { world, row, columns in
       let tapEntityId = row.component(at: 0, columns, LECSId.self)
-      let tapPosition = row.component(at: 1, columns, LECSPosition2d.self)
+      let tapPosition = row.component(at: 1, columns, CTPosition3d.self)
 
       world.select(
         [LECSId.self, CTPosition3d.self, CTRadius.self, CTTappable.self]
@@ -118,7 +121,7 @@ class GMWorld01: GMWorld {
 
         if otherEntityId != tapEntityId {
 
-          if otherRectangle.contains(tapPosition.position) {
+          if otherRectangle.contains(Float2(tapPosition.x, tapPosition.y)) {
             world.addComponent(otherEntityId.id, CTTappable(tapped: true))
           }
         }
@@ -129,9 +132,9 @@ class GMWorld01: GMWorld {
 
     emitterSystem = ecs.addSystemWorldScoped(
       "emitterSystem",
-      selector: [LECSPosition2d.self, CTBalloonEmitter.self],
+      selector: [CTPosition3d.self, CTBalloonEmitter.self],
     ) { world, row, columns in
-      let position = row.component(at: 0, columns, LECSPosition2d.self)
+      let position = row.component(at: 0, columns, CTPosition3d.self)
       var emitter = row.component(at: 1, columns, CTBalloonEmitter.self)
 
       // TODO: get the delta from outer update loop
@@ -139,12 +142,17 @@ class GMWorld01: GMWorld {
       if emitter.emit() {
         let balloon = world.createEntity(UUID.init().uuidString)
         world.addComponent(balloon, position)
+        world.addComponent(balloon, CTModel("brick-sphere.usdz"))
         world.addComponent(balloon, CTRadius(1.0))
         world.addComponent(balloon, CTColor(.yellow))
+        world.addComponent(balloon, CTQuaternion())
+        world.addComponent(balloon, CTScale3d())
         world.addComponent(balloon, CTTagVisible())
         world.addComponent(balloon, CTTagBalloon())
-        world.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -1 * (emitter.rate * 0.0004)))
-        world.addComponent(balloon, CTScale3d(self.config.game.world.world01.worldBasis))
+        world.addComponent(
+          balloon,
+          LECSVelocity2d(x: 0.0, y: -1 * (emitter.rate * 0.0004))
+        )
       }
       return [position, emitter]
     }
@@ -153,17 +161,23 @@ class GMWorld01: GMWorld {
       "velocity",
       selector: [
         LECSId.self,
-        LECSPosition2d.self,
+        CTPosition3d.self,
         LECSVelocity2d.self,
       ],
     ) { world, row, columns in
       let entityId = row.component(at: 0, columns, LECSId.self)
-      let position = row.component(at: 1, columns, LECSPosition2d.self)
+      let position = row.component(at: 1, columns, CTPosition3d.self)
       let velocity = row.component(at: 2, columns, LECSVelocity2d.self)
 
-      let newPosition = position.position + velocity.velocity
+      let newPosition =
+        position.position
+        + F3(
+          x: velocity.velocity.x,
+          y: velocity.velocity.y,
+          z: 0
+        )
 
-      return [entityId, LECSPosition2d(newPosition), velocity]
+      return [entityId, CTPosition3d(newPosition), velocity]
     }
   }
   /// Update the game.
@@ -186,7 +200,10 @@ class GMWorld01: GMWorld {
           camera: playerCamera
         )!
 
-        ecs.addComponent(tapSquare!, LECSPosition2d(x: worldLocation.x, y: worldLocation.y))
+        ecs.addComponent(
+          tapSquare!,
+          CTPosition3d(x: worldLocation.x, y: worldLocation.y, z: worldLocation.z)
+        )
         ecs.addComponent(tapSquare!, CTTagTap())
         ecs.addComponent(tapSquare!, CTTagVisible())
         if let tapSystem = self.tapSystem {
