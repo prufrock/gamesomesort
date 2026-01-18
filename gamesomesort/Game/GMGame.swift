@@ -42,9 +42,7 @@ class GMGame {
       elapsedTime += timeStep
       if !commands.isEmpty {
         if case let .start(level) = commands.dequeue() {
-          if selectedLevel != level {
-            initWorld(worldNumber: level)
-          }
+          initWorld(worldNumber: level)
         }
       }
     } else {

@@ -293,7 +293,24 @@ class GMWorld02: GMWorld {
           )
         )
       }
+    }
 
+    let playerPosition = ecs.getComponent(
+      ecs.entity("player01")!,
+      CTPosition3d.self
+    )!
+    var playerSafe = false
+    ecs.select([CTTile.self, CTPosition3d.self]) { row, columns in
+      let tile = row.component(at: 0, columns, CTTile.self)
+      let tilePosition = row.component(at: 1, columns, CTPosition3d.self)
+      if playerSafe == false && tile.tile == .floor {
+        playerSafe = tilePosition.position.xy == playerPosition.position.xy
+      }
+    }
+
+    if !playerSafe {
+      print("Restart level.")
+      gameCommands.enqueue(.start(level: 2))
     }
 
     if let velocitySystem {

@@ -87,6 +87,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(wall, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
       ecs.addComponent(wall, CTModel("back-plane"))
       ecs.addComponent(wall, CTTagVisible())
+      ecs.addComponent(wall, CTTile(.wall))
     case .floor:
       let floor = ecs.createEntity("floor\(x),\(y)")
       ecs.addComponent(floor, CTPosition3d(x.f, y.f, 1.8))
@@ -96,6 +97,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(floor, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
       ecs.addComponent(floor, CTModel("back-plane"))
       ecs.addComponent(floor, CTTagVisible())
+      ecs.addComponent(floor, CTTile(.floor))
     }
   }
 
