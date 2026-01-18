@@ -73,7 +73,7 @@ struct GMEcsInitW02: GMEcsStarter {
       )
     )
     ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
-    ecs.addComponent(playerCamera, CTPosition3d(F3(8, 8, -8.0)))
+    ecs.addComponent(playerCamera, CTPosition3d(F3(3.5, 4, -7.25)))
     ecs.addComponent(playerCamera, CTScale3d(worldVector))
   }
 
@@ -81,12 +81,22 @@ struct GMEcsInitW02: GMEcsStarter {
     switch tile {
     case .wall:
       let wall = ecs.createEntity("wall\(x),\(y)")
-      ecs.addComponent(wall, LECSPosition2d(Float2(x.f, y.f)))
+      ecs.addComponent(wall, CTPosition3d(x.f, y.f, 1.0))
       ecs.addComponent(wall, CTRadius(0.5))
       ecs.addComponent(wall, CTColor(.green))
+      ecs.addComponent(wall, CTScale3d(F3(x: 1, y: 1, z: 1)))
+      ecs.addComponent(wall, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
+      ecs.addComponent(wall, CTModel("back-plane"))
+      ecs.addComponent(wall, CTTagVisible())
     case .floor:
       let floor = ecs.createEntity("floor\(x),\(y)")
-      ecs.addComponent(floor, LECSPosition2d(Float2(x.f, y.f)))
+      ecs.addComponent(floor, CTPosition3d(x.f, y.f, 1.8))
+      ecs.addComponent(floor, CTRadius(0.5))
+      ecs.addComponent(floor, CTColor(.yellow))
+      ecs.addComponent(floor, CTScale3d(F3(x: 0.9, y: 0.9, z: 0.9)))
+      ecs.addComponent(floor, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
+      ecs.addComponent(floor, CTModel("back-plane"))
+      ecs.addComponent(floor, CTTagVisible())
     }
   }
 
@@ -121,13 +131,13 @@ struct GMEcsInitW02: GMEcsStarter {
 
   private func createPlayer(ecs: LECSWorld) {
     let player = ecs.createEntity("player01")
-    ecs.addComponent(player, CTPosition3d(x: 8.0, y: 10.0, z: 1.0))
+    ecs.addComponent(player, CTPosition3d(x: 7.0, y: 7.0, z: 1.0))
     ecs.addComponent(player, CTColor(.black))
     ecs.addComponent(player, CTRadius(1.0))
     ecs.addComponent(player, CTTagVisible())
     ecs.addComponent(player, CTModel("brick-sphere.usdz"))
     ecs.addComponent(player, CTQuaternion(simd_quatf(Float4x4.identity)))
-    ecs.addComponent(player, CTScale3d(F3(repeating: 1)))
+    ecs.addComponent(player, CTScale3d(F3(repeating: 0.5)))
   }
 
   private func createLights(ecs: LECSWorld) {
@@ -210,7 +220,7 @@ struct GMEcsInitW02: GMEcsStarter {
 
   private func createExitButton(ecs: LECSWorld) {
     let button = ecs.createEntity(config.game.world.world02.exitButton)
-    ecs.addComponent(button, CTPosition3d(5, 2, 1.0))
+    ecs.addComponent(button, CTPosition3d(1.0, -2, 1.0))
     ecs.addComponent(button, CTScale3d(F3(repeating: 1)))
     ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
     ecs.addComponent(button, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
