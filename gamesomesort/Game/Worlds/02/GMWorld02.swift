@@ -228,7 +228,7 @@ class GMWorld02: GMWorld {
           ecs.entity("player01")!,
           CTPosition3d(
             x: playerPosition.x,
-            y: playerPosition.y - 0.5,
+            y: playerPosition.y - 1.0,
             z: playerPosition.z
           )
         )
@@ -248,7 +248,7 @@ class GMWorld02: GMWorld {
           ecs.entity("player01")!,
           CTPosition3d(
             x: playerPosition.x,
-            y: playerPosition.y + 0.5,
+            y: playerPosition.y + 1.0,
             z: playerPosition.z
           )
         )
@@ -267,7 +267,7 @@ class GMWorld02: GMWorld {
         ecs.addComponent(
           ecs.entity("player01")!,
           CTPosition3d(
-            x: playerPosition.x - 0.5,
+            x: playerPosition.x - 1.0,
             y: playerPosition.y,
             z: playerPosition.z
           )
@@ -287,7 +287,7 @@ class GMWorld02: GMWorld {
         ecs.addComponent(
           ecs.entity("player01")!,
           CTPosition3d(
-            x: playerPosition.x + 0.5,
+            x: playerPosition.x + 1.0,
             y: playerPosition.y,
             z: playerPosition.z
           )
