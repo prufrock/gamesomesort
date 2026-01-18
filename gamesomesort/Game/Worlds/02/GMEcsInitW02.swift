@@ -59,7 +59,6 @@ struct GMEcsInitW02: GMEcsStarter {
     createBackPlane(ecs: ecs)
     createExitButton(ecs: ecs)
     createButtons(ecs: ecs)
-    createPlayer(ecs: ecs)
   }
 
   private func createPlayerCamera(ecs: LECSWorld) {
@@ -111,6 +110,8 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(balloon, CTTagBalloon())
       ecs.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -0.005))
       ecs.addComponent(balloon, CTScale3d(F3(repeating: 1)))
+    case .player:
+      createPlayer(ecs: ecs, position: F2(x.f, y.f))
     case .nothing:
       //no-op
       break
@@ -129,9 +130,9 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(backPlane, CTTagVisible())
   }
 
-  private func createPlayer(ecs: LECSWorld) {
+  private func createPlayer(ecs: LECSWorld, position: Float2) {
     let player = ecs.createEntity("player01")
-    ecs.addComponent(player, CTPosition3d(x: 7.0, y: 7.0, z: 1.0))
+    ecs.addComponent(player, CTPosition3d(x: position.x, y: position.y, z: 1.0))
     ecs.addComponent(player, CTColor(.black))
     ecs.addComponent(player, CTRadius(1.0))
     ecs.addComponent(player, CTTagVisible())
