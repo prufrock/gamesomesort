@@ -310,7 +310,7 @@ class GMWorld02: GMWorld {
 
     if !playerSafe {
       print("Restart level.")
-      gameCommands.enqueue(.start(level: 2))
+      gameCommands.enqueue(.start(level: map.index))
     }
 
     var goalReached = false
@@ -324,7 +324,7 @@ class GMWorld02: GMWorld {
 
     if goalReached {
       print("Goal reached.")
-      gameCommands.enqueue(.start(level: 1))
+      gameCommands.enqueue(.start(level: map.index + 1))
     }
 
     if let velocitySystem {

@@ -66,24 +66,28 @@ class AppCore {
     let config: AppCoreConfig
 
     func create(level: Int, levels: [GMTileMap]) -> any GMWorld {
-      let map = levels[level]
-      switch level {
+      var selectedLevel = 0
+      if level < levels.count {
+        selectedLevel = level
+      }
+      let map = levels[selectedLevel]
+      switch selectedLevel {
+      case 0:
+        return GMWorld00(
+          config: config,
+          ecs: LECSCreateWorld(archetypeSize: 500),
+          map: map,
+          ecsStarter: selectStarter(level: 0, levels: levels)
+        )
       case 1:
         return GMWorld01(
           config: config,
           ecs: LECSCreateWorld(archetypeSize: 500),
           map: map,
-          ecsStarter: selectStarter(level: level, levels: levels)
-        )
-      case 2:
-        return GMWorld02(
-          config: config,
-          ecs: LECSCreateWorld(archetypeSize: 500),
-          map: map,
-          ecsStarter: selectStarter(level: level, levels: levels)
+          ecsStarter: selectStarter(level: 1, levels: levels)
         )
       default:
-        return GMWorld00(
+        return GMWorld02(
           config: config,
           ecs: LECSCreateWorld(archetypeSize: 500),
           map: map,
@@ -94,13 +98,17 @@ class AppCore {
     }
 
     func selectStarter(level: Int, levels: [GMTileMap]) -> GMEcsStarter {
-      switch level {
+      var selectedLevel = 0
+      if level < levels.count {
+        selectedLevel = level
+      }
+      switch selectedLevel {
       case 0:
         return GMEcsInitW00(config: config)
-      case 2:
-        return GMEcsInitW02(map: levels[level], config: config)
-      default:
+      case 1:
         return GMEcsInitW01(map: levels[level], config: config)
+      default:
+        return GMEcsInitW02(map: levels[level], config: config)
       }
     }
   }
