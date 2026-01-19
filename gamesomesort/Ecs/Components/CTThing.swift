@@ -5,14 +5,16 @@
 //  Created by David Kanenwisher on 1/17/26.
 //
 
-struct CTThing {
+import lecs_swift
+
+struct CTThing: LECSComponent {
   let thing: GMThing
 
   init() {
     self.thing = .nothing
   }
 
-  init(thing: GMThing) {
+  init(_ thing: GMThing) {
     self.thing = thing
   }
 }

@@ -313,6 +313,20 @@ class GMWorld02: GMWorld {
       gameCommands.enqueue(.start(level: 2))
     }
 
+    var goalReached = false
+    ecs.select([CTThing.self, CTPosition3d.self]) { row, columns in
+      let thing = row.component(at: 0, columns, CTThing.self)
+      let tilePosition = row.component(at: 1, columns, CTPosition3d.self)
+      if goalReached == false && thing.thing == .end {
+        goalReached = tilePosition.position.xy == playerPosition.position.xy
+      }
+    }
+
+    if goalReached {
+      print("Goal reached.")
+      gameCommands.enqueue(.start(level: 1))
+    }
+
     if let velocitySystem {
       ecs.processSystemWorldScoped(system: velocitySystem)
     }

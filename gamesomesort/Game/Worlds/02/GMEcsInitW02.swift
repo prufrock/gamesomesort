@@ -114,6 +114,15 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(balloon, CTScale3d(F3(repeating: 1)))
     case .player:
       createPlayer(ecs: ecs, position: F2(x.f, y.f))
+    case .end:
+      let end = ecs.createEntity("end\(x),\(y)")
+      ecs.addComponent(end, CTPosition3d(x.f, y.f, 1.79))
+      ecs.addComponent(end, CTScale3d(F3(x: 0.5, y: 0.5, z: 0.5)))
+      ecs.addComponent(end, CTColor([0.6, 0.0, 0.0]))
+      ecs.addComponent(end, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
+      ecs.addComponent(end, CTModel("back-plane"))
+      ecs.addComponent(end, CTTagVisible())
+      ecs.addComponent(end, CTThing(.end))
     case .nothing:
       //no-op
       break
