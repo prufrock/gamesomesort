@@ -180,118 +180,46 @@ class GMWorld02: GMWorld {
         break
       }
 
-      let buttonTappable = ecs.getComponent(
-        ecs.entity(config.game.world.world02.exitButton)!,
-        CTTappable.self
-      )!
+      var lastEventId: LECSId? = nil
+      ecs.select([LECSId.self, CTTappable.self, LECSName.self]) { row, columns in
+        let id = row.component(at: 0, columns, LECSId.self)
+        let tappable = row.component(at: 1, columns, CTTappable.self)
+        let name = row.component(at: 2, columns, LECSName.self)
 
-      if buttonTappable.tapped {
-        print("exit button tapped")
-        ecs.addComponent(
-          ecs.entity(config.game.world.world02.exitButton)!,
-          CTTappable(tapped: false)
-        )
-        gameCommands.enqueue(.start(level: 0))
-      }
-
-      let upButton = ecs.getComponent(
-        ecs.entity("upButton")!,
-        CTTappable.self
-      )!
-
-      let downButton = ecs.getComponent(
-        ecs.entity("downButton")!,
-        CTTappable.self
-      )!
-
-      let leftButton = ecs.getComponent(
-        ecs.entity("leftButton")!,
-        CTTappable.self
-      )!
-
-      let rightButton = ecs.getComponent(
-        ecs.entity("rightButton")!,
-        CTTappable.self
-      )!
-
-      if upButton.tapped {
-        print("up button tapped")
-        ecs.addComponent(
-          ecs.entity("upButton")!,
-          CTTappable(tapped: false)
-        )
-        let playerPosition = ecs.getComponent(
-          ecs.entity("player01")!,
-          CTPosition3d.self
-        )!
-        ecs.addComponent(
-          ecs.entity("player01")!,
-          CTPosition3d(
-            x: playerPosition.x,
-            y: playerPosition.y - 1.0,
-            z: playerPosition.z
+        // Could this happen, instead of setting tapped?
+        if tappable.tapped {
+          print("tapped name \(name)")
+          var eventName: String
+          if lastEventId == nil {
+            eventName = "eventStart"
+          } else {
+            eventName = "event\(lastEventId?.id ?? 0)"
+          }
+          let newEvent = ecs.createEntity(eventName)
+          ecs.addComponent(
+            newEvent,
+            CTEvent(
+              nextEventId: nil,
+              srcEntity: id,
+              type: .tap
+            )
           )
-        )
-      }
+          if let lastEventId {
+            let lastEvent = ecs.getComponent(
+              lastEventId.id,
+              CTEvent.self
+            )
+            if let lastEvent {
+              ecs.addComponent(lastEventId.id, lastEvent)
+            }
+          }
+          lastEventId = LECSId(newEvent)
 
-      if downButton.tapped {
-        print("down button tapped")
-        ecs.addComponent(
-          ecs.entity("downButton")!,
-          CTTappable(tapped: false)
-        )
-        let playerPosition = ecs.getComponent(
-          ecs.entity("player01")!,
-          CTPosition3d.self
-        )!
-        ecs.addComponent(
-          ecs.entity("player01")!,
-          CTPosition3d(
-            x: playerPosition.x,
-            y: playerPosition.y + 1.0,
-            z: playerPosition.z
+          ecs.addComponent(
+            id.id,
+            CTTappable(tapped: false)
           )
-        )
-      }
-
-      if leftButton.tapped {
-        print("left button tapped")
-        ecs.addComponent(
-          ecs.entity("leftButton")!,
-          CTTappable(tapped: false)
-        )
-        let playerPosition = ecs.getComponent(
-          ecs.entity("player01")!,
-          CTPosition3d.self
-        )!
-        ecs.addComponent(
-          ecs.entity("player01")!,
-          CTPosition3d(
-            x: playerPosition.x - 1.0,
-            y: playerPosition.y,
-            z: playerPosition.z
-          )
-        )
-      }
-
-      if rightButton.tapped {
-        print("right button tapped")
-        ecs.addComponent(
-          ecs.entity("rightButton")!,
-          CTTappable(tapped: false)
-        )
-        let playerPosition = ecs.getComponent(
-          ecs.entity("player01")!,
-          CTPosition3d.self
-        )!
-        ecs.addComponent(
-          ecs.entity("player01")!,
-          CTPosition3d(
-            x: playerPosition.x + 1.0,
-            y: playerPosition.y,
-            z: playerPosition.z
-          )
-        )
+        }
       }
     }
 
@@ -331,6 +259,53 @@ class GMWorld02: GMWorld {
       ecs.processSystemWorldScoped(system: velocitySystem)
     }
 
+    var eventId: LECSEntityId? = ecs.entity("eventStart")
+
+    while let validId = eventId {
+      let event: CTEvent? = ecs.getComponent(validId, CTEvent.self)
+      ecs.deleteEntity(validId)
+      eventId = event?.nextEventId?.id
+
+      if let event = event {
+        let buttonName = ecs.getComponent(
+          event.srcEntity.id,
+          LECSName.self
+        )!
+        print("eventId: \(validId), srcEntity: \(event.srcEntity), buttonName \(buttonName)")
+        if buttonName.name.starts(with: "exit") {
+          gameCommands.enqueue(.start(level: 0))
+        }
+        movePlayer(
+          ecs: ecs,
+          buttonName: buttonName.name,
+          startsWith: "r",
+          add: F3(x: 1.0, y: 0.0, z: 0.0)
+        )
+        movePlayer(
+          ecs: ecs,
+          buttonName: buttonName.name,
+          startsWith: "l",
+          add: F3(x: -1.0, y: 0.0, z: 0.0)
+        )
+        movePlayer(
+          ecs: ecs,
+          buttonName: buttonName.name,
+          startsWith: "d",
+          add: F3(x: 0.0, y: 1.0, z: 0.0)
+        )
+        movePlayer(
+          ecs: ecs,
+          buttonName: buttonName.name,
+          startsWith: "u",
+          add: F3(x: 0.0, y: -1.0, z: 0.0)
+        )
+        // adjust color
+        let color = ecs.getComponent(event.srcEntity.id, CTColor.self)!
+        let newColor: F4 = color.color.F4 - F4(0.1, 0.1, 0.1, 0.0)
+        ecs.addComponent(event.srcEntity.id, CTColor(newColor.xyz))
+      }
+    }
+
     //print("world updated: \(timeStep)")
     return gameCommands
   }
@@ -340,6 +315,25 @@ class GMWorld02: GMWorld {
 
     if let aspectRatioSystem = self.aspectRatioSystem {
       ecs.process(system: aspectRatioSystem)
+    }
+  }
+
+  func movePlayer(
+    ecs: LECSWorld,
+    buttonName: String,
+    startsWith: String,
+    add: F3
+  ) {
+    if buttonName.starts(with: startsWith) {
+      let playerPosition = ecs.getComponent(
+        ecs.entity("player01")!,
+        CTPosition3d.self
+      )!
+
+      ecs.addComponent(
+        ecs.entity("player01")!,
+        playerPosition + add
+      )
     }
   }
 }

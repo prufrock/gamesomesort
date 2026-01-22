@@ -66,6 +66,8 @@ struct AppCoreConfig {
       struct World02 {
         let worldBasis: F3 = [1, -1, 1]
         let exitButton: String = "exitButton"
+        let buttonResetInterval: Int = 3
+        let buttonMax: Int = 3
         let uprightTransforms: [String: GEOTransform] = [
           "back-plane": GEOTransform(
             position: [0, 0, 0],
