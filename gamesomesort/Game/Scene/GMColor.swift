@@ -89,6 +89,10 @@ class GMColorA {
     Float4(r, g, b, a)
   }
 
+  var F3: F3 {
+    Float3(r, g, b)
+  }
+
   init(r: Float, g: Float, b: Float, a: Float) {
     self.r = r
     self.g = g

@@ -117,6 +117,15 @@ struct AppCoreConfig {
             model: "button-one",
             locking: true
           ),
+          Button(
+            name: "editButton",
+            position: [3.0, -2, 1.0],
+            scale: [1, 1, 1],
+            color: [0, 0, 0],
+            radius: 0.5,
+            model: "button-one",
+            locking: false
+          ),
         ]
       }
 

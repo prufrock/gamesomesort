@@ -238,7 +238,22 @@ class GMWorld02: GMWorld {
 
     if !playerSafe {
       print("Restart level.")
-      gameCommands.enqueue(.start(level: map.index))
+      let startId = ecs.entity("start")!
+      let startPosition = ecs.getComponent(startId, CTPosition3d.self)!
+      ecs.addComponent(
+        ecs.entity("player01")!,
+        startPosition
+      )
+
+      ecs.select([LECSId.self, CTLockingButton.self]) { row, columns in
+        let entityId = row.component(at: 0, columns, LECSId.self)
+        var buttonLock = row.component(at: 1, columns, CTLockingButton.self)
+        buttonLock.count = 0
+        buttonLock.locked = false
+        let buttonColor: GMColor = .green
+        ecs.addComponent(entityId.id, buttonLock)
+        ecs.addComponent(entityId.id, CTColor(buttonColor))
+      }
     }
 
     var goalReached = false
@@ -274,6 +289,38 @@ class GMWorld02: GMWorld {
         print("eventId: \(validId), srcEntity: \(event.srcEntity), buttonName \(buttonName)")
         if buttonName.name.starts(with: "exit") {
           gameCommands.enqueue(.start(level: 0))
+        }
+
+        if buttonName.name.starts(with: "edit") {
+          let color = ecs.getComponent(event.srcEntity.id, CTColor.self)!
+          // store the state in the color for expediency!
+          if color.f3.x <= 0 {
+            ecs.addComponent(event.srcEntity.id, CTColor(F3(0.5, 0.25, 0)))
+          } else {
+            ecs.addComponent(event.srcEntity.id, CTColor(F3(0, 0, 0)))
+          }
+        }
+
+        if buttonName.name.starts(with: "tile")
+          && ecs.getComponent(ecs.entity("editButton")!, CTColor.self)!.color.r > 0
+        {
+          var tile = ecs.getComponent(event.srcEntity.id, CTTile.self)!
+          if tile.tile == .floor {
+            let pos = ecs.getComponent(event.srcEntity.id, CTPosition3d.self)!
+            ecs.addComponent(event.srcEntity.id, CTPosition3d(pos.x, pos.y, 1.0))
+            ecs.addComponent(event.srcEntity.id, CTRadius(0.5))
+            ecs.addComponent(event.srcEntity.id, CTColor(.green))
+            ecs.addComponent(event.srcEntity.id, CTScale3d(F3(x: 1, y: 1, z: 1)))
+            tile = CTTile(.wall)
+          } else if tile.tile == .wall {
+            tile = CTTile(.floor)
+            let pos = ecs.getComponent(event.srcEntity.id, CTPosition3d.self)!
+            ecs.addComponent(event.srcEntity.id, CTPosition3d(pos.x, pos.y, 1.8))
+            ecs.addComponent(event.srcEntity.id, CTRadius(0.5))
+            ecs.addComponent(event.srcEntity.id, CTColor(.yellow))
+            ecs.addComponent(event.srcEntity.id, CTScale3d(F3(x: 0.9, y: 0.9, z: 0.9)))
+          }
+          ecs.addComponent(event.srcEntity.id, tile)
         }
 
         // increment taps

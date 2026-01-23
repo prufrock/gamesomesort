@@ -80,7 +80,7 @@ struct GMEcsInitW02: GMEcsStarter {
   private func createTile(ecs: LECSWorld, tile: GMTile, x: Int, y: Int) {
     switch tile {
     case .wall:
-      let wall = ecs.createEntity("wall\(x),\(y)")
+      let wall = ecs.createEntity("tile\(x),\(y)")
       ecs.addComponent(wall, CTPosition3d(x.f, y.f, 1.0))
       ecs.addComponent(wall, CTRadius(0.5))
       ecs.addComponent(wall, CTColor(.green))
@@ -89,8 +89,9 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(wall, CTModel("back-plane"))
       ecs.addComponent(wall, CTTagVisible())
       ecs.addComponent(wall, CTTile(.wall))
+      ecs.addComponent(wall, CTTappable())
     case .floor:
-      let floor = ecs.createEntity("floor\(x),\(y)")
+      let floor = ecs.createEntity("tile\(x),\(y)")
       ecs.addComponent(floor, CTPosition3d(x.f, y.f, 1.8))
       ecs.addComponent(floor, CTRadius(0.5))
       ecs.addComponent(floor, CTColor(.yellow))
@@ -99,6 +100,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(floor, CTModel("back-plane"))
       ecs.addComponent(floor, CTTagVisible())
       ecs.addComponent(floor, CTTile(.floor))
+      ecs.addComponent(floor, CTTappable())
     }
   }
 
@@ -115,6 +117,13 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(balloon, CTScale3d(F3(repeating: 1)))
     case .player:
       createPlayer(ecs: ecs, position: F2(x.f, y.f))
+      let start = ecs.createEntity("start")
+      ecs.addComponent(start, CTPosition3d(x.f, y.f, 1.79))
+      ecs.addComponent(start, CTScale3d(F3(x: 0.5, y: 0.5, z: 0.5)))
+      ecs.addComponent(start, CTColor(color: GMColorA(.orange)))
+      ecs.addComponent(start, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
+      ecs.addComponent(start, CTModel("back-plane"))
+      ecs.addComponent(start, CTTagVisible())
     case .end:
       let end = ecs.createEntity("end\(x),\(y)")
       ecs.addComponent(end, CTPosition3d(x.f, y.f, 1.79))
