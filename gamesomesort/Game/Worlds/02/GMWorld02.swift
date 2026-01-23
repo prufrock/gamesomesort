@@ -275,34 +275,96 @@ class GMWorld02: GMWorld {
         if buttonName.name.starts(with: "exit") {
           gameCommands.enqueue(.start(level: 0))
         }
-        movePlayer(
-          ecs: ecs,
-          buttonName: buttonName.name,
-          startsWith: "r",
-          add: F3(x: 1.0, y: 0.0, z: 0.0)
-        )
-        movePlayer(
-          ecs: ecs,
-          buttonName: buttonName.name,
-          startsWith: "l",
-          add: F3(x: -1.0, y: 0.0, z: 0.0)
-        )
-        movePlayer(
-          ecs: ecs,
-          buttonName: buttonName.name,
-          startsWith: "d",
-          add: F3(x: 0.0, y: 1.0, z: 0.0)
-        )
-        movePlayer(
-          ecs: ecs,
-          buttonName: buttonName.name,
-          startsWith: "u",
-          add: F3(x: 0.0, y: -1.0, z: 0.0)
-        )
-        // adjust color
-        let color = ecs.getComponent(event.srcEntity.id, CTColor.self)!
-        let newColor: F4 = color.color.F4 - F4(0.1, 0.1, 0.1, 0.0)
-        ecs.addComponent(event.srcEntity.id, CTColor(newColor.xyz))
+
+        // increment taps
+        if ecs.hasComponent(event.srcEntity.id, CTLockingButton.self) {
+          var buttonLock = ecs.getComponent(event.srcEntity.id, CTLockingButton.self)!
+          if buttonLock.locked == false {
+            movePlayer(
+              ecs: ecs,
+              buttonName: buttonName.name,
+              startsWith: "r",
+              add: F3(x: 1.0, y: 0.0, z: 0.0)
+            )
+            movePlayer(
+              ecs: ecs,
+              buttonName: buttonName.name,
+              startsWith: "l",
+              add: F3(x: -1.0, y: 0.0, z: 0.0)
+            )
+            movePlayer(
+              ecs: ecs,
+              buttonName: buttonName.name,
+              startsWith: "d",
+              add: F3(x: 0.0, y: 1.0, z: 0.0)
+            )
+            movePlayer(
+              ecs: ecs,
+              buttonName: buttonName.name,
+              startsWith: "u",
+              add: F3(x: 0.0, y: -1.0, z: 0.0)
+            )
+            // decrement locks before locking to avoid incrementing the current button, also only unlocked buttons can incremented
+            ecs.select([LECSId.self, CTLockingButton.self]) { row, columns in
+              let entityId = row.component(at: 0, columns, LECSId.self)
+              var buttonLock = row.component(at: 1, columns, CTLockingButton.self)
+
+              if buttonLock.locked {
+                buttonLock.count += 1
+              }
+
+              if buttonLock.count == 0 {
+                buttonLock.locked = false
+              }
+
+              // adjust color
+              var buttonColor: GMColor
+              if buttonLock.count == 0 {
+                buttonColor = .green
+              } else if buttonLock.count == 1 {
+                buttonColor = .yellow
+              } else if buttonLock.count == 2 {
+                buttonColor = .red
+              } else if buttonLock.count == -3 {
+                buttonColor = .black
+              } else if buttonLock.count == -2 {
+                buttonColor = .grey
+              } else if buttonLock.count == -1 {
+                buttonColor = .blue
+              } else {
+                buttonColor = .black
+              }
+
+              ecs.addComponent(entityId.id, buttonLock)
+              ecs.addComponent(entityId.id, CTColor(buttonColor))
+            }
+            buttonLock.count += 1
+            if buttonLock.count == 3 {
+              buttonLock.locked = true
+              buttonLock.count = -3
+            }
+          }
+
+          ecs.addComponent(event.srcEntity.id, buttonLock)
+          // adjust color
+          var buttonColor: GMColor
+          if buttonLock.count == 0 {
+            buttonColor = .green
+          } else if buttonLock.count == 1 {
+            buttonColor = .yellow
+          } else if buttonLock.count == 2 {
+            buttonColor = .red
+          } else if buttonLock.count == -3 {
+            buttonColor = .black
+          } else if buttonLock.count == -2 {
+            buttonColor = .grey
+          } else if buttonLock.count == -1 {
+            buttonColor = .blue
+          } else {
+            buttonColor = .black
+          }
+          ecs.addComponent(event.srcEntity.id, CTColor(buttonColor))
+        }
       }
     }
 

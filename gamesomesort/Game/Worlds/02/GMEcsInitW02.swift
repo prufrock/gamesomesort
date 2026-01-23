@@ -24,6 +24,7 @@ struct GMEcsInitW02: GMEcsStarter {
       CTBalloonEmitter.self,
       CTCameraFirstPerson.self,
       CTColor.self,
+      CTEvent.self,
       CTLight.self,
       CTModel.self,
       CTTagBalloon.self,
@@ -227,6 +228,10 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(entity, CTModel(button.model))
       ecs.addComponent(entity, CTTappable())
       ecs.addComponent(entity, CTTagVisible())
+
+      if button.locking {
+        ecs.addComponent(entity, CTLockingButton())
+      }
     }
   }
 

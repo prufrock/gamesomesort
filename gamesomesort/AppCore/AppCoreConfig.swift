@@ -85,33 +85,37 @@ struct AppCoreConfig {
             name: "upButton",
             position: [3.5, 8.0, 1.0],
             scale: [1, 1, 1],
-            color: [0.5, 1.0, 1.0],
+            color: [0, 1, 0],
             radius: 0.5,
-            model: "button-one"
+            model: "button-one",
+            locking: true
           ),
           Button(
             name: "leftButton",
             position: [2.5, 9.0, 1.0],
             scale: [1, 1, 1],
-            color: [0.5, 0.8, 1.0],
+            color: [0, 1, 0],
             radius: 0.5,
-            model: "button-one"
+            model: "button-one",
+            locking: true
           ),
           Button(
             name: "rightButton",
             position: [4.5, 9.0, 1.0],
             scale: [1, 1, 1],
-            color: [0.5, 0.8, 1.0],
+            color: [0, 1, 0],
             radius: 0.5,
-            model: "button-one"
+            model: "button-one",
+            locking: true
           ),
           Button(
             name: "downButton",
             position: [3.5, 10.0, 1.0],
             scale: [1, 1, 1],
-            color: [0.5, 0.8, 1.0],
+            color: [0, 1, 0],
             radius: 0.5,
-            model: "button-one"
+            model: "button-one",
+            locking: true
           ),
         ]
       }
@@ -123,6 +127,7 @@ struct AppCoreConfig {
         let color: F3
         let radius: Float
         let model: String
+        let locking: Bool
       }
     }
   }
