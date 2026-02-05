@@ -5,30 +5,34 @@
 //  Created by David Kanenwisher on 5/30/25.
 //
 
-import lecs_swift
 import MetalKit
 
-/// The AppCore serves the global state for the application to avoid singletons(if possible):
-///  - manages the state of the application
-///  - provides access to services
+/// AppCore is where anything that needs to be available across the application
+/// should be stored or made accessible. The motiviation here is to avoid any
+/// global state, so if you think something might need to be global, find a way
+/// to put it in the AppCore.
 class AppCore {
+  /// The memory of AppCore. The place where AppCore keeps all it's stuff.
   private var context: AppCoreContext
 
+  /// The application's configuration. This is the place to go to get it.
   var config: AppCoreConfig {
     get {
       context.config
     }
   }
 
+  /// Creates a new AppCore with the given config.
   init(_ config: AppCoreConfig) {
     context = AppCoreContext(config: config)
   }
 
-  /// I'm hoping I can provide a sync and async facade over the commands services want to execute.
+  /// Synchronously send a command.
   func sync(_ command: any ServiceCommand) {
     context.sync(command)
   }
 
+  /// Create a fresh instance of GMGame.
   func createGMGame() -> GMGame {
     var levels: [GMTileMap] = []
     sync(
@@ -39,14 +43,19 @@ class AppCore {
     return GMGame(appCore: self, levels: levels)
   }
 
+  /// Create a fresh world factory.
   func createWorldFactory() -> GMWorldFactory {
     GMWorldFactory(config: config)
   }
 
+  /// Create a fresh ControllerInput.
   func createControllerInput() -> ControllerInput {
     ControllerInput(config: config)
   }
 
+  /// Create a fresh ControllerGame.
+  /// This has to happen on the main thread, so the delegate on the MTKView
+  /// can be set.
   @MainActor
   func createControllerGame(view: MTKView) -> ControllerGame {
     .init(
@@ -56,62 +65,10 @@ class AppCore {
     )
   }
 
+  /// A version of AppCore for test and maybe previews, if it would work.
   static func preview() -> AppCore {
     AppCore(
       AppCoreConfig.testDefault
     )
   }
-
-  struct GMWorldFactory {
-    let config: AppCoreConfig
-
-    func create(level: Int, levels: [GMTileMap]) -> any GMWorld {
-      var selectedLevel = 0
-      if level < levels.count {
-        selectedLevel = level
-      }
-      let map = levels[selectedLevel]
-      switch selectedLevel {
-      case 0:
-        return GMWorld00(
-          config: config,
-          ecs: LECSCreateWorld(archetypeSize: 500),
-          map: map,
-          ecsStarter: selectStarter(level: 0, levels: levels)
-        )
-      case 1:
-        return GMWorld01(
-          config: config,
-          ecs: LECSCreateWorld(archetypeSize: 500),
-          map: map,
-          ecsStarter: selectStarter(level: 1, levels: levels)
-        )
-      default:
-        return GMWorld02(
-          config: config,
-          ecs: LECSCreateWorld(archetypeSize: 500),
-          map: map,
-          ecsStarter: selectStarter(level: level, levels: levels)
-        )
-      }
-
-    }
-
-    func selectStarter(level: Int, levels: [GMTileMap]) -> GMEcsStarter {
-      var selectedLevel = 0
-      if level < levels.count {
-        selectedLevel = level
-      }
-      switch selectedLevel {
-      case 0:
-        return GMEcsInitW00(config: config)
-      case 1:
-        return GMEcsInitW01(map: levels[level], config: config)
-      default:
-        return GMEcsInitW02(map: levels[level], config: config)
-      }
-    }
-  }
 }
-
-protocol ServiceCommand {}
