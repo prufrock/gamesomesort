@@ -37,6 +37,16 @@
 		637CB14D2DE9534B00A2947D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		630CF38B2F35973800538CA2 /* Exceptions for "gamesomesort" folder in "gamesomesort" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DataStructures,
+			);
+			target = 631E2DB62DE90E3200A5F49C /* gamesomesort */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 		634A901D2DF3E4E400DF3497 /* Exceptions for "gamesomesort" folder in "Compile Sources" phase from "gamesomesort" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
@@ -51,6 +61,7 @@
 		631E2DB92DE90E3200A5F49C /* gamesomesort */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				630CF38B2F35973800538CA2 /* Exceptions for "gamesomesort" folder in "gamesomesort" target */,
 				634A901D2DF3E4E400DF3497 /* Exceptions for "gamesomesort" folder in "Compile Sources" phase from "gamesomesort" target */,
 			);
 			path = gamesomesort;
