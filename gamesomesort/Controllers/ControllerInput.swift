@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 6/19/25.
 //
 
+import DataStructures
 import Foundation
 import Combine
 import MetalKit
@@ -18,7 +19,7 @@ class ControllerInput {
   private var updateFrameSizeSubject: PassthroughSubject<CGSize, Never> = PassthroughSubject()
   private var updateFrameSizeCancelable: AnyCancellable?
 
-  private var events: any CTSQueue<GMGameInput.Events> = CTSQueueArray<GMGameInput.Events>()
+  private var events: any DSQueue<GMGameInput.Events> = DSQueueArray<GMGameInput.Events>()
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -85,7 +86,7 @@ class ControllerInput {
 
   func update() -> GMGameInput {
     defer {
-      events = CTSQueueArray<GMGameInput.Events>()
+      events = DSQueueArray<GMGameInput.Events>()
     }
 
     return GMGameInput(events: events)
@@ -93,7 +94,7 @@ class ControllerInput {
 }
 
 struct GMGameInput {
-  let events: any CTSQueue<Events>
+  let events: any DSQueue<Events>
 
   enum Events {
     case tap(tapLocation: F2, lastTapTime: Double)
@@ -103,6 +104,6 @@ struct GMGameInput {
 
 extension GMGameInput {
   init() {
-    events = CTSQueueArray<Events>()
+    events = DSQueueArray<Events>()
   }
 }

@@ -1,17 +1,17 @@
 //
-//  CTSQueueArrayTests.swift
-//  gamesomesort
+//  DSQueueArrayTests.swift
+//  DataStructures
 //
-//  Created by David Kanenwisher on 6/27/25.
+//  Created by David Kanenwisher on 2/5/26.
 //
 
 import Testing
-@testable import gamesomesort
+@testable import DataStructures
 
-struct CTSQueueArrayTests {
+struct DSQueueArrayTests {
 
   @Test func verifyEnqueueDequeueAndPeek() throws {
-    var queue = CTSQueueArray<String>()
+    var queue = DSQueueArray<String>()
     queue.enqueue("Cid")
     queue.enqueue("Veronica")
     queue.enqueue("Celes")

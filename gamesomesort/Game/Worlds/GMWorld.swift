@@ -4,6 +4,7 @@
 //
 //  Created by David Kanenwisher on 11/30/25.
 //
+import DataStructures
 import lecs_swift
 
 protocol GMWorld {
@@ -13,7 +14,7 @@ protocol GMWorld {
   var basis: F3 { get }
   var uprightTransforms: [String: GEOTransform] { get }
 
-  func update(timeStep: Float, input: GMGameInput) -> any CTSQueue<GMWorldCommands>
+  func update(timeStep: Float, input: GMGameInput) -> any DSQueue<GMWorldCommands>
 
   func update(_ dimensions: ScreenDimensions)
 }

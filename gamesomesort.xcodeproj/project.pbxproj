@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		630CF38D2F359EB900538CA2 /* DataStructures in Frameworks */ = {isa = PBXBuildFile; productRef = 630CF38C2F359EB900538CA2 /* DataStructures */; };
 		6390715C2E1B728100FE7DEE /* lecs-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6390715B2E1B728100FE7DEE /* lecs-swift */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				630CF38D2F359EB900538CA2 /* DataStructures in Frameworks */,
 				6390715C2E1B728100FE7DEE /* lecs-swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,6 +161,7 @@
 			name = gamesomesort;
 			packageProductDependencies = (
 				6390715B2E1B728100FE7DEE /* lecs-swift */,
+				630CF38C2F359EB900538CA2 /* DataStructures */,
 			);
 			productName = gamesomesort;
 			productReference = 631E2DB72DE90E3200A5F49C /* gamesomesort.app */;
@@ -697,6 +700,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		630CF38C2F359EB900538CA2 /* DataStructures */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DataStructures;
+		};
 		6390715B2E1B728100FE7DEE /* lecs-swift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "lecs-swift";

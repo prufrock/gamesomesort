@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 6/2/25.
 //
 
+import DataStructures
 import Foundation
 import lecs_swift
 
@@ -183,11 +184,11 @@ class GMWorld01: GMWorld {
   /// Update the game.
   /// - Parameters:
   ///   - timeStep: The amount of time to move it forward.
-  func update(timeStep: Float, input: GMGameInput) -> any CTSQueue<GMWorldCommands> {
+  func update(timeStep: Float, input: GMGameInput) -> any DSQueue<GMWorldCommands> {
     let playerCamera = ecs.gmCameraFirstPerson("playerCamera")!
-    var gameCommands: any CTSQueue<GMWorldCommands> = CTSQueueArray<GMWorldCommands>()
+    var gameCommands: any DSQueue<GMWorldCommands> = DSQueueArray<GMWorldCommands>()
 
-    var inputEvents: any CTSQueue<GMGameInput.Events> = input.events
+    var inputEvents: any DSQueue<GMGameInput.Events> = input.events
     while !inputEvents.isEmpty {
       let event: GMGameInput.Events = inputEvents.dequeue()!
       switch event {

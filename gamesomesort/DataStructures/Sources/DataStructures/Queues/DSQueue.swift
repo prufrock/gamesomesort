@@ -1,12 +1,12 @@
 //
-//  CTSQueue.swift
-//  gamesomesort
+//  DSQueue.swift
+//  DataStructures
 //
-//  Created by David Kanenwisher on 6/27/25.
+//  Created by David Kanenwisher on 2/5/26.
 //
 
 /// All the basic functionality you want in a queue.
-protocol CTSQueue<T>: CustomStringConvertible, ScopeFunction {
+public protocol DSQueue<T>: CustomStringConvertible {
   associatedtype T
 
   var isEmpty: Bool { get }
