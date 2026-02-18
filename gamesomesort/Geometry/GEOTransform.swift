@@ -5,6 +5,8 @@
 //  Created by David Kanenwisher on 6/17/25.
 //
 
+import VRTMath
+
 struct GEOTransform {
   var position: Float3 = [0, 0, 0]
   var quaternion: simd_quatf = simd_quatf(float4x4.identity)

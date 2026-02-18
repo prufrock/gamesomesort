@@ -8,6 +8,7 @@
 import DataStructures
 import Foundation
 import lecs_swift
+import VRTMath
 
 class GMWorld02: GMWorld {
   private let config: AppCoreConfig
@@ -74,7 +75,7 @@ class GMWorld02: GMWorld {
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, LECSPosition2d.self)
         let otherRadius = otherRow.component(at: 3, otherColumns, CTRadius.self)
-        let otherRectangle = GEORectangle(position: otherPosition.position, radius: otherRadius.radius)
+        let otherRectangle = VRTMRectangle(position: otherPosition.position, radius: otherRadius.radius)
 
         if otherEntityId != tapEntityId {
 
@@ -114,7 +115,7 @@ class GMWorld02: GMWorld {
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 1, otherColumns, CTPosition3d.self)
         let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
-        let otherRectangle = GEORectangle(
+        let otherRectangle = VRTMRectangle(
           position: otherPosition.position.xy,
           radius: otherRadius.radius
         )

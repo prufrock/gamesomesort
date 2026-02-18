@@ -7,6 +7,7 @@
 
 import MetalKit
 import lecs_swift
+import VRTMath
 
 protocol RNDRRenderPass {
 

@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import VRTMath
 
 // Manages models and makes them available to for the rest of the application.
 // Should this be in RNDR?

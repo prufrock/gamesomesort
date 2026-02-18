@@ -6,6 +6,7 @@
 //
 import MetalKit
 import lecs_swift
+import VRTMath
 
 class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let config: AppCoreConfig

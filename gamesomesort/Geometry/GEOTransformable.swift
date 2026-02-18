@@ -5,6 +5,8 @@
 //  Created by David Kanenwisher on 6/17/25.
 //
 
+import VRTMath
+
 protocol GEOTransformable {
   var transform: GEOTransform { get set }
 }

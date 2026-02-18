@@ -7,6 +7,7 @@
 
 import MetalKit
 import lecs_swift
+import VRTMath
 
 struct RNDRSquare {
   let v: [F3] = [  // model space

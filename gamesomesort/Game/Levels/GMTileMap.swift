@@ -5,6 +5,8 @@
 //  Created by David Kanenwisher on 6/2/25.
 //
 
+import VRTMath
+
 public struct GMTileMap {
   private(set) var tiles: [GMTile]
   private(set) var things: [GMThing]

@@ -6,6 +6,7 @@
 //
 
 import lecs_swift
+import VRTMath
 
 struct CTScale3d: LECSComponent {
   public var scale: F3

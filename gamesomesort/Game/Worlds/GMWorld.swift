@@ -6,6 +6,7 @@
 //
 import DataStructures
 import lecs_swift
+import VRTMath
 
 protocol GMWorld {
 

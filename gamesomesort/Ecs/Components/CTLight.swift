@@ -6,6 +6,7 @@
 //
 
 import lecs_swift
+import VRTMath
 
 struct CTLight: LECSComponent {
   var type: LightType

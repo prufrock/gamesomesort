@@ -6,6 +6,7 @@
 //
 
 import lecs_swift
+import VRTMath
 
 extension LECSWorld {
   func entity(_ name: String) -> LECSEntityId? {

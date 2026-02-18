@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 9/23/25.
 //
 import lecs_swift
+import VRTMath
 
 struct GMEcsInitW02: GMEcsStarter {
   let map: GMTileMap

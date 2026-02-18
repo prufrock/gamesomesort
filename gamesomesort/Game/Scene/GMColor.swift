@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import VRTMath
 
 enum GMColor: Int {
   case black = 0x000000

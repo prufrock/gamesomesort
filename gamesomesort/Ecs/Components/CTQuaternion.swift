@@ -7,6 +7,8 @@
 
 import lecs_swift
 
+import VRTMath
+
 struct CTQuaternion: LECSComponent {
   var quaternion: simd_quatf
 

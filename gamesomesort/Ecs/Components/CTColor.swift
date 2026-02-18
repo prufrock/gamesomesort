@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 6/18/25.
 //
 import lecs_swift
+import VRTMath
 
 struct CTColor: LECSComponent {
   var color: GMColorA

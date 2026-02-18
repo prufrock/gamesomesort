@@ -9,6 +9,7 @@ import DataStructures
 import Foundation
 import Combine
 import MetalKit
+import VRTMath
 
 class ControllerInput {
   let config: AppCoreConfig

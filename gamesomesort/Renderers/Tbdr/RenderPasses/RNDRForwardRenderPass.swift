@@ -7,6 +7,7 @@
 
 import MetalKit
 import lecs_swift
+import VRTMath
 
 struct RNDRForwardRenderPass: RNDRRenderPass {
   let label = "Forward Render Pass"

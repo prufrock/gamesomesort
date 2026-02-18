@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 12/7/25.
 //
 import MetalKit
+import VRTMath
 
 struct RNDRGameObject: GEOTransformable {
   let name: String

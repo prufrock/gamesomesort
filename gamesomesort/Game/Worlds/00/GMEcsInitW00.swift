@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 9/23/25.
 //
 import lecs_swift
+import VRTMath
 
 struct GMEcsInitW00: GMEcsStarter {
   let config: AppCoreConfig

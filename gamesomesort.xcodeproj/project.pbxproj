@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		630CF38D2F359EB900538CA2 /* DataStructures in Frameworks */ = {isa = PBXBuildFile; productRef = 630CF38C2F359EB900538CA2 /* DataStructures */; };
 		6390715C2E1B728100FE7DEE /* lecs-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6390715B2E1B728100FE7DEE /* lecs-swift */; };
+		63CEB8A82F454A5700700D04 /* VRTMath in Frameworks */ = {isa = PBXBuildFile; productRef = 63CEB8A72F454A5700700D04 /* VRTMath */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,7 @@
 		637CB14C2DE9532D00A2947D /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
 		637CB14D2DE9534B00A2947D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		63CEB8292F45479A00700D04 /* DataStructures */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataStructures; sourceTree = "<group>"; };
+		63CEB8A62F454A1D00700D04 /* VRTMath */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VRTMath; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
@@ -75,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63CEB8A82F454A5700700D04 /* VRTMath in Frameworks */,
 				630CF38D2F359EB900538CA2 /* DataStructures in Frameworks */,
 				6390715C2E1B728100FE7DEE /* lecs-swift in Frameworks */,
 			);
@@ -107,6 +110,7 @@
 		631E2DAE2DE90E3200A5F49C = {
 			isa = PBXGroup;
 			children = (
+				63CEB8A62F454A1D00700D04 /* VRTMath */,
 				637CB14D2DE9534B00A2947D /* README.md */,
 				637CB14C2DE9532D00A2947D /* .swift-format */,
 				637CB14B2DE9531B00A2947D /* .gitignore */,
@@ -153,6 +157,7 @@
 			packageProductDependencies = (
 				6390715B2E1B728100FE7DEE /* lecs-swift */,
 				630CF38C2F359EB900538CA2 /* DataStructures */,
+				63CEB8A72F454A5700700D04 /* VRTMath */,
 			);
 			productName = gamesomesort;
 			productReference = 631E2DB72DE90E3200A5F49C /* gamesomesort.app */;
@@ -698,6 +703,10 @@
 		6390715B2E1B728100FE7DEE /* lecs-swift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "lecs-swift";
+		};
+		63CEB8A72F454A5700700D04 /* VRTMath */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = VRTMath;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -5,6 +5,8 @@
 //  Created by David Kanenwisher on 12/11/25.
 //
 
+import VRTMath
+
 protocol GEOUprightable {
   var upright: GEOTransform { get set }
 }

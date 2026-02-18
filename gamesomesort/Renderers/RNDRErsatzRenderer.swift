@@ -7,6 +7,7 @@
 
 import MetalKit
 import lecs_swift
+import VRTMath
 
 /// Does nothing, useful for testing in iCloud which doesn't support Metal.
 class RNDRErsatzRenderer: RNDRRenderer {

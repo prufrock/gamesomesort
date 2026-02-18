@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 6/29/25.
 
 import Foundation
+import VRTMath
 
 // Represents a tp location on the screen.
 struct INTapLocation {

@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import VRTMath
 
 extension MTLVertexDescriptor {
   static var defaultLayout: MTLVertexDescriptor? {

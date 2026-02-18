@@ -6,6 +6,7 @@
 //
 
 import lecs_swift
+import VRTMath
 
 struct CTPosition3d: LECSComponent {
   var position: F3

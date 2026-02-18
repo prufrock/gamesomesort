@@ -1,8 +1,8 @@
 //
 //  Float4Exts.swift
-//  gamesomesort
+//  VRTMath
 //
-//  Created by David Kanenwisher on 6/9/25.
+//  Created by David Kanenwisher on 2/17/26.
 //
 
 import simd
@@ -10,7 +10,7 @@ import simd
 public typealias Float4 = SIMD4<Float>
 public typealias F4 = Float4
 
-extension Float4 {
+public extension Float4 {
   var xy: Float2 {
     .init(x: x, y: y)
   }

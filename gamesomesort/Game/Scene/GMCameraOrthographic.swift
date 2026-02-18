@@ -5,6 +5,8 @@
 //  Created by David Kanenwisher on 8/5/25.
 //
 
+import VRTMath
+
 struct GMCameraOrthographic: GMCamera {
   var transform: GEOTransform
   var aspect: Float = 1
@@ -18,7 +20,7 @@ struct GMCameraOrthographic: GMCamera {
   }
 
   var projection: Float4x4 {
-    let rect = GEORectangle(x: -viewSize * aspect * 0.5, y: viewSize * 0.5, width: viewSize * aspect, height: viewSize)
+    let rect = VRTMRectangle(x: -viewSize * aspect * 0.5, y: viewSize * 0.5, width: viewSize * aspect, height: viewSize)
     return float4x4.orthographicProjection(rect: rect, near: near, far: far)
   }
 }

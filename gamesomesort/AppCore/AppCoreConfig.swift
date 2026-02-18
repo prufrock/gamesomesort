@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import VRTMath
 
 struct AppCoreConfig {
   let platform: Platform

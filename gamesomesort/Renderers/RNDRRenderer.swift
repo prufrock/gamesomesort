@@ -8,6 +8,7 @@
 import Foundation
 import MetalKit
 import lecs_swift
+import VRTMath
 
 protocol RNDRRenderer {
   func resize(_ dmensions: ScreenDimensions)

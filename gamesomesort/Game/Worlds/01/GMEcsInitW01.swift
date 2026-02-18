@@ -6,6 +6,7 @@
 //
 
 import lecs_swift
+import VRTMath
 
 protocol GMEcsStarter {
   func start(ecs: LECSWorld)

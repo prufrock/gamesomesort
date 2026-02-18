@@ -7,6 +7,7 @@
 
 import MetalKit
 import lecs_swift
+import VRTMath
 
 ///  At what point does the processing required to load the renderer require putting it behind a loading screen?
 class RNDRSquareRenderer: RNDRRenderer {
