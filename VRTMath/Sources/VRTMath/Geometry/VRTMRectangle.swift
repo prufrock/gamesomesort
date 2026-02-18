@@ -32,21 +32,25 @@ public struct VRTMRectangle {
     }
   }
 
+  /// Create a rectangle from the smallest and largest points.
   public init(min: F2, max: F2) {
     self.min = min
     self.max = max
   }
 
-  public init(x: Float, y: Float, width: Float, height: Float) {
-    self.min = F2(x, y)
-    self.max = F2(x + width, y + height)
-  }
-
+  /// Create a rectangle from the smallest and largest points.
   public init(_ minX: Float, _ minY: Float, _ maxX: Float, _ maxY: Float) {
     min = F2(minX, minY)
     max = F2(maxX, maxY)
   }
 
+  /// Create a rectangle at x, y by adding x + width and y + height.
+  public init(x: Float, y: Float, width: Float, height: Float) {
+    self.min = F2(x, y)
+    self.max = F2(x + width, y + height)
+  }
+
+  /// Create a square rectangle centered on a point.
   public init(position: F2, radius: Float = 1) {
     self.min = position - F2(x: radius, y: radius)
     self.max = position + F2(x: radius, y: radius)
