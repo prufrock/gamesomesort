@@ -36,17 +36,8 @@
 		637CB14B2DE9531B00A2947D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		637CB14C2DE9532D00A2947D /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
 		637CB14D2DE9534B00A2947D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		63CEB8292F45479A00700D04 /* DataStructures */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataStructures; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		630CF38B2F35973800538CA2 /* Exceptions for "gamesomesort" folder in "gamesomesort" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				DataStructures,
-			);
-			target = 631E2DB62DE90E3200A5F49C /* gamesomesort */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 		634A901D2DF3E4E400DF3497 /* Exceptions for "gamesomesort" folder in "Compile Sources" phase from "gamesomesort" target */ = {
@@ -62,7 +53,6 @@
 		631E2DB92DE90E3200A5F49C /* gamesomesort */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				630CF38B2F35973800538CA2 /* Exceptions for "gamesomesort" folder in "gamesomesort" target */,
 				634A901D2DF3E4E400DF3497 /* Exceptions for "gamesomesort" folder in "Compile Sources" phase from "gamesomesort" target */,
 			);
 			path = gamesomesort;
@@ -121,6 +111,7 @@
 				637CB14C2DE9532D00A2947D /* .swift-format */,
 				637CB14B2DE9531B00A2947D /* .gitignore */,
 				637CB1492DE9530600A2947D /* .editorconfig */,
+				63CEB8292F45479A00700D04 /* DataStructures */,
 				631E2DB92DE90E3200A5F49C /* gamesomesort */,
 				631E2DC82DE90E3400A5F49C /* gamesomesortTests */,
 				631E2DD22DE90E3400A5F49C /* gamesomesortUITests */,
