@@ -52,20 +52,22 @@ public struct VRTMRectangle {
     self.max = position + F2(x: radius, y: radius)
   }
 
+  /// Check for intersection between two rectangles, returning the smallest
+  /// intersection.
   public func intersection(with rect: Self) -> F2? {
-    let left = F2(x: max.x - rect.min.x, y: 0)  // world
+    let left = F2(x: max.x - rect.min.x, y: 0)
     if left.x <= 0 {
       return nil
     }
-    let right = F2(x: min.x - rect.max.x, y: 0)  // world
+    let right = F2(x: min.x - rect.max.x, y: 0)
     if right.x >= 0 {
       return nil
     }
-    let up = F2(x: 0, y: max.y - rect.min.y)  // world
+    let up = F2(x: 0, y: max.y - rect.min.y)
     if up.y <= 0 {
       return nil
     }
-    let down = F2(x: 0, y: min.y - rect.max.y)  // world
+    let down = F2(x: 0, y: min.y - rect.max.y)
     if down.y >= 0 {
       return nil
     }
@@ -74,6 +76,7 @@ public struct VRTMRectangle {
     return [left, right, up, down].sorted(by: { $0.length < $1.length }).first
   }
 
+  /// Whether a rectangle is within this rectangle.
   public func contains(_ rect: Self) -> Bool {
     // This can't contain the rectangle if it's not big enough
     if area < rect.area {
@@ -84,10 +87,17 @@ public struct VRTMRectangle {
     return rect.corners.filter { contains($0) }.count == 4
   }
 
-  public func contains(_ minX: Float, _ maxX: Float, _ minY: Float, _ maxY: Float) -> Bool {
+  /// Whether the 4 points of a rectangle are all inside this rectangle.
+  public func contains(
+    _ minX: Float,
+    _ maxX: Float,
+    _ minY: Float,
+    _ maxY: Float
+  ) -> Bool {
     contains(Self.init(minX, maxX, minY, maxY))
   }
 
+  /// Whether a single float is within this rectangle.
   public func contains(_ p: Float2) -> Bool {
     !(min.x > p.x || max.x < p.x || min.y > p.y || max.y < p.y)
   }
