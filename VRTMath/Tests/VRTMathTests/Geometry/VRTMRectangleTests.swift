@@ -12,11 +12,33 @@ import Foundation
 
 struct GEORectangleTests {
 
+  @Test func `various constructors`() throws {
+    let rectOne = VRTMRectangle(min: F2(0, 0), max: F2(1, 1))
+    #expect(rectOne.area == 1.0)
+
+    let rectTwo = VRTMRectangle(x: 0, y: 0, width: 2, height: 2)
+    #expect(rectTwo.area == 4.0)
+
+    let rectThree = VRTMRectangle(position: F2(0, 0), radius: 3.0)
+    #expect(rectThree.area == 36.0)
+  }
+
+  @Test func `height and width`() throws {
+    let rectOne = VRTMRectangle(min: F2(0, 0), max: F2(1, 1))
+    #expect(rectOne.height == 1.0)
+    #expect(rectOne.width == 1.0)
+  }
+
   @Test func whenTwoRectanglesDontIntersect() throws {
     let rectOne = VRTMRectangle(min: F2(0, 0), max: F2(1, 1))
-    let rectTwo = VRTMRectangle(min: F2(2, 2), max: F2(3, 3))
-
-    #expect(rectOne.intersection(with: rectTwo) == nil)
+    [
+      VRTMRectangle(min: F2(2, 2), max: F2(3, 3)),
+      VRTMRectangle(min: F2(-2, 2), max: F2(-1, 3)),
+      VRTMRectangle(min: F2(0, 2), max: F2(1, 3)),
+      VRTMRectangle(min: F2(0, -2), max: F2(1, -1)),
+    ].forEach { rectTwo in
+      #expect(rectOne.intersection(with: rectTwo) == nil)
+    }
   }
 
   @Test func whenTwoRectanglesDoIntersect() throws {
@@ -43,5 +65,12 @@ struct GEORectangleTests {
     #expect(r.contains(4.0, 4.0, 6.0, 6.0) == false)  // lower right
 
     #expect(r.contains(0.0, 0.0, 3.0, 3.0) == true)
+  }
+
+  @Test func `a rectangle can't contain a larger one`() {
+    let smaller = VRTMRectangle(0.0, 0.0, 1.0, 1.0)
+    let bigger = VRTMRectangle(0.0, 0.0, 5.0, 5.0)
+
+    #expect(smaller.contains(bigger) == false)
   }
 }

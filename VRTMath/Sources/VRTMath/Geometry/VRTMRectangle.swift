@@ -5,21 +5,26 @@
 //  Created by David Kanenwisher on 2/17/26.
 //
 
+/// A rectangle for all your rectangle needs.
 public struct VRTMRectangle {
+  /// The smallest and largest corners of the rectangle.
   public var min, max: F2
 
+  /// The area of the rectangle.
   public var area: Float {
     get {
       height * width
     }
   }
 
+  /// The difference between the largest and smallest corner on the y-axis.
   public var height: Float {
     get {
       max.y - min.y
     }
   }
 
+  /// The difference between the largest and smallest corner on the x-axis.
   public var width: Float {
     get {
       max.x - min.x
