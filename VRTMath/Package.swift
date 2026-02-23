@@ -12,15 +12,24 @@ let package = Package(
             targets: ["VRTMath"]
         ),
     ],
+    dependencies: [
+      .package(url: "https://github.com/apple/swift-numerics", from: "1.1.1"),
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "VRTMath"
+            name: "VRTMath",
+            dependencies: [
+              .product(name: "Numerics", package: "swift-numerics")
+            ]
         ),
         .testTarget(
             name: "VRTMathTests",
-            dependencies: ["VRTMath"]
+            dependencies: [
+              "VRTMath",
+              .product(name: "Numerics", package: "swift-numerics")
+            ]
         ),
     ]
 )

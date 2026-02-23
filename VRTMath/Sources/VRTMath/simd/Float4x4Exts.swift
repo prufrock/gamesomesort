@@ -191,7 +191,7 @@ public extension Float4x4 {
     return float3x3(columns: (x, y, z))
   }
 
-  static func orthographicProjection(rect: VRTMRectangle, near: Float, far: Float) -> Float4x4 {
+  static func orthographicProjection(rect: VRTM2D.Rectangle, near: Float, far: Float) -> Float4x4 {
     let left = Float(rect.min.x)
     let right = Float(rect.min.x + rect.width)
     let top = Float(rect.min.y)
@@ -204,7 +204,7 @@ public extension Float4x4 {
     return Float4x4(X, Y, Z, W)
   }
 
-  func orthographicProjection(rect: VRTMRectangle, near: Float, far: Float) -> Float4x4 {
+  func orthographicProjection(rect: VRTM2D.Rectangle, near: Float, far: Float) -> Float4x4 {
     self * Self.orthographicProjection(rect: rect, near: near, far: far)
   }
 
