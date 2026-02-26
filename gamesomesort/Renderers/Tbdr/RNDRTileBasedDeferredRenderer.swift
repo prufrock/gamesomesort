@@ -17,8 +17,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private var shadowRenderPass: RNDRShadowRenderPass? = nil
   private var tbdrPass: RNDRTiledDeferredRenderPass? = nil
 
-  private var squareRenderer = RNDRSquare()
-
   private var screenDimensions = ScreenDimensions()
 
   var controllerTexture = ControllerTexture()
@@ -62,8 +60,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     }
     self.library = library
 
-    squareRenderer.initBuffers(device: device)
-
     // Place holder controller, without models.
     controllerModel = ControllerModel(
       device: device,
@@ -99,7 +95,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   }
 
   func initializePipelines(pixelFormat: MTLPixelFormat) {
-    squareRenderer.initPipelines(device: device, library: library, pixelFormat: pixelFormat)
+    //no-op for now
   }
 
   func initializeRenderPasses(pixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) {
