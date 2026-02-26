@@ -36,12 +36,12 @@ struct AppCoreConfig {
         let uprightTransforms: [String: GEOTransform] = [
           "back-plane": GEOTransform(
             position: [0, 0, 0],
-            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            quaternion: Float4x4.rotateY(-.pi / 2).q,
             scale: [1, 1, 1]
           ),
           "button-one": GEOTransform(
             position: [0, 0, 0],
-            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            quaternion: Float4x4.rotateY(-.pi / 2).q,
             scale: [1, 1, 1]
           ),
         ]
@@ -53,12 +53,12 @@ struct AppCoreConfig {
         let uprightTransforms: [String: GEOTransform] = [
           "back-plane": GEOTransform(
             position: [0, 0, 0],
-            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            quaternion: Float4x4.rotateY(-.pi / 2).q,
             scale: [1, 1, 1]
           ),
           "button-one": GEOTransform(
             position: [0, 0, 0],
-            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            quaternion: Float4x4.rotateY(-.pi / 2).q,
             scale: [1, 1, 1]
           ),
         ]
@@ -72,12 +72,12 @@ struct AppCoreConfig {
         let uprightTransforms: [String: GEOTransform] = [
           "back-plane": GEOTransform(
             position: [0, 0, 0],
-            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            quaternion: Float4x4.rotateY(-.pi / 2).q,
             scale: [1, 1, 1]
           ),
           "button-one": GEOTransform(
             position: [0, 0, 0],
-            quaternion: simd_quatf(Float4x4.rotateY(-.pi / 2)),
+            quaternion: Float4x4.rotateY(-.pi / 2).q,
             scale: [1, 1, 1]
           ),
         ]

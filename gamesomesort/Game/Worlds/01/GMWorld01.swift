@@ -9,6 +9,7 @@ import DataStructures
 import Foundation
 import lecs_swift
 import VRTMath
+private typealias Rect = VRTM2D.Rectangle
 
 class GMWorld01: GMWorld {
   private let config: AppCoreConfig
@@ -50,7 +51,7 @@ class GMWorld01: GMWorld {
     ecs.addComponent(tapSquare, CTColor(.red))
     ecs.addComponent(tapSquare, CTTagVisible())
     ecs.addComponent(tapSquare, CTModel("button-one"))
-    ecs.addComponent(tapSquare, CTQuaternion(simd_quatf(Float4x4.identity)))
+    ecs.addComponent(tapSquare, CTQuaternion(Float4x4.identity.q))
     ecs.addComponent(tapSquare, CTScale3d(F3(repeating: 0.1)))
     self.tapSquare = tapSquare
 
@@ -76,7 +77,7 @@ class GMWorld01: GMWorld {
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, CTPosition3d.self)
         let otherRadius = otherRow.component(at: 3, otherColumns, CTRadius.self)
-        let otherRectangle = VRTMRectangle(position: otherPosition.position.xy, radius: otherRadius.radius)
+        let otherRectangle = Rect(position: otherPosition.position.xy, radius: otherRadius.radius)
 
         if otherEntityId != tapEntityId {
 
@@ -116,7 +117,7 @@ class GMWorld01: GMWorld {
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 1, otherColumns, CTPosition3d.self)
         let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
-        let otherRectangle = VRTMRectangle(
+        let otherRectangle = Rect(
           position: otherPosition.position.xy,
           radius: otherRadius.radius
         )

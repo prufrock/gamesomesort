@@ -26,7 +26,7 @@ extension LECSWorld {
     return GMCameraFirstPerson(
       transform: GEOTransform(
         position: cameraPosition.position,
-        quaternion: simd_quatf(Float4x4.identity),
+        quaternion: Float4x4.identity.q,
         scale: cameraScale.scale
       ),
       aspect: aspectRatio.aspect,

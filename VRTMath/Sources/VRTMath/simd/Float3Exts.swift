@@ -16,6 +16,6 @@ public extension Float3 {
   }
 
   static func quaternion(_ rotation: Float3) -> simd_quatf {
-    simd_quatf(Float4x4.rotate(rotation))
+    Float4x4.rotate(rotation).q
   }
 }

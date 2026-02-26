@@ -121,7 +121,7 @@ struct RNDRSquare {
       let square = GMSquare(
         transform: GEOTransform(
           position: F3(position.position, 1.0),
-          quaternion: simd_quatf(Float4x4.identity),
+          quaternion: Float4x4.identity.q,
           scale: Float3(repeating: radius.radius)
         ),
         color: color.color

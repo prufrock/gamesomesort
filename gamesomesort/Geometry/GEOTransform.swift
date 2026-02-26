@@ -9,7 +9,7 @@ import VRTMath
 
 struct GEOTransform {
   var position: Float3 = [0, 0, 0]
-  var quaternion: simd_quatf = simd_quatf(float4x4.identity)
+  var quaternion: simd_quatf = float4x4.identity.q
   var scale: Float3 = [1, 1, 1]
 }
 

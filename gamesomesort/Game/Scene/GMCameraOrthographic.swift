@@ -6,6 +6,7 @@
 //
 
 import VRTMath
+private typealias Rect = VRTM2D.Rectangle
 
 struct GMCameraOrthographic: GMCamera {
   var transform: GEOTransform
@@ -20,7 +21,7 @@ struct GMCameraOrthographic: GMCamera {
   }
 
   var projection: Float4x4 {
-    let rect = VRTMRectangle(x: -viewSize * aspect * 0.5, y: viewSize * 0.5, width: viewSize * aspect, height: viewSize)
+    let rect = Rect(x: -viewSize * aspect * 0.5, y: viewSize * 0.5, width: viewSize * aspect, height: viewSize)
     return float4x4.orthographicProjection(rect: rect, near: near, far: far)
   }
 }

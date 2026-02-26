@@ -10,6 +10,11 @@ import simd
 public typealias Float4x4 = simd_float4x4
 
 public extension Float4x4 {
+
+  var q: simd_quatf {
+    .init(self)
+  }
+
   static var identity: Float4x4 {
     matrix_identity_float4x4
   }

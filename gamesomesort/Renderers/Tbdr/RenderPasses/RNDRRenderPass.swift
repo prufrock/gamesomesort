@@ -66,7 +66,7 @@ extension LECSWorld {
       let square = GMSquare(
         transform: GEOTransform(
           position: F3(position.position, 1.0),
-          quaternion: simd_quatf(Float4x4.identity),
+          quaternion: Float4x4.identity.q,
           scale: F3(
             x: scale.scale.x * radius.radius,
             y: scale.scale.y * radius.radius,
