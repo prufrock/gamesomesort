@@ -6,6 +6,7 @@
 //
 
 import simd
+import RealModule
 
 public typealias Float4x4 = simd_float4x4
 
@@ -228,5 +229,32 @@ public extension Float4x4 {
 
   func lookAtProjection(eye: F3, center: F3, up: F3) -> Float4x4 {
     self * Self.lookAtProjection(eye: eye, center: center, up: up)
+  }
+}
+
+extension Float4x4 {
+  /// Test if self and other are approximately equal with specified tolerances.
+  func isApproximatelyEqual(
+    to other: Self,
+    absoluteTolerance: Float = 0.0,
+    relativeTolerance: Float = Float.ulpOfOne.squareRoot()
+  ) -> Bool {
+    return self.columns.0.isApproximatelyEqual(to: other.columns.0, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance) &&
+    self.columns.1.isApproximatelyEqual(to: other.columns.1, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance) &&
+    self.columns.2.isApproximatelyEqual(to: other.columns.2, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance) &&
+    self.columns.2.isApproximatelyEqual(to: other.columns.2, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance)
+  }
+
+  /// Test if self and other are close enough with specified tolerances.
+  public func isClose(
+    to other: Self,
+    absoluteTolerance: Float = 0.0,
+    relativeTolerance: Float = Float.ulpOfOne.squareRoot()
+  ) -> Bool {
+    return isApproximatelyEqual(
+      to: other,
+      absoluteTolerance: absoluteTolerance,
+      relativeTolerance: relativeTolerance
+    )
   }
 }
