@@ -159,17 +159,6 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
     )
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
-    let squares = ecs.models
-    let sphere = context.controllerModel.models["brick-sphere.usdz"]!
-    for square in squares {
-      sphere.upright = square.transform
-      sphere.render(
-        encoder: renderEncoder,
-        uniforms: uniforms,
-        params: params
-      )
-    }
-
     let models = ecs.geoModels(context: context)
     for model in models {
       model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
