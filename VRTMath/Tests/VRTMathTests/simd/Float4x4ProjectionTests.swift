@@ -20,15 +20,15 @@ struct Float4x4ProjectionTests {
       farPlane: 3.0
     )
     let expected = Float4x4([
-      Float4(1.0, 0.0, 0.0, 0.0),
-      Float4(0.0, 1.0, 0.0, 0.0),
-      Float4(0.0, 0.0, -1.5, -1.0),
-      Float4(0.0, 0.0, -1.5, 0.0),
+      F4(1.0, 0.0, 0.0, 0.0),
+      F4(0.0, 1.0, 0.0, 0.0),
+      F4(0.0, 0.0, -1.5, -1.0),
+      F4(0.0, 0.0, -1.5, 0.0),
     ])
     #expect(projection.isClose(to: expected))
 
-    let result = projection * Float4(0.0, 0.0, -2.0, 1.0)
-    #expect(result.isClose(to: Float4(0.0, 0.0, 1.5, 2.0)))
-    #expect(result.perspectiveDivide.isClose(to: Float3(0.0, 0.0, 0.75)))
+    let result = projection * F4(0.0, 0.0, -2.0, 1.0)
+    #expect(result.isClose(to: F4(0.0, 0.0, 1.5, 2.0)))
+    #expect(result.perspectiveDivide.isClose(to: F3(0.0, 0.0, 0.75)))
   }
 }

@@ -10,6 +10,7 @@ import Testing
 
 import Foundation
 import lecs_swift
+import DataStructures
 
 struct GMTileMapTests {
 
@@ -21,7 +22,7 @@ struct GMTileMapTests {
   @Test func testLocations() {
     let tileMap = simpleTileMap
 
-    var expectedCoordinates = CTSQueueArray<(GMTile, GMThing, (Int, Int))>()
+    var expectedCoordinates = DSQueueArray<(GMTile, GMThing, (Int, Int))>()
     expectedCoordinates.enqueue((.wall, .nothing, (0, 0)))
 
     tileMap.locations { tile, thing, xy in

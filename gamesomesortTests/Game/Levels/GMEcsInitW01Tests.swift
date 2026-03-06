@@ -9,6 +9,7 @@ import Testing
 @testable import gamesomesort
 
 import Foundation
+import VRTMath
 import lecs_swift
 
 struct GMEcsInitW01Tests {
@@ -32,6 +33,6 @@ struct GMEcsInitW01Tests {
     }
 
     #expect(positions.count == 1)
-    #expect(positions[0].position == Float2(x: 0, y: 0))
+    #expect(positions[0].position == F2(x: 0, y: 0))
   }
 }
