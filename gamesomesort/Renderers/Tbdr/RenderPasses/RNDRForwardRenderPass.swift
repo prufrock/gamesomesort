@@ -159,7 +159,7 @@ struct RNDRForwardRenderPass: RNDRRenderPass {
     )
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
-    let models = ecs.geoModels(context: context)
+    let models = ecs.gameObjects(context: context)
     for model in models {
       model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
     }

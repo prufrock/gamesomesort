@@ -51,36 +51,6 @@ extension RNDRRenderPass {
 
 extension LECSWorld {
 
-  func geoModels(context: RNDRContext) -> [GEOModel] {
-    var models = [GEOModel]()
-    select(
-      [
-        CTModel.self,
-        CTPosition3d.self,
-        CTScale3d.self,
-        CTQuaternion.self,
-        CTColor.self,
-        CTTagVisible.self,
-      ]
-    ) { row, columns in
-      let ctModel = row.component(at: 0, columns, CTModel.self)
-      let position = row.component(at: 1, columns, CTPosition3d.self)
-      let scale = row.component(at: 2, columns, CTScale3d.self)
-      let quaternion = row.component(at: 3, columns, CTQuaternion.self)
-      let color = row.component(at: 4, columns, CTColor.self)
-
-      //TODO: models need to be separate from transforms and eventually textures
-      let model = context.controllerModel.models[ctModel.name]!
-      model.upright.scale = scale.scale
-      model.upright.quaternion = quaternion.quaternion
-      model.upright.position = position.position
-      model.meshes[0].submeshes[0].material.baseColor = color.f3
-
-      models.append(model)
-    }
-    return models
-  }
-
   func gameObjects(context: RNDRContext) -> [RNDRGameObject] {
     var gameObjects = [RNDRGameObject]()
     select(
