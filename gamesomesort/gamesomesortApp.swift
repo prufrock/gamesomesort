@@ -29,7 +29,7 @@ struct gamesomesortApp: App {
             type: .tileBased,
             clearColor: (0.3, 0.0, 0.3, 1.0),
             models: [
-              "brick-sphere.usdz",
+              "brick-sphere.usdz"
             ],
             tbdrRender: .tbdr
           ),
