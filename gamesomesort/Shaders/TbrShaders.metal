@@ -133,6 +133,10 @@ fragment GBufferOut tbr_fragment_gBuffer(
                                    );
   if (!is_null_texture(baseColorTexture)) {
     out.albedo = baseColorTexture.sample(textureSampler, in.uv).rgba;
+    // discard if the albedo is below this threshold
+    if (out.albedo.a < 0.01) {
+      discard_fragment();
+    }
   } else {
     out.albedo = float4(material.baseColor, 1.0);
   }

@@ -158,8 +158,8 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(player, CTColor(.black))
     ecs.addComponent(player, CTRadius(1.0))
     ecs.addComponent(player, CTTagVisible())
-    ecs.addComponent(player, CTModel("brick-sphere.usdz"))
-    ecs.addComponent(player, CTQuaternion(Float4x4.identity.q))
+    ecs.addComponent(player, CTModel("square-bella.usdz"))
+    ecs.addComponent(player, CTQuaternion(Float4x4.rotateY(.pi).q))
     ecs.addComponent(player, CTScale3d(F3(repeating: 0.5)))
   }
 
@@ -248,11 +248,11 @@ struct GMEcsInitW02: GMEcsStarter {
   private func createExitButton(ecs: LECSWorld) {
     let button = ecs.createEntity(config.game.world.world02.exitButton)
     ecs.addComponent(button, CTPosition3d(1.0, -2, 1.0))
-    ecs.addComponent(button, CTScale3d(F3(repeating: 1)))
+    ecs.addComponent(button, CTScale3d(F3(repeating: 0.5)))
     ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
     ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
     ecs.addComponent(button, CTRadius(0.5))
-    ecs.addComponent(button, CTModel("back-plane"))
+    ecs.addComponent(button, CTModel("brick-sphere.usdz"))
     ecs.addComponent(button, CTTappable())
     ecs.addComponent(button, CTTagVisible())
   }
