@@ -80,6 +80,11 @@ struct AppCoreConfig {
             quaternion: Float4x4.rotateY(-.pi / 2).q,
             scale: [1, 1, 1]
           ),
+          "brick-sphere.usdz": GEOTransform(
+            position: [0, 0, 0],
+            quaternion: Float4x4.rotateY(0).q,
+            scale: [1, 1, 1]
+          ),
         ]
         let buttons: [Button] = [
           Button(

@@ -31,32 +31,35 @@ class ControllerModel {
   }
 
   func loadModel(_ name: String) {
-    var upright = GEOTransform()
-    upright.scale = self.worldBasis
-
     let model = GEOModel(
       name: name,
       controllerTexture: controllerTexture,
       device: device,
-      upright: upright
+      upright: self.uprightFor(model: name)
     )
     models[name] = model
   }
 
   @discardableResult
   func loadPrimitive(_ name: String, primitiveType: GEOPrimitive) -> GEOModel {
-    var upright = self.worldUprightTransforms[name] ?? GEOTransform()
-    upright.scale = self.worldBasis
-
     let model = GEOModel(
       name: name,
       primitiveType: primitiveType,
       controllerTexture: controllerTexture,
       device: device,
-      upright: upright
+      upright: self.uprightFor(model: name)
     )
     models[name] = model
 
     return model
+  }
+
+  func uprightFor(model name: String) -> GEOTransform {
+    let uprightConfig = self.worldUprightTransforms[name] ?? GEOTransform()
+    return GEOTransform(
+      position: uprightConfig.position,
+      quaternion: uprightConfig.quaternion,
+      scale: self.worldBasis * uprightConfig.scale,
+    )
   }
 }
