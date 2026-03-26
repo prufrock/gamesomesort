@@ -54,7 +54,7 @@ class ControllerModel {
     return model
   }
 
-  func uprightFor(model name: String) -> GEOTransform {
+  private func uprightFor(model name: String) -> GEOTransform {
     let uprightConfig = self.worldUprightTransforms[name] ?? GEOTransform()
     return GEOTransform(
       position: uprightConfig.position,
