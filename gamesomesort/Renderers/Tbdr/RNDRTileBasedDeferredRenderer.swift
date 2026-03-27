@@ -137,11 +137,13 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     let shadowCamera = camera.createShadowCamera(lightPosition: position.position)
     uniforms.shadowProjectionMatrix = shadowCamera.projection
     let upVector = config.game.upVector
-    uniforms.shadowViewMatrix = Float4x4.lookAtProjection(
-      eye: shadowCamera.position,
-      center: shadowCamera.center,
-      up: upVector
-    )
+    uniforms.shadowViewMatrix =
+      Float4x4.scale(camera.scale)
+      * Float4x4.lookAtProjection(
+        eye: shadowCamera.position,
+        center: shadowCamera.center,
+        up: upVector
+      )
 
     return uniforms
   }

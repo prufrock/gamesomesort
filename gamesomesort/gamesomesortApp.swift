@@ -35,7 +35,10 @@ struct gamesomesortApp: App {
             tbdrRender: .tbdr
           ),
           fileService: AppCoreConfig.Services.FileService(
-            levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json),
+            levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(
+              name: "levels",
+              ext: .json
+            ),
           )
         ),
         game: AppCoreConfig.Game(
