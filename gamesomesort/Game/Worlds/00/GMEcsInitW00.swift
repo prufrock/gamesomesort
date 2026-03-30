@@ -42,6 +42,7 @@ struct GMEcsInitW00: GMEcsStarter {
     createLights(ecs: ecs)
     createFirstGameButton(ecs: ecs)
     createSecondGameButton(ecs: ecs)
+    createThirdGameButton(ecs: ecs)
     createBackPlane(ecs: ecs)
   }
 
@@ -63,7 +64,7 @@ struct GMEcsInitW00: GMEcsStarter {
 
   private func createFirstGameButton(ecs: LECSWorld) {
     let button = ecs.createEntity(config.game.world.world00.worldOneButtonName)
-    ecs.addComponent(button, CTPosition3d(8, 8, 1.0))
+    ecs.addComponent(button, CTPosition3d(8, 2, 1.0))
     ecs.addComponent(button, CTScale3d(F3(3, 3, 3)))
     ecs.addComponent(button, CTColor([0.1, 0.6, 0.0]))
     ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
@@ -75,9 +76,21 @@ struct GMEcsInitW00: GMEcsStarter {
 
   private func createSecondGameButton(ecs: LECSWorld) {
     let button = ecs.createEntity(config.game.world.world00.worldTwoButtonName)
-    ecs.addComponent(button, CTPosition3d(8, 12, 1.0))
+    ecs.addComponent(button, CTPosition3d(8, 5.5, 1.0))
     ecs.addComponent(button, CTScale3d(F3(3, 3, 3)))
     ecs.addComponent(button, CTColor([0.6, 0.1, 0.4]))
+    ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(button, CTRadius(1.5))
+    ecs.addComponent(button, CTModel("button-one"))
+    ecs.addComponent(button, CTTappable())
+    ecs.addComponent(button, CTTagVisible())
+  }
+
+  private func createThirdGameButton(ecs: LECSWorld) {
+    let button = ecs.createEntity(config.game.world.world00.worldThreeButtonName)
+    ecs.addComponent(button, CTPosition3d(8, 9, 1.0))
+    ecs.addComponent(button, CTScale3d(F3(3, 3, 3)))
+    ecs.addComponent(button, CTColor([0.1, 0.1, 0.4]))
     ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
     ecs.addComponent(button, CTRadius(1.5))
     ecs.addComponent(button, CTModel("button-one"))

@@ -118,32 +118,16 @@ class GMWorld00: GMWorld {
       }
     }
 
-    let buttonTappable = ecs.getComponent(
-      ecs.entity(config.game.world.world00.worldOneButtonName)!,
-      CTTappable.self
-    )!
-
-    if buttonTappable.tapped {
-      print("button one tapped")
-      ecs.addComponent(
-        ecs.entity(config.game.world.world00.worldOneButtonName)!,
-        CTTappable(tapped: false)
-      )
+    if buttonTapped(name: config.game.world.world00.worldOneButtonName) {
       gameCommands.enqueue(.start(level: 1))
     }
 
-    let button02Tappable = ecs.getComponent(
-      ecs.entity(config.game.world.world00.worldTwoButtonName)!,
-      CTTappable.self
-    )!
-
-    if button02Tappable.tapped {
-      print("button two tapped")
-      ecs.addComponent(
-        ecs.entity(config.game.world.world00.worldTwoButtonName)!,
-        CTTappable(tapped: false)
-      )
+    if buttonTapped(name: config.game.world.world00.worldTwoButtonName) {
       gameCommands.enqueue(.start(level: 2))
+    }
+
+    if buttonTapped(name: config.game.world.world00.worldThreeButtonName) {
+      print("open world001")
     }
 
     return gameCommands
@@ -155,5 +139,22 @@ class GMWorld00: GMWorld {
     if let aspectRatioSystem = self.aspectRatioSystem {
       ecs.process(system: aspectRatioSystem)
     }
+  }
+
+  func buttonTapped(name: String) -> Bool {
+    let buttonTappable = ecs.getComponent(
+      ecs.entity(name)!,
+      CTTappable.self
+    )!
+
+    if buttonTappable.tapped {
+      print("button \(name) tapped")
+      ecs.addComponent(
+        ecs.entity(name)!,
+        CTTappable(tapped: false)
+      )
+    }
+
+    return buttonTappable.tapped
   }
 }

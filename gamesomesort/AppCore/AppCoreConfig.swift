@@ -33,6 +33,7 @@ struct AppCoreConfig {
         let worldBasis: F3 = [1, -1, 1]
         let worldOneButtonName: String = "worldOneButton"
         let worldTwoButtonName: String = "worldTwoButton"
+        let worldThreeButtonName: String = "worldThreeButton"
         let uprightTransforms: [String: GEOTransform] = [
           "back-plane": GEOTransform(
             position: [0, 0, 0],
