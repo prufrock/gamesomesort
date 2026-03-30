@@ -39,6 +39,8 @@ class AppCoreContext {
       renderService.sync(actual)
     case let actual as LoadLevelFileCommand:
       fileService.sync(actual)
+    case let actual as LoadWorldFileCommand:
+      fileService.sync(actual)
     default:
       fatalError("What in creation is this command!")
     }

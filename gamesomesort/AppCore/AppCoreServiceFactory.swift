@@ -17,6 +17,9 @@ class AppCoreServiceFactory {
   }
 
   func createFileService() -> FileService {
-    FileService(levelsFile: config.services.fileService.levelsFile)
+    FileService(
+      levelsFile: config.services.fileService.levelsFile,
+      worldFiles: config.services.fileService.worldFiles
+    )
   }
 }

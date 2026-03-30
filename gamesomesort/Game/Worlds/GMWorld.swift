@@ -22,4 +22,5 @@ protocol GMWorld {
 
 enum GMWorldCommands: Equatable {
   case start(level: Int)
+  case startWorld(world: String)
 }

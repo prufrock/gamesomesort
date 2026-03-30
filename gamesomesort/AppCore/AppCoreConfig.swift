@@ -169,6 +169,7 @@ struct AppCoreConfig {
 
     struct FileService {
       let levelsFile: FileDescriptor
+      let worldFiles: [String: FileDescriptor]
 
       struct FileDescriptor {
         let name: String
@@ -197,7 +198,11 @@ extension AppCoreConfig {
         tbdrRender: .forward
       ),
       fileService: AppCoreConfig.Services.FileService(
-        levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json),
+        levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(
+          name: "levels",
+          ext: .json
+        ),
+        worldFiles: [:]
       )
     ),
     game: AppCoreConfig.Game(

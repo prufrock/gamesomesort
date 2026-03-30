@@ -41,8 +41,13 @@ class GMGame {
       var commands = world.update(timeStep: timeStep, input: input)
       elapsedTime += timeStep
       if !commands.isEmpty {
-        if case let .start(level) = commands.dequeue() {
+        //TODO: Convert to switch
+        let command = commands.dequeue()
+        if case let .start(level) = command {
           initWorld(worldNumber: level)
+        }
+        if case let .startWorld(world) = command {
+          appCore.sync(LoadWorldFileCommand(worldName: world))
         }
       }
     } else {

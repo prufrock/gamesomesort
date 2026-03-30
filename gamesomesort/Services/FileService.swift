@@ -7,14 +7,25 @@
 
 import Foundation
 
-class FileService {
-  fileprivate let levelsFile: AppCoreConfig.Services.FileService.FileDescriptor
+private typealias FileDescriptor = AppCoreConfig.Services.FileService.FileDescriptor
 
-  init(levelsFile: AppCoreConfig.Services.FileService.FileDescriptor) {
+class FileService {
+  fileprivate let levelsFile: FileDescriptor
+  fileprivate let worldFiles: [String: FileDescriptor]
+
+  init(
+    levelsFile: AppCoreConfig.Services.FileService.FileDescriptor,
+    worldFiles: [String: AppCoreConfig.Services.FileService.FileDescriptor]
+  ) {
     self.levelsFile = levelsFile
+    self.worldFiles = worldFiles
   }
 
   func sync(_ command: LoadLevelFileCommand) {
+    command.execute(fileService: self)
+  }
+
+  func sync(_ command: LoadWorldFileCommand) {
     command.execute(fileService: self)
   }
 }
@@ -35,5 +46,25 @@ struct LoadLevelFileCommand: ServiceCommand {
         GMTileMap(mapData, index: index)
       }
     )
+  }
+}
+
+struct LoadWorldFileCommand: ServiceCommand {
+  let worldName: String
+
+  func execute(fileService: FileService) {
+    guard let fileDescriptor = fileService.worldFiles[worldName] else {
+      fatalError(
+        "Unable to load world: \(worldName)."
+          + "The world file descriptor is not registered in AppCoreConfig."
+      )
+    }
+    let jsonUrl = Bundle.main.url(
+      forResource: fileDescriptor.name,
+      withExtension: fileDescriptor.ext.rawValue
+    )!
+
+    let jsonData = try! Data(contentsOf: jsonUrl)
+    print(jsonData.count)
   }
 }

@@ -39,6 +39,12 @@ struct gamesomesortApp: App {
               name: "levels",
               ext: .json
             ),
+            worldFiles: [
+              "world001": AppCoreConfig.Services.FileService.FileDescriptor(
+                name: "world001",
+                ext: .json
+              )
+            ],
           )
         ),
         game: AppCoreConfig.Game(
