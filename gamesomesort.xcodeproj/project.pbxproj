@@ -33,6 +33,8 @@
 		631E2DB72DE90E3200A5F49C /* gamesomesort.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gamesomesort.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		631E2DC52DE90E3400A5F49C /* gamesomesortTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gamesomesortTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		631E2DCF2DE90E3400A5F49C /* gamesomesortUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gamesomesortUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		631EBB0F2F7B633400864047 /* SVCFile */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SVCFile; sourceTree = "<group>"; };
+		631EBB102F7B6C0900864047 /* SVCDefinitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SVCDefinitions; sourceTree = "<group>"; };
 		637CB1492DE9530600A2947D /* .editorconfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = .editorconfig; sourceTree = "<group>"; };
 		637CB14B2DE9531B00A2947D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		637CB14C2DE9532D00A2947D /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
@@ -111,12 +113,14 @@
 		631E2DAE2DE90E3200A5F49C = {
 			isa = PBXGroup;
 			children = (
+				631EBB102F7B6C0900864047 /* SVCDefinitions */,
 				637CB14D2DE9534B00A2947D /* README.md */,
 				637CB14C2DE9532D00A2947D /* .swift-format */,
 				637CB14B2DE9531B00A2947D /* .gitignore */,
 				637CB1492DE9530600A2947D /* .editorconfig */,
 				63CEB8292F45479A00700D04 /* DataStructures */,
 				63E74A342F671C4B006B4868 /* RNDRyme */,
+				631EBB0F2F7B633400864047 /* SVCFile */,
 				63CEB8A62F454A1D00700D04 /* VRTMath */,
 				631E2DB92DE90E3200A5F49C /* gamesomesort */,
 				631E2DC82DE90E3400A5F49C /* gamesomesortTests */,
