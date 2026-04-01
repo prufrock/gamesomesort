@@ -7,6 +7,7 @@
 
 import MetalKit
 import SVCDefinitions
+import SVCFile
 
 /// AppCore is where anything that needs to be available across the application
 /// should be stored or made accessible. The motiviation here is to avoid any
@@ -37,8 +38,13 @@ class AppCore {
   func createGMGame() -> GMGame {
     var levels: [GMTileMap] = []
     sync(
-      LoadLevelFileCommand { maps in
-        levels = maps
+      LoadJsonFileCommand(
+        fileDescriptor: self.config.services.fileService.levelsFile.svcFileDescriptor,
+        decodeType: [GMMapData].self
+      ) { (mapData: [GMMapData]) in
+        levels = mapData.enumerated().map { index, mapData in
+          GMTileMap(mapData, index: index)
+        }
       }
     )
     return GMGame(appCore: self, levels: levels)

@@ -12,7 +12,8 @@ struct FileServiceTests {
 
   @Test func loadLevels() throws {
     let fileService = FileService(
-      levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json)
+      levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(name: "levels", ext: .json),
+      worldFiles: [:]
     )
 
     var levels: [GMTileMap] = []

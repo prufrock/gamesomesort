@@ -4,6 +4,8 @@
 //
 //  Created by David Kanenwisher on 5/30/25.
 
+import SVCFile
+
 /// Constructs services on demand from the config.
 class AppCoreServiceFactory {
   private let config: AppCoreConfig
@@ -21,5 +23,9 @@ class AppCoreServiceFactory {
       levelsFile: config.services.fileService.levelsFile,
       worldFiles: config.services.fileService.worldFiles
     )
+  }
+
+  func createSVCFileService() -> SVCFileService {
+    SVCFileService()
   }
 }

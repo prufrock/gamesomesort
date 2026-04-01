@@ -15,11 +15,21 @@ import Foundation
   service.sync(
     LoadJsonFileCommand(
       fileDescriptor: SVCFileDescriptor(name: "Resources/books", ext: .json),
+      decodeType: Books.self,
       bundle: bundle
-    ) { (data: Data) in
-        count = data.count
+    ) { (books: Books) in
+      count = books.books.count
     }
   )
 
-  #expect(count == 119)
+  #expect(count == 1)
+}
+
+struct Books: Decodable {
+  let books: [Book]
+}
+
+struct Book: Decodable {
+  let title: String
+  let author: String
 }

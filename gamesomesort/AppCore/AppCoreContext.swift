@@ -6,6 +6,7 @@
 //
 
 import SVCDefinitions
+import SVCFile
 
 /// All of the bits that need to be shared across the application.
 /// Right now this is:
@@ -19,12 +20,14 @@ class AppCoreContext {
   private let serviceFactory: AppCoreServiceFactory
   private let renderService: RenderService
   private let fileService: FileService
+  private let svcFileService: SVCFileService
 
   init(config: AppCoreConfig) {
     self.config = config
     serviceFactory = AppCoreServiceFactory(config)
     renderService = serviceFactory.createRenderService()
     fileService = serviceFactory.createFileService()
+    svcFileService = serviceFactory.createSVCFileService()
   }
 
   func sync(_ command: SVCDServiceCommand) {
@@ -43,6 +46,8 @@ class AppCoreContext {
       fileService.sync(actual)
     case let actual as LoadWorldFileCommand:
       fileService.sync(actual)
+    case let actual as LoadJsonFileCommand<[GMMapData]>:
+      svcFileService.sync(actual)
     default:
       fatalError("What in creation is this command!")
     }
