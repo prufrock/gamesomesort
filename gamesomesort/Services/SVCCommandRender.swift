@@ -8,22 +8,23 @@
 import MetalKit
 import lecs_swift
 import VRTMath
+import SVCDefinitions
 
 enum SVCCommandRender {
-  struct ChangeWorld: ServiceCommand {
+  struct ChangeWorld: SVCDServiceCommand {
     let worldBasis: F3
     let worldUprightTransforms: [String: GEOTransform]
   }
 
-  struct InitializePipelines: ServiceCommand {
+  struct InitializePipelines: SVCDServiceCommand {
     let pixelFormat: MTLPixelFormat
   }
 
-  struct Resize: ServiceCommand {
+  struct Resize: SVCDServiceCommand {
     let screenDimensions: ScreenDimensions
   }
 
-  struct Render: ServiceCommand {
+  struct Render: SVCDServiceCommand {
     let renderDescriptor: SVCRenderDescriptor
     let ecs: LECSWorld
   }

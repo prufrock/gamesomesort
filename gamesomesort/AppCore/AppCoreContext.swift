@@ -5,6 +5,8 @@
 //  Created by David Kanenwisher on 5/30/25.
 //
 
+import SVCDefinitions
+
 /// All of the bits that need to be shared across the application.
 /// Right now this is:
 /// - configuration: strings and scalars describing how different objects operate.
@@ -25,7 +27,7 @@ class AppCoreContext {
     fileService = serviceFactory.createFileService()
   }
 
-  func sync(_ command: ServiceCommand) {
+  func sync(_ command: SVCDServiceCommand) {
     // Mostly just an example.
     // May eventually need a way to register commands with services.
     switch command {

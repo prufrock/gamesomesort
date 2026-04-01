@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SVCDefinitions
 
 private typealias FileDescriptor = AppCoreConfig.Services.FileService.FileDescriptor
 
@@ -30,7 +31,7 @@ class FileService {
   }
 }
 
-struct LoadLevelFileCommand: ServiceCommand {
+struct LoadLevelFileCommand: SVCDServiceCommand {
   let block: ([GMTileMap]) -> Void
 
   func execute(fileService: FileService) {
@@ -49,7 +50,7 @@ struct LoadLevelFileCommand: ServiceCommand {
   }
 }
 
-struct LoadWorldFileCommand: ServiceCommand {
+struct LoadWorldFileCommand: SVCDServiceCommand {
   let worldName: String
 
   func execute(fileService: FileService) {

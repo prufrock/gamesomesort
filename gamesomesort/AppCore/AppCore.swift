@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import SVCDefinitions
 
 /// AppCore is where anything that needs to be available across the application
 /// should be stored or made accessible. The motiviation here is to avoid any
@@ -28,7 +29,7 @@ class AppCore {
   }
 
   /// Synchronously send a command.
-  func sync(_ command: any ServiceCommand) {
+  func sync(_ command: any SVCDServiceCommand) {
     context.sync(command)
   }
 
