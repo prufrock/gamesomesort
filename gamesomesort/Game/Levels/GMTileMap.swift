@@ -7,6 +7,8 @@
 
 import VRTMath
 
+/// I am going to start transitioning this into a "Game" level config,
+/// but keep this in place while I make that happen.
 public struct GMTileMap {
   private(set) var tiles: [GMTile]
   private(set) var things: [GMThing]
@@ -22,10 +24,13 @@ public struct GMTileMap {
   // for switching between levels
   let index: Int
 
+  let worlds: [String: CFGWorldPath]
+
   init(_ map: GMMapData, index: Int) {
     tiles = map.tiles
     width = map.width
     things = map.things
+    worlds = map.worlds ?? [:]
 
     self.index = index
   }

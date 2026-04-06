@@ -48,6 +48,8 @@ class AppCoreContext {
       fileService.sync(actual)
     case let actual as LoadJsonFileCommand<[GMMapData]>:
       svcFileService.sync(actual)
+    case let actual as LoadJsonFileCommand<CFGWorld>:
+      svcFileService.sync(actual)
     default:
       fatalError("What in creation is this command!")
     }
