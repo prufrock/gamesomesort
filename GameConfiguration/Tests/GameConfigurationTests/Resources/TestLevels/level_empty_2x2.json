@@ -1,0 +1,11 @@
+{
+    "name": "level empty 2x2",
+    "tiles": [
+        0, 0,
+        0, 0
+    ],
+    "creatures": [
+        0, 0,
+        0, 0
+    ]
+}

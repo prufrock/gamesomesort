@@ -7,4 +7,6 @@
 
 struct GCFGLevel: Decodable {
   let name: String
+  let tiles: [Int]
+  let creatures: [Int]
 }
