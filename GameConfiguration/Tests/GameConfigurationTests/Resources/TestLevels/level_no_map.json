@@ -1,5 +1,8 @@
 {
     "name": "level no map",
-    "tiles": [],
-    "creatures": []
+    "map": {
+        "width": 0,
+        "tiles": [],
+        "creatures": []
+    }
 }
