@@ -30,9 +30,9 @@ import Foundation
     #expect(creature == 0)
   }
 
-  #expect(level.map[tile: 0, 0] == 0)
-  #expect(level.map[creature: 0, 0] == 0)
-  #expect(level.map[thing: 0, 0] == 0)
+  #expect(level[tile: 0, 0]!.name == "empty")
+  #expect(level[creature: 0, 0] == 0)
+  #expect(level[thing: 0, 0] == 0)
 }
 
 private func loadTestLevel(name: String) throws -> GCFGLevel {

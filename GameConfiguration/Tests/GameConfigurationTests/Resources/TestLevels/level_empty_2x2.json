@@ -1,6 +1,10 @@
 {
     "entities": {
-        "tiles": {}
+        "tiles": {
+            "0": {
+                "name": "empty"
+            }
+        }
     },
     "map": {
         "width": 2,

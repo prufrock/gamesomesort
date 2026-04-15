@@ -10,6 +10,18 @@ struct GCFGLevel: Decodable {
   let map: Map
   let entities: GCFGEntities
 
+  subscript(tile x: Int, y: Int) -> GCFGTile? {
+    get { entities.tiles[map.tiles[y * map.width + x]] }
+  }
+
+  subscript(creature x: Int, y: Int) -> Int {
+    get { map.creatures[y * map.width + x] }
+  }
+
+  subscript(thing x: Int, y: Int) -> Int {
+    get { map.things[y * map.width + x] }
+  }
+
   struct Map: Decodable {
     let width: Int
     // tiles are the walls, floors, pits, that make up the world
@@ -31,12 +43,4 @@ struct GCFGLevel: Decodable {
       get { things[y * width + x] }
     }
   }
-}
-
-struct GCFGEntities: Decodable {
-  let tiles: [Int: GCFGTile]
-}
-
-struct GCFGTile: Decodable {
-  let name: String
 }
