@@ -7,6 +7,8 @@
 
 struct GCFGEntities: Decodable {
   let tiles: [Int: GCFGTile]
+  let creatures: [Int: GCFGCreature]
+  let things: [Int: GCFGThing]
 
   private struct CodingKeys: CodingKey {
     var intValue: Int?
@@ -25,17 +27,39 @@ struct GCFGEntities: Decodable {
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    let tilesContainer = try container.nestedContainer(
-      keyedBy: CodingKeys.self,
-      forKey: CodingKeys(stringValue: "tiles")!
+
+    self.tiles = try Self.decodeIntKeyedDictionary(
+      forKey: "tiles",
+      container: container
     )
 
-    var tiles: [Int: GCFGTile] = [:]
-    for key in tilesContainer.allKeys {
+    self.creatures = try Self.decodeIntKeyedDictionary(
+      forKey: "creatures",
+      container: container
+    )
+
+    self.things = try Self.decodeIntKeyedDictionary(
+      forKey: "things",
+      container: container
+    )
+  }
+
+  private static func decodeIntKeyedDictionary<T: Decodable>(
+    forKey key: String,
+    container: KeyedDecodingContainer<CodingKeys>,
+  ) throws -> [Int: T] {
+    let decodedContainer = try container.nestedContainer(
+      keyedBy: CodingKeys.self,
+      forKey: CodingKeys(stringValue: key)!
+    )
+
+    var decodedMap: [Int: T] = [:]
+    for key in decodedContainer.allKeys {
       if let intKey = key.intValue {
-        tiles[intKey] = try tilesContainer.decode(GCFGTile.self, forKey: key)
+        decodedMap[intKey] = try decodedContainer.decode(T.self, forKey: key)
       }
     }
-    self.tiles = tiles
+
+    return decodedMap
   }
 }

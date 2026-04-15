@@ -14,12 +14,12 @@ struct GCFGLevel: Decodable {
     get { entities.tiles[map.tiles[y * map.width + x]] }
   }
 
-  subscript(creature x: Int, y: Int) -> Int {
-    get { map.creatures[y * map.width + x] }
+  subscript(creature x: Int, y: Int) -> GCFGCreature? {
+    get { entities.creatures[map.creatures[y * map.width + x]] }
   }
 
-  subscript(thing x: Int, y: Int) -> Int {
-    get { map.things[y * map.width + x] }
+  subscript(thing x: Int, y: Int) -> GCFGThing? {
+    get { entities.things[map.things[y * map.width + x]] }
   }
 
   struct Map: Decodable {

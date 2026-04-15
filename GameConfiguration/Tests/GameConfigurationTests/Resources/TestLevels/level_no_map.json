@@ -1,6 +1,8 @@
 {
     "entities": {
-        "tiles": {}
+        "tiles": {},
+        "creatures": {},
+        "things": {}
     },
     "map": {
         "width": 0,

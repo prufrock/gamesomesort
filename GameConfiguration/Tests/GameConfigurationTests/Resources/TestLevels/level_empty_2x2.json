@@ -4,6 +4,16 @@
             "0": {
                 "name": "empty"
             }
+        },
+        "creatures": {
+            "0": {
+                "name": "absence"
+            }
+        },
+        "things": {
+            "0": {
+                "name": "nothing"
+            }
         }
     },
     "map": {
