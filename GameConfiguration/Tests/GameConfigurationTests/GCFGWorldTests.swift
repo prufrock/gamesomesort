@@ -32,7 +32,9 @@ import Foundation
   )
 
   #expect(world.entities.creatures.count == 1)
-  #expect(levelOne.entities.creatures.count == 1)
+  #expect(
+    world.entities.creatures[levelOne[creature: 0, 0]!]!.name == "absence"
+  )
 }
 
 private func loadTestFile<T: Decodable>(from dir: String, name: String) throws -> T {

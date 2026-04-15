@@ -1,8 +1,20 @@
 {
     "entities": {
-        "tiles": {},
-        "creatures": {},
-        "things": {}
+        "tiles": {
+            "0": {
+                "name": "empty"
+            }
+        },
+        "creatures": {
+            "0": {
+                "name": "absence"
+            }
+        },
+        "things": {
+            "0": {
+                "name": "nothing"
+            }
+        }
     },
     "name": "world one level",
     "levels": {

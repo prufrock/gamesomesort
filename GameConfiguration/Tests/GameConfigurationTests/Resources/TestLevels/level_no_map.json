@@ -1,9 +1,4 @@
 {
-    "entities": {
-        "tiles": {},
-        "creatures": {},
-        "things": {}
-    },
     "map": {
         "width": 0,
         "tiles": [],
