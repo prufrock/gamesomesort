@@ -1,9 +1,12 @@
 {
-    "name": "level no map",
+    "entities": {
+        "tiles": {}
+    },
     "map": {
         "width": 0,
         "tiles": [],
         "creatures": [],
         "things": []
     },
+    "name": "level no map",
 }

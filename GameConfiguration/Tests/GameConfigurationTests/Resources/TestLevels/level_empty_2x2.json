@@ -1,5 +1,7 @@
 {
-    "name": "level empty 2x2",
+    "entities": {
+        "tiles": {}
+    },
     "map": {
         "width": 2,
         "tiles": [
@@ -14,5 +16,6 @@
             0, 0,
             0, 0
         ]
-    }
+    },
+    "name": "level empty 2x2",
 }

@@ -8,6 +8,7 @@
 struct GCFGLevel: Decodable {
   let name: String
   let map: Map
+  let entities: GCFGEntities
 
   struct Map: Decodable {
     let width: Int
@@ -30,4 +31,12 @@ struct GCFGLevel: Decodable {
       get { things[y * width + x] }
     }
   }
+}
+
+struct GCFGEntities: Decodable {
+  let tiles: [Int: GCFGTile]
+}
+
+struct GCFGTile: Decodable {
+  let name: String
 }
