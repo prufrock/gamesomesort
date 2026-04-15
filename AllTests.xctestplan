@@ -1,0 +1,73 @@
+{
+  "configurations" : [
+    {
+      "id" : "2D919AA3-67CF-4415-8BFD-B3FEEE98451F",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:DataStructures",
+        "identifier" : "DataStructuresTests",
+        "name" : "DataStructuresTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:gamesomesort.xcodeproj",
+        "identifier" : "631E2DC42DE90E3400A5F49C",
+        "name" : "gamesomesortTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:RNDRyme",
+        "identifier" : "RNDRymeTests",
+        "name" : "RNDRymeTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:SVCFile",
+        "identifier" : "SVCFileTests",
+        "name" : "SVCFileTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:GameConfiguration",
+        "identifier" : "GameConfigurationTests",
+        "name" : "GameConfigurationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:SVCDefinitions",
+        "identifier" : "SVCDefinitionsTests",
+        "name" : "SVCDefinitionsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:VRTMath",
+        "identifier" : "VRTMathTests",
+        "name" : "VRTMathTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:gamesomesort.xcodeproj",
+        "identifier" : "631E2DCE2DE90E3400A5F49C",
+        "name" : "gamesomesortUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

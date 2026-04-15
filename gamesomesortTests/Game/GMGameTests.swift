@@ -17,7 +17,7 @@ struct GMGameTests {
 
     let game = GMGame(
       appCore: appCore,
-      levels: [GMTileMap(GMMapData(tiles: [], width: 1, things: []), index: 0)],
+      levels: [GMTileMap(GMMapData(tiles: [], width: 1, things: [], worlds: [:]), index: 0)],
     )
 
     #expect(throws: Never.self) {

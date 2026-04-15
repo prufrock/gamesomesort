@@ -3,6 +3,7 @@
     "map": {
         "width": 0,
         "tiles": [],
-        "creatures": []
-    }
+        "creatures": [],
+        "things": []
+    },
 }

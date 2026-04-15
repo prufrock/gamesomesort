@@ -15,7 +15,7 @@ import DataStructures
 struct GMTileMapTests {
 
   let simpleTileMap = GMTileMap(
-    GMMapData(tiles: [.wall], width: 1, things: [.nothing]),
+    GMMapData(tiles: [.wall], width: 1, things: [.nothing], worlds: [:]),
     index: 0
   )
 
