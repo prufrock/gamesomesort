@@ -11,15 +11,22 @@ import Testing
 import Foundation
 
 @Test func `create world with no levels`() async throws {
+  let world: GCFGWorld = try! loadTestFile(
+    from: "WorldNoLevels",
+    name: "world_no_levels"
+  )
+
+  #expect(world.name == "no levels")
+  #expect(world.levels.count == 0)
+}
+
+private func loadTestFile<T: Decodable>(from dir: String, name: String) throws -> T {
   let bundle = Bundle.module
   let jsonUrl = bundle.url(
-    forResource: "Resources/TestWorlds/world_no_levels",
+    forResource: "Resources/TestWorlds/\(dir)/\(name)",
     withExtension: "json"
   )!
 
   let data: Data = try! Data(contentsOf: jsonUrl)
-  let world: GCFGWorld = try! JSONDecoder().decode(GCFGWorld.self, from: data)
-
-  #expect(world.name == "no levels")
-  #expect(world.levels.count == 0)
+  return try JSONDecoder().decode(T.self, from: data)
 }

@@ -6,8 +6,9 @@
 //
 
 struct GCFGWorld: Decodable {
-  let name: String
+  let entities: GCFGEntities
   let levels: [String: LevelPath]
+  let name: String
 
   struct LevelPath: Decodable {
     let name: String
