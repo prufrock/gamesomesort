@@ -1,6 +1,14 @@
 {
-    "name": "no levels",
+    "entities": {
+        "tiles": {},
+        "creatures": {},
+        "things": {}
+    },
+    "name": "world one level",
     "levels": {
-        "world_one_level_001": "world_one_level_001"
+        "world_one_level_001": {
+            "name": "world one level 001",
+            "path": "world_one_level_001"
+        }
     }
 }

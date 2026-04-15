@@ -6,7 +6,6 @@
 //
 
 struct GCFGLevel: Decodable {
-  let name: String
   let map: Map
   let entities: GCFGEntities
 

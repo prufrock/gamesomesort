@@ -13,6 +13,5 @@ struct GCFGWorld: Decodable {
   struct LevelPath: Decodable {
     let name: String
     let path: String
-    let ext: String
   }
 }

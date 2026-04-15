@@ -1,3 +1,34 @@
 {
-    "name": "world_one_level_001"
+    "entities": {
+        "tiles": {
+            "0": {
+                "name": "empty"
+            }
+        },
+        "creatures": {
+            "0": {
+                "name": "absence"
+            }
+        },
+        "things": {
+            "0": {
+                "name": "nothing"
+            }
+        }
+    },
+    "map": {
+        "width": 2,
+        "tiles": [
+            0, 0,
+            0, 0
+        ],
+        "creatures": [
+            0, 0,
+            0, 0
+        ],
+        "things": [
+            0, 0,
+            0, 0
+        ]
+    }
 }

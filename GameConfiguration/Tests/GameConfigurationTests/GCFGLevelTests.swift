@@ -13,14 +13,12 @@ import Foundation
 @Test func `create level with no map`() async throws {
   let level: GCFGLevel = try! loadTestLevel(name: "level_no_map")
 
-  #expect(level.name == "level no map")
   #expect(level.map.tiles.count == 0)
 }
 
 @Test func `create level empty 2x2`() async throws {
   let level: GCFGLevel = try! loadTestLevel(name: "level_empty_2x2")
 
-  #expect(level.name == "level empty 2x2")
   #expect(level.map.tiles.count == 4)
   level.map.tiles.forEach { tile in
     #expect(tile == 0)
