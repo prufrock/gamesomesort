@@ -7,6 +7,7 @@
 
 import Foundation
 import SVCFile
+import GameConfiguration
 
 /// Game manages all of the logic of the game. The World is a part of Game because there may be time when Game needs to
 /// change World or interrupt it. If World wants to change itself, like change levels, or do something to Game it needs to
@@ -52,8 +53,8 @@ class GMGame {
           appCore.sync(
             LoadJsonFileCommand(
               fileDescriptor: SVCFileDescriptor(name: world001Path!, ext: .json),
-              decodeType: CFGWorld.self
-            ) { (worldData: CFGWorld) in
+              decodeType: GCFGWorld.self
+            ) { (worldData: GCFGWorld) in
               print("worldData \(worldData)")
             }
           )

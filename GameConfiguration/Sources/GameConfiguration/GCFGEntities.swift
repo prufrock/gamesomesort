@@ -5,10 +5,10 @@
 //  Created by David Kanenwisher on 4/14/26.
 //
 
-struct GCFGEntities: Decodable {
-  let tiles: [Int: GCFGTile]
-  let creatures: [Int: GCFGCreature]
-  let things: [Int: GCFGThing]
+public struct GCFGEntities: Decodable {
+  public let tiles: [Int: GCFGTile]
+  public let creatures: [Int: GCFGCreature]
+  public let things: [Int: GCFGThing]
 
   private struct CodingKeys: CodingKey {
     var intValue: Int?
@@ -25,7 +25,7 @@ struct GCFGEntities: Decodable {
     }
   }
 
-  init(from decoder: Decoder) throws {
+  public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
 
     self.tiles = try Self.decodeIntKeyedDictionary(

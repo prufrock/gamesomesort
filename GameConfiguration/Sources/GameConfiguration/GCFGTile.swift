@@ -5,6 +5,6 @@
 //  Created by David Kanenwisher on 4/14/26.
 //
 
-struct GCFGTile: Decodable {
-  let name: String
+public struct GCFGTile: Decodable {
+  public let name: String
 }

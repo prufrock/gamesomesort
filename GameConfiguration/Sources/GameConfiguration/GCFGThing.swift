@@ -5,6 +5,6 @@
 //  Created by David Kanenwisher on 4/5/26.
 //
 
-struct GCFGThing: Decodable {
-  let name: String
+public struct GCFGThing: Decodable {
+  public let name: String
 }

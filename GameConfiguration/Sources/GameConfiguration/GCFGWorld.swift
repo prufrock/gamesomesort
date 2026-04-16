@@ -5,13 +5,13 @@
 //  Created by David Kanenwisher on 4/5/26.
 //
 
-struct GCFGWorld: Decodable {
-  let entities: GCFGEntities
-  let levels: [String: LevelPath]
-  let name: String
+public struct GCFGWorld: Decodable {
+  public let entities: GCFGEntities
+  public let levels: [String: LevelPath]
+  public let name: String
 
-  struct LevelPath: Decodable {
-    let name: String
-    let path: String
+  public struct LevelPath: Decodable {
+    public let name: String
+    public let path: String
   }
 }

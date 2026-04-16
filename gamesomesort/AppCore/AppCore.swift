@@ -8,6 +8,7 @@
 import MetalKit
 import SVCDefinitions
 import SVCFile
+import GameConfiguration
 
 /// AppCore is where anything that needs to be available across the application
 /// should be stored or made accessible. The motiviation here is to avoid any
@@ -52,8 +53,8 @@ class AppCore {
     sync(
       LoadJsonFileCommand(
         fileDescriptor: SVCFileDescriptor(name: world001Path!, ext: .json),
-        decodeType: CFGWorld.self
-      ) { (worldData: CFGWorld) in
+        decodeType: GCFGWorld.self
+      ) { (worldData: GCFGWorld) in
         print("worldData \(worldData)")
       }
     )

@@ -1,11 +1,9 @@
 {
-    "world": {
-        "levels": {
-            "w001L001": {
-                "name": "w001L001",
-                "path": "w001L001",
-                "ext": "json"
-            }
-        }
-    }
+    "entities": {
+        "tiles": {},
+        "creatures": {},
+        "things": {}
+    },
+    "levels": {},
+    "name": "no levels",
 }

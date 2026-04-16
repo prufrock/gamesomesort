@@ -7,6 +7,7 @@
 
 import SVCDefinitions
 import SVCFile
+import GameConfiguration
 
 /// All of the bits that need to be shared across the application.
 /// Right now this is:
@@ -48,7 +49,7 @@ class AppCoreContext {
       fileService.sync(actual)
     case let actual as LoadJsonFileCommand<[GMMapData]>:
       svcFileService.sync(actual)
-    case let actual as LoadJsonFileCommand<CFGWorld>:
+    case let actual as LoadJsonFileCommand<GCFGWorld>:
       svcFileService.sync(actual)
     default:
       fatalError("What in creation is this command!")
