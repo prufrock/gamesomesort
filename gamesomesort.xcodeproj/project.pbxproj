@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		630CF38D2F359EB900538CA2 /* DataStructures in Frameworks */ = {isa = PBXBuildFile; productRef = 630CF38C2F359EB900538CA2 /* DataStructures */; };
 		6330618B2F907F9300EC1950 /* GameConfiguration in Frameworks */ = {isa = PBXBuildFile; productRef = 6330618A2F907F9300EC1950 /* GameConfiguration */; };
+		637BE5C72F91D3FA00D4A5F4 /* TileBasedGame in Frameworks */ = {isa = PBXBuildFile; productRef = 637BE5C62F91D3FA00D4A5F4 /* TileBasedGame */; };
 		6390715C2E1B728100FE7DEE /* lecs-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 6390715B2E1B728100FE7DEE /* lecs-swift */; };
 		63CEB8A82F454A5700700D04 /* VRTMath in Frameworks */ = {isa = PBXBuildFile; productRef = 63CEB8A72F454A5700700D04 /* VRTMath */; };
 		63DAD37C2F7CC1D700C9559B /* SVCDefinitions in Frameworks */ = {isa = PBXBuildFile; productRef = 63DAD37B2F7CC1D700C9559B /* SVCDefinitions */; };
@@ -39,6 +40,7 @@
 		631EBB0F2F7B633400864047 /* SVCFile */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SVCFile; sourceTree = "<group>"; };
 		631EBB102F7B6C0900864047 /* SVCDefinitions */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SVCDefinitions; sourceTree = "<group>"; };
 		633061892F8F13BF00EC1950 /* AllTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AllTests.xctestplan; sourceTree = "<group>"; };
+		637BE5C52F91D3E000D4A5F4 /* TileBasedGame */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TileBasedGame; sourceTree = "<group>"; };
 		637CB1492DE9530600A2947D /* .editorconfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = .editorconfig; sourceTree = "<group>"; };
 		637CB14B2DE9531B00A2947D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		637CB14C2DE9532D00A2947D /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				6330618B2F907F9300EC1950 /* GameConfiguration in Frameworks */,
 				63DAD37C2F7CC1D700C9559B /* SVCDefinitions in Frameworks */,
 				6390715C2E1B728100FE7DEE /* lecs-swift in Frameworks */,
+				637BE5C72F91D3FA00D4A5F4 /* TileBasedGame in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +134,7 @@
 				63E74A342F671C4B006B4868 /* RNDRyme */,
 				631EBB0F2F7B633400864047 /* SVCFile */,
 				631EBB102F7B6C0900864047 /* SVCDefinitions */,
+				637BE5C52F91D3E000D4A5F4 /* TileBasedGame */,
 				63CEB8A62F454A1D00700D04 /* VRTMath */,
 				631E2DB92DE90E3200A5F49C /* gamesomesort */,
 				631E2DC82DE90E3400A5F49C /* gamesomesortTests */,
@@ -177,6 +181,7 @@
 				63DAD37B2F7CC1D700C9559B /* SVCDefinitions */,
 				63DAD37D2F7CC30300C9559B /* SVCFile */,
 				6330618A2F907F9300EC1950 /* GameConfiguration */,
+				637BE5C62F91D3FA00D4A5F4 /* TileBasedGame */,
 			);
 			productName = gamesomesort;
 			productReference = 631E2DB72DE90E3200A5F49C /* gamesomesort.app */;
@@ -722,6 +727,10 @@
 		6330618A2F907F9300EC1950 /* GameConfiguration */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GameConfiguration;
+		};
+		637BE5C62F91D3FA00D4A5F4 /* TileBasedGame */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TileBasedGame;
 		};
 		6390715B2E1B728100FE7DEE /* lecs-swift */ = {
 			isa = XCSwiftPackageProductDependency;
