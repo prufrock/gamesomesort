@@ -10,7 +10,7 @@ import lecs_swift
 import VRTMath
 import DataStructures
 
-extension TBDGame: GMWorld {
+extension TBDGWorld: GMWorld {
   var ecs: any LECSWorld {
     LECSCreateWorld(archetypeSize: 50)
   }

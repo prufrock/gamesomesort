@@ -8,6 +8,9 @@
 import Foundation
 import SVCFile
 import GameConfiguration
+//TODO: remove by moving into a TBDGame factory
+import TileBasedGame
+import lecs_swift
 
 /// Game manages all of the logic of the game. The World is a part of Game because there may be time when Game needs to
 /// change World or interrupt it. If World wants to change itself, like change levels, or do something to Game it needs to
@@ -56,6 +59,12 @@ class GMGame {
               decodeType: GCFGWorld.self
             ) { (worldData: GCFGWorld) in
               print("worldData \(worldData)")
+              self.world = TBDGWorld(
+                worldConfig: worldData,
+                ecs: LECSCreateWorld(
+                  archetypeSize: self.appCore.config.game.world.ecsArchetypeSize
+                )
+              )
             }
           )
         }
