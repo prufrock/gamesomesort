@@ -45,6 +45,7 @@
 		637CB14B2DE9531B00A2947D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		637CB14C2DE9532D00A2947D /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
 		637CB14D2DE9534B00A2947D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		63918B5B2F971CD7006ECE69 /* LECSPieces */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = LECSPieces; sourceTree = "<group>"; };
 		63A801952F95D0DA00A6CD11 /* GameConfiguration.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = GameConfiguration.xctestplan; sourceTree = "<group>"; };
 		63CEB8292F45479A00700D04 /* DataStructures */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataStructures; sourceTree = "<group>"; };
 		63CEB8A62F454A1D00700D04 /* VRTMath */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VRTMath; sourceTree = "<group>"; };
@@ -132,6 +133,7 @@
 				637CB14B2DE9531B00A2947D /* .gitignore */,
 				637CB1492DE9530600A2947D /* .editorconfig */,
 				63CEB8292F45479A00700D04 /* DataStructures */,
+				63918B5B2F971CD7006ECE69 /* LECSPieces */,
 				63DDC0B92F83302D00FF6E1F /* GameConfiguration */,
 				63E74A342F671C4B006B4868 /* RNDRyme */,
 				631EBB0F2F7B633400864047 /* SVCFile */,
