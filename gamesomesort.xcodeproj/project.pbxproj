@@ -45,6 +45,7 @@
 		637CB14B2DE9531B00A2947D /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		637CB14C2DE9532D00A2947D /* .swift-format */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-format"; sourceTree = "<group>"; };
 		637CB14D2DE9534B00A2947D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		63A801952F95D0DA00A6CD11 /* GameConfiguration.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = GameConfiguration.xctestplan; sourceTree = "<group>"; };
 		63CEB8292F45479A00700D04 /* DataStructures */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataStructures; sourceTree = "<group>"; };
 		63CEB8A62F454A1D00700D04 /* VRTMath */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = VRTMath; sourceTree = "<group>"; };
 		63DDC0B92F83302D00FF6E1F /* GameConfiguration */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GameConfiguration; sourceTree = "<group>"; };
@@ -124,6 +125,7 @@
 		631E2DAE2DE90E3200A5F49C = {
 			isa = PBXGroup;
 			children = (
+				63A801952F95D0DA00A6CD11 /* GameConfiguration.xctestplan */,
 				633061892F8F13BF00EC1950 /* AllTests.xctestplan */,
 				637CB14D2DE9534B00A2947D /* README.md */,
 				637CB14C2DE9532D00A2947D /* .swift-format */,

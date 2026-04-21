@@ -7,13 +7,41 @@
 
 import lecs_swift
 import GameConfiguration
+import VRTMath
 
 public class TBDGWorld {
   public let ecs: LECSWorld
-  private let worldConfig: GCFGWorld
+  fileprivate let worldConfig: GCFGWorld
+  fileprivate let levelConfig: GCFGLevel
 
-  public init(worldConfig: GCFGWorld, ecs: LECSWorld) {
+  public init(
+    worldConfig: GCFGWorld,
+    levelConfig: GCFGLevel,
+    ecs: LECSWorld
+  ) {
     self.ecs = ecs
     self.worldConfig = worldConfig
+    self.levelConfig = levelConfig
+  }
+}
+
+struct TBDGLevelInitializer {
+  let world: TBDGWorld
+  let level: String
+
+  func reset() {
+
+  }
+
+  func initPlayerCamera() {
+    let cfg = world.levelConfig.playerCamera
+    let ecs = world.ecs
+    let playerCamera = ecs.createEntity("playerCamera")
+  }
+
+  func initSun() {
+    let cfg = world.levelConfig.playerCamera
+    let ecs = world.ecs
+    let playerCamera = ecs.createEntity("sun")
   }
 }

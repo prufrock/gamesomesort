@@ -5,7 +5,10 @@
 //  Created by David Kanenwisher on 4/6/26.
 //
 
+import VRTMath
+
 public struct GCFGLevel: Decodable {
+  public let playerCamera: Camera
   public let map: Map
 
   public subscript(tile x: Int, y: Int) -> Int? {
@@ -18,6 +21,19 @@ public struct GCFGLevel: Decodable {
 
   public subscript(thing x: Int, y: Int) -> Int? {
     get { map.things[y * map.width + x] }
+  }
+
+  public struct Camera: Decodable {
+    public let viewAngleDegrees: Float
+    public let nearPlane: Float
+    public let farPlane: Float
+  }
+
+  public struct Light {
+    public struct Sun: Decodable {
+      public let color: F3
+      public let position: F3
+    }
   }
 
   public struct Map: Decodable {

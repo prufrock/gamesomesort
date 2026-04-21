@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "54649D18-6196-4A80-B6F9-5D10F39344FA",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "GameConfigurationTests",
+        "name" : "GameConfigurationTests"
+      }
+    }
+  ],
+  "version" : 1
+}

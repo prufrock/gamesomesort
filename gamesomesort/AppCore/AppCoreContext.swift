@@ -51,6 +51,8 @@ class AppCoreContext {
       svcFileService.sync(actual)
     case let actual as LoadJsonFileCommand<GCFGWorld>:
       svcFileService.sync(actual)
+    case let actual as LoadJsonFileCommand<GCFGLevel>:
+      svcFileService.sync(actual)
     default:
       fatalError("What in creation is this command!")
     }

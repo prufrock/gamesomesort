@@ -52,20 +52,41 @@ class GMGame {
           initWorld(worldNumber: level)
         }
         if case let .startWorld(world) = command {
+          //TODO: this a mess, you should feel bad and clean it up!
           let world001Path = levels[0].worlds[world]?.path
+          let selectedLevel = "w001L001"
+
+          var worldCfg: GCFGWorld! = nil
+          var levelCfg: GCFGLevel! = nil
           appCore.sync(
             LoadJsonFileCommand(
               fileDescriptor: SVCFileDescriptor(name: world001Path!, ext: .json),
               decodeType: GCFGWorld.self
             ) { (worldData: GCFGWorld) in
               print("worldData \(worldData)")
-              self.world = TBDGWorld(
-                worldConfig: worldData,
-                ecs: LECSCreateWorld(
-                  archetypeSize: self.appCore.config.game.world.ecsArchetypeSize
-                )
-              )
+              worldCfg = worldData
+
             }
+          )
+          appCore.sync(
+            LoadJsonFileCommand(
+              fileDescriptor: SVCFileDescriptor(
+                name: worldCfg.levels[selectedLevel]!.path,
+                ext: .json
+              ),
+              decodeType: GCFGLevel.self
+            ) { (levelData: GCFGLevel) in
+              print("levelData \(levelData)")
+              levelCfg = levelData
+            }
+          )
+
+          self.world = TBDGWorld(
+            worldConfig: worldCfg!,
+            levelConfig: levelCfg!,
+            ecs: LECSCreateWorld(
+              archetypeSize: self.appCore.config.game.world.ecsArchetypeSize
+            )
           )
         }
       }

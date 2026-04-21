@@ -4,6 +4,11 @@
         "creatures": {},
         "things": {}
     },
-    "levels": {},
-    "name": "no levels",
+    "levels": {
+        "w001L001": {
+            "name": "w001L001",
+            "path": "w001L001"
+        }
+    },
+    "name": "one level"
 }

@@ -16,6 +16,12 @@
             }
         }
     },
+    "playerCamera": {
+        "flipY": true,
+        "viewAngleDegrees": 90.0,
+        "nearPlane": 0.1,
+        "farPlane": 10.0
+    },
     "map": {
         "width": 2,
         "tiles": [

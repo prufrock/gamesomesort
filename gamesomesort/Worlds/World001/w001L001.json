@@ -1,16 +1,27 @@
 {
-    "level": {
-        "name": "L001"
-        "grid":   {
-            "width": 16,
-            "tiles": [
-                0, 0
-                0, 0
-            ],
-            "things": [
-                0, 0
-                0, 0
-            ]
-        }
+    "map": {
+        "width": 2,
+        "tiles": [
+            0, 0,
+            0, 0
+        ],
+        "creatures": [
+            0, 0,
+            0, 0
+        ],
+        "things": [
+            0, 0,
+            0, 0
+        ]
+    },
+    "playerCamera": {
+        "flipY": true,
+        "viewAngleDegrees": 90.0,
+        "nearPlane": 0.1,
+        "farPlane": 20.0
+    },
+    "sun": {
+        "color": [1, 1, 1],
+        "position": [0, 0, -1],
     }
 }
