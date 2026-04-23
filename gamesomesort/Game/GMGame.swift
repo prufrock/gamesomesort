@@ -81,13 +81,15 @@ class GMGame {
             }
           )
 
-          self.world = TBDGWorld(
+          let tbdgWorld = TBDGWorld(
             worldConfig: worldCfg!,
             levelConfig: levelCfg!,
             ecs: LECSCreateWorld(
               archetypeSize: self.appCore.config.game.world.ecsArchetypeSize
             )
           )
+          tbdgWorld.reset()
+          self.world = tbdgWorld
         }
       }
     } else {

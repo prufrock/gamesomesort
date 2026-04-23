@@ -8,6 +8,7 @@
 import lecs_swift
 import GameConfiguration
 import VRTMath
+import LECSPieces
 
 public class TBDGWorld {
   public let ecs: LECSWorld
@@ -23,6 +24,11 @@ public class TBDGWorld {
     self.worldConfig = worldConfig
     self.levelConfig = levelConfig
   }
+
+  public func reset() {
+    let lvlInit = TBDGLevelInitializer(world: self, level: "")
+    lvlInit.reset()
+  }
 }
 
 struct TBDGLevelInitializer {
@@ -30,13 +36,24 @@ struct TBDGLevelInitializer {
   let level: String
 
   func reset() {
-
+    initPlayerCamera()
   }
 
   func initPlayerCamera() {
     let cfg = world.levelConfig.playerCamera
     let ecs = world.ecs
     let playerCamera = ecs.createEntity("playerCamera")
+    ecs.addComponent(
+      playerCamera,
+      LECSPCameraFirstPerson(
+        fov: cfg.viewAngleDegrees * (.pi / 180),
+        nearPlane: 0.1,
+        farPlane: 20
+      )
+    )
+//    ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
+//    ecs.addComponent(playerCamera, CTPosition3d(F3(3.5, 4, -7.25)))
+//    ecs.addComponent(playerCamera, CTScale3d(worldVector))
   }
 
   func initSun() {

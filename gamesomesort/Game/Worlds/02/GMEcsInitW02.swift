@@ -6,6 +6,7 @@
 //
 import lecs_swift
 import VRTMath
+import LECSPieces
 
 struct GMEcsInitW02: GMEcsStarter {
   let map: GMTileMap
@@ -23,7 +24,7 @@ struct GMEcsInitW02: GMEcsStarter {
     let componentTypes: [LECSComponent.Type] = [
       CTAspect.self,
       CTBalloonEmitter.self,
-      CTCameraFirstPerson.self,
+      LECSPCameraFirstPerson.self,
       CTColor.self,
       CTEvent.self,
       CTLight.self,
@@ -67,7 +68,7 @@ struct GMEcsInitW02: GMEcsStarter {
     let playerCamera = ecs.createEntity("playerCamera")
     ecs.addComponent(
       playerCamera,
-      CTCameraFirstPerson(
+      LECSPCameraFirstPerson(
         fov: 1 * (.pi / 2),
         nearPlane: 0.1,
         farPlane: 20

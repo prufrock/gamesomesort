@@ -7,6 +7,7 @@
 
 import lecs_swift
 import VRTMath
+import LECSPieces
 
 extension LECSWorld {
   func entity(_ name: String) -> LECSEntityId? {
@@ -16,7 +17,7 @@ extension LECSWorld {
   func gmCameraFirstPerson(_ name: String) -> GMCameraFirstPerson? {
     guard
       let playerCamera = entity("playerCamera"),
-      let cameraComponent = getComponent(playerCamera, CTCameraFirstPerson.self),
+      let cameraComponent = getComponent(playerCamera, LECSPCameraFirstPerson.self),
       let cameraPosition = getComponent(playerCamera, CTPosition3d.self),
       let aspectRatio = getComponent(playerCamera, CTAspect.self),
       let cameraScale = getComponent(playerCamera, CTScale3d.self)

@@ -7,6 +7,7 @@
 
 import lecs_swift
 import VRTMath
+import LECSPieces
 
 protocol GMEcsStarter {
   func start(ecs: LECSWorld)
@@ -28,7 +29,7 @@ struct GMEcsInitW01: GMEcsStarter {
     let componentTypes: [LECSComponent.Type] = [
       CTAspect.self,
       CTBalloonEmitter.self,
-      CTCameraFirstPerson.self,
+      LECSPCameraFirstPerson.self,
       CTColor.self,
       CTLight.self,
       CTModel.self,
@@ -100,7 +101,7 @@ struct GMEcsInitW01: GMEcsStarter {
     let playerCamera = ecs.createEntity("playerCamera")
     ecs.addComponent(
       playerCamera,
-      CTCameraFirstPerson(
+      LECSPCameraFirstPerson(
         // negate fov to flip the y-axis, without messing with the winding order
         fov: -1 * (.pi / 2),
         nearPlane: 0.1,

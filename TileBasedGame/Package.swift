@@ -17,6 +17,7 @@ let package = Package(
     ],
     dependencies: [
       .package(path: "../GameConfiguration"),
+      .package(path: "../LECSPieces"),
       .package(path: "../lecs-swift")
     ],
     targets: [
@@ -24,7 +25,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "TileBasedGame",
-            dependencies:["GameConfiguration", "lecs-swift"]
+            dependencies:["GameConfiguration", "LECSPieces", "lecs-swift"]
         ),
         .testTarget(
             name: "TileBasedGameTests",
