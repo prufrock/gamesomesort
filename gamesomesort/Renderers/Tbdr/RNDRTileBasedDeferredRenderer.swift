@@ -7,6 +7,7 @@
 import MetalKit
 import lecs_swift
 import VRTMath
+import LECSPieces
 
 class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let config: AppCoreConfig
@@ -133,7 +134,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     uniforms.projectionMatrix = camera.projection
 
     let sunlight = ecs.entity("sun")!
-    let position = ecs.getComponent(sunlight, CTPosition3d.self)!
+    let position = ecs.getComponent(sunlight, LECSPPosition3d.self)!
     let shadowCamera = camera.createShadowCamera(lightPosition: position.position)
     uniforms.shadowProjectionMatrix = shadowCamera.projection
     let upVector = config.game.upVector
@@ -231,8 +232,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 extension LECSWorld {
   var lights: [SHDRLight] {
     var lights: [SHDRLight] = []
-    select([CTPosition3d.self, CTLight.self, CTColor.self]) { row, columns in
-      let position = row.component(at: 0, columns, CTPosition3d.self)
+    select([LECSPPosition3d.self, CTLight.self, CTColor.self]) { row, columns in
+      let position = row.component(at: 0, columns, LECSPPosition3d.self)
       let light = row.component(at: 1, columns, CTLight.self)
       let color = row.component(at: 2, columns, CTColor.self)
 

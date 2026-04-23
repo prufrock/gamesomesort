@@ -9,6 +9,8 @@ import DataStructures
 import Foundation
 import lecs_swift
 import VRTMath
+import LECSPieces
+
 private typealias Rect = VRTM2D.Rectangle
 
 class GMWorld01: GMWorld {
@@ -52,30 +54,30 @@ class GMWorld01: GMWorld {
     ecs.addComponent(tapSquare, CTTagVisible())
     ecs.addComponent(tapSquare, CTModel("button-one"))
     ecs.addComponent(tapSquare, CTQuaternion(Float4x4.identity.q))
-    ecs.addComponent(tapSquare, CTScale3d(F3(repeating: 0.1)))
+    ecs.addComponent(tapSquare, LECSPScale3d(F3(repeating: 0.1)))
     self.tapSquare = tapSquare
 
-    aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
-      return [CTAspect(aspect: self.screenDimensions.aspectRatio)]
+    aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [LECSPAspect.self]) { components, columns in
+      return [LECSPAspect(aspect: self.screenDimensions.aspectRatio)]
     }
 
     collisionSystem = ecs.addSystemWorldScoped(
       "collides",
       selector: [
         LECSId.self,
-        CTPosition3d.self,
+        LECSPPosition3d.self,
         CTTagTap.self,
       ]
     ) { world, row, columns in
       let tapEntityId = row.component(at: 0, columns, LECSId.self)
-      let tapPosition = row.component(at: 1, columns, CTPosition3d.self)
+      let tapPosition = row.component(at: 1, columns, LECSPPosition3d.self)
 
       var selectedEntityId: LECSId? = nil
       world.select(
-        [LECSId.self, CTColor.self, CTPosition3d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
+        [LECSId.self, CTColor.self, LECSPPosition3d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
-        let otherPosition = otherRow.component(at: 2, otherColumns, CTPosition3d.self)
+        let otherPosition = otherRow.component(at: 2, otherColumns, LECSPPosition3d.self)
         let otherRadius = otherRow.component(at: 3, otherColumns, CTRadius.self)
         let otherRectangle = Rect(position: otherPosition.position.xy, radius: otherRadius.radius)
 
@@ -104,18 +106,18 @@ class GMWorld01: GMWorld {
       "tapSystem",
       selector: [
         LECSId.self,
-        CTPosition3d.self,
+        LECSPPosition3d.self,
         CTTagTap.self,
       ]
     ) { world, row, columns in
       let tapEntityId = row.component(at: 0, columns, LECSId.self)
-      let tapPosition = row.component(at: 1, columns, CTPosition3d.self)
+      let tapPosition = row.component(at: 1, columns, LECSPPosition3d.self)
 
       world.select(
-        [LECSId.self, CTPosition3d.self, CTRadius.self, CTTappable.self]
+        [LECSId.self, LECSPPosition3d.self, CTRadius.self, CTTappable.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
-        let otherPosition = otherRow.component(at: 1, otherColumns, CTPosition3d.self)
+        let otherPosition = otherRow.component(at: 1, otherColumns, LECSPPosition3d.self)
         let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
         let otherRectangle = Rect(
           position: otherPosition.position.xy,
@@ -135,9 +137,9 @@ class GMWorld01: GMWorld {
 
     emitterSystem = ecs.addSystemWorldScoped(
       "emitterSystem",
-      selector: [CTPosition3d.self, CTBalloonEmitter.self],
+      selector: [LECSPPosition3d.self, CTBalloonEmitter.self],
     ) { world, row, columns in
-      let position = row.component(at: 0, columns, CTPosition3d.self)
+      let position = row.component(at: 0, columns, LECSPPosition3d.self)
       var emitter = row.component(at: 1, columns, CTBalloonEmitter.self)
 
       // TODO: get the delta from outer update loop
@@ -149,7 +151,7 @@ class GMWorld01: GMWorld {
         world.addComponent(balloon, CTRadius(1.0))
         world.addComponent(balloon, CTColor(.yellow))
         world.addComponent(balloon, CTQuaternion())
-        world.addComponent(balloon, CTScale3d())
+        world.addComponent(balloon, LECSPScale3d())
         world.addComponent(balloon, CTTagVisible())
         world.addComponent(balloon, CTTagBalloon())
         world.addComponent(
@@ -164,12 +166,12 @@ class GMWorld01: GMWorld {
       "velocity",
       selector: [
         LECSId.self,
-        CTPosition3d.self,
+        LECSPPosition3d.self,
         LECSVelocity2d.self,
       ],
     ) { world, row, columns in
       let entityId = row.component(at: 0, columns, LECSId.self)
-      let position = row.component(at: 1, columns, CTPosition3d.self)
+      let position = row.component(at: 1, columns, LECSPPosition3d.self)
       let velocity = row.component(at: 2, columns, LECSVelocity2d.self)
 
       let newPosition =
@@ -180,7 +182,7 @@ class GMWorld01: GMWorld {
           z: 0
         )
 
-      return [entityId, CTPosition3d(newPosition), velocity]
+      return [entityId, LECSPPosition3d(newPosition), velocity]
     }
   }
   /// Update the game.
@@ -205,7 +207,7 @@ class GMWorld01: GMWorld {
 
         ecs.addComponent(
           tapSquare!,
-          CTPosition3d(x: worldLocation.x, y: worldLocation.y, z: worldLocation.z)
+          LECSPPosition3d(x: worldLocation.x, y: worldLocation.y, z: worldLocation.z)
         )
         ecs.addComponent(tapSquare!, CTTagTap())
         ecs.addComponent(tapSquare!, CTTagVisible())

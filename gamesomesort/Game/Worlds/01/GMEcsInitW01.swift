@@ -27,7 +27,7 @@ struct GMEcsInitW01: GMEcsStarter {
   func start(ecs: LECSWorld) {
 
     let componentTypes: [LECSComponent.Type] = [
-      CTAspect.self,
+      LECSPAspect.self,
       CTBalloonEmitter.self,
       LECSPCameraFirstPerson.self,
       CTColor.self,
@@ -38,7 +38,7 @@ struct GMEcsInitW01: GMEcsStarter {
       CTTagVisible.self,
       CTQuaternion.self,
       CTRadius.self,
-      CTScale3d.self,
+      LECSPScale3d.self,
       LECSPosition2d.self,
       LECSVelocity2d.self,
     ]
@@ -63,7 +63,7 @@ struct GMEcsInitW01: GMEcsStarter {
     createPlayerCamera(ecs: ecs)
 
     let firstEmitter = ecs.createEntity("firstEmitter")
-    ecs.addComponent(firstEmitter, CTPosition3d(x: 5, y: 20, z: 1))
+    ecs.addComponent(firstEmitter, LECSPPosition3d(x: 5, y: 20, z: 1))
     ecs.addComponent(
       firstEmitter,
       CTBalloonEmitter(
@@ -73,7 +73,7 @@ struct GMEcsInitW01: GMEcsStarter {
     )
 
     let secondEmitter = ecs.createEntity("secondEmitter")
-    ecs.addComponent(secondEmitter, CTPosition3d(x: 8, y: 20, z: 1))
+    ecs.addComponent(secondEmitter, LECSPPosition3d(x: 8, y: 20, z: 1))
     ecs.addComponent(
       secondEmitter,
       CTBalloonEmitter(
@@ -83,7 +83,7 @@ struct GMEcsInitW01: GMEcsStarter {
     )
 
     let thirdEmitter = ecs.createEntity("thirdEmitter")
-    ecs.addComponent(thirdEmitter, CTPosition3d(x: 12, y: 20, z: 1))
+    ecs.addComponent(thirdEmitter, LECSPPosition3d(x: 12, y: 20, z: 1))
     ecs.addComponent(
       thirdEmitter,
       CTBalloonEmitter(
@@ -108,9 +108,9 @@ struct GMEcsInitW01: GMEcsStarter {
         farPlane: 20
       )
     )
-    ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
-    ecs.addComponent(playerCamera, CTPosition3d(F3(8, 8, -8.0)))
-    ecs.addComponent(playerCamera, CTScale3d(worldVector))
+    ecs.addComponent(playerCamera, LECSPAspect(aspect: 1.0))
+    ecs.addComponent(playerCamera, LECSPPosition3d(F3(8, 8, -8.0)))
+    ecs.addComponent(playerCamera, LECSPScale3d(worldVector))
   }
 
   private func createTile(ecs: LECSWorld, tile: GMTile, x: Int, y: Int) {
@@ -146,8 +146,8 @@ struct GMEcsInitW01: GMEcsStarter {
 
   private func createBackPlane(ecs: LECSWorld) {
     let backPlane = ecs.createEntity("backPlane")
-    ecs.addComponent(backPlane, CTPosition3d(10, 10, 2.5))
-    ecs.addComponent(backPlane, CTScale3d(F3(repeating: 35)))
+    ecs.addComponent(backPlane, LECSPPosition3d(10, 10, 2.5))
+    ecs.addComponent(backPlane, LECSPScale3d(F3(repeating: 35)))
     ecs.addComponent(backPlane, CTColor([0.6, 0.6, 0.6]))
     ecs.addComponent(backPlane, CTQuaternion(Float4x4.rotateY(0).q))
     ecs.addComponent(backPlane, CTModel("back-plane"))
@@ -159,7 +159,7 @@ struct GMEcsInitW01: GMEcsStarter {
       var sun = CTLight()
       sun.type = Sun
       let color = CTColor([1, 1, 1])
-      let position = CTPosition3d([0, 0, -1])
+      let position = LECSPPosition3d([0, 0, -1])
       let id = ecs.createEntity("sun")
       ecs.addComponent(id, sun)
       ecs.addComponent(id, color)
@@ -171,7 +171,7 @@ struct GMEcsInitW01: GMEcsStarter {
       light.type = Spot
       light.coneDirection = [1, 1, 0]
       let color = CTColor([1, 0.5, 0.5])
-      let position = CTPosition3d([10, 7, 0.2])
+      let position = LECSPPosition3d([10, 7, 0.2])
       let id = ecs.createEntity("spotLight")
       ecs.addComponent(id, light)
       ecs.addComponent(id, color)
@@ -184,7 +184,7 @@ struct GMEcsInitW01: GMEcsStarter {
       light.attenuation = [0.2, 10, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = CTColor([0, 0.5, 0.5])
-      let position = CTPosition3d([6, 3, 2.4])
+      let position = LECSPPosition3d([6, 3, 2.4])
       let id = ecs.createEntity("pointLight")
       ecs.addComponent(id, light)
       ecs.addComponent(id, color)
@@ -197,7 +197,7 @@ struct GMEcsInitW01: GMEcsStarter {
       light.attenuation = [0.8, 20, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = CTColor([0.5, 0, 0.5])
-      let position = CTPosition3d([8, 14, 0.0])
+      let position = LECSPPosition3d([8, 14, 0.0])
       let id = ecs.createEntity("pointLightTwo")
       ecs.addComponent(id, light)
       ecs.addComponent(id, color)
@@ -207,8 +207,8 @@ struct GMEcsInitW01: GMEcsStarter {
 
   private func createExitButton(ecs: LECSWorld) {
     let button = ecs.createEntity(config.game.world.world02.exitButton)
-    ecs.addComponent(button, CTPosition3d(10, 1, 1.0))
-    ecs.addComponent(button, CTScale3d(F3(repeating: 1)))
+    ecs.addComponent(button, LECSPPosition3d(10, 1, 1.0))
+    ecs.addComponent(button, LECSPScale3d(F3(repeating: 1)))
     ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
     ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
     ecs.addComponent(button, CTRadius(1.5))

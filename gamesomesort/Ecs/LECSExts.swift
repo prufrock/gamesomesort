@@ -18,9 +18,9 @@ extension LECSWorld {
     guard
       let playerCamera = entity("playerCamera"),
       let cameraComponent = getComponent(playerCamera, LECSPCameraFirstPerson.self),
-      let cameraPosition = getComponent(playerCamera, CTPosition3d.self),
-      let aspectRatio = getComponent(playerCamera, CTAspect.self),
-      let cameraScale = getComponent(playerCamera, CTScale3d.self)
+      let cameraPosition = getComponent(playerCamera, LECSPPosition3d.self),
+      let aspectRatio = getComponent(playerCamera, LECSPAspect.self),
+      let cameraScale = getComponent(playerCamera, LECSPScale3d.self)
     else {
       return nil
     }

@@ -9,6 +9,8 @@ import DataStructures
 import Foundation
 import lecs_swift
 import VRTMath
+import LECSPieces
+
 private typealias Rect = VRTM2D.Rectangle
 
 class GMWorld00: GMWorld {
@@ -49,8 +51,8 @@ class GMWorld00: GMWorld {
     ecs.addComponent(tapSquare, CTColor(.red))
     self.tapSquare = tapSquare
 
-    aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
-      return [CTAspect(aspect: self.screenDimensions.aspectRatio)]
+    aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [LECSPAspect.self]) { components, columns in
+      return [LECSPAspect(aspect: self.screenDimensions.aspectRatio)]
     }
 
     tapSystem = ecs.addSystemWorldScoped(
@@ -65,10 +67,10 @@ class GMWorld00: GMWorld {
       let tapPosition = row.component(at: 1, columns, LECSPosition2d.self)
 
       world.select(
-        [LECSId.self, CTPosition3d.self, CTRadius.self, CTTappable.self]
+        [LECSId.self, LECSPPosition3d.self, CTRadius.self, CTTappable.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
-        let otherPosition = otherRow.component(at: 1, otherColumns, CTPosition3d.self)
+        let otherPosition = otherRow.component(at: 1, otherColumns, LECSPPosition3d.self)
         let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
         let otherRectangle = Rect(
           position: otherPosition.position.xy,

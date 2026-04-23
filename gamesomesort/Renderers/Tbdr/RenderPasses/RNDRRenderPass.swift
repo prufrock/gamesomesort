@@ -8,6 +8,7 @@
 import MetalKit
 import lecs_swift
 import VRTMath
+import LECSPieces
 
 protocol RNDRRenderPass {
 
@@ -56,16 +57,16 @@ extension LECSWorld {
     select(
       [
         CTModel.self,
-        CTPosition3d.self,
-        CTScale3d.self,
+        LECSPPosition3d.self,
+        LECSPScale3d.self,
         CTQuaternion.self,
         CTColor.self,
         CTTagVisible.self,
       ]
     ) { row, columns in
       let ctModel = row.component(at: 0, columns, CTModel.self)
-      let position = row.component(at: 1, columns, CTPosition3d.self)
-      let scale = row.component(at: 2, columns, CTScale3d.self)
+      let position = row.component(at: 1, columns, LECSPPosition3d.self)
+      let scale = row.component(at: 2, columns, LECSPScale3d.self)
       let quaternion = row.component(at: 3, columns, CTQuaternion.self)
       let color = row.component(at: 4, columns, CTColor.self)
 

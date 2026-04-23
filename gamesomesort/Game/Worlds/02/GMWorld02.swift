@@ -9,6 +9,7 @@ import DataStructures
 import Foundation
 import lecs_swift
 import VRTMath
+import LECSPieces
 private typealias Rect = VRTM2D.Rectangle
 
 class GMWorld02: GMWorld {
@@ -51,11 +52,11 @@ class GMWorld02: GMWorld {
     ecs.addComponent(tapSquare, CTTagVisible())
     ecs.addComponent(tapSquare, CTModel("button-one"))
     ecs.addComponent(tapSquare, CTQuaternion(Float4x4.identity.q))
-    ecs.addComponent(tapSquare, CTScale3d(F3(repeating: 0.1)))
+    ecs.addComponent(tapSquare, LECSPScale3d(F3(repeating: 0.1)))
     self.tapSquare = tapSquare
 
-    aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [CTAspect.self]) { components, columns in
-      return [CTAspect(aspect: self.screenDimensions.aspectRatio)]
+    aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [LECSPAspect.self]) { components, columns in
+      return [LECSPAspect(aspect: self.screenDimensions.aspectRatio)]
     }
 
     collisionSystem = ecs.addSystemWorldScoped(
@@ -103,18 +104,18 @@ class GMWorld02: GMWorld {
       "tapSystem",
       selector: [
         LECSId.self,
-        CTPosition3d.self,
+        LECSPPosition3d.self,
         CTTagTap.self,
       ]
     ) { world, row, columns in
       let tapEntityId = row.component(at: 0, columns, LECSId.self)
-      let tapPosition = row.component(at: 1, columns, CTPosition3d.self)
+      let tapPosition = row.component(at: 1, columns, LECSPPosition3d.self)
 
       world.select(
-        [LECSId.self, CTPosition3d.self, CTRadius.self, CTTappable.self]
+        [LECSId.self, LECSPPosition3d.self, CTRadius.self, CTTappable.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
-        let otherPosition = otherRow.component(at: 1, otherColumns, CTPosition3d.self)
+        let otherPosition = otherRow.component(at: 1, otherColumns, LECSPPosition3d.self)
         let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
         let otherRectangle = Rect(
           position: otherPosition.position.xy,
@@ -169,7 +170,7 @@ class GMWorld02: GMWorld {
           camera: playerCamera
         )!
 
-        ecs.addComponent(tapSquare!, CTPosition3d(x: worldLocation.x, y: worldLocation.y, z: 1.0))
+        ecs.addComponent(tapSquare!, LECSPPosition3d(x: worldLocation.x, y: worldLocation.y, z: 1.0))
         ecs.addComponent(tapSquare!, CTTagTap())
         ecs.addComponent(tapSquare!, CTTagVisible())
         if let tapSystem = self.tapSystem {
@@ -228,12 +229,12 @@ class GMWorld02: GMWorld {
 
     let playerPosition = ecs.getComponent(
       ecs.entity("player01")!,
-      CTPosition3d.self
+      LECSPPosition3d.self
     )!
     var playerSafe = false
-    ecs.select([CTTile.self, CTPosition3d.self]) { row, columns in
+    ecs.select([CTTile.self, LECSPPosition3d.self]) { row, columns in
       let tile = row.component(at: 0, columns, CTTile.self)
-      let tilePosition = row.component(at: 1, columns, CTPosition3d.self)
+      let tilePosition = row.component(at: 1, columns, LECSPPosition3d.self)
       if playerSafe == false && tile.tile == .floor {
         playerSafe = tilePosition.position.xy == playerPosition.position.xy
       }
@@ -242,7 +243,7 @@ class GMWorld02: GMWorld {
     if !playerSafe {
       print("Restart level.")
       let startId = ecs.entity("start")!
-      let startPosition = ecs.getComponent(startId, CTPosition3d.self)!
+      let startPosition = ecs.getComponent(startId, LECSPPosition3d.self)!
       ecs.addComponent(
         ecs.entity("player01")!,
         startPosition
@@ -260,9 +261,9 @@ class GMWorld02: GMWorld {
     }
 
     var goalReached = false
-    ecs.select([CTThing.self, CTPosition3d.self]) { row, columns in
+    ecs.select([CTThing.self, LECSPPosition3d.self]) { row, columns in
       let thing = row.component(at: 0, columns, CTThing.self)
-      let tilePosition = row.component(at: 1, columns, CTPosition3d.self)
+      let tilePosition = row.component(at: 1, columns, LECSPPosition3d.self)
       if goalReached == false && thing.thing == .end {
         goalReached = tilePosition.position.xy == playerPosition.position.xy
       }
@@ -309,19 +310,19 @@ class GMWorld02: GMWorld {
         {
           var tile = ecs.getComponent(event.srcEntity.id, CTTile.self)!
           if tile.tile == .floor {
-            let pos = ecs.getComponent(event.srcEntity.id, CTPosition3d.self)!
-            ecs.addComponent(event.srcEntity.id, CTPosition3d(pos.x, pos.y, 1.0))
+            let pos = ecs.getComponent(event.srcEntity.id, LECSPPosition3d.self)!
+            ecs.addComponent(event.srcEntity.id, LECSPPosition3d(pos.x, pos.y, 1.0))
             ecs.addComponent(event.srcEntity.id, CTRadius(0.5))
             ecs.addComponent(event.srcEntity.id, CTColor(.green))
-            ecs.addComponent(event.srcEntity.id, CTScale3d(F3(x: 1, y: 1, z: 1)))
+            ecs.addComponent(event.srcEntity.id, LECSPScale3d(F3(x: 1, y: 1, z: 1)))
             tile = CTTile(.wall)
           } else if tile.tile == .wall {
             tile = CTTile(.floor)
-            let pos = ecs.getComponent(event.srcEntity.id, CTPosition3d.self)!
-            ecs.addComponent(event.srcEntity.id, CTPosition3d(pos.x, pos.y, 1.8))
+            let pos = ecs.getComponent(event.srcEntity.id, LECSPPosition3d.self)!
+            ecs.addComponent(event.srcEntity.id, LECSPPosition3d(pos.x, pos.y, 1.8))
             ecs.addComponent(event.srcEntity.id, CTRadius(0.5))
             ecs.addComponent(event.srcEntity.id, CTColor(.yellow))
-            ecs.addComponent(event.srcEntity.id, CTScale3d(F3(x: 0.9, y: 0.9, z: 0.9)))
+            ecs.addComponent(event.srcEntity.id, LECSPScale3d(F3(x: 0.9, y: 0.9, z: 0.9)))
           }
           ecs.addComponent(event.srcEntity.id, tile)
         }
@@ -439,7 +440,7 @@ class GMWorld02: GMWorld {
     if buttonName.starts(with: startsWith) {
       let playerPosition = ecs.getComponent(
         ecs.entity("player01")!,
-        CTPosition3d.self
+        LECSPPosition3d.self
       )!
 
       ecs.addComponent(

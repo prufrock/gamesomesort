@@ -11,10 +11,6 @@ import VRTMath
 import DataStructures
 
 extension TBDGWorld: GMWorld {
-  var ecs: any LECSWorld {
-    LECSCreateWorld(archetypeSize: 50)
-  }
-
   var basis: F3 {
     F3(0, 0, 0)
   }

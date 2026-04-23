@@ -43,6 +43,7 @@ struct TBDGLevelInitializer {
     let cfg = world.levelConfig.playerCamera
     let ecs = world.ecs
     let playerCamera = ecs.createEntity("playerCamera")
+    let worldVector: F3 = [1, -1, 1]
     ecs.addComponent(
       playerCamera,
       LECSPCameraFirstPerson(
@@ -51,9 +52,9 @@ struct TBDGLevelInitializer {
         farPlane: 20
       )
     )
-//    ecs.addComponent(playerCamera, CTAspect(aspect: 1.0))
-//    ecs.addComponent(playerCamera, CTPosition3d(F3(3.5, 4, -7.25)))
-//    ecs.addComponent(playerCamera, CTScale3d(worldVector))
+    ecs.addComponent(playerCamera, LECSPAspect(aspect: 1.0))
+    ecs.addComponent(playerCamera, LECSPPosition3d(F3(3.5, 4, -7.25)))
+    ecs.addComponent(playerCamera, LECSPScale3d(worldVector))
   }
 
   func initSun() {

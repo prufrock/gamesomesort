@@ -1,14 +1,14 @@
 //
-//  CTScale3d.swift
-//  gamesomesort
+//  LECSPScale3d.swift
+//  LECSPieces
 //
-//  Created by David Kanenwisher on 6/18/25.
+//  Created by David Kanenwisher on 4/22/26.
 //
 
 import lecs_swift
 import VRTMath
 
-struct CTScale3d: LECSComponent {
+public struct LECSPScale3d: LECSComponent {
   public var scale: F3
 
   public var x: Float {
