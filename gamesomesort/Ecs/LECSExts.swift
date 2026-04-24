@@ -37,3 +37,9 @@ extension LECSWorld {
     )
   }
 }
+
+extension LECSPLight.LightType {
+  var lightType: LightType {
+    .init(UInt32(self.rawValue))
+  }
+}

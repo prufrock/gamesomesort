@@ -232,9 +232,9 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 extension LECSWorld {
   var lights: [SHDRLight] {
     var lights: [SHDRLight] = []
-    select([LECSPPosition3d.self, CTLight.self, LECSPColor.self]) { row, columns in
+    select([LECSPPosition3d.self, LECSPLight.self, LECSPColor.self]) { row, columns in
       let position = row.component(at: 0, columns, LECSPPosition3d.self)
-      let light = row.component(at: 1, columns, CTLight.self)
+      let light = row.component(at: 1, columns, LECSPLight.self)
       let color = row.component(at: 2, columns, LECSPColor.self)
 
       var shdrLight = SHDRLight()
@@ -242,7 +242,7 @@ extension LECSWorld {
       shdrLight.position = position.position
       shdrLight.radius = 0
       shdrLight.color = color.f3
-      shdrLight.type = light.type
+      shdrLight.type = light.type.lightType
       shdrLight.coneDirection = light.coneDirection
       shdrLight.attenuation = light.attenuation
       shdrLight.coneAngle = light.coneAngle

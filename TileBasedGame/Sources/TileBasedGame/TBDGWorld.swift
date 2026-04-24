@@ -37,6 +37,7 @@ struct TBDGLevelInitializer {
 
   func reset() {
     initPlayerCamera()
+    initSun()
   }
 
   func initPlayerCamera() {
@@ -58,6 +59,7 @@ struct TBDGLevelInitializer {
   }
 
   func initSun() {
+    //TODO: Get the sun in the config
     let cfg = world.levelConfig.playerCamera
     let ecs = world.ecs
     let id = ecs.createEntity("sun")

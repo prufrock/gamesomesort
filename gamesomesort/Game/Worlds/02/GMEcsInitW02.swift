@@ -27,7 +27,7 @@ struct GMEcsInitW02: GMEcsStarter {
       LECSPCameraFirstPerson.self,
       LECSPColor.self,
       CTEvent.self,
-      CTLight.self,
+      LECSPLight.self,
       CTModel.self,
       CTTagBalloon.self,
       CTTagTap.self,
@@ -166,8 +166,8 @@ struct GMEcsInitW02: GMEcsStarter {
 
   private func createLights(ecs: LECSWorld) {
     _ = {
-      var sun = CTLight()
-      sun.type = Sun
+      var sun = LECSPLight()
+      sun.type = .Sun
       let color = LECSPColor([1, 1, 1])
       let position = LECSPPosition3d([0, 0, -1])
       let id = ecs.createEntity("sun")
@@ -177,8 +177,8 @@ struct GMEcsInitW02: GMEcsStarter {
     }()
 
     _ = {
-      var light = CTLight()
-      light.type = Spot
+      var light = LECSPLight()
+      light.type = .Spot
       light.coneDirection = [1, 1, 0]
       let color = LECSPColor([1, 0.5, 0.5])
       let position = LECSPPosition3d([10, 7, 0.2])
@@ -189,8 +189,8 @@ struct GMEcsInitW02: GMEcsStarter {
     }()
 
     _ = {
-      var light = CTLight()
-      light.type = Point
+      var light = LECSPLight()
+      light.type = .Point
       light.attenuation = [0.2, 10, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = LECSPColor([0, 0.5, 0.5])
@@ -202,8 +202,8 @@ struct GMEcsInitW02: GMEcsStarter {
     }()
 
     _ = {
-      var light = CTLight()
-      light.type = Point
+      var light = LECSPLight()
+      light.type = .Point
       light.attenuation = [0.2, 10, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = LECSPColor([0, 0.5, 0.5])
@@ -215,8 +215,8 @@ struct GMEcsInitW02: GMEcsStarter {
     }()
 
     _ = {
-      var light = CTLight()
-      light.type = Point
+      var light = LECSPLight()
+      light.type = .Point
       light.attenuation = [0.8, 20, 50]
       light.specularColor = F3(repeating: 0.6)
       let color = LECSPColor([0.5, 0, 0.5])
