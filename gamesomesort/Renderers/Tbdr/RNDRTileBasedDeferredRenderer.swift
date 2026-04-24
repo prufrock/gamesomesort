@@ -220,11 +220,13 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       options: []
     )!
     pointLights = lights.filter { $0.type == Point }
-    pointLightBuffer = device.makeBuffer(
-      bytes: &pointLights,
-      length: MemoryLayout<SHDRLight>.stride * pointLights.count,
-      options: []
-    )
+    if pointLights.isNotEmpty {
+      pointLightBuffer = device.makeBuffer(
+        bytes: &pointLights,
+        length: MemoryLayout<SHDRLight>.stride * pointLights.count,
+        options: []
+      )
+    }
     params.lightCount = UInt32(lights.count)
   }
 }
