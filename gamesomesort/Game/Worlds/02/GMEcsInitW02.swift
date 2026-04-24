@@ -28,12 +28,12 @@ struct GMEcsInitW02: GMEcsStarter {
       LECSPColor.self,
       CTEvent.self,
       LECSPLight.self,
-      CTModel.self,
+      LECSPModel.self,
       CTTagBalloon.self,
       CTTagTap.self,
-      CTTagVisible.self,
-      CTQuaternion.self,
-      CTRadius.self,
+      LECSPTagVisible.self,
+      LECSPQuaternion.self,
+      LECSPRadius.self,
       LECSPScale3d.self,
       LECSPosition2d.self,
       LECSVelocity2d.self,
@@ -84,23 +84,23 @@ struct GMEcsInitW02: GMEcsStarter {
     case .wall:
       let wall = ecs.createEntity("tile\(x),\(y)")
       ecs.addComponent(wall, LECSPPosition3d(x.f, y.f, 1.0))
-      ecs.addComponent(wall, CTRadius(0.5))
+      ecs.addComponent(wall, LECSPRadius(0.5))
       ecs.addComponent(wall, LECSPColor(.green))
       ecs.addComponent(wall, LECSPScale3d(F3(x: 1, y: 1, z: 1)))
-      ecs.addComponent(wall, CTQuaternion(Float4x4.rotateY(0).q))
-      ecs.addComponent(wall, CTModel("back-plane"))
-      ecs.addComponent(wall, CTTagVisible())
+      ecs.addComponent(wall, LECSPQuaternion(Float4x4.rotateY(0).q))
+      ecs.addComponent(wall, LECSPModel("back-plane"))
+      ecs.addComponent(wall, LECSPTagVisible())
       ecs.addComponent(wall, CTTile(.wall))
       ecs.addComponent(wall, CTTappable())
     case .floor:
       let floor = ecs.createEntity("tile\(x),\(y)")
       ecs.addComponent(floor, LECSPPosition3d(x.f, y.f, 1.8))
-      ecs.addComponent(floor, CTRadius(0.5))
+      ecs.addComponent(floor, LECSPRadius(0.5))
       ecs.addComponent(floor, LECSPColor(.yellow))
       ecs.addComponent(floor, LECSPScale3d(F3(x: 0.9, y: 0.9, z: 0.9)))
-      ecs.addComponent(floor, CTQuaternion(Float4x4.rotateY(0).q))
-      ecs.addComponent(floor, CTModel("back-plane"))
-      ecs.addComponent(floor, CTTagVisible())
+      ecs.addComponent(floor, LECSPQuaternion(Float4x4.rotateY(0).q))
+      ecs.addComponent(floor, LECSPModel("back-plane"))
+      ecs.addComponent(floor, LECSPTagVisible())
       ecs.addComponent(floor, CTTile(.floor))
       ecs.addComponent(floor, CTTappable())
     }
@@ -111,9 +111,9 @@ struct GMEcsInitW02: GMEcsStarter {
     case .balloon:
       let balloon = ecs.createEntity("balloon\(x),\(y)")
       ecs.addComponent(balloon, LECSPosition2d(Float2(x.f, y.f)))
-      ecs.addComponent(balloon, CTRadius(1.0))
+      ecs.addComponent(balloon, LECSPRadius(1.0))
       ecs.addComponent(balloon, LECSPColor(.yellow))
-      ecs.addComponent(balloon, CTTagVisible())
+      ecs.addComponent(balloon, LECSPTagVisible())
       ecs.addComponent(balloon, CTTagBalloon())
       ecs.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -0.005))
       ecs.addComponent(balloon, LECSPScale3d(F3(repeating: 1)))
@@ -123,17 +123,17 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(start, LECSPPosition3d(x.f, y.f, 1.79))
       ecs.addComponent(start, LECSPScale3d(F3(x: 0.5, y: 0.5, z: 0.5)))
       ecs.addComponent(start, LECSPColor(color: VRTMColorA(.orange)))
-      ecs.addComponent(start, CTQuaternion(Float4x4.rotateY(0).q))
-      ecs.addComponent(start, CTModel("back-plane"))
-      ecs.addComponent(start, CTTagVisible())
+      ecs.addComponent(start, LECSPQuaternion(Float4x4.rotateY(0).q))
+      ecs.addComponent(start, LECSPModel("back-plane"))
+      ecs.addComponent(start, LECSPTagVisible())
     case .end:
       let end = ecs.createEntity("end\(x),\(y)")
       ecs.addComponent(end, LECSPPosition3d(x.f, y.f, 1.79))
       ecs.addComponent(end, LECSPScale3d(F3(x: 0.5, y: 0.5, z: 0.5)))
       ecs.addComponent(end, LECSPColor([0.6, 0.0, 0.0]))
-      ecs.addComponent(end, CTQuaternion(simd_quatf(Float4x4.rotateY(0))))
-      ecs.addComponent(end, CTModel("back-plane"))
-      ecs.addComponent(end, CTTagVisible())
+      ecs.addComponent(end, LECSPQuaternion(simd_quatf(Float4x4.rotateY(0))))
+      ecs.addComponent(end, LECSPModel("back-plane"))
+      ecs.addComponent(end, LECSPTagVisible())
       ecs.addComponent(end, CTThing(.end))
     case .nothing:
       //no-op
@@ -148,19 +148,19 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(backPlane, LECSPPosition3d(10, 10, 2.5))
     ecs.addComponent(backPlane, LECSPScale3d(F3(x: 35, y: 35, z: 35)))
     ecs.addComponent(backPlane, LECSPColor([0.6, 0.6, 0.6]))
-    ecs.addComponent(backPlane, CTQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(backPlane, CTModel("back-plane"))
-    ecs.addComponent(backPlane, CTTagVisible())
+    ecs.addComponent(backPlane, LECSPQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(backPlane, LECSPModel("back-plane"))
+    ecs.addComponent(backPlane, LECSPTagVisible())
   }
 
   private func createPlayer(ecs: LECSWorld, position: Float2) {
     let player = ecs.createEntity("player01")
     ecs.addComponent(player, LECSPPosition3d(x: position.x, y: position.y, z: 1.0))
     ecs.addComponent(player, LECSPColor(.black))
-    ecs.addComponent(player, CTRadius(1.0))
-    ecs.addComponent(player, CTTagVisible())
-    ecs.addComponent(player, CTModel("square-bella.usdz"))
-    ecs.addComponent(player, CTQuaternion(Float4x4.rotateY(.pi).q))
+    ecs.addComponent(player, LECSPRadius(1.0))
+    ecs.addComponent(player, LECSPTagVisible())
+    ecs.addComponent(player, LECSPModel("square-bella.usdz"))
+    ecs.addComponent(player, LECSPQuaternion(Float4x4.rotateY(.pi).q))
     ecs.addComponent(player, LECSPScale3d(F3(repeating: 0.5)))
   }
 
@@ -234,11 +234,11 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(entity, LECSPPosition3d(button.position))
       ecs.addComponent(entity, LECSPScale3d(button.scale))
       ecs.addComponent(entity, LECSPColor(button.color))
-      ecs.addComponent(entity, CTQuaternion(Float4x4.rotateY(0).q))
-      ecs.addComponent(entity, CTRadius(button.radius))
-      ecs.addComponent(entity, CTModel(button.model))
+      ecs.addComponent(entity, LECSPQuaternion(Float4x4.rotateY(0).q))
+      ecs.addComponent(entity, LECSPRadius(button.radius))
+      ecs.addComponent(entity, LECSPModel(button.model))
       ecs.addComponent(entity, CTTappable())
-      ecs.addComponent(entity, CTTagVisible())
+      ecs.addComponent(entity, LECSPTagVisible())
 
       if button.locking {
         ecs.addComponent(entity, CTLockingButton())
@@ -251,10 +251,10 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(button, LECSPPosition3d(1.0, -2, 1.0))
     ecs.addComponent(button, LECSPScale3d(F3(repeating: 0.5)))
     ecs.addComponent(button, LECSPColor([1.0, 1.0, 1.0]))
-    ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(button, CTRadius(0.5))
-    ecs.addComponent(button, CTModel("brick-sphere.usdz"))
+    ecs.addComponent(button, LECSPQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(button, LECSPRadius(0.5))
+    ecs.addComponent(button, LECSPModel("brick-sphere.usdz"))
     ecs.addComponent(button, CTTappable())
-    ecs.addComponent(button, CTTagVisible())
+    ecs.addComponent(button, LECSPTagVisible())
   }
 }

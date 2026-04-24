@@ -47,11 +47,11 @@ class GMWorld02: GMWorld {
     self.ecsStarter.start(ecs: self.ecs)
 
     let tapSquare = ecs.createEntity("tapSquare")
-    ecs.addComponent(tapSquare, CTRadius(0.1))
+    ecs.addComponent(tapSquare, LECSPRadius(0.1))
     ecs.addComponent(tapSquare, LECSPColor(.red))
-    ecs.addComponent(tapSquare, CTTagVisible())
-    ecs.addComponent(tapSquare, CTModel("button-one"))
-    ecs.addComponent(tapSquare, CTQuaternion(Float4x4.identity.q))
+    ecs.addComponent(tapSquare, LECSPTagVisible())
+    ecs.addComponent(tapSquare, LECSPModel("button-one"))
+    ecs.addComponent(tapSquare, LECSPQuaternion(Float4x4.identity.q))
     ecs.addComponent(tapSquare, LECSPScale3d(F3(repeating: 0.1)))
     self.tapSquare = tapSquare
 
@@ -72,11 +72,11 @@ class GMWorld02: GMWorld {
 
       var selectedEntityId: LECSId? = nil
       world.select(
-        [LECSId.self, LECSPColor.self, LECSPosition2d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
+        [LECSId.self, LECSPColor.self, LECSPosition2d.self, LECSPRadius.self, CTTagBalloon.self, LECSPTagVisible.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, LECSPosition2d.self)
-        let otherRadius = otherRow.component(at: 3, otherColumns, CTRadius.self)
+        let otherRadius = otherRow.component(at: 3, otherColumns, LECSPRadius.self)
         let otherRectangle = Rect(position: otherPosition.position, radius: otherRadius.radius)
 
         if otherEntityId != tapEntityId {
@@ -97,7 +97,7 @@ class GMWorld02: GMWorld {
         }
       }
 
-      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), CTTagVisible()]
+      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), LECSPTagVisible()]
     }
 
     tapSystem = ecs.addSystemWorldScoped(
@@ -112,11 +112,11 @@ class GMWorld02: GMWorld {
       let tapPosition = row.component(at: 1, columns, LECSPPosition3d.self)
 
       world.select(
-        [LECSId.self, LECSPPosition3d.self, CTRadius.self, CTTappable.self]
+        [LECSId.self, LECSPPosition3d.self, LECSPRadius.self, CTTappable.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 1, otherColumns, LECSPPosition3d.self)
-        let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
+        let otherRadius = otherRow.component(at: 2, otherColumns, LECSPRadius.self)
         let otherRectangle = Rect(
           position: otherPosition.position.xy,
           radius: otherRadius.radius
@@ -172,7 +172,7 @@ class GMWorld02: GMWorld {
 
         ecs.addComponent(tapSquare!, LECSPPosition3d(x: worldLocation.x, y: worldLocation.y, z: 1.0))
         ecs.addComponent(tapSquare!, CTTagTap())
-        ecs.addComponent(tapSquare!, CTTagVisible())
+        ecs.addComponent(tapSquare!, LECSPTagVisible())
         if let tapSystem = self.tapSystem {
           ecs.processSystemWorldScoped(system: tapSystem)
         }
@@ -312,7 +312,7 @@ class GMWorld02: GMWorld {
           if tile.tile == .floor {
             let pos = ecs.getComponent(event.srcEntity.id, LECSPPosition3d.self)!
             ecs.addComponent(event.srcEntity.id, LECSPPosition3d(pos.x, pos.y, 1.0))
-            ecs.addComponent(event.srcEntity.id, CTRadius(0.5))
+            ecs.addComponent(event.srcEntity.id, LECSPRadius(0.5))
             ecs.addComponent(event.srcEntity.id, LECSPColor(.green))
             ecs.addComponent(event.srcEntity.id, LECSPScale3d(F3(x: 1, y: 1, z: 1)))
             tile = CTTile(.wall)
@@ -320,7 +320,7 @@ class GMWorld02: GMWorld {
             tile = CTTile(.floor)
             let pos = ecs.getComponent(event.srcEntity.id, LECSPPosition3d.self)!
             ecs.addComponent(event.srcEntity.id, LECSPPosition3d(pos.x, pos.y, 1.8))
-            ecs.addComponent(event.srcEntity.id, CTRadius(0.5))
+            ecs.addComponent(event.srcEntity.id, LECSPRadius(0.5))
             ecs.addComponent(event.srcEntity.id, LECSPColor(.yellow))
             ecs.addComponent(event.srcEntity.id, LECSPScale3d(F3(x: 0.9, y: 0.9, z: 0.9)))
           }

@@ -49,11 +49,11 @@ class GMWorld01: GMWorld {
     self.ecsStarter.start(ecs: self.ecs)
 
     let tapSquare = ecs.createEntity("tapSquare")
-    ecs.addComponent(tapSquare, CTRadius(0.1))
+    ecs.addComponent(tapSquare, LECSPRadius(0.1))
     ecs.addComponent(tapSquare, LECSPColor(.red))
-    ecs.addComponent(tapSquare, CTTagVisible())
-    ecs.addComponent(tapSquare, CTModel("button-one"))
-    ecs.addComponent(tapSquare, CTQuaternion(Float4x4.identity.q))
+    ecs.addComponent(tapSquare, LECSPTagVisible())
+    ecs.addComponent(tapSquare, LECSPModel("button-one"))
+    ecs.addComponent(tapSquare, LECSPQuaternion(Float4x4.identity.q))
     ecs.addComponent(tapSquare, LECSPScale3d(F3(repeating: 0.1)))
     self.tapSquare = tapSquare
 
@@ -74,11 +74,11 @@ class GMWorld01: GMWorld {
 
       var selectedEntityId: LECSId? = nil
       world.select(
-        [LECSId.self, LECSPColor.self, LECSPPosition3d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
+        [LECSId.self, LECSPColor.self, LECSPPosition3d.self, LECSPRadius.self, CTTagBalloon.self, LECSPTagVisible.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, LECSPPosition3d.self)
-        let otherRadius = otherRow.component(at: 3, otherColumns, CTRadius.self)
+        let otherRadius = otherRow.component(at: 3, otherColumns, LECSPRadius.self)
         let otherRectangle = Rect(position: otherPosition.position.xy, radius: otherRadius.radius)
 
         if otherEntityId != tapEntityId {
@@ -99,7 +99,7 @@ class GMWorld01: GMWorld {
         }
       }
 
-      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), CTTagVisible()]
+      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), LECSPTagVisible()]
     }
 
     tapSystem = ecs.addSystemWorldScoped(
@@ -114,11 +114,11 @@ class GMWorld01: GMWorld {
       let tapPosition = row.component(at: 1, columns, LECSPPosition3d.self)
 
       world.select(
-        [LECSId.self, LECSPPosition3d.self, CTRadius.self, CTTappable.self]
+        [LECSId.self, LECSPPosition3d.self, LECSPRadius.self, CTTappable.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 1, otherColumns, LECSPPosition3d.self)
-        let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
+        let otherRadius = otherRow.component(at: 2, otherColumns, LECSPRadius.self)
         let otherRectangle = Rect(
           position: otherPosition.position.xy,
           radius: otherRadius.radius
@@ -147,12 +147,12 @@ class GMWorld01: GMWorld {
       if emitter.emit() {
         let balloon = world.createEntity(UUID.init().uuidString)
         world.addComponent(balloon, position)
-        world.addComponent(balloon, CTModel("brick-sphere.usdz"))
-        world.addComponent(balloon, CTRadius(1.0))
+        world.addComponent(balloon, LECSPModel("brick-sphere.usdz"))
+        world.addComponent(balloon, LECSPRadius(1.0))
         world.addComponent(balloon, LECSPColor(.yellow))
-        world.addComponent(balloon, CTQuaternion())
+        world.addComponent(balloon, LECSPQuaternion())
         world.addComponent(balloon, LECSPScale3d())
-        world.addComponent(balloon, CTTagVisible())
+        world.addComponent(balloon, LECSPTagVisible())
         world.addComponent(balloon, CTTagBalloon())
         world.addComponent(
           balloon,
@@ -210,7 +210,7 @@ class GMWorld01: GMWorld {
           LECSPPosition3d(x: worldLocation.x, y: worldLocation.y, z: worldLocation.z)
         )
         ecs.addComponent(tapSquare!, CTTagTap())
-        ecs.addComponent(tapSquare!, CTTagVisible())
+        ecs.addComponent(tapSquare!, LECSPTagVisible())
         if let tapSystem = self.tapSystem {
           ecs.processSystemWorldScoped(system: tapSystem)
         }

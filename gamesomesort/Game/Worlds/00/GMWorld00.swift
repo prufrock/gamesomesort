@@ -47,7 +47,7 @@ class GMWorld00: GMWorld {
     self.ecsStarter.start(ecs: self.ecs)
 
     let tapSquare = ecs.createEntity("tapSquare")
-    ecs.addComponent(tapSquare, CTRadius(0.1))
+    ecs.addComponent(tapSquare, LECSPRadius(0.1))
     ecs.addComponent(tapSquare, LECSPColor(.red))
     self.tapSquare = tapSquare
 
@@ -67,11 +67,11 @@ class GMWorld00: GMWorld {
       let tapPosition = row.component(at: 1, columns, LECSPosition2d.self)
 
       world.select(
-        [LECSId.self, LECSPPosition3d.self, CTRadius.self, CTTappable.self]
+        [LECSId.self, LECSPPosition3d.self, LECSPRadius.self, CTTappable.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 1, otherColumns, LECSPPosition3d.self)
-        let otherRadius = otherRow.component(at: 2, otherColumns, CTRadius.self)
+        let otherRadius = otherRow.component(at: 2, otherColumns, LECSPRadius.self)
         let otherRectangle = Rect(
           position: otherPosition.position.xy,
           radius: otherRadius.radius
@@ -110,7 +110,7 @@ class GMWorld00: GMWorld {
 
         ecs.addComponent(tapSquare!, LECSPosition2d(x: worldLocation.x, y: worldLocation.y))
         ecs.addComponent(tapSquare!, CTTagTap())
-        ecs.addComponent(tapSquare!, CTTagVisible())
+        ecs.addComponent(tapSquare!, LECSPTagVisible())
         if let tapSystem = self.tapSystem {
           ecs.processSystemWorldScoped(system: tapSystem)
         }

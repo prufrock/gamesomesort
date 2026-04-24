@@ -32,12 +32,12 @@ struct GMEcsInitW01: GMEcsStarter {
       LECSPCameraFirstPerson.self,
       LECSPColor.self,
       LECSPLight.self,
-      CTModel.self,
+      LECSPModel.self,
       CTTagBalloon.self,
       CTTagTap.self,
-      CTTagVisible.self,
-      CTQuaternion.self,
-      CTRadius.self,
+      LECSPTagVisible.self,
+      LECSPQuaternion.self,
+      LECSPRadius.self,
       LECSPScale3d.self,
       LECSPosition2d.self,
       LECSVelocity2d.self,
@@ -118,7 +118,7 @@ struct GMEcsInitW01: GMEcsStarter {
     case .wall:
       let wall = ecs.createEntity("wall\(x),\(y)")
       ecs.addComponent(wall, LECSPosition2d(Float2(x.f, y.f)))
-      ecs.addComponent(wall, CTRadius(0.5))
+      ecs.addComponent(wall, LECSPRadius(0.5))
       ecs.addComponent(wall, LECSPColor(.green))
     case .floor:
       let floor = ecs.createEntity("floor\(x),\(y)")
@@ -131,9 +131,9 @@ struct GMEcsInitW01: GMEcsStarter {
     case .balloon:
       let balloon = ecs.createEntity("balloon\(x),\(y)")
       ecs.addComponent(balloon, LECSPosition2d(Float2(x.f, y.f)))
-      ecs.addComponent(balloon, CTRadius(1.0))
+      ecs.addComponent(balloon, LECSPRadius(1.0))
       ecs.addComponent(balloon, LECSPColor(.yellow))
-      ecs.addComponent(balloon, CTTagVisible())
+      ecs.addComponent(balloon, LECSPTagVisible())
       ecs.addComponent(balloon, CTTagBalloon())
       ecs.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -0.005))
     case .nothing:
@@ -149,9 +149,9 @@ struct GMEcsInitW01: GMEcsStarter {
     ecs.addComponent(backPlane, LECSPPosition3d(10, 10, 2.5))
     ecs.addComponent(backPlane, LECSPScale3d(F3(repeating: 35)))
     ecs.addComponent(backPlane, LECSPColor([0.6, 0.6, 0.6]))
-    ecs.addComponent(backPlane, CTQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(backPlane, CTModel("back-plane"))
-    ecs.addComponent(backPlane, CTTagVisible())
+    ecs.addComponent(backPlane, LECSPQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(backPlane, LECSPModel("back-plane"))
+    ecs.addComponent(backPlane, LECSPTagVisible())
   }
 
   private func createLights(ecs: LECSWorld) {
@@ -210,10 +210,10 @@ struct GMEcsInitW01: GMEcsStarter {
     ecs.addComponent(button, LECSPPosition3d(10, 1, 1.0))
     ecs.addComponent(button, LECSPScale3d(F3(repeating: 1)))
     ecs.addComponent(button, LECSPColor([1.0, 1.0, 1.0]))
-    ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(button, CTRadius(1.5))
-    ecs.addComponent(button, CTModel("back-plane"))
+    ecs.addComponent(button, LECSPQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(button, LECSPRadius(1.5))
+    ecs.addComponent(button, LECSPModel("back-plane"))
     ecs.addComponent(button, CTTappable())
-    ecs.addComponent(button, CTTagVisible())
+    ecs.addComponent(button, LECSPTagVisible())
   }
 }

@@ -18,13 +18,13 @@ struct GMEcsInitW00: GMEcsStarter {
       LECSPCameraFirstPerson.self,
       LECSPColor.self,
       LECSPLight.self,
-      CTModel.self,
+      LECSPModel.self,
       CTTagBalloon.self,
       CTTagTap.self,
-      CTTagVisible.self,
+      LECSPTagVisible.self,
       CTTappable.self,
-      CTQuaternion.self,
-      CTRadius.self,
+      LECSPQuaternion.self,
+      LECSPRadius.self,
       LECSPScale3d.self,
       LECSPosition2d.self,
       LECSVelocity2d.self,
@@ -68,11 +68,11 @@ struct GMEcsInitW00: GMEcsStarter {
     ecs.addComponent(button, LECSPPosition3d(8, 2, 1.0))
     ecs.addComponent(button, LECSPScale3d(F3(3, 3, 3)))
     ecs.addComponent(button, LECSPColor([0.1, 0.6, 0.0]))
-    ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(button, CTRadius(1.5))
-    ecs.addComponent(button, CTModel("button-one"))
+    ecs.addComponent(button, LECSPQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(button, LECSPRadius(1.5))
+    ecs.addComponent(button, LECSPModel("button-one"))
     ecs.addComponent(button, CTTappable())
-    ecs.addComponent(button, CTTagVisible())
+    ecs.addComponent(button, LECSPTagVisible())
   }
 
   private func createSecondGameButton(ecs: LECSWorld) {
@@ -80,11 +80,11 @@ struct GMEcsInitW00: GMEcsStarter {
     ecs.addComponent(button, LECSPPosition3d(8, 5.5, 1.0))
     ecs.addComponent(button, LECSPScale3d(F3(3, 3, 3)))
     ecs.addComponent(button, LECSPColor([0.6, 0.1, 0.4]))
-    ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(button, CTRadius(1.5))
-    ecs.addComponent(button, CTModel("button-one"))
+    ecs.addComponent(button, LECSPQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(button, LECSPRadius(1.5))
+    ecs.addComponent(button, LECSPModel("button-one"))
     ecs.addComponent(button, CTTappable())
-    ecs.addComponent(button, CTTagVisible())
+    ecs.addComponent(button, LECSPTagVisible())
   }
 
   private func createThirdGameButton(ecs: LECSWorld) {
@@ -92,11 +92,11 @@ struct GMEcsInitW00: GMEcsStarter {
     ecs.addComponent(button, LECSPPosition3d(8, 9, 1.0))
     ecs.addComponent(button, LECSPScale3d(F3(3, 3, 3)))
     ecs.addComponent(button, LECSPColor([0.1, 0.1, 0.4]))
-    ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(button, CTRadius(1.5))
-    ecs.addComponent(button, CTModel("button-one"))
+    ecs.addComponent(button, LECSPQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(button, LECSPRadius(1.5))
+    ecs.addComponent(button, LECSPModel("button-one"))
     ecs.addComponent(button, CTTappable())
-    ecs.addComponent(button, CTTagVisible())
+    ecs.addComponent(button, LECSPTagVisible())
   }
 
   private func createBackPlane(ecs: LECSWorld) {
@@ -104,9 +104,9 @@ struct GMEcsInitW00: GMEcsStarter {
     ecs.addComponent(backPlane, LECSPPosition3d(10, 10, 3.0))
     ecs.addComponent(backPlane, LECSPScale3d(F3(35, 35, 35)))
     ecs.addComponent(backPlane, LECSPColor([0.0, 0.6, 0.6]))
-    ecs.addComponent(backPlane, CTQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(backPlane, CTModel("back-plane"))
-    ecs.addComponent(backPlane, CTTagVisible())
+    ecs.addComponent(backPlane, LECSPQuaternion(Float4x4.rotateY(0).q))
+    ecs.addComponent(backPlane, LECSPModel("back-plane"))
+    ecs.addComponent(backPlane, LECSPTagVisible())
   }
 
   private func createLights(ecs: LECSWorld) {
