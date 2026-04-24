@@ -30,7 +30,7 @@ struct GMEcsInitW01: GMEcsStarter {
       LECSPAspect.self,
       CTBalloonEmitter.self,
       LECSPCameraFirstPerson.self,
-      CTColor.self,
+      LECSPColor.self,
       CTLight.self,
       CTModel.self,
       CTTagBalloon.self,
@@ -119,7 +119,7 @@ struct GMEcsInitW01: GMEcsStarter {
       let wall = ecs.createEntity("wall\(x),\(y)")
       ecs.addComponent(wall, LECSPosition2d(Float2(x.f, y.f)))
       ecs.addComponent(wall, CTRadius(0.5))
-      ecs.addComponent(wall, CTColor(.green))
+      ecs.addComponent(wall, LECSPColor(.green))
     case .floor:
       let floor = ecs.createEntity("floor\(x),\(y)")
       ecs.addComponent(floor, LECSPosition2d(Float2(x.f, y.f)))
@@ -132,7 +132,7 @@ struct GMEcsInitW01: GMEcsStarter {
       let balloon = ecs.createEntity("balloon\(x),\(y)")
       ecs.addComponent(balloon, LECSPosition2d(Float2(x.f, y.f)))
       ecs.addComponent(balloon, CTRadius(1.0))
-      ecs.addComponent(balloon, CTColor(.yellow))
+      ecs.addComponent(balloon, LECSPColor(.yellow))
       ecs.addComponent(balloon, CTTagVisible())
       ecs.addComponent(balloon, CTTagBalloon())
       ecs.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -0.005))
@@ -148,7 +148,7 @@ struct GMEcsInitW01: GMEcsStarter {
     let backPlane = ecs.createEntity("backPlane")
     ecs.addComponent(backPlane, LECSPPosition3d(10, 10, 2.5))
     ecs.addComponent(backPlane, LECSPScale3d(F3(repeating: 35)))
-    ecs.addComponent(backPlane, CTColor([0.6, 0.6, 0.6]))
+    ecs.addComponent(backPlane, LECSPColor([0.6, 0.6, 0.6]))
     ecs.addComponent(backPlane, CTQuaternion(Float4x4.rotateY(0).q))
     ecs.addComponent(backPlane, CTModel("back-plane"))
     ecs.addComponent(backPlane, CTTagVisible())
@@ -158,7 +158,7 @@ struct GMEcsInitW01: GMEcsStarter {
     _ = {
       var sun = CTLight()
       sun.type = Sun
-      let color = CTColor([1, 1, 1])
+      let color = LECSPColor([1, 1, 1])
       let position = LECSPPosition3d([0, 0, -1])
       let id = ecs.createEntity("sun")
       ecs.addComponent(id, sun)
@@ -170,7 +170,7 @@ struct GMEcsInitW01: GMEcsStarter {
       var light = CTLight()
       light.type = Spot
       light.coneDirection = [1, 1, 0]
-      let color = CTColor([1, 0.5, 0.5])
+      let color = LECSPColor([1, 0.5, 0.5])
       let position = LECSPPosition3d([10, 7, 0.2])
       let id = ecs.createEntity("spotLight")
       ecs.addComponent(id, light)
@@ -183,7 +183,7 @@ struct GMEcsInitW01: GMEcsStarter {
       light.type = Point
       light.attenuation = [0.2, 10, 50]
       light.specularColor = F3(repeating: 0.6)
-      let color = CTColor([0, 0.5, 0.5])
+      let color = LECSPColor([0, 0.5, 0.5])
       let position = LECSPPosition3d([6, 3, 2.4])
       let id = ecs.createEntity("pointLight")
       ecs.addComponent(id, light)
@@ -196,7 +196,7 @@ struct GMEcsInitW01: GMEcsStarter {
       light.type = Point
       light.attenuation = [0.8, 20, 50]
       light.specularColor = F3(repeating: 0.6)
-      let color = CTColor([0.5, 0, 0.5])
+      let color = LECSPColor([0.5, 0, 0.5])
       let position = LECSPPosition3d([8, 14, 0.0])
       let id = ecs.createEntity("pointLightTwo")
       ecs.addComponent(id, light)
@@ -209,7 +209,7 @@ struct GMEcsInitW01: GMEcsStarter {
     let button = ecs.createEntity(config.game.world.world02.exitButton)
     ecs.addComponent(button, LECSPPosition3d(10, 1, 1.0))
     ecs.addComponent(button, LECSPScale3d(F3(repeating: 1)))
-    ecs.addComponent(button, CTColor([1.0, 1.0, 1.0]))
+    ecs.addComponent(button, LECSPColor([1.0, 1.0, 1.0]))
     ecs.addComponent(button, CTQuaternion(Float4x4.rotateY(0).q))
     ecs.addComponent(button, CTRadius(1.5))
     ecs.addComponent(button, CTModel("back-plane"))

@@ -8,15 +8,15 @@
 import lecs_swift
 import VRTMath
 
-struct LECSPLight: LECSComponent {
-  var type: LightType
-  var specularColor: Float3
-  var attenuation: Float3
-  var coneAngle: Float
-  var coneDirection: Float3
-  var coneAttenuation: Float
+public struct LECSPLight: LECSComponent {
+  public var type: LightType
+  public var specularColor: Float3
+  public var attenuation: Float3
+  public var coneAngle: Float
+  public var coneDirection: Float3
+  public var coneAttenuation: Float
 
-  init() {
+  public init() {
     type = .Point
     specularColor = [1, 1, 1]
     attenuation = .zero
@@ -26,7 +26,7 @@ struct LECSPLight: LECSComponent {
   }
 
   // TODO: how to bridge these with a shader?
-  enum LightType: Int {
+  public enum LightType: Int {
     case unused = 0
     case Sun = 1
     case Spot = 2

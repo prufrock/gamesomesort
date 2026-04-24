@@ -48,7 +48,7 @@ class GMWorld00: GMWorld {
 
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, CTRadius(0.1))
-    ecs.addComponent(tapSquare, CTColor(.red))
+    ecs.addComponent(tapSquare, LECSPColor(.red))
     self.tapSquare = tapSquare
 
     aspectRatioSystem = ecs.addSystem("aspectRatio", selector: [LECSPAspect.self]) { components, columns in

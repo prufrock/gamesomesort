@@ -48,7 +48,7 @@ class GMWorld02: GMWorld {
 
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, CTRadius(0.1))
-    ecs.addComponent(tapSquare, CTColor(.red))
+    ecs.addComponent(tapSquare, LECSPColor(.red))
     ecs.addComponent(tapSquare, CTTagVisible())
     ecs.addComponent(tapSquare, CTModel("button-one"))
     ecs.addComponent(tapSquare, CTQuaternion(Float4x4.identity.q))
@@ -72,7 +72,7 @@ class GMWorld02: GMWorld {
 
       var selectedEntityId: LECSId? = nil
       world.select(
-        [LECSId.self, CTColor.self, LECSPosition2d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
+        [LECSId.self, LECSPColor.self, LECSPosition2d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, LECSPosition2d.self)
@@ -254,9 +254,9 @@ class GMWorld02: GMWorld {
         var buttonLock = row.component(at: 1, columns, CTLockingButton.self)
         buttonLock.count = 0
         buttonLock.locked = false
-        let buttonColor: GMColor = .green
+        let buttonColor: VRTMColor = .green
         ecs.addComponent(entityId.id, buttonLock)
-        ecs.addComponent(entityId.id, CTColor(buttonColor))
+        ecs.addComponent(entityId.id, LECSPColor(buttonColor))
       }
     }
 
@@ -296,24 +296,24 @@ class GMWorld02: GMWorld {
         }
 
         if buttonName.name.starts(with: "edit") {
-          let color = ecs.getComponent(event.srcEntity.id, CTColor.self)!
+          let color = ecs.getComponent(event.srcEntity.id, LECSPColor.self)!
           // store the state in the color for expediency!
           if color.f3.x <= 0 {
-            ecs.addComponent(event.srcEntity.id, CTColor(F3(0.5, 0.25, 0)))
+            ecs.addComponent(event.srcEntity.id, LECSPColor(F3(0.5, 0.25, 0)))
           } else {
-            ecs.addComponent(event.srcEntity.id, CTColor(F3(0, 0, 0)))
+            ecs.addComponent(event.srcEntity.id, LECSPColor(F3(0, 0, 0)))
           }
         }
 
         if buttonName.name.starts(with: "tile")
-          && ecs.getComponent(ecs.entity("editButton")!, CTColor.self)!.color.r > 0
+          && ecs.getComponent(ecs.entity("editButton")!, LECSPColor.self)!.color.r > 0
         {
           var tile = ecs.getComponent(event.srcEntity.id, CTTile.self)!
           if tile.tile == .floor {
             let pos = ecs.getComponent(event.srcEntity.id, LECSPPosition3d.self)!
             ecs.addComponent(event.srcEntity.id, LECSPPosition3d(pos.x, pos.y, 1.0))
             ecs.addComponent(event.srcEntity.id, CTRadius(0.5))
-            ecs.addComponent(event.srcEntity.id, CTColor(.green))
+            ecs.addComponent(event.srcEntity.id, LECSPColor(.green))
             ecs.addComponent(event.srcEntity.id, LECSPScale3d(F3(x: 1, y: 1, z: 1)))
             tile = CTTile(.wall)
           } else if tile.tile == .wall {
@@ -321,7 +321,7 @@ class GMWorld02: GMWorld {
             let pos = ecs.getComponent(event.srcEntity.id, LECSPPosition3d.self)!
             ecs.addComponent(event.srcEntity.id, LECSPPosition3d(pos.x, pos.y, 1.8))
             ecs.addComponent(event.srcEntity.id, CTRadius(0.5))
-            ecs.addComponent(event.srcEntity.id, CTColor(.yellow))
+            ecs.addComponent(event.srcEntity.id, LECSPColor(.yellow))
             ecs.addComponent(event.srcEntity.id, LECSPScale3d(F3(x: 0.9, y: 0.9, z: 0.9)))
           }
           ecs.addComponent(event.srcEntity.id, tile)
@@ -369,7 +369,7 @@ class GMWorld02: GMWorld {
               }
 
               // adjust color
-              var buttonColor: GMColor
+              var buttonColor: VRTMColor
               if buttonLock.count == 0 {
                 buttonColor = .green
               } else if buttonLock.count == 1 {
@@ -387,7 +387,7 @@ class GMWorld02: GMWorld {
               }
 
               ecs.addComponent(entityId.id, buttonLock)
-              ecs.addComponent(entityId.id, CTColor(buttonColor))
+              ecs.addComponent(entityId.id, LECSPColor(buttonColor))
             }
             buttonLock.count += 1
             if buttonLock.count == 3 {
@@ -398,7 +398,7 @@ class GMWorld02: GMWorld {
 
           ecs.addComponent(event.srcEntity.id, buttonLock)
           // adjust color
-          var buttonColor: GMColor
+          var buttonColor: VRTMColor
           if buttonLock.count == 0 {
             buttonColor = .green
           } else if buttonLock.count == 1 {
@@ -414,7 +414,7 @@ class GMWorld02: GMWorld {
           } else {
             buttonColor = .black
           }
-          ecs.addComponent(event.srcEntity.id, CTColor(buttonColor))
+          ecs.addComponent(event.srcEntity.id, LECSPColor(buttonColor))
         }
       }
     }

@@ -50,7 +50,7 @@ class GMWorld01: GMWorld {
 
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, CTRadius(0.1))
-    ecs.addComponent(tapSquare, CTColor(.red))
+    ecs.addComponent(tapSquare, LECSPColor(.red))
     ecs.addComponent(tapSquare, CTTagVisible())
     ecs.addComponent(tapSquare, CTModel("button-one"))
     ecs.addComponent(tapSquare, CTQuaternion(Float4x4.identity.q))
@@ -74,7 +74,7 @@ class GMWorld01: GMWorld {
 
       var selectedEntityId: LECSId? = nil
       world.select(
-        [LECSId.self, CTColor.self, LECSPPosition3d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
+        [LECSId.self, LECSPColor.self, LECSPPosition3d.self, CTRadius.self, CTTagBalloon.self, CTTagVisible.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, LECSPPosition3d.self)
@@ -149,7 +149,7 @@ class GMWorld01: GMWorld {
         world.addComponent(balloon, position)
         world.addComponent(balloon, CTModel("brick-sphere.usdz"))
         world.addComponent(balloon, CTRadius(1.0))
-        world.addComponent(balloon, CTColor(.yellow))
+        world.addComponent(balloon, LECSPColor(.yellow))
         world.addComponent(balloon, CTQuaternion())
         world.addComponent(balloon, LECSPScale3d())
         world.addComponent(balloon, CTTagVisible())

@@ -60,7 +60,7 @@ extension LECSWorld {
         LECSPPosition3d.self,
         LECSPScale3d.self,
         CTQuaternion.self,
-        CTColor.self,
+        LECSPColor.self,
         CTTagVisible.self,
       ]
     ) { row, columns in
@@ -68,7 +68,7 @@ extension LECSWorld {
       let position = row.component(at: 1, columns, LECSPPosition3d.self)
       let scale = row.component(at: 2, columns, LECSPScale3d.self)
       let quaternion = row.component(at: 3, columns, CTQuaternion.self)
-      let color = row.component(at: 4, columns, CTColor.self)
+      let color = row.component(at: 4, columns, LECSPColor.self)
 
       let gameObject = RNDRGameObject(
         name: ctModel.name,

@@ -8,6 +8,7 @@
 import MetalKit
 import lecs_swift
 import VRTMath
+import LECSPieces
 
 struct RNDRSquare {
   let v: [F3] = [  // model space
@@ -114,9 +115,9 @@ struct RNDRSquare {
     guard let indexedVertexPipeline else { return }
 
     var squareCount = 0
-    ecs.select([LECSPosition2d.self, CTColor.self, CTRadius.self, CTTagVisible.self]) { row, columns in
+    ecs.select([LECSPosition2d.self, LECSPColor.self, CTRadius.self, CTTagVisible.self]) { row, columns in
       let position = row.component(at: 0, columns, LECSPosition2d.self)
-      let color = row.component(at: 1, columns, CTColor.self)
+      let color = row.component(at: 1, columns, LECSPColor.self)
       let radius = row.component(at: 2, columns, CTRadius.self)
       let square = GMSquare(
         transform: GEOTransform(

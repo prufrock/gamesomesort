@@ -232,10 +232,10 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 extension LECSWorld {
   var lights: [SHDRLight] {
     var lights: [SHDRLight] = []
-    select([LECSPPosition3d.self, CTLight.self, CTColor.self]) { row, columns in
+    select([LECSPPosition3d.self, CTLight.self, LECSPColor.self]) { row, columns in
       let position = row.component(at: 0, columns, LECSPPosition3d.self)
       let light = row.component(at: 1, columns, CTLight.self)
-      let color = row.component(at: 2, columns, CTColor.self)
+      let color = row.component(at: 2, columns, LECSPColor.self)
 
       var shdrLight = SHDRLight()
 
