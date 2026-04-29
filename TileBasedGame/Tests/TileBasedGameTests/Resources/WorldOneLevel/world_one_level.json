@@ -21,11 +21,11 @@
         "buttons": [
             {
                 "behaviors": ["exit"],
-                "color": [0, 0, 0],
+                "color": [1, 1, 1],
                 "name": "exitButton",
                 "model": "square",
-                "position": [0, 0, 0],
-                "radius": 1.0,
+                "position": [1.0, -2, 1.0],
+                "radius": 1.5,
                 "rotationDegrees": 0,
                 "tappable": true,
                 "visible": true

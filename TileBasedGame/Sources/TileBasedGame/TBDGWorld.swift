@@ -86,17 +86,27 @@ fileprivate struct TBDGLevelInitializer {
   }
 
   private func initExitButton() {
-    //TODO: get this from the config
-    let ecs = world.ecs
-    let button = ecs.createEntity("exitButton")
-    ecs.addComponent(button, LECSPPosition3d(1.0, -2, 1.0))
-    ecs.addComponent(button, LECSPScale3d(F3(repeating: 0.5)))
-    ecs.addComponent(button, LECSPColor([1.0, 1.0, 1.0]))
-    ecs.addComponent(button, LECSPQuaternion(Float4x4.rotateY(0).q))
-    ecs.addComponent(button, LECSPRadius(0.5))
-    ecs.addComponent(button, LECSPModel("brick-sphere.usdz"))
-//    ecs.addComponent(button, CTTappable())
-    ecs.addComponent(button, LECSPTagVisible())
+    let cfg = world.worldConfig.hud.buttons
+    cfg.forEach { button in
+      let ecs = world.ecs
+      let entity = ecs.createEntity(button.name)
+      //TODO: behavior
+      ecs.addComponent(entity, LECSPPosition3d(button.position))
+      ecs.addComponent(entity, LECSPScale3d(F3(repeating: 0.5)))
+      ecs.addComponent(entity, LECSPColor(button.color))
+      ecs.addComponent(
+        entity,
+        LECSPQuaternion(Float4x4.rotateY(button.rotationDegrees).q)
+      )
+      ecs.addComponent(entity, LECSPRadius(button.radius))
+      ecs.addComponent(entity, LECSPModel(button.model))
+      if button.tappable {
+        ecs.addComponent(entity, LECSPTagTappable())
+      }
+      if button.visible {
+        ecs.addComponent(entity, LECSPTagVisible())
+      }
+    }
   }
 
   //TODO: remove later, just to make the renderer happy

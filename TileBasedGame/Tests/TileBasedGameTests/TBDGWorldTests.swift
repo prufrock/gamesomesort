@@ -31,6 +31,12 @@ import VRTMath
     )!
     #expect(aspect == 0.6)
   }()
+
+  _ = {
+    let entity = world.ecs.entity("exitButton")
+
+    #expect(entity != nil)
+  }()
 }
 
 private func startWorld() -> TBDGWorld {
