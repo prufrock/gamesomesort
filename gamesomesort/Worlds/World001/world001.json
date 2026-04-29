@@ -10,5 +10,6 @@
             "path": "w001L001"
         }
     },
-    "name": "one level"
+    "name": "one level",
+    "worldVector": [1, -1, 1]
 }

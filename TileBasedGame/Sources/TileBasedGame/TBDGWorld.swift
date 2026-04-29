@@ -47,17 +47,17 @@ fileprivate struct TBDGLevelInitializer {
     let cfg = world.levelConfig.playerCamera
     let ecs = world.ecs
     let playerCamera = ecs.createEntity("playerCamera")
-    let worldVector: F3 = [1, -1, 1]
     ecs.addComponent(
       playerCamera,
       LECSPCameraFirstPerson(
-        fov: cfg.viewAngleDegrees * (.pi / 180),
-        nearPlane: 0.1,
-        farPlane: 20
+        fov: cfg.viewAngleDegrees * DEG2RAD,
+        nearPlane: cfg.nearPlane,
+        farPlane: cfg.farPlane
       )
     )
     ecs.addComponent(playerCamera, LECSPAspect(aspect: 1.0))
     ecs.addComponent(playerCamera, LECSPPosition3d(F3(3.5, 4, -7.25)))
+    let worldVector: F3 = world.worldConfig.worldVector
     ecs.addComponent(playerCamera, LECSPScale3d(worldVector))
   }
 
