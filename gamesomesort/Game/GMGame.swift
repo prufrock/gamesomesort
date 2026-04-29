@@ -89,7 +89,7 @@ class GMGame {
               archetypeSize: self.appCore.config.game.world.ecsArchetypeSize
             )
           )
-          tbdgWorld.reset()
+          tbdgWorld.restart()
           tbdgWorld.update(screenDimensions)
           self.world = tbdgWorld
         }

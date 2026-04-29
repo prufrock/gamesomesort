@@ -27,7 +27,7 @@ public class TBDGWorld {
     self.levelConfig = levelConfig
   }
 
-  public func reset() {
+  public func restart() {
     let lvlInit = TBDGLevelInitializer(world: self, level: "")
     lvlInit.reset()
   }

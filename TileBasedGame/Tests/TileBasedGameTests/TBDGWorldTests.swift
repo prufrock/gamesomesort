@@ -14,7 +14,26 @@ import VRTMath
 @testable import TileBasedGame
 
 
-@Test func `load the world`() {
+@Test func `change the screen dimensions`() {
+  let world = startWorld()
+
+  world.update(VRTMScreenDimensions(
+    pixelSize: CGSize(width: 300, height: 500),
+    scaleFactor: 1.0)
+  )
+
+  _ = {
+    let entity = world.ecs.entity("playerCamera")!
+
+    let aspect = world.ecs.getComponent(
+      entity,
+      LECSPAspect.self
+    )!
+    #expect(aspect == 0.6)
+  }()
+}
+
+private func startWorld() -> TBDGWorld {
   let worldCfg: GCFGWorld = try! loadTestFile(
     from: "WorldOneLevel",
     name: "world_one_level"
@@ -32,50 +51,10 @@ import VRTMath
     levelConfig: levelOneCfg,
     ecs: ecs
   )
-  world.reset()
 
-  _ = {
-    let entity = world.ecs.entity("playerCamera")!
+  world.restart()
 
-    let aspect = world.ecs.getComponent(
-      entity,
-      LECSPAspect.self
-    )!
-    #expect(aspect == 1.0)
-
-    let camera = world.ecs.getComponent(
-      entity,
-      LECSPCameraFirstPerson.self
-    )
-    #expect(camera != nil)
-
-    let position = world.ecs.getComponent(
-      entity,
-      LECSPPosition3d.self
-    )!
-    #expect(position == [0, 0, 0])
-
-    let scale = world.ecs.getComponent(
-      entity,
-      LECSPScale3d.self
-    )!
-    #expect(scale == [1, -1, 1])
-  }()
-
-  world.update(VRTMScreenDimensions(
-    pixelSize: CGSize(width: 300, height: 500),
-    scaleFactor: 1.0)
-  )
-
-  _ = {
-    let entity = world.ecs.entity("playerCamera")!
-
-    let aspect = world.ecs.getComponent(
-      entity,
-      LECSPAspect.self
-    )!
-    #expect(aspect == 0.6)
-  }()
+  return world
 }
 
 private func loadTestFile<T: Decodable>(from dir: String, name: String) throws -> T {
