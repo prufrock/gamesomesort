@@ -1,9 +1,10 @@
 {
     "playerCamera": {
+        "farPlane": 10.0,
         "flipY": true,
-        "viewAngleDegrees": 90.0,
         "nearPlane": 0.1,
-        "farPlane": 10.0
+        "position": [0, 0, 0],
+        "viewAngleDegrees": 90.0
     },
     "map": {
         "width": 2,

@@ -33,6 +33,9 @@ let package = Package(
               "GameConfiguration",
               "lecs-swift",
               "TileBasedGame"
+            ],
+            resources: [
+              .copy("Resources")
             ]
         ),
     ],

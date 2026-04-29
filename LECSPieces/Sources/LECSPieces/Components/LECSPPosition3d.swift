@@ -8,7 +8,7 @@
 import lecs_swift
 import VRTMath
 
-public struct LECSPPosition3d: LECSComponent {
+public struct LECSPPosition3d: LECSComponent, Equatable {
   public var position: F3
 
   public var x: Float {
@@ -70,5 +70,9 @@ public struct LECSPPosition3d: LECSComponent {
 public extension LECSPPosition3d {
   static func + (lhs: LECSPPosition3d, rhs: F3) -> LECSPPosition3d {
     return LECSPPosition3d(lhs.position + rhs)
+  }
+
+  static func == (lhs: LECSPPosition3d, rhs: F3) -> Bool {
+    return lhs.position == rhs
   }
 }

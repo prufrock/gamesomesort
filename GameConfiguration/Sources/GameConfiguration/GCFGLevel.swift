@@ -27,6 +27,7 @@ public struct GCFGLevel: Decodable {
     public let viewAngleDegrees: Float
     public let nearPlane: Float
     public let farPlane: Float
+    public let position: F3
   }
 
   public struct Light {

@@ -15,10 +15,11 @@
         ]
     },
     "playerCamera": {
+        "farPlane": 10.0,
         "flipY": true,
-        "viewAngleDegrees": 90.0,
         "nearPlane": 0.1,
-        "farPlane": 20.0
+        "position": [3.5, 4, -7.25],
+        "viewAngleDegrees": 90.0
     },
     "sun": {
         "color": [1, 1, 1],

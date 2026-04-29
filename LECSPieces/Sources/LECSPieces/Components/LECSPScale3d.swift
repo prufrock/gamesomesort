@@ -60,3 +60,9 @@ public struct LECSPScale3d: LECSComponent {
     scale = F3(repeating: uniform)
   }
 }
+
+public extension LECSPScale3d {
+  static func == (lhs: LECSPScale3d, rhs: F3) -> Bool {
+    return lhs.scale == rhs
+  }
+}

@@ -6,6 +6,7 @@
 //
 
 import lecs_swift
+import VRTMath
 
 public struct LECSPAspect: LECSComponent {
   public var aspect: Float
@@ -16,5 +17,11 @@ public struct LECSPAspect: LECSComponent {
 
   public init(aspect: Float) {
     self.aspect = aspect
+  }
+}
+
+public extension LECSPAspect {
+  static func == (lhs: LECSPAspect, rhs: Float) -> Bool {
+    return lhs.aspect == rhs
   }
 }

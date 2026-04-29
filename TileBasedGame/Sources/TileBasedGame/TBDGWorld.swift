@@ -56,7 +56,7 @@ fileprivate struct TBDGLevelInitializer {
       )
     )
     ecs.addComponent(playerCamera, LECSPAspect(aspect: 1.0))
-    ecs.addComponent(playerCamera, LECSPPosition3d(F3(3.5, 4, -7.25)))
+    ecs.addComponent(playerCamera, LECSPPosition3d(cfg.position))
     let worldVector: F3 = world.worldConfig.worldVector
     ecs.addComponent(playerCamera, LECSPScale3d(worldVector))
   }
