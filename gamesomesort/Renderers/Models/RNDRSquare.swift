@@ -115,7 +115,7 @@ struct RNDRSquare {
     guard let indexedVertexPipeline else { return }
 
     var squareCount = 0
-    ecs.select([LECSPosition2d.self, LECSPColor.self, LECSPRadius.self, LECSPTagVisible.self]) { row, columns in
+    ecs.select([LECSPosition2d.self, LECSPColor.self, LECSPRadius.self, LECSPTag.Visible.self]) { row, columns in
       let position = row.component(at: 0, columns, LECSPosition2d.self)
       let color = row.component(at: 1, columns, LECSPColor.self)
       let radius = row.component(at: 2, columns, LECSPRadius.self)

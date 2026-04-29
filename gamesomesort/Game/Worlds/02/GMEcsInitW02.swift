@@ -31,7 +31,7 @@ struct GMEcsInitW02: GMEcsStarter {
       LECSPModel.self,
       CTTagBalloon.self,
       CTTagTap.self,
-      LECSPTagVisible.self,
+      LECSPTag.Visible.self,
       LECSPQuaternion.self,
       LECSPRadius.self,
       LECSPScale3d.self,
@@ -89,7 +89,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(wall, LECSPScale3d(F3(x: 1, y: 1, z: 1)))
       ecs.addComponent(wall, LECSPQuaternion(Float4x4.rotateY(0).q))
       ecs.addComponent(wall, LECSPModel("back-plane"))
-      ecs.addComponent(wall, LECSPTagVisible())
+      ecs.addComponent(wall, LECSPTag.Visible())
       ecs.addComponent(wall, CTTile(.wall))
       ecs.addComponent(wall, CTTappable())
     case .floor:
@@ -100,7 +100,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(floor, LECSPScale3d(F3(x: 0.9, y: 0.9, z: 0.9)))
       ecs.addComponent(floor, LECSPQuaternion(Float4x4.rotateY(0).q))
       ecs.addComponent(floor, LECSPModel("back-plane"))
-      ecs.addComponent(floor, LECSPTagVisible())
+      ecs.addComponent(floor, LECSPTag.Visible())
       ecs.addComponent(floor, CTTile(.floor))
       ecs.addComponent(floor, CTTappable())
     }
@@ -113,7 +113,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(balloon, LECSPosition2d(Float2(x.f, y.f)))
       ecs.addComponent(balloon, LECSPRadius(1.0))
       ecs.addComponent(balloon, LECSPColor(.yellow))
-      ecs.addComponent(balloon, LECSPTagVisible())
+      ecs.addComponent(balloon, LECSPTag.Visible())
       ecs.addComponent(balloon, CTTagBalloon())
       ecs.addComponent(balloon, LECSVelocity2d(x: 0.0, y: -0.005))
       ecs.addComponent(balloon, LECSPScale3d(F3(repeating: 1)))
@@ -125,7 +125,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(start, LECSPColor(color: VRTMColorA(.orange)))
       ecs.addComponent(start, LECSPQuaternion(Float4x4.rotateY(0).q))
       ecs.addComponent(start, LECSPModel("back-plane"))
-      ecs.addComponent(start, LECSPTagVisible())
+      ecs.addComponent(start, LECSPTag.Visible())
     case .end:
       let end = ecs.createEntity("end\(x),\(y)")
       ecs.addComponent(end, LECSPPosition3d(x.f, y.f, 1.79))
@@ -133,7 +133,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(end, LECSPColor([0.6, 0.0, 0.0]))
       ecs.addComponent(end, LECSPQuaternion(simd_quatf(Float4x4.rotateY(0))))
       ecs.addComponent(end, LECSPModel("back-plane"))
-      ecs.addComponent(end, LECSPTagVisible())
+      ecs.addComponent(end, LECSPTag.Visible())
       ecs.addComponent(end, CTThing(.end))
     case .nothing:
       //no-op
@@ -150,7 +150,7 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(backPlane, LECSPColor([0.6, 0.6, 0.6]))
     ecs.addComponent(backPlane, LECSPQuaternion(Float4x4.rotateY(0).q))
     ecs.addComponent(backPlane, LECSPModel("back-plane"))
-    ecs.addComponent(backPlane, LECSPTagVisible())
+    ecs.addComponent(backPlane, LECSPTag.Visible())
   }
 
   private func createPlayer(ecs: LECSWorld, position: Float2) {
@@ -158,7 +158,7 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(player, LECSPPosition3d(x: position.x, y: position.y, z: 1.0))
     ecs.addComponent(player, LECSPColor(.black))
     ecs.addComponent(player, LECSPRadius(1.0))
-    ecs.addComponent(player, LECSPTagVisible())
+    ecs.addComponent(player, LECSPTag.Visible())
     ecs.addComponent(player, LECSPModel("square-bella.usdz"))
     ecs.addComponent(player, LECSPQuaternion(Float4x4.rotateY(.pi).q))
     ecs.addComponent(player, LECSPScale3d(F3(repeating: 0.5)))
@@ -238,7 +238,7 @@ struct GMEcsInitW02: GMEcsStarter {
       ecs.addComponent(entity, LECSPRadius(button.radius))
       ecs.addComponent(entity, LECSPModel(button.model))
       ecs.addComponent(entity, CTTappable())
-      ecs.addComponent(entity, LECSPTagVisible())
+      ecs.addComponent(entity, LECSPTag.Visible())
 
       if button.locking {
         ecs.addComponent(entity, CTLockingButton())
@@ -255,6 +255,6 @@ struct GMEcsInitW02: GMEcsStarter {
     ecs.addComponent(button, LECSPRadius(0.5))
     ecs.addComponent(button, LECSPModel("brick-sphere.usdz"))
     ecs.addComponent(button, CTTappable())
-    ecs.addComponent(button, LECSPTagVisible())
+    ecs.addComponent(button, LECSPTag.Visible())
   }
 }

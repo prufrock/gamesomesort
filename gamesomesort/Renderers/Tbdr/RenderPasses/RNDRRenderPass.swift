@@ -61,7 +61,7 @@ extension LECSWorld {
         LECSPScale3d.self,
         LECSPQuaternion.self,
         LECSPColor.self,
-        LECSPTagVisible.self,
+        LECSPTag.Visible.self,
       ]
     ) { row, columns in
       let LECSPModel = row.component(at: 0, columns, LECSPModel.self)

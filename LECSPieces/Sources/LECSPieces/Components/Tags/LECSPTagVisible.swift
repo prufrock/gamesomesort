@@ -7,8 +7,10 @@
 
 import lecs_swift
 
-public struct LECSPTagVisible: LECSComponent {
-  public let exists = true
+extension LECSPTag {
+  public struct Visible: LECSComponent {
+    public let exists = true
 
-  public init() {}
+    public init() {}
+  }
 }

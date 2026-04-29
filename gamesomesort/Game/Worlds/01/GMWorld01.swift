@@ -54,7 +54,7 @@ class GMWorld01: GMWorld {
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, LECSPRadius(0.1))
     ecs.addComponent(tapSquare, LECSPColor(.red))
-    ecs.addComponent(tapSquare, LECSPTagVisible())
+    ecs.addComponent(tapSquare, LECSPTag.Visible())
     ecs.addComponent(tapSquare, LECSPModel("button-one"))
     ecs.addComponent(tapSquare, LECSPQuaternion(Float4x4.identity.q))
     ecs.addComponent(tapSquare, LECSPScale3d(F3(repeating: 0.1)))
@@ -77,7 +77,14 @@ class GMWorld01: GMWorld {
 
       var selectedEntityId: LECSId? = nil
       world.select(
-        [LECSId.self, LECSPColor.self, LECSPPosition3d.self, LECSPRadius.self, CTTagBalloon.self, LECSPTagVisible.self]
+        [
+          LECSId.self,
+          LECSPColor.self,
+          LECSPPosition3d.self,
+          LECSPRadius.self,
+          CTTagBalloon.self,
+          LECSPTag.Visible.self,
+        ]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, LECSPPosition3d.self)
@@ -102,7 +109,7 @@ class GMWorld01: GMWorld {
         }
       }
 
-      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), LECSPTagVisible()]
+      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), LECSPTag.Visible()]
     }
 
     tapSystem = ecs.addSystemWorldScoped(
@@ -155,7 +162,7 @@ class GMWorld01: GMWorld {
         world.addComponent(balloon, LECSPColor(.yellow))
         world.addComponent(balloon, LECSPQuaternion())
         world.addComponent(balloon, LECSPScale3d())
-        world.addComponent(balloon, LECSPTagVisible())
+        world.addComponent(balloon, LECSPTag.Visible())
         world.addComponent(balloon, CTTagBalloon())
         world.addComponent(
           balloon,
@@ -213,7 +220,7 @@ class GMWorld01: GMWorld {
           LECSPPosition3d(x: worldLocation.x, y: worldLocation.y, z: worldLocation.z)
         )
         ecs.addComponent(tapSquare!, CTTagTap())
-        ecs.addComponent(tapSquare!, LECSPTagVisible())
+        ecs.addComponent(tapSquare!, LECSPTag.Visible())
         if let tapSystem = self.tapSystem {
           ecs.processSystemWorldScoped(system: tapSystem)
         }

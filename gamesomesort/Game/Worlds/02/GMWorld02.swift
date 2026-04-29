@@ -52,7 +52,7 @@ class GMWorld02: GMWorld {
     let tapSquare = ecs.createEntity("tapSquare")
     ecs.addComponent(tapSquare, LECSPRadius(0.1))
     ecs.addComponent(tapSquare, LECSPColor(.red))
-    ecs.addComponent(tapSquare, LECSPTagVisible())
+    ecs.addComponent(tapSquare, LECSPTag.Visible())
     ecs.addComponent(tapSquare, LECSPModel("button-one"))
     ecs.addComponent(tapSquare, LECSPQuaternion(Float4x4.identity.q))
     ecs.addComponent(tapSquare, LECSPScale3d(F3(repeating: 0.1)))
@@ -75,7 +75,7 @@ class GMWorld02: GMWorld {
 
       var selectedEntityId: LECSId? = nil
       world.select(
-        [LECSId.self, LECSPColor.self, LECSPosition2d.self, LECSPRadius.self, CTTagBalloon.self, LECSPTagVisible.self]
+        [LECSId.self, LECSPColor.self, LECSPosition2d.self, LECSPRadius.self, CTTagBalloon.self, LECSPTag.Visible.self]
       ) { otherRow, otherColumns in
         let otherEntityId = otherRow.component(at: 0, otherColumns, LECSId.self)
         let otherPosition = otherRow.component(at: 2, otherColumns, LECSPosition2d.self)
@@ -100,7 +100,7 @@ class GMWorld02: GMWorld {
         }
       }
 
-      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), LECSPTagVisible()]
+      return [tapEntityId, tapPosition, CTTagTap(), CTTagBalloon(), LECSPTag.Visible()]
     }
 
     tapSystem = ecs.addSystemWorldScoped(
@@ -175,7 +175,7 @@ class GMWorld02: GMWorld {
 
         ecs.addComponent(tapSquare!, LECSPPosition3d(x: worldLocation.x, y: worldLocation.y, z: 1.0))
         ecs.addComponent(tapSquare!, CTTagTap())
-        ecs.addComponent(tapSquare!, LECSPTagVisible())
+        ecs.addComponent(tapSquare!, LECSPTag.Visible())
         if let tapSystem = self.tapSystem {
           ecs.processSystemWorldScoped(system: tapSystem)
         }

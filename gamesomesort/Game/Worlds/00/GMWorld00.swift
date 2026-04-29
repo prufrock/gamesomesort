@@ -113,7 +113,7 @@ class GMWorld00: GMWorld {
 
         ecs.addComponent(tapSquare!, LECSPosition2d(x: worldLocation.x, y: worldLocation.y))
         ecs.addComponent(tapSquare!, CTTagTap())
-        ecs.addComponent(tapSquare!, LECSPTagVisible())
+        ecs.addComponent(tapSquare!, LECSPTag.Visible())
         if let tapSystem = self.tapSystem {
           ecs.processSystemWorldScoped(system: tapSystem)
         }

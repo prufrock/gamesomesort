@@ -7,8 +7,10 @@
 
 import lecs_swift
 
-public struct LECSPTagTappable: LECSComponent {
-  public let exists = true
+extension LECSPTag {
+  public struct Tappable: LECSComponent {
+    public let exists = true
 
-  public init() {}
+    public init() {}
+  }
 }

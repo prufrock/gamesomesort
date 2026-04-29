@@ -101,10 +101,10 @@ fileprivate struct TBDGLevelInitializer {
       ecs.addComponent(entity, LECSPRadius(button.radius))
       ecs.addComponent(entity, LECSPModel(button.model))
       if button.tappable {
-        ecs.addComponent(entity, LECSPTagTappable())
+        ecs.addComponent(entity, LECSPTag.Tappable())
       }
       if button.visible {
-        ecs.addComponent(entity, LECSPTagVisible())
+        ecs.addComponent(entity, LECSPTag.Visible())
       }
     }
   }
