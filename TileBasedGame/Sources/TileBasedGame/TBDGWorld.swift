@@ -10,6 +10,8 @@ import GameConfiguration
 import VRTMath
 import LECSPieces
 
+public let E_NAME_CAMERA_PLAYER = "playerCamera"
+
 public class TBDGWorld {
   public let ecs: LECSWorld
   fileprivate let worldConfig: GCFGWorld
@@ -29,6 +31,15 @@ public class TBDGWorld {
     let lvlInit = TBDGLevelInitializer(world: self, level: "")
     lvlInit.reset()
   }
+
+  public func update(_ dimensions: VRTMScreenDimensions) {
+    let camera = ecs.entity(E_NAME_CAMERA_PLAYER)!
+
+    ecs.addComponent(
+      camera,
+      LECSPAspect(aspect: dimensions.aspectRatio)
+    )
+  }
 }
 
 fileprivate struct TBDGLevelInitializer {
@@ -43,10 +54,9 @@ fileprivate struct TBDGLevelInitializer {
   }
 
   private func initPlayerCamera() {
-    //TODO: get all of this stuff from the config
     let cfg = world.levelConfig.playerCamera
     let ecs = world.ecs
-    let playerCamera = ecs.createEntity("playerCamera")
+    let playerCamera = ecs.createEntity(E_NAME_CAMERA_PLAYER)
     ecs.addComponent(
       playerCamera,
       LECSPCameraFirstPerson(

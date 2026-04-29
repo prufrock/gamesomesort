@@ -17,7 +17,7 @@ class RNDRSquareRenderer: RNDRRenderer {
 
   private var squareRenderer = RNDRSquare()
 
-  private var screenDimensions = ScreenDimensions()
+  private var screenDimensions = VRTMScreenDimensions()
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -44,7 +44,7 @@ class RNDRSquareRenderer: RNDRRenderer {
     squareRenderer.initBuffers(device: device)
   }
 
-  func resize(_ dimensions: ScreenDimensions) {
+  func resize(_ dimensions: VRTMScreenDimensions) {
     screenDimensions = dimensions
   }
 

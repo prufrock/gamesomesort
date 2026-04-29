@@ -61,6 +61,21 @@ import VRTMath
     )!
     #expect(scale == [1, -1, 1])
   }()
+
+  world.update(VRTMScreenDimensions(
+    pixelSize: CGSize(width: 300, height: 500),
+    scaleFactor: 1.0)
+  )
+
+  _ = {
+    let entity = world.ecs.entity("playerCamera")!
+
+    let aspect = world.ecs.getComponent(
+      entity,
+      LECSPAspect.self
+    )!
+    #expect(aspect == 0.6)
+  }()
 }
 
 private func loadTestFile<T: Decodable>(from dir: String, name: String) throws -> T {

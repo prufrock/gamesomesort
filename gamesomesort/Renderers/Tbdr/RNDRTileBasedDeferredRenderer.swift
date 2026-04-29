@@ -4,10 +4,10 @@
 //
 //  Created by David Kanenwisher on 7/14/25.
 //
-import MetalKit
-import lecs_swift
-import VRTMath
 import LECSPieces
+import MetalKit
+import VRTMath
+import lecs_swift
 
 class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let config: AppCoreConfig
@@ -18,7 +18,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private var shadowRenderPass: RNDRShadowRenderPass? = nil
   private var tbdrPass: RNDRTiledDeferredRenderPass? = nil
 
-  private var screenDimensions = ScreenDimensions()
+  private var screenDimensions = VRTMScreenDimensions()
 
   var controllerTexture = ControllerTexture()
   var controllerModel: ControllerModel
@@ -70,7 +70,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     )
   }
 
-  func resize(_ dimensions: ScreenDimensions) {
+  func resize(_ dimensions: VRTMScreenDimensions) {
     screenDimensions = dimensions
     tbdrPass?.resize(dimensions)
   }

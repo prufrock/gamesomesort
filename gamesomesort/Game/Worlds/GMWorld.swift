@@ -17,7 +17,7 @@ protocol GMWorld {
 
   func update(timeStep: Float, input: GMGameInput) -> any DSQueue<GMWorldCommands>
 
-  func update(_ dimensions: ScreenDimensions)
+  func update(_ dimensions: VRTMScreenDimensions)
 }
 
 enum GMWorldCommands: Equatable {

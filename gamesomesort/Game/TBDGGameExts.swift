@@ -22,7 +22,4 @@ extension TBDGWorld: GMWorld {
   func update(timeStep: Float, input: GMGameInput) -> any DSQueue<GMWorldCommands> {
     DSQueueArray<GMWorldCommands>()
   }
-
-  func update(_ dimensions: ScreenDimensions) {
-  }
 }

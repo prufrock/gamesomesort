@@ -6,10 +6,11 @@
 //
 
 import Foundation
-import SVCFile
 import GameConfiguration
+import SVCFile
 //TODO: remove by moving into a TBDGame factory
 import TileBasedGame
+import VRTMath
 import lecs_swift
 
 /// Game manages all of the logic of the game. The World is a part of Game because there may be time when Game needs to
@@ -19,7 +20,7 @@ class GMGame {
   var world: any GMWorld
   private let levels: [GMTileMap]
   private let appCore: AppCore
-  private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
+  private var screenDimensions = VRTMScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
   private var elapsedTime: Float = 0
   private var selectedLevel: Int? = nil
 
@@ -89,6 +90,7 @@ class GMGame {
             )
           )
           tbdgWorld.reset()
+          tbdgWorld.update(screenDimensions)
           self.world = tbdgWorld
         }
       }
@@ -110,7 +112,7 @@ class GMGame {
     )
   }
 
-  func update(_ dimensions: ScreenDimensions) {
+  func update(_ dimensions: VRTMScreenDimensions) {
     self.screenDimensions = dimensions
     world.update(dimensions)
   }

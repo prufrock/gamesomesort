@@ -21,7 +21,7 @@ enum SVCCommandRender {
   }
 
   struct Resize: SVCDServiceCommand {
-    let screenDimensions: ScreenDimensions
+    let screenDimensions: VRTMScreenDimensions
   }
 
   struct Render: SVCDServiceCommand {

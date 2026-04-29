@@ -36,7 +36,7 @@ struct INTapLocation {
   }
 
   func screenToWorldOnZPlane(
-    screenDimensions: ScreenDimensions,
+    screenDimensions: VRTMScreenDimensions,
     targetZPlaneWorldCoord: Float = 1.0,
     camera: GMCameraFirstPerson
   ) -> simd_float3? {

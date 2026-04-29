@@ -6,6 +6,7 @@
 //
 
 import MetalKit
+import VRTMath
 import lecs_swift
 
 struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
@@ -242,7 +243,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   }
 
   // TODO: make sure this gets called by RNDRTileBasedDefferredRenderer when it's called.
-  mutating func resize(_ dimensions: ScreenDimensions) {
+  mutating func resize(_ dimensions: VRTMScreenDimensions) {
     albedoTexture = Self.makeTexture(
       device: device,
       size: dimensions.cgSize,

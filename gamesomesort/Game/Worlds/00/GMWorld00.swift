@@ -18,7 +18,10 @@ class GMWorld00: GMWorld {
   public let ecs: LECSWorld
   private(set) var map: GMTileMap
   private let ecsStarter: GMEcsStarter
-  private var screenDimensions = ScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
+  private var screenDimensions = VRTMScreenDimensions(
+    pixelSize: CGSize(),
+    scaleFactor: 1.0
+  )
   public var basis: F3 {
     config.game.world.world00.worldBasis
   }
@@ -137,7 +140,7 @@ class GMWorld00: GMWorld {
     return gameCommands
   }
 
-  func update(_ dimensions: ScreenDimensions) {
+  func update(_ dimensions: VRTMScreenDimensions) {
     screenDimensions = dimensions
 
     if let aspectRatioSystem = self.aspectRatioSystem {

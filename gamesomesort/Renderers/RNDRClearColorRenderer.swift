@@ -37,7 +37,7 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
     commandQueue = newCommandQueue
   }
 
-  func resize(_ dimensions: ScreenDimensions) {
+  func resize(_ dimensions: VRTMScreenDimensions) {
     // no-op
   }
 

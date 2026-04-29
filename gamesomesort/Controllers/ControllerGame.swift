@@ -5,8 +5,9 @@
 //  Created by David Kanenwisher on 5/30/25.
 //
 
-import MetalKit
 import Combine
+import MetalKit
+import VRTMath
 
 @MainActor
 class ControllerGame: NSObject {
@@ -40,7 +41,7 @@ class ControllerGame: NSObject {
     guard game == nil else { return }
 
     game = appCore.createGMGame()
-    let dimensions = ScreenDimensions(
+    let dimensions = VRTMScreenDimensions(
       pixelSize: view.drawableSize,
       scaleFactor: appCore.config.platform.scaleFactor
     )
@@ -85,7 +86,7 @@ class ControllerGame: NSObject {
 
 extension ControllerGame: MTKViewDelegate {
   func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-    let dimensions = ScreenDimensions(
+    let dimensions = VRTMScreenDimensions(
       pixelSize: size,
       scaleFactor: appCore.config.platform.scaleFactor
     )
