@@ -6,6 +6,7 @@
 //
 
 import Testing
+import VRTMath
 @testable import gamesomesort
 
 import Foundation
@@ -18,7 +19,7 @@ struct AppCoreContextTests {
     #expect(throws: Never.self) {
       context.sync(
         SVCCommandRender.Resize(
-          screenDimensions: ScreenDimensions()
+          screenDimensions: VRTMScreenDimensions()
         )
       )
     }
