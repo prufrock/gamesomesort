@@ -4,6 +4,20 @@
         "creatures": {},
         "things": {}
     },
+    "hud": {
+        "buttons": [
+            {
+                "behaviors": [],
+                "color": [0, 0, 0],
+                "model": "square",
+                "position": [0, 0, 0],
+                "radius": 1.0,
+                "rotationDegrees": 0,
+                "tappable": true,
+                "visible": true
+            }
+        ]
+    },
     "levels": {},
     "name": "no levels",
     "worldVector": [1, 1, 1]

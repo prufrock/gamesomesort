@@ -16,12 +16,15 @@
             }
         }
     },
-    "name": "world one level",
+    "hud": {
+        "buttons": []
+    },
     "levels": {
         "world_one_level_001": {
             "name": "world one level 001",
             "path": "world_one_level_001"
         }
     },
+    "name": "world one level",
     "worldVector": [1, 1, 1]
 }

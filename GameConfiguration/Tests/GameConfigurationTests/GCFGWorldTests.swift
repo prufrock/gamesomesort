@@ -18,6 +18,7 @@ import Foundation
 
   #expect(world.name == "no levels")
   #expect(world.levels.count == 0)
+  #expect(world.hud.buttons.count == 1)
 }
 
 @Test func `create world with one level`() async throws {

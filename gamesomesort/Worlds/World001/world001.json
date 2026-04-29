@@ -4,6 +4,9 @@
         "creatures": {},
         "things": {}
     },
+    "hud": {
+        "buttons": []
+    },
     "levels": {
         "w001L001": {
             "name": "w001L001",

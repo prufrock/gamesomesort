@@ -16,12 +16,8 @@
             }
         }
     },
-    "playerCamera": {
-        "farPlane": 10.0,
-        "flipY": true,
-        "nearPlane": 0.1,
-        "position": [0, 0, 0],
-        "viewAngleDegrees": 90.0
+    "hud": {
+        "buttons": []
     },
     "map": {
         "width": 2,
@@ -37,5 +33,12 @@
             0, 0,
             0, 0
         ]
+    },
+    "playerCamera": {
+        "farPlane": 10.0,
+        "flipY": true,
+        "nearPlane": 0.1,
+        "position": [0, 0, 0],
+        "viewAngleDegrees": 90.0
     }
 }
