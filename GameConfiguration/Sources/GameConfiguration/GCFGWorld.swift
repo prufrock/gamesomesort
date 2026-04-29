@@ -20,6 +20,7 @@ public struct GCFGWorld: Decodable {
     public struct Button: Decodable {
       public let behaviors: [String]
       public let color: F3
+      public let name: String
       public let model: String
       public let position: F3
       public let radius: Float

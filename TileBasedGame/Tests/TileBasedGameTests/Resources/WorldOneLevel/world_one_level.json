@@ -17,6 +17,21 @@
         }
     },
     "name": "world one level",
+    "hud": {
+        "buttons": [
+            {
+                "behaviors": ["exit"],
+                "color": [0, 0, 0],
+                "name": "exitButton",
+                "model": "square",
+                "position": [0, 0, 0],
+                "radius": 1.0,
+                "rotationDegrees": 0,
+                "tappable": true,
+                "visible": true
+            }
+        ]
+    },
     "levels": {
         "world_one_level_001": {
             "name": "world one level 001",

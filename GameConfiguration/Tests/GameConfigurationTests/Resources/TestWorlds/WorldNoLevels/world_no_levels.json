@@ -9,6 +9,7 @@
             {
                 "behaviors": [],
                 "color": [0, 0, 0],
+                "name": "exitButton",
                 "model": "square",
                 "position": [0, 0, 0],
                 "radius": 1.0,

@@ -67,6 +67,20 @@
         "identifier" : "631E2DCE2DE90E3400A5F49C",
         "name" : "gamesomesortUITests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:LECSPieces",
+        "identifier" : "LECSPiecesTests",
+        "name" : "LECSPiecesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:TileBasedGame",
+        "identifier" : "TileBasedGameTests",
+        "name" : "TileBasedGameTests"
+      }
     }
   ],
   "version" : 1
