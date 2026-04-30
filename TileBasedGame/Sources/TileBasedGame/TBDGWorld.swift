@@ -98,7 +98,6 @@ fileprivate struct TBDGLevelInitializer {
     cfg.forEach { button in
       let ecs = world.ecs
       let entity = ecs.createEntity(button.name)
-      //TODO: behavior
       ecs.addComponent(
         entity, LECSPHUD.Button.Behaviors(Set(button.behaviors))
       )
