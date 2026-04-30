@@ -5,10 +5,10 @@
 //  Created by David Kanenwisher on 6/12/25.
 //
 
+import Foundation
+import TileBasedGame
 import Testing
 @testable import gamesomesort
-
-import Foundation
 
 struct GMGameTests {
 
@@ -21,7 +21,7 @@ struct GMGameTests {
     )
 
     #expect(throws: Never.self) {
-      game.update(timeStep: 0.1, input: GMGameInput())
+      game.update(timeStep: 0.1, input: TBDGame.Input())
     }
   }
 }

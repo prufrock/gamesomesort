@@ -7,9 +7,10 @@
 
 import DataStructures
 import Foundation
-import lecs_swift
-import VRTMath
 import LECSPieces
+import TileBasedGame
+import VRTMath
+import lecs_swift
 
 private typealias Rect = VRTM2D.Rectangle
 
@@ -198,13 +199,13 @@ class GMWorld01: GMWorld {
   /// Update the game.
   /// - Parameters:
   ///   - timeStep: The amount of time to move it forward.
-  func update(timeStep: Float, input: GMGameInput) -> any DSQueue<GMWorldCommands> {
+  func update(timeStep: Float, input: TBDGame.Input) -> any DSQueue<TBDGWorld.Commands> {
     let playerCamera = ecs.gmCameraFirstPerson("playerCamera")!
-    var gameCommands: any DSQueue<GMWorldCommands> = DSQueueArray<GMWorldCommands>()
+    var gameCommands: any DSQueue<TBDGWorld.Commands> = DSQueueArray<TBDGWorld.Commands>()
 
-    var inputEvents: any DSQueue<GMGameInput.Events> = input.events
+    var inputEvents = input.events
     while !inputEvents.isEmpty {
-      let event: GMGameInput.Events = inputEvents.dequeue()!
+      let event = inputEvents.dequeue()!
       switch event {
       case .tap(tapLocation: let loc, lastTapTime: _):
         let tapLocation = INTapLocation(location: loc)

@@ -6,6 +6,7 @@
 //
 import DataStructures
 import lecs_swift
+import TileBasedGame
 import VRTMath
 
 protocol GMWorld {
@@ -15,7 +16,7 @@ protocol GMWorld {
   var basis: F3 { get }
   var uprightTransforms: [String: GEOTransform] { get }
 
-  func update(timeStep: Float, input: GMGameInput) -> any DSQueue<GMWorldCommands>
+  func update(timeStep: Float, input: TBDGame.Input) -> any DSQueue<TBDGWorld.Commands>
 
   func update(_ dimensions: VRTMScreenDimensions)
 }

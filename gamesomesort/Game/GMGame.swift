@@ -36,7 +36,7 @@ class GMGame {
   /// Update the game.
   /// - Parameters:
   ///   - timeStep: The amount of time to move forward.
-  func update(timeStep: Float, input: GMGameInput) {
+  func update(timeStep: Float, input: TBDGame.Input) {
 
     if selectedLevel == nil {
       initWorld(worldNumber: appCore.config.game.world.initialLevel)

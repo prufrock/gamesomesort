@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 4/16/26.
 //
 
+import DataStructures
 import lecs_swift
 import GameConfiguration
 import VRTMath
@@ -39,6 +40,13 @@ public class TBDGWorld {
       camera,
       LECSPAspect(aspect: dimensions.aspectRatio)
     )
+  }
+
+  public func update(
+    timeStep: Float,
+    input: TBDGame.Input
+  ) -> any DSQueue<TBDGWorld.Commands> {
+    return DSQueueArray()
   }
 }
 
@@ -91,6 +99,9 @@ fileprivate struct TBDGLevelInitializer {
       let ecs = world.ecs
       let entity = ecs.createEntity(button.name)
       //TODO: behavior
+      ecs.addComponent(
+        entity, LECSPHUD.Button.Behaviors(Set(button.behaviors))
+      )
       ecs.addComponent(entity, LECSPPosition3d(button.position))
       ecs.addComponent(entity, LECSPScale3d(F3(repeating: 0.5)))
       ecs.addComponent(entity, LECSPColor(button.color))

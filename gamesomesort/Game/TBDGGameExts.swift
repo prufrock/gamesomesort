@@ -18,8 +18,4 @@ extension TBDGWorld: GMWorld {
   var uprightTransforms: [String: GEOTransform] {
     [:]
   }
-
-  func update(timeStep: Float, input: GMGameInput) -> any DSQueue<GMWorldCommands> {
-    DSQueueArray<GMWorldCommands>()
-  }
 }

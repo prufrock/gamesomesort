@@ -5,10 +5,11 @@
 //  Created by David Kanenwisher on 6/19/25.
 //
 
+import Combine
 import DataStructures
 import Foundation
-import Combine
 import MetalKit
+import TileBasedGame
 import VRTMath
 
 class ControllerInput {
@@ -20,7 +21,7 @@ class ControllerInput {
   private var updateFrameSizeSubject: PassthroughSubject<CGSize, Never> = PassthroughSubject()
   private var updateFrameSizeCancelable: AnyCancellable?
 
-  private var events: any DSQueue<GMGameInput.Events> = DSQueueArray<GMGameInput.Events>()
+  private var events: any DSQueue<TBDGame.Input.Events> = DSQueueArray<TBDGame.Input.Events>()
 
   init(config: AppCoreConfig) {
     self.config = config
@@ -85,12 +86,12 @@ class ControllerInput {
     updateFrameSizeSubject.send(size)
   }
 
-  func update() -> GMGameInput {
+  func update() -> TBDGame.Input {
     defer {
-      events = DSQueueArray<GMGameInput.Events>()
+      events = DSQueueArray<TBDGame.Input.Events>()
     }
 
-    return GMGameInput(events: events)
+    return TBDGame.Input(events: events)
   }
 }
 
