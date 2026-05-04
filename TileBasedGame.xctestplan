@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "FE947B2C-1613-41B6-BB7A-BE3F9F6BC924",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "TileBasedGameTests",
+        "name" : "TileBasedGameTests"
+      }
+    }
+  ],
+  "version" : 1
+}
