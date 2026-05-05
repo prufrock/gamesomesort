@@ -7,6 +7,7 @@
 
 import DataStructures
 import lecs_swift
+import Foundation
 import GameConfiguration
 import VRTMath
 import LECSPieces
@@ -17,6 +18,7 @@ public class TBDGWorld {
   public let ecs: LECSWorld
   fileprivate let worldConfig: GCFGWorld
   fileprivate let levelConfig: GCFGLevel
+  private var screenDimensions = VRTMScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
 
   public init(
     worldConfig: GCFGWorld,
@@ -34,10 +36,11 @@ public class TBDGWorld {
   }
 
   public func update(_ dimensions: VRTMScreenDimensions) {
-    let camera = ecs.entity(E_NAME_CAMERA_PLAYER)!
+    let activeCamera = ecs.entity(E_NAME_CAMERA_PLAYER)!
+    self.screenDimensions = dimensions
 
     ecs.addComponent(
-      camera,
+      activeCamera,
       LECSPAspect(aspect: dimensions.aspectRatio)
     )
   }
@@ -46,7 +49,30 @@ public class TBDGWorld {
     timeStep: Float,
     input: TBDGame.Input
   ) -> any DSQueue<TBDGWorld.Commands> {
-    return DSQueueArray()
+    let activeCamera = ecs.vrtmCameraPerspective(E_NAME_CAMERA_PLAYER)!
+    var gameCommands = DSQueueArray<TBDGWorld.Commands>()
+
+    var inputEvents = input.events
+    while !inputEvents.isEmpty {
+      let event = inputEvents.dequeue()!
+      switch event {
+      case .tap(tapLocation: let loc, lastTapTime: _):
+        let tapLocation = TBDGTapLocation(location: loc)
+
+        let worldLocation = tapLocation.screenToWorldOnZPlane(
+          screenDimensions: screenDimensions,
+          targetZPlaneWorldCoord: 1,
+          camera: activeCamera,
+        )!
+
+        print("tapLocation: \(tapLocation)")
+        print("worldLocation: \(worldLocation)")
+        gameCommands.enqueue(.start(level: 0))
+      case .screenSizeChanged:
+        break
+      }
+    }
+    return gameCommands
   }
 }
 

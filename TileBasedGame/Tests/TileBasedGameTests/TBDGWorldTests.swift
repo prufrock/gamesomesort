@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 4/28/26.
 //
 
+import DataStructures
 import Foundation
 import GameConfiguration
 import lecs_swift
@@ -37,6 +38,25 @@ import VRTMath
 
     #expect(entity != nil)
   }()
+}
+
+@Test func `exit the world`() {
+  let world = startWorld()
+
+  world.update(VRTMScreenDimensions(
+    pixelSize: CGSize(width: 300, height: 500),
+    scaleFactor: 1.0)
+  )
+
+  var events = DSQueueArray<TBDGame.Input.Events>()
+  events.enqueue(.tap(tapLocation: F2(0,0), lastTapTime: 0.009))
+  let input = TBDGame.Input(events: events)
+
+  var commands = world.update(
+    timeStep: 0.01, input: input
+  )
+
+  #expect(commands.dequeue() == .start(level: 0))
 }
 
 private func startWorld() -> TBDGWorld {
