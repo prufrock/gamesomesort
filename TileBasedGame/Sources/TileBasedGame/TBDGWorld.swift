@@ -107,13 +107,13 @@ fileprivate struct TBDGLevelInitializer {
 
   private func initSun() {
     //TODO: Get the sun in the config
-    let cfg = world.levelConfig.playerCamera
+    let cfg = world.levelConfig.sun
     let ecs = world.ecs
     let id = ecs.createEntity("sun")
     var sun = LECSPLight()
     sun.type = .Sun
-    let color = LECSPColor([1, 1, 1])
-    let position = LECSPPosition3d([0, 0, -1])
+    let color = LECSPColor(cfg.color)
+    let position = LECSPPosition3d(cfg.position)
     ecs.addComponent(id, sun)
     ecs.addComponent(id, color)
     ecs.addComponent(id, position)

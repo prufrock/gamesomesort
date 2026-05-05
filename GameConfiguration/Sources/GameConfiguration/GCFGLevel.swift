@@ -10,6 +10,7 @@ import VRTMath
 public struct GCFGLevel: Decodable {
   public let playerCamera: Camera
   public let map: Map
+  public let sun: Light.Sun
 
   public subscript(tile x: Int, y: Int) -> Int? {
     get { map.tiles[y * map.width + x] }

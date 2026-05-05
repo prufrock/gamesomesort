@@ -59,10 +59,14 @@ class GMGame {
 
           var worldCfg: GCFGWorld! = nil
           var levelCfg: GCFGLevel! = nil
+          #if os(macOS) && DEBUG
           appCore.sync(
             LoadJsonFileCommand(
               fileDescriptor: SVCFileDescriptor(name: world001Path!, ext: .json),
-              decodeType: GCFGWorld.self
+              decodeType: GCFGWorld.self,
+              filePath: URL(
+                fileURLWithPath: "~/Music/gamesomesort/Worlds/World001"
+              )
             ) { (worldData: GCFGWorld) in
               print("worldData \(worldData)")
               worldCfg = worldData
@@ -75,12 +79,41 @@ class GMGame {
                 name: worldCfg.levels[selectedLevel]!.path,
                 ext: .json
               ),
-              decodeType: GCFGLevel.self
+              decodeType: GCFGLevel.self,
+              filePath: URL(
+                fileURLWithPath: "~/Music/gamesomesort/Worlds/World001"
+              )
             ) { (levelData: GCFGLevel) in
               print("levelData \(levelData)")
               levelCfg = levelData
             }
           )
+          #else
+          appCore.sync(
+            LoadJsonFileCommand(
+              fileDescriptor: SVCFileDescriptor(name: world001Path!, ext: .json),
+              decodeType: GCFGWorld.self,
+              bundle: .main
+            ) { (worldData: GCFGWorld) in
+              print("worldData \(worldData)")
+              worldCfg = worldData
+
+            }
+          )
+          appCore.sync(
+            LoadJsonFileCommand(
+              fileDescriptor: SVCFileDescriptor(
+                name: worldCfg.levels[selectedLevel]!.path,
+                ext: .json
+              ),
+              decodeType: GCFGLevel.self,
+              bundle: .main
+            ) { (levelData: GCFGLevel) in
+              print("levelData \(levelData)")
+              levelCfg = levelData
+            }
+          )
+          #endif  // os(macOS) && DEBUG
 
           let tbdgWorld = TBDGWorld(
             worldConfig: worldCfg!,
