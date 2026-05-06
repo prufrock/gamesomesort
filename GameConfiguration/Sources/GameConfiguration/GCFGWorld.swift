@@ -16,6 +16,7 @@ public struct GCFGWorld: Decodable {
 
   public struct HUD: Decodable {
     public let buttons: [Button]
+    public let input: Input
 
     public struct Button: Decodable {
       public let behaviors: [String]
@@ -28,8 +29,15 @@ public struct GCFGWorld: Decodable {
       public let tappable: Bool
       public let visible: Bool
     }
-  }
 
+    public struct Input: Decodable {
+      public let tap: Tap
+
+      public struct Tap: Decodable {
+        public let radius: Float
+      }
+    }
+  }
   public struct LevelPath: Decodable {
     public let name: String
     public let path: String

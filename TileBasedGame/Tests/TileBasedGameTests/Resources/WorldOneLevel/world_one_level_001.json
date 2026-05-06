@@ -16,13 +16,6 @@
             }
         }
     },
-    "playerCamera": {
-        "farPlane": 10.0,
-        "flipY": true,
-        "nearPlane": 0.1,
-        "position": [0, 0, 0],
-        "viewAngleDegrees": 90.0
-    },
     "map": {
         "width": 2,
         "tiles": [
@@ -37,5 +30,16 @@
             0, 0,
             0, 0
         ]
+    },
+    "playerCamera": {
+        "farPlane": 10.0,
+        "flipY": true,
+        "nearPlane": 0.1,
+        "position": [3.5, 4, -7.25],
+        "viewAngleDegrees": 90.0
+    },
+    "sun": {
+        "color": [1, 1, 1],
+        "position": [0, 0, -9],
     }
 }

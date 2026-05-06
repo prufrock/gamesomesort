@@ -1,4 +1,10 @@
 {
+    "map": {
+        "width": 0,
+        "tiles": [],
+        "creatures": [],
+        "things": []
+    },
     "playerCamera": {
         "farPlane": 10.0,
         "flipY": true,
@@ -6,10 +12,8 @@
         "position": [0, 0, 0],
         "viewAngleDegrees": 90.0
     },
-    "map": {
-        "width": 0,
-        "tiles": [],
-        "creatures": [],
-        "things": []
+    "sun": {
+        "color": [1, 1, 1],
+        "position": [0, 0, -9],
     }
 }

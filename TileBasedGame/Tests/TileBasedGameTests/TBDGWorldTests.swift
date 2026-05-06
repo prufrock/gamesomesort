@@ -44,12 +44,12 @@ import VRTMath
   let world = startWorld()
 
   world.update(VRTMScreenDimensions(
-    pixelSize: CGSize(width: 300, height: 500),
+    pixelSize: CGSize(width: 500, height: 500),
     scaleFactor: 1.0)
   )
 
   var events = DSQueueArray<TBDGame.Input.Events>()
-  events.enqueue(.tap(tapLocation: F2(0,0), lastTapTime: 0.009))
+  events.enqueue(.tap(tapLocation: F2(175.0, 65.0), lastTapTime: 0.009))
   let input = TBDGame.Input(events: events)
 
   var commands = world.update(

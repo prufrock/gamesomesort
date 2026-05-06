@@ -17,7 +17,12 @@
         }
     },
     "hud": {
-        "buttons": []
+        "buttons": [],
+        "input": {
+            "tap": {
+                "radius": 1.0
+            }
+        }
     },
     "levels": {
         "world_one_level_001": {

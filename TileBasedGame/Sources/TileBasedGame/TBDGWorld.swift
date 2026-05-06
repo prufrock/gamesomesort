@@ -13,6 +13,7 @@ import VRTMath
 import LECSPieces
 
 public let E_NAME_CAMERA_PLAYER = "playerCamera"
+public let E_NAME_TAP_LOCATION = "tapLocation"
 
 public class TBDGWorld {
   public let ecs: LECSWorld
@@ -58,16 +59,50 @@ public class TBDGWorld {
       switch event {
       case .tap(tapLocation: let loc, lastTapTime: _):
         let tapLocation = TBDGTapLocation(location: loc)
+        let tapEntity = ecs.entity(E_NAME_TAP_LOCATION)!
+        let tapRadius = ecs.getComponent(tapEntity, LECSPRadius.self)
 
         let worldLocation = tapLocation.screenToWorldOnZPlane(
           screenDimensions: screenDimensions,
           targetZPlaneWorldCoord: 1,
           camera: activeCamera,
         )!
+        print("screen \(loc) -> world \(worldLocation)")
 
-        print("tapLocation: \(tapLocation)")
-        print("worldLocation: \(worldLocation)")
-        gameCommands.enqueue(.start(level: 0))
+        ecs.addComponent(
+          tapEntity,
+          LECSPPosition3d(x: worldLocation.x, y: worldLocation.y, z: 1.0)
+        )
+        ecs.addComponent(tapEntity, LECSPTag.Tap())
+        ecs.addComponent(tapEntity, LECSPTag.Visible())
+
+        ecs.select([
+          LECSPHUD.Button.Behaviors.self,
+          LECSPPosition3d.self,
+          LECSPRadius.self,
+          LECSPTag.Tappable.self
+        ]) { row, columns in
+          let behaviors = row.component(at: 0, columns, LECSPHUD.Button.Behaviors.self)
+          let position = row.component(at: 1, columns, LECSPPosition3d.self)
+          let radius = row.component(at: 2, columns, LECSPRadius.self)
+
+          let rectangle = VRTM2D.Rectangle(
+            position: position.position.xy,
+            radius: radius.radius
+          )
+
+          let tapped = rectangle.contains(worldLocation.xy)
+
+          if tapped && behaviors.list.contains("exit") {
+            print("exit")
+            gameCommands.enqueue(.start(level: 0))
+          }
+          if tapped && behaviors.list.contains("reload") {
+            print("exit")
+            gameCommands.enqueue(.startWorld(world: "world001"))
+          }
+        }
+
       case .screenSizeChanged:
         break
       }
@@ -81,10 +116,11 @@ fileprivate struct TBDGLevelInitializer {
   let level: String
 
   func reset() {
-    initPlayerCamera()
-    initSun()
     initExitButton()
+    initPlayerCamera()
     initPointLight()
+    initSun()
+    initTapLocation()
   }
 
   private func initPlayerCamera() {
@@ -158,5 +194,14 @@ fileprivate struct TBDGLevelInitializer {
     ecs.addComponent(id, light)
     ecs.addComponent(id, color)
     ecs.addComponent(id, position)
+  }
+
+  private func initTapLocation() {
+    let ecs = world.ecs
+    let id = ecs.createEntity("tapLocation")
+    let position = LECSPPosition3d(-10000, -10000, -10000)
+    let radius = LECSPRadius(0)
+    ecs.addComponent(id, position)
+    ecs.addComponent(id, radius)
   }
 }

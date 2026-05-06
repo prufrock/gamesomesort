@@ -1,24 +1,5 @@
 {
-    "entities": {
-        "tiles": {
-            "0": {
-                "name": "empty"
-            }
-        },
-        "creatures": {
-            "0": {
-                "name": "absence"
-            }
-        },
-        "things": {
-            "0": {
-                "name": "nothing"
-            }
-        }
-    },
-    "hud": {
-        "buttons": []
-    },
+
     "map": {
         "width": 2,
         "tiles": [
@@ -40,5 +21,9 @@
         "nearPlane": 0.1,
         "position": [0, 0, 0],
         "viewAngleDegrees": 90.0
+    },
+    "sun": {
+        "color": [1, 1, 1],
+        "position": [0, 0, -9],
     }
 }
