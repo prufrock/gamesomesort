@@ -1,21 +1,4 @@
 {
-    "entities": {
-        "tiles": {
-            "0": {
-                "name": "empty"
-            }
-        },
-        "creatures": {
-            "0": {
-                "name": "absence"
-            }
-        },
-        "things": {
-            "0": {
-                "name": "nothing"
-            }
-        }
-    },
     "map": {
         "width": 2,
         "tiles": [

@@ -6,9 +6,9 @@
 //
 
 public struct GCFGEntities: Decodable {
-  public let tiles: [Int: GCFGTile]
   public let creatures: [Int: GCFGCreature]
   public let things: [Int: GCFGThing]
+  public let tiles: [Int: GCFGTile]
 
   private struct CodingKeys: CodingKey {
     var intValue: Int?
@@ -23,6 +23,16 @@ public struct GCFGEntities: Decodable {
       self.stringValue = String(intValue)
       self.intValue = intValue
     }
+  }
+
+  public init(
+    creatures: [Int: GCFGCreature],
+    things: [Int: GCFGThing],
+    tiles: [Int: GCFGTile],
+  ) {
+    self.creatures = creatures
+    self.things = things
+    self.tiles = tiles
   }
 
   public init(from decoder: Decoder) throws {

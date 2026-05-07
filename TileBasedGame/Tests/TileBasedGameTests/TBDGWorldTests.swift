@@ -60,9 +60,39 @@ import VRTMath
 }
 
 private func startWorld() -> TBDGWorld {
-  let worldCfg: GCFGWorld = try! loadTestFile(
-    from: "WorldOneLevel",
-    name: "world_one_level"
+  let worldCfg = GCFGWorld(
+    entities: GCFGEntities(
+      creatures: [:],
+      things: [:],
+      tiles: [:]
+    ),
+    hud: GCFGWorld.HUD(
+      buttons: [
+        GCFGWorld.HUD
+          .Button(
+            behaviors: ["exit"],
+            color: [0, 0, 0],
+            name: "exitButton",
+            model: "square",
+            position: [1.0, -2, 1.0],
+            radius: 1.5,
+            rotationDegrees: 0,
+            tappable: true,
+            visible: true
+          )
+      ],
+      input: GCFGWorld.HUD.Input(
+        tap: GCFGWorld.HUD.Input.Tap(radius: 1.0)
+      )
+    ),
+    levels: [
+      "world_one_level_001": GCFGWorld.LevelPath(
+        name: "world one level 001", 
+        path: "world_one_level_001"
+      )
+    ],
+    name: "world_one_level",
+    worldVector: [1, -1, 1]
   )
 
   let levelOneCfg: GCFGLevel = try! loadTestFile(
