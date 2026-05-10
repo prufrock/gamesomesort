@@ -58,40 +58,25 @@ public class TBDGWorld {
       let event = inputEvents.dequeue()!
       switch event {
       case .tap(tapLocation: let loc, lastTapTime: _):
-        let tapLocation = TBDGTapLocation(location: loc)
-        let tapEntity = ecs.entity(E_NAME_TAP_LOCATION)!
-        let tapRadius = ecs.getComponent(tapEntity, LECSPRadius.self)
-
-        let worldLocation = tapLocation.screenToWorldOnZPlane(
+        let worldLocation = TBDGTapLocation(
+          location: loc
+        ).screenToWorldOnZPlane(
           screenDimensions: screenDimensions,
           targetZPlaneWorldCoord: 1,
           camera: activeCamera,
         )!
-        print("screen \(loc) -> world \(worldLocation)")
 
-        ecs.addComponent(
-          tapEntity,
-          LECSPPosition3d(x: worldLocation.x, y: worldLocation.y, z: 1.0)
-        )
-        ecs.addComponent(tapEntity, LECSPTag.Tap())
-        ecs.addComponent(tapEntity, LECSPTag.Visible())
+        var tap = ecs.getTap(name: E_NAME_TAP_LOCATION)
+        tap.set(position: worldLocation)
+        tap.show()
 
-        ecs.select([
-          LECSPHUD.Button.Behaviors.self,
-          LECSPPosition3d.self,
-          LECSPRadius.self,
-          LECSPTag.Tappable.self
-        ]) { row, columns in
-          let behaviors = row.component(at: 0, columns, LECSPHUD.Button.Behaviors.self)
-          let position = row.component(at: 1, columns, LECSPPosition3d.self)
-          let radius = row.component(at: 2, columns, LECSPRadius.self)
-
+        ecs.selectTappables { behaviors, position, radius in
           let rectangle = VRTM2D.Rectangle(
             position: position.position.xy,
             radius: radius.radius
           )
 
-          let tapped = rectangle.contains(worldLocation.xy)
+          let tapped = rectangle.contains(tap.position.xy)
 
           if tapped && behaviors.list.contains("exit") {
             print("exit")
@@ -203,5 +188,6 @@ fileprivate struct TBDGLevelInitializer {
     let radius = LECSPRadius(0)
     ecs.addComponent(id, position)
     ecs.addComponent(id, radius)
+    ecs.addComponent(id, LECSPTag.Tap())
   }
 }
