@@ -95,9 +95,32 @@ private func startWorld() -> TBDGWorld {
     worldVector: [1, -1, 1]
   )
 
-  let levelOneCfg: GCFGLevel = try! loadTestFile(
-    from: "WorldOneLevel",
-    name: worldCfg.levels["world_one_level_001"]!.path
+  let levelOneCfg: GCFGLevel = GCFGLevel(
+    map: GCFGLevel.Map(
+      creatures: [
+        0, 0,
+        0, 0
+      ],
+      things: [
+        0, 0,
+        0, 0
+      ],
+      tiles: [
+        0, 0,
+        0, 0
+      ],
+      width: 2,
+    ),
+    playerCamera: GCFGLevel.Camera(
+      farPlane: 10.0,
+      nearPlane: 0.1,
+      position: [3.5, 4, -7.25],
+      viewAngleDegrees: 90.0,
+    ),
+    sun: GCFGLevel.Light.Sun(
+      color: [1, 1, 1],
+      position: [0, 0, -9],
+    )
   )
 
   let ecs = LECSCreateWorld(archetypeSize: 100)
@@ -111,15 +134,4 @@ private func startWorld() -> TBDGWorld {
   world.restart()
 
   return world
-}
-
-private func loadTestFile<T: Decodable>(from dir: String, name: String) throws -> T {
-  let bundle = Bundle.module
-  let jsonUrl = bundle.url(
-    forResource: "Resources/\(dir)/\(name)",
-    withExtension: "json"
-  )!
-
-  let data: Data = try! Data(contentsOf: jsonUrl)
-  return try JSONDecoder().decode(T.self, from: data)
 }
