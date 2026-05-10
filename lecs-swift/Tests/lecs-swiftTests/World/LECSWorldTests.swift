@@ -47,6 +47,17 @@ final class LECSWorldTests: XCTestCase {
         XCTAssertFalse(world.hasComponent(otherEntity, LECSVelocity2d.self))
     }
 
+    func testGetComponentNotOnEntity() {
+        let world = LECSWorldFixedSize(archetypeSize: 10)
+
+        let entity = world.createEntity("spear")
+        world.addComponent(entity, LECSVelocity2d())
+
+        let component = world.getComponent(entity, LECSPosition2d.self)
+
+        XCTAssertNil(component)
+    }
+
     func testAddSystem() {
         let world = LECSWorldFixedSize(archetypeSize: 10)
 

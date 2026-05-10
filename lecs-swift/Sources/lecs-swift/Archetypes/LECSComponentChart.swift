@@ -81,7 +81,8 @@ class LECSFixedComponentChart {
 
     func component(in row: LECSRowId, type: LECSComponent.Type) -> Bool {
         guard let componentId = components[type] else {
-            fatalError("The type:[\(type)] hasn't been added yet. Do you need to adjust your code to add it?")
+            //fatalError("The type:[\(type)] hasn't been added yet. Do you need to adjust your code to add it?")
+            return false
         }
 
         return componentArchetype[componentId]?[row.archetypeId] != nil

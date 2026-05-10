@@ -197,8 +197,10 @@ class LECSWorldFixedSize: LECSWorld {
         let row = getRow(for: entityId)
         return chart.component(in: row, type: component)
     }
-    
+
     func getComponent<T:LECSComponent>(_ entityId: LECSEntityId, _ component: T.Type) -> T? {
+        guard hasComponent(entityId, component) else { return nil }
+
         let row = getRow(for: entityId)
         return chart.readComponentFrom(row: row, type: component)
     }
