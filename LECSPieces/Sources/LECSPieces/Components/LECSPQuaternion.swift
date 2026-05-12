@@ -19,4 +19,8 @@ public struct LECSPQuaternion: LECSComponent {
   public init(_ quaternion: simd_quatf) {
     self.quaternion = quaternion
   }
+
+  public init(fromDegY deg: Float) {
+    self.quaternion = .init(Float4x4.rotateY(deg))
+  }
 }

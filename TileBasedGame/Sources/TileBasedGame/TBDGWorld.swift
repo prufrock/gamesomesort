@@ -69,6 +69,7 @@ public class TBDGWorld {
         var tap = ecs.getTap(name: E_NAME_TAP_LOCATION)
         tap.set(position: worldLocation)
         tap.show()
+        ecs.updateTappable(model: tap)
 
         ecs.selectTappables { behaviors, position, radius in
           let rectangle = VRTM2D.Rectangle(
@@ -76,7 +77,7 @@ public class TBDGWorld {
             radius: radius.radius
           )
 
-          let tapped = rectangle.contains(tap.position.xy)
+          let tapped = rectangle.intersection(with: tap.rectangle) != nil
 
           if tapped && behaviors.list.contains("exit") {
             print("exit")
@@ -183,11 +184,11 @@ fileprivate struct TBDGLevelInitializer {
 
   private func initTapLocation() {
     let ecs = world.ecs
-    let id = ecs.createEntity("tapLocation")
-    let position = LECSPPosition3d(-10000, -10000, -10000)
-    let radius = LECSPRadius(0)
-    ecs.addComponent(id, position)
-    ecs.addComponent(id, radius)
-    ecs.addComponent(id, LECSPTag.Tap())
+    ecs.createTap(
+      isVisible: true,
+      name: "tapLocation",
+      position: F3(-10000, -10000, -10000),
+      radius: 0.1
+    )
   }
 }

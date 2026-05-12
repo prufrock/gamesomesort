@@ -36,11 +36,33 @@ extension LECSWorld {
 
 // Tappables
 extension LECSWorld {
+  func createTap(
+    isVisible: Bool,
+    name: String,
+    position: F3,
+    radius: Float,
+  ) {
+    let id = createEntity("tapLocation")
+    let position = LECSPPosition3d(position)
+    let radius = LECSPRadius(radius)
+    addComponent(id, position)
+    addComponent(id, radius)
+    addComponent(id, LECSPTag.Tap())
+    addComponent(id, LECSPModel("button-one"))
+    addComponent(id, LECSPColor(F3(0, 0, 0)))
+    addComponent(id, LECSPScale3d(F3(repeating: radius.radius)))
+    addComponent(id, LECSPQuaternion(fromDegY: 0))
+    if isVisible {
+      addComponent(id, LECSPTag.Visible())
+    }
+  }
+
   func getTap(name: String) -> Model.Tap {
     let entity = entity(name)!
     let position = getComponent(entity, LECSPPosition3d.self)!
     let radius = getComponent(entity, LECSPRadius.self)!
     let visible = getComponent(entity, LECSPTag.Visible.self)
+
     return .init(
       id: entity,
       name: name,
@@ -85,6 +107,18 @@ enum Model {
     let name: String
     var position: LECSPPosition3d
     let radius: LECSPRadius
+    var rectangle: VRTM2D.Rectangle {
+      .init(
+        min: F2(
+          position.x - radius.radius,
+          position.y - radius.radius,
+        ),
+        max: F2(
+          position.x + radius.radius,
+          position.y + radius.radius,
+        )
+      )
+    }
     var visible: LECSPTag.Visible?
 
     mutating func set(position: F3) {
