@@ -34,6 +34,14 @@ extension LECSWorld {
   }
 }
 
+// Events
+extension LECSWorld {
+  func createEvent(name: String, type: LECSPEvent.EventType) {
+    let id = createEntity(name)
+    addComponent(id, LECSPEvent(event: type))
+  }
+}
+
 // Tappables
 extension LECSWorld {
   func createTap(
@@ -74,22 +82,27 @@ extension LECSWorld {
 
   func selectTappables(
     block: (
+      LECSId,
       LECSPHUD.Button.Behaviors,
       LECSPPosition3d,
       LECSPRadius
     ) -> Void)
   {
     select([
+      LECSId.self,
       LECSPHUD.Button.Behaviors.self,
       LECSPPosition3d.self,
       LECSPRadius.self,
       LECSPTag.Tappable.self
     ]) { row, columns in
-      let behaviors = row.component(at: 0, columns, LECSPHUD.Button.Behaviors.self)
-      let position = row.component(at: 1, columns, LECSPPosition3d.self)
-      let radius = row.component(at: 2, columns, LECSPRadius.self)
+      var i = 0
+      let counter: () -> Int = { defer {i += 1}; return i }
+      let id = row.component(at: counter(), columns, LECSId.self)
+      let behaviors = row.component(at: counter(), columns, LECSPHUD.Button.Behaviors.self)
+      let position = row.component(at: counter(), columns, LECSPPosition3d.self)
+      let radius = row.component(at: counter(), columns, LECSPRadius.self)
 
-      block(behaviors, position, radius)
+      block(id, behaviors, position, radius)
     }
   }
 

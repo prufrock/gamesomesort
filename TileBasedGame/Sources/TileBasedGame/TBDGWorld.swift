@@ -71,26 +71,46 @@ public class TBDGWorld {
         tap.show()
         ecs.updateTappable(model: tap)
 
-        ecs.selectTappables { behaviors, position, radius in
+        ecs.selectTappables { id, behaviors, position, radius in
           let rectangle = VRTM2D.Rectangle(
             position: position.position.xy,
             radius: radius.radius
           )
 
           let tapped = rectangle.intersection(with: tap.rectangle) != nil
+          if tapped {
+            ecs.createEvent(name: "tapEvent", type: .touched(id))
+          }
+        }
+      case .screenSizeChanged:
+        break
+      }
+    }
 
-          if tapped && behaviors.list.contains("exit") {
-            print("exit")
+    // process events
+    ecs.select([LECSId.self, LECSPEvent.self]) { row, columns in
+      var i = 0
+      let counter: () -> Int = { defer {i += 1}; return i }
+      let id = row.component(at: counter(), columns, LECSId.self)
+      let event = row.component(at: counter(), columns, LECSPEvent.self)
+      ecs.deleteEntity(id.id)
+
+      switch event.event {
+      case .none:
+        // no-op
+      case .touched(let id):
+        let behaviors = ecs.getComponent(
+          id.id,
+          LECSPHUD.Button.Behaviors.self
+        )
+        if let behaviors {
+          if behaviors.list.contains("exit") {
             gameCommands.enqueue(.start(level: 0))
           }
-          if tapped && behaviors.list.contains("reload") {
-            print("exit")
+          if behaviors.list.contains("reload") {
             gameCommands.enqueue(.startWorld(world: "world001"))
           }
         }
-
-      case .screenSizeChanged:
-        break
       }
     }
     return gameCommands
@@ -102,11 +122,19 @@ fileprivate struct TBDGLevelInitializer {
   let level: String
 
   func reset() {
+    initComponents()
     initExitButton()
     initPlayerCamera()
     initPointLight()
     initSun()
     initTapLocation()
+  }
+
+  private func initComponents() {
+    let ecs = world.ecs
+    let componentHolder = ecs.createEntity("componentHolder")
+    ecs.addComponent(componentHolder, LECSPEvent())
+    ecs.removeComponent(componentHolder, component: LECSPEvent.self)
   }
 
   private func initPlayerCamera() {
