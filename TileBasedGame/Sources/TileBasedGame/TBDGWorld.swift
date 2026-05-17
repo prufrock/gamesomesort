@@ -51,8 +51,7 @@ public class TBDGWorld {
     input: TBDGame.Input
   ) -> any DSQueue<TBDGWorld.Commands> {
     let activeCamera = ecs.vrtmCameraPerspective(E_NAME_CAMERA_PLAYER)!
-    var gameCommands = DSQueueArray<TBDGWorld.Commands>()
-
+    
     var inputEvents = input.events
     while !inputEvents.isEmpty {
       let event = inputEvents.dequeue()!
@@ -88,32 +87,7 @@ public class TBDGWorld {
     }
 
     // process events
-    ecs.select([LECSId.self, LECSPEvent.self]) { row, columns in
-      var i = 0
-      let counter: () -> Int = { defer {i += 1}; return i }
-      let id = row.component(at: counter(), columns, LECSId.self)
-      let event = row.component(at: counter(), columns, LECSPEvent.self)
-      ecs.deleteEntity(id.id)
-
-      switch event.event {
-      case .none:
-        // no-op
-      case .touched(let id):
-        let behaviors = ecs.getComponent(
-          id.id,
-          LECSPHUD.Button.Behaviors.self
-        )
-        if let behaviors {
-          if behaviors.list.contains("exit") {
-            gameCommands.enqueue(.start(level: 0))
-          }
-          if behaviors.list.contains("reload") {
-            gameCommands.enqueue(.startWorld(world: "world001"))
-          }
-        }
-      }
-    }
-    return gameCommands
+    return ecs.processEvents()
   }
 }
 

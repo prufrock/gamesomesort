@@ -34,14 +34,6 @@ extension LECSWorld {
   }
 }
 
-// Events
-extension LECSWorld {
-  func createEvent(name: String, type: LECSPEvent.EventType) {
-    let id = createEntity(name)
-    addComponent(id, LECSPEvent(event: type))
-  }
-}
-
 // Tappables
 extension LECSWorld {
   func createTap(
