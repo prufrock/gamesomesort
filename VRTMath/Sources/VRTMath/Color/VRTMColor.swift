@@ -106,4 +106,11 @@ public class VRTMColorA {
     b = color.bFloat()
     self.a = a
   }
+
+  public init(_ color: F3, a: Float = 1.0) {
+    r = color.x
+    g = color.y
+    b = color.z
+    self.a = a
+  }
 }

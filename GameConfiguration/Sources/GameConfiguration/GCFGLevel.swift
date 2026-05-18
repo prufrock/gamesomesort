@@ -76,6 +76,9 @@ public struct GCFGLevel: Decodable {
     // tiles are the walls, floors, pits, that make up the world
     public let tiles: [Int]
     public let width: Int
+    public var height: Int {
+      width
+    }
 
     public init(
       creatures: [Int],
@@ -99,6 +102,14 @@ public struct GCFGLevel: Decodable {
 
     public subscript(thing x: Int, y: Int) -> Int {
       get { things[y * width + x] }
+    }
+
+    public func forEachLocation(_ body: (Int, Int) -> Void) {
+      for y in 0..<height {
+        for x in 0..<width {
+          body(x, y)
+        }
+      }
     }
   }
 }

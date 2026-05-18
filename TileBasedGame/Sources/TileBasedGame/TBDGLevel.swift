@@ -23,6 +23,7 @@ struct TBDGLevel {
     initPointLight()
     initSun()
     initTapLocation()
+    initTiles()
   }
 
   private func initComponents() {
@@ -51,7 +52,6 @@ struct TBDGLevel {
   }
 
   private func initSun() {
-    //TODO: Get the sun in the config
     let cfg = world.levelConfig.sun
     let ecs = world.ecs
     let id = ecs.createEntity("sun")
@@ -105,5 +105,26 @@ struct TBDGLevel {
       position: F3(-10000, -10000, -10000),
       radius: 0.1
     )
+  }
+
+  private func initTiles() {
+    let ecs = world.ecs
+    let map = world.levelConfig.map
+
+    map.forEachLocation { x, y in
+      let tileId = map[tile: x, y]
+      let tileCfg = world.worldConfig.entities.tiles[tileId]!
+      print("name \(tileCfg.name)")
+      ecs.createTile(
+        color: VRTMColorA(tileCfg.color),
+        model: tileCfg.model,
+        position: F3(x.f, y.f, tileCfg.z),
+        radius: tileCfg.radius,
+        rotationDegY: tileCfg.rotationDegY,
+        scale: tileCfg.scale,
+        tappable: true,
+        visible: true
+      )
+    }
   }
 }

@@ -78,7 +78,7 @@ public class TBDGWorld {
 
           let tapped = rectangle.intersection(with: tap.rectangle) != nil
           if tapped {
-            ecs.createEvent(name: "tapEvent", type: .touched(id))
+            ecs.createEvent(name: "tapEvent-\(id)", type: .touched(id))
           }
         }
       case .screenSizeChanged:
