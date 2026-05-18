@@ -97,7 +97,7 @@ fileprivate struct TBDGLevelInitializer {
 
   func reset() {
     initComponents()
-    initExitButton()
+    initButtons()
     initPlayerCamera()
     initPointLight()
     initSun()
@@ -143,7 +143,7 @@ fileprivate struct TBDGLevelInitializer {
     ecs.addComponent(id, position)
   }
 
-  private func initExitButton() {
+  private func initButtons() {
     let cfg = world.worldConfig.hud.buttons
     cfg.forEach { button in
       world.ecs.createTappable(
