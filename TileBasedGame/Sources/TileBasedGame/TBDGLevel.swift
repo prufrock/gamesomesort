@@ -1,0 +1,109 @@
+//
+//  TBDGLevel.swift
+//  TileBasedGame
+//
+//  Created by David Kanenwisher on 5/17/26.
+//
+
+import DataStructures
+import lecs_swift
+import Foundation
+import GameConfiguration
+import VRTMath
+import LECSPieces
+
+struct TBDGLevel {
+  let world: TBDGWorld
+  let level: String
+
+  func reset() {
+    initComponents()
+    initButtons()
+    initPlayerCamera()
+    initPointLight()
+    initSun()
+    initTapLocation()
+  }
+
+  private func initComponents() {
+    let ecs = world.ecs
+    let componentHolder = ecs.createEntity("componentHolder")
+    ecs.addComponent(componentHolder, LECSPEvent())
+    ecs.removeComponent(componentHolder, component: LECSPEvent.self)
+  }
+
+  private func initPlayerCamera() {
+    let cfg = world.levelConfig.playerCamera
+    let ecs = world.ecs
+    let playerCamera = ecs.createEntity(E_NAME_CAMERA_PLAYER)
+    ecs.addComponent(
+      playerCamera,
+      LECSPCameraFirstPerson(
+        fov: cfg.viewAngleDegrees * DEG2RAD,
+        nearPlane: cfg.nearPlane,
+        farPlane: cfg.farPlane
+      )
+    )
+    ecs.addComponent(playerCamera, LECSPAspect(aspect: 1.0))
+    ecs.addComponent(playerCamera, LECSPPosition3d(cfg.position))
+    let worldVector: F3 = world.worldConfig.worldVector
+    ecs.addComponent(playerCamera, LECSPScale3d(worldVector))
+  }
+
+  private func initSun() {
+    //TODO: Get the sun in the config
+    let cfg = world.levelConfig.sun
+    let ecs = world.ecs
+    let id = ecs.createEntity("sun")
+    var sun = LECSPLight()
+    sun.type = .Sun
+    let color = LECSPColor(cfg.color)
+    let position = LECSPPosition3d(cfg.position)
+    ecs.addComponent(id, sun)
+    ecs.addComponent(id, color)
+    ecs.addComponent(id, position)
+  }
+
+  private func initButtons() {
+    let cfg = world.worldConfig.hud.buttons
+    cfg.forEach { button in
+      world.ecs.createTappable(
+          behaviors: button.behaviors,
+          color: button.color,
+          model: button.model,
+          name: button.name,
+          position: button.position,
+          radius: button.radius,
+          rotationDegY: button.rotationDegrees,
+          scale: 0.5,
+          tappable: button.tappable,
+          visible: button.visible
+        )
+    }
+  }
+
+  //TODO: remove later, just to make the renderer happy
+  private func initPointLight() {
+    let ecs = world.ecs
+    var light = LECSPLight()
+    light.type = .Point
+    light.attenuation = [0.2, 10, 50]
+    light.specularColor = F3(repeating: 0.6)
+    let color = LECSPColor([0, 0.5, 0.5])
+    let position = LECSPPosition3d([6, 3, 2.4])
+    let id = ecs.createEntity("pointLight")
+    ecs.addComponent(id, light)
+    ecs.addComponent(id, color)
+    ecs.addComponent(id, position)
+  }
+
+  private func initTapLocation() {
+    let ecs = world.ecs
+    ecs.createTap(
+      isVisible: true,
+      name: "tapLocation",
+      position: F3(-10000, -10000, -10000),
+      radius: 0.1
+    )
+  }
+}
