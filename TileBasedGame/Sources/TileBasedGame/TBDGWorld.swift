@@ -146,26 +146,18 @@ fileprivate struct TBDGLevelInitializer {
   private func initExitButton() {
     let cfg = world.worldConfig.hud.buttons
     cfg.forEach { button in
-      let ecs = world.ecs
-      let entity = ecs.createEntity(button.name)
-      ecs.addComponent(
-        entity, LECSPHUD.Button.Behaviors(Set(button.behaviors))
-      )
-      ecs.addComponent(entity, LECSPPosition3d(button.position))
-      ecs.addComponent(entity, LECSPScale3d(F3(repeating: 0.5)))
-      ecs.addComponent(entity, LECSPColor(button.color))
-      ecs.addComponent(
-        entity,
-        LECSPQuaternion(Float4x4.rotateY(button.rotationDegrees).q)
-      )
-      ecs.addComponent(entity, LECSPRadius(button.radius))
-      ecs.addComponent(entity, LECSPModel(button.model))
-      if button.tappable {
-        ecs.addComponent(entity, LECSPTag.Tappable())
-      }
-      if button.visible {
-        ecs.addComponent(entity, LECSPTag.Visible())
-      }
+      world.ecs.createTappable(
+          behaviors: button.behaviors,
+          color: button.color,
+          model: button.model,
+          name: button.name,
+          position: button.position,
+          radius: button.radius,
+          rotationDegY: button.rotationDegrees,
+          scale: 0.5,
+          tappable: button.tappable,
+          visible: button.visible
+        )
     }
   }
 
