@@ -114,7 +114,7 @@ struct TBDGLevel {
     map.forEachLocation { x, y in
       let tileId = map[tile: x, y]
       let tileCfg = world.worldConfig.entities.tiles[tileId]!
-      print("name \(tileCfg.name)")
+
       ecs.createTile(
         color: VRTMColorA(tileCfg.color),
         model: tileCfg.model,
