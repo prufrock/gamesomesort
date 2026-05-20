@@ -19,8 +19,16 @@
             }
         },
         "things": {
-            "0": {
-                "name": "nothing"
+            "1": {
+                "color": [0.0, 0.9, 0.3],
+                "model": "button-one",
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.5,
+                "type": "playerStart",
+                "tappable": true,
+                "visible": true,
+                "z": 1.0
             }
         }
     },
