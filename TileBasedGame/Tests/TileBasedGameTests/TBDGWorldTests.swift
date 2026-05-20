@@ -64,7 +64,19 @@ private func startWorld() -> TBDGWorld {
     entities: GCFGEntities(
       creatures: [:],
       things: [:],
-      tiles: [:]
+      tiles: [
+        0: GCFGTile(
+          color: [0.5, 0.5, 0.5],
+          model: "button-one",
+          name: "floor",
+          radius: 0.5,
+          rotationDegY: 0,
+          scale: 0.95,
+          tappable: true,
+          visible: true,
+          z: 1.0
+        )
+      ]
     ),
     hud: GCFGWorld.HUD(
       buttons: [
