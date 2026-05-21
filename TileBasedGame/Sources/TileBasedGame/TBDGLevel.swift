@@ -24,6 +24,7 @@ struct TBDGLevel {
     initSun()
     initTapLocation()
     initTiles()
+    initThings()
   }
 
   private func initComponents() {
@@ -125,6 +126,32 @@ struct TBDGLevel {
         tappable: true,
         visible: true
       )
+    }
+  }
+
+  private func initThings() {
+    let ecs = world.ecs
+    let map = world.levelConfig.map
+
+    map.forEachLocation { x, y in
+      let thingId = map[thing: x, y]
+      let thingCfg = world.worldConfig.entities.things[thingId]!
+
+      switch thingCfg.type {
+      case .nothing:
+        break
+      case .playerStart:
+        ecs.createThing(
+          color: VRTMColorA(thingCfg.color),
+          model: thingCfg.model,
+          position: F3(x.f, y.f, thingCfg.z),
+          radius: thingCfg.radius,
+          rotationDegY: thingCfg.rotationDegY,
+          scale: thingCfg.scale,
+          tappable: true,
+          visible: true
+        )
+      }
     }
   }
 }

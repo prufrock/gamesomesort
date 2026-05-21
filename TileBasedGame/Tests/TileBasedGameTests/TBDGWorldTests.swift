@@ -63,7 +63,19 @@ private func startWorld() -> TBDGWorld {
   let worldCfg = GCFGWorld(
     entities: GCFGEntities(
       creatures: [:],
-      things: [:],
+      things: [
+        0: GCFGThing(
+          color: [0.0, 0.0, 0.0],
+          model: "",
+          type: .nothing,
+          radius: 0.0,
+          rotationDegY: 0,
+          scale: 0.0,
+          tappable: false,
+          visible: false,
+          z: 1.0
+        )
+      ],
       tiles: [
         0: GCFGTile(
           color: [0.5, 0.5, 0.5],
