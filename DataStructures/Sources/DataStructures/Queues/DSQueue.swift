@@ -8,10 +8,12 @@
 /// All the basic functionality you want in a queue.
 public protocol DSQueue<T>: CustomStringConvertible {
   associatedtype T
-
+  
   var isEmpty: Bool { get }
-
+  
   var count: Int { get }
+  
+  var storage: [T] { get }
 
   /// Add an element at the back of the queue.
   @discardableResult
@@ -25,4 +27,7 @@ public protocol DSQueue<T>: CustomStringConvertible {
 
   /// Return the elements of the queue as an array.
   func toArray() -> [T]
+
+  /// Append one queue to the end of this one.
+  mutating func append(_ other: any DSQueue<T>)
 }

@@ -12,7 +12,7 @@ public struct DSQueueArray<T>: DSQueue {
     storage.map { "\($0)" }.joined(separator: ", ")
   }
 
-  private var storage: [T] = []
+  public private(set) var storage: [T] = []
 
   public init(storage: [T] = []) {
     self.storage = storage
@@ -50,5 +50,9 @@ public struct DSQueueArray<T>: DSQueue {
 
   public func toArray() -> [T] {
     storage
+  }
+
+  public mutating func append(_ other: any DSQueue<T>) {
+    storage.append(contentsOf: other.storage)
   }
 }

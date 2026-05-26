@@ -10,6 +10,7 @@ import Testing
 typealias Circle = VRTM2D.Circle
 import Numerics
 
+@Suite
 struct CircleTests {
 
   @Test func `various constructors`() throws {

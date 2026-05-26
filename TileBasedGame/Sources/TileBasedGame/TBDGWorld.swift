@@ -12,6 +12,8 @@ import GameConfiguration
 import VRTMath
 import LECSPieces
 
+typealias GameCommands = DSQueueArray<TBDGWorld.Commands>
+
 public let E_NAME_CAMERA_PLAYER = "playerCamera"
 public let E_NAME_TAP_LOCATION = "tapLocation"
 
@@ -50,44 +52,15 @@ public class TBDGWorld {
     timeStep: Float,
     input: TBDGame.Input
   ) -> any DSQueue<TBDGWorld.Commands> {
-    let activeCamera = ecs.vrtmCameraPerspective(E_NAME_CAMERA_PLAYER)!
-    
-    var inputEvents = input.events
-    while !inputEvents.isEmpty {
-      let event = inputEvents.dequeue()!
-      switch event {
-      case .tap(tapLocation: let loc, lastTapTime: _):
-        let worldLocation = TBDGTapLocation(
-          location: loc
-        ).screenToWorldOnZPlane(
-          screenDimensions: screenDimensions,
-          targetZPlaneWorldCoord: 1,
-          camera: activeCamera,
-        )!
+    let stepList: [StepSelector.Step] = [.handleInput, .handleEvents]
 
-        var tap = ecs.getTap(name: E_NAME_TAP_LOCATION)
-        tap.set(position: worldLocation)
-        tap.show()
-        ecs.updateTappable(model: tap)
-
-        ecs.selectTappables { id, behaviors, position, radius in
-          let rectangle = VRTM2D.Rectangle(
-            position: position.position.xy,
-            radius: radius.radius
-          )
-
-          let tapped = rectangle.intersection(with: tap.rectangle) != nil
-          if tapped {
-            ecs.createEvent(name: "tapEvent-\(id)", type: .touched(id))
-          }
-        }
-      case .screenSizeChanged:
-        break
-      }
-    }
-
-    // process events
-    return ecs.processEvents()
+    return StepSelector().run(
+      stepList: stepList,
+      context: StepSelector.Context(
+        ecs: ecs,
+        input: TBDGame.Input(events: input.events, screenDimensions: screenDimensions)
+      )
+    )
   }
 }
 

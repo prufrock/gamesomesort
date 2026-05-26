@@ -9,8 +9,6 @@ import DataStructures
 import LECSPieces
 import lecs_swift
 
-typealias GameCommands = DSQueueArray<TBDGWorld.Commands>
-
 extension LECSWorld {
   func createEvent(name: String, type: LECSPEvent.EventType) {
     let id = createEntity(name)
@@ -20,7 +18,7 @@ extension LECSWorld {
 
 extension LECSWorld {
   func processEvents() -> GameCommands {
-    var gameCommands = GameCommands ()
+    var gameCommands = GameCommands()
     select([LECSId.self, LECSPEvent.self]) { row, columns in
       var i = 0
       let counter: () -> Int = { defer {i += 1}; return i }
