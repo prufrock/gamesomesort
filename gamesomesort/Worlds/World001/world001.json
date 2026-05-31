@@ -65,5 +65,6 @@
         }
     },
     "name": "one level",
+    "stepList": ["handleInput", "handleEvents"],
     "worldVector": [1, -1, 1]
 }

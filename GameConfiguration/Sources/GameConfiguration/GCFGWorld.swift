@@ -12,6 +12,7 @@ public struct GCFGWorld: Decodable {
   public let hud: HUD
   public let levels: [String: LevelPath]
   public let name: String
+  public let stepList: [GCFGWorld.StepId]
   public let worldVector: F3
 
   public init(
@@ -19,12 +20,14 @@ public struct GCFGWorld: Decodable {
     hud: HUD,
     levels: [String : LevelPath],
     name: String,
+    stepList: [GCFGWorld.StepId],
     worldVector: F3
   ) {
     self.entities = entities
     self.hud = hud
     self.levels = levels
     self.name = name
+    self.stepList = stepList
     self.worldVector = worldVector
   }
 }
@@ -106,5 +109,12 @@ extension GCFGWorld.HUD.Input {
     public init(radius: Float) {
       self.radius = radius
     }
+  }
+}
+
+extension GCFGWorld {
+  public enum StepId: String, Decodable, Hashable {
+    case handleInput
+    case handleEvents
   }
 }

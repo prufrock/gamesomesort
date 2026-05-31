@@ -116,6 +116,7 @@ private func startWorld() -> TBDGWorld {
       )
     ],
     name: "world_one_level",
+    stepList: [.handleInput, .handleEvents],
     worldVector: [1, -1, 1]
   )
 

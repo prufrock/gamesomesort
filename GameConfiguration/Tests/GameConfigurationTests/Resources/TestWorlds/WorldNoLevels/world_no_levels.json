@@ -26,5 +26,6 @@
     },
     "levels": {},
     "name": "no levels",
+    "stepList": [],
     "worldVector": [1, 1, 1]
 }
