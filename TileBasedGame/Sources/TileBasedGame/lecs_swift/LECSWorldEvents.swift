@@ -9,6 +9,11 @@ import DataStructures
 import LECSPieces
 import lecs_swift
 
+func counter(start:Int = 0) -> () -> Int {
+  var i = start
+  return { defer {i += 1}; return i }
+}
+
 extension LECSWorld {
   func createEvent(name: String, type: LECSPEvent.EventType) {
     let id = createEntity(name)
@@ -20,16 +25,18 @@ extension LECSWorld {
   func processEvents() -> GameCommands {
     var gameCommands = GameCommands()
     select([LECSId.self, LECSPEvent.self]) { row, columns in
-      var i = 0
-      let counter: () -> Int = { defer {i += 1}; return i }
-
-      let id = row.component(at: counter(), columns, LECSId.self)
-      let event = row.component(at: counter(), columns, LECSPEvent.self)
+      let c: () -> Int = counter()
+      let id = row.component(at: c(), columns, LECSId.self)
+      let event = row.component(at: c(), columns, LECSPEvent.self)
       deleteEntity(id.id)
 
       switch event.event {
       case .none:
         break
+      case .awake(let id):
+        removeComponent(id.id, component: LECSPTimerSleep.self)
+        let player = createEntity("player-\(id)")
+        addComponent(player, LECSPPlayer())
       case .touched(let id):
         let behaviors = getComponent(
           id.id,

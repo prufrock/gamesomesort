@@ -30,8 +30,15 @@ struct TBDGLevel {
   private func initComponents() {
     let ecs = world.ecs
     let componentHolder = ecs.createEntity("componentHolder")
-    ecs.addComponent(componentHolder, LECSPEvent())
-    ecs.removeComponent(componentHolder, component: LECSPEvent.self)
+
+    func ini(_ component: LECSComponent.Type) {
+      ecs.addComponent(componentHolder, component.init())
+      ecs.removeComponent(componentHolder, component: component)
+    }
+
+    ini(LECSPEvent.self)
+    ini(LECSPTimerSleep.self)
+    ini(LECSPPlayer.self)
   }
 
   private func initPlayerCamera() {

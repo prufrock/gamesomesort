@@ -57,6 +57,12 @@ import VRTMath
   )
 
   #expect(commands.dequeue() == .start(level: 0))
+
+  var countPlayers = 0
+  world.ecs.select([LECSPPlayer.self]) { rows, columns in
+    countPlayers += 1
+  }
+  #expect(countPlayers == 1)
 }
 
 private func startWorld() -> TBDGWorld {
@@ -66,9 +72,22 @@ private func startWorld() -> TBDGWorld {
       things: [
         0: GCFGThing(
           color: [0.0, 0.0, 0.0],
+          onWake: [],
           model: "",
           type: .nothing,
           radius: 0.0,
+          rotationDegY: 0,
+          scale: 0.0,
+          tappable: false,
+          visible: false,
+          z: 1.0
+        ),
+        1: GCFGThing(
+          color: [0.3, 0.0, 0.9],
+          onWake: [.createsPlayerDoll],
+          model: "",
+          type: .playerStart,
+          radius: 0.5,
           rotationDegY: 0,
           scale: 0.0,
           tappable: false,
@@ -116,7 +135,7 @@ private func startWorld() -> TBDGWorld {
       )
     ],
     name: "world_one_level",
-    stepList: [.handleInput, .handleEvents],
+    stepList: [.awaken, .handleInput, .handleEvents],
     worldVector: [1, -1, 1]
   )
 
@@ -127,7 +146,7 @@ private func startWorld() -> TBDGWorld {
         0, 0
       ],
       things: [
-        0, 0,
+        1, 0,
         0, 0
       ],
       tiles: [

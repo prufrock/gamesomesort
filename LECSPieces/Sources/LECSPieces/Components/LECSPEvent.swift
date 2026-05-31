@@ -23,5 +23,6 @@ public extension LECSPEvent {
   enum EventType {
     case none
     case touched(LECSId)
+    case awake(LECSId)
   }
 }

@@ -114,7 +114,8 @@ extension GCFGWorld.HUD.Input {
 
 extension GCFGWorld {
   public enum StepId: String, Decodable, Hashable {
-    case handleInput
+    case awaken
     case handleEvents
+    case handleInput
   }
 }

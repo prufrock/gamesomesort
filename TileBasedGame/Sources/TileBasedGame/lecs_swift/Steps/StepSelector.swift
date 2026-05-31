@@ -15,6 +15,8 @@ struct StepSelector {
 
     stepList.forEach { work in
       switch work {
+      case .awaken:
+        gameCommands.append(awaken(context: context))
       case .handleInput:
         gameCommands.append(handleInput(context: context))
       case .handleEvents:

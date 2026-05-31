@@ -21,6 +21,7 @@
         "things": {
             "1": {
                 "color": [0.0, 0.9, 0.3],
+                "onWake": ["createsPlayerDoll"],
                 "model": "button-one",
                 "radius": 0.5,
                 "rotationDegY": 0,
