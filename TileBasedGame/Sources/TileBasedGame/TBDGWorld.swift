@@ -52,10 +52,9 @@ public class TBDGWorld {
     timeStep: Float,
     input: TBDGame.Input
   ) -> any DSQueue<TBDGWorld.Commands> {
-    let stepList: [StepSelector.Step] = [.handleInput, .handleEvents]
 
     return StepSelector().run(
-      stepList: stepList,
+      stepList: worldConfig.stepList,
       context: StepSelector.Context(
         ecs: ecs,
         input: TBDGame.Input(events: input.events, screenDimensions: screenDimensions)

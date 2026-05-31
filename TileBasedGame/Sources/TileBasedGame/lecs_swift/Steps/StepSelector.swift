@@ -6,10 +6,11 @@
 //
 
 import lecs_swift
+import GameConfiguration
 
 struct StepSelector {
 
-  func run(stepList: [Step], context: Context) -> GameCommands {
+  func run(stepList: [GCFGWorld.StepId], context: Context) -> GameCommands {
     var gameCommands = GameCommands()
 
     stepList.forEach { work in
