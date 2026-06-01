@@ -9,7 +9,7 @@ import VRTMath
 
 public struct GCFGThing: Decodable {
   public let color: F3
-  public let onWake: [OnWakeAction]
+  public let onWake: [GCFGOnWakeAction]
   public let model: String
   public let type: ThingTypes
   public let radius: Float
@@ -21,7 +21,7 @@ public struct GCFGThing: Decodable {
 
   public init(
     color: F3,
-    onWake: [OnWakeAction],
+    onWake: [GCFGOnWakeAction],
     model: String,
     type: ThingTypes,
     radius: Float,
@@ -48,7 +48,5 @@ public struct GCFGThing: Decodable {
     case playerStart
   }
 
-  public enum OnWakeAction: String, Decodable {
-    case createsPlayerDoll
-  }
+
 }

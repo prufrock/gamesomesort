@@ -41,7 +41,7 @@ extension LECSWorld {
   func createThing(
     color: VRTMColorA,
     model: String,
-    onWake: [GCFGThing.OnWakeAction],
+    onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
     rotationDegY: Float,
@@ -78,7 +78,7 @@ extension LECSWorld {
   func createCreature(
     color: VRTMColorA,
     model: String,
-    onWake: [GCFGThing.OnWakeAction],
+    onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
     rotationDegY: Float,
