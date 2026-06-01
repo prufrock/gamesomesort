@@ -8,6 +8,7 @@
 import DataStructures
 import LECSPieces
 import lecs_swift
+import VRTMath
 
 func counter(start:Int = 0) -> () -> Int {
   var i = start
@@ -35,8 +36,25 @@ extension LECSWorld {
         break
       case .awake(let id):
         removeComponent(id.id, component: LECSPTimerSleep.self)
-        let player = createEntity("player-\(id)")
-        addComponent(player, LECSPPlayer())
+        let sourceEntityPosition = getComponent(id.id, LECSPPosition3d.self)!
+        let playerPostion = F3(
+          x: sourceEntityPosition.x,
+          y: sourceEntityPosition.y,
+          z: 0.5
+        )
+        let creature = createThing(
+          color: VRTMColorA(F3(0, 1, 1)),
+          model: "square-bella.usdz",
+          onWake: [],
+          position: playerPostion,
+          radius: 0.5,
+          rotationDegY: 180,
+          scale: 0.5,
+          tappable: false,
+          visible: true,
+          name: "player-01-\(id)"
+        )
+        addComponent(creature, LECSPPlayer())
       case .touched(let id):
         let behaviors = getComponent(
           id.id,

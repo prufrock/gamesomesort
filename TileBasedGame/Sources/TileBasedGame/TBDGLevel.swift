@@ -151,6 +151,7 @@ struct TBDGLevel {
         ecs.createThing(
           color: VRTMColorA(thingCfg.color),
           model: thingCfg.model,
+          onWake: thingCfg.onWake,
           position: F3(x.f, y.f, thingCfg.z),
           radius: thingCfg.radius,
           rotationDegY: thingCfg.rotationDegY,

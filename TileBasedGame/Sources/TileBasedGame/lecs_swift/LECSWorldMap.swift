@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 5/17/26.
 //
 
+import GameConfiguration
 import LECSPieces
 import lecs_swift
 import VRTMath
@@ -40,21 +41,26 @@ extension LECSWorld {
   func createThing(
     color: VRTMColorA,
     model: String,
+    onWake: [GCFGThing.OnWakeAction],
     position: F3,
     radius: Float,
     rotationDegY: Float,
     scale: Float,
     tappable: Bool,
-    visible: Bool
+    visible: Bool,
+    name: String = "thing"
   ) -> LECSEntityId {
-    let thing = createEntity("thing\(position.x)-\(position.y)")
+    let thing = createEntity("\(name)-\(position.x)-\(position.y)")
     addComponent(thing, LECSPPosition3d(position))
     addComponent(thing, LECSPRadius(radius))
     addComponent(thing, LECSPColor(color: color))
     addComponent(thing, LECSPScale3d(F3(repeating: scale)))
-    addComponent(thing, LECSPQuaternion(Float4x4.rotateY(rotationDegY).q))
+    addComponent(thing, LECSPQuaternion(Float4x4.rotateY(rotationDegY * DEG2RAD).q))
     addComponent(thing, LECSPModel(model))
-    addComponent(thing, LECSPTimerSleep())
+
+    if onWake.isNotEmpty {
+      addComponent(thing, LECSPTimerSleep())
+    }
 
     if visible {
       addComponent(thing, LECSPTag.Visible())
