@@ -60,6 +60,43 @@ extension LECSWorld {
 
     if onWake.isNotEmpty {
       addComponent(thing, LECSPTimerSleep())
+      addComponent(thing, LECSPOnWake(actions: Set(onWake.map{ LECSPOnWake.Action(rawValue: $0.rawValue)! })))
+    }
+
+    if visible {
+      addComponent(thing, LECSPTag.Visible())
+    }
+    if tappable {
+      addComponent(thing, LECSPTag.Tappable())
+      addComponent(thing, LECSPHUD.Button.Behaviors([]))
+    }
+
+    return thing
+  }
+
+  @discardableResult
+  func createCreature(
+    color: VRTMColorA,
+    model: String,
+    onWake: [GCFGThing.OnWakeAction],
+    position: F3,
+    radius: Float,
+    rotationDegY: Float,
+    scale: Float,
+    tappable: Bool,
+    visible: Bool,
+    name: String = "creature"
+  ) -> LECSEntityId {
+    let thing = createEntity("\(name)-\(position.x)-\(position.y)")
+    addComponent(thing, LECSPPosition3d(position))
+    addComponent(thing, LECSPRadius(radius))
+    addComponent(thing, LECSPColor(color: color))
+    addComponent(thing, LECSPScale3d(F3(repeating: scale)))
+    addComponent(thing, LECSPQuaternion(Float4x4.rotateY(rotationDegY * DEG2RAD).q))
+    addComponent(thing, LECSPModel(model))
+
+    if onWake.isNotEmpty {
+      addComponent(thing, LECSPTimerSleep())
     }
 
     if visible {

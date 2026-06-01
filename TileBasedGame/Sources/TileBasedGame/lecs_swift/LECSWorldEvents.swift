@@ -36,25 +36,29 @@ extension LECSWorld {
         break
       case .awake(let id):
         removeComponent(id.id, component: LECSPTimerSleep.self)
-        let sourceEntityPosition = getComponent(id.id, LECSPPosition3d.self)!
-        let playerPostion = F3(
-          x: sourceEntityPosition.x,
-          y: sourceEntityPosition.y,
-          z: 0.5
-        )
-        let creature = createThing(
-          color: VRTMColorA(F3(0, 1, 1)),
-          model: "square-bella.usdz",
-          onWake: [],
-          position: playerPostion,
-          radius: 0.5,
-          rotationDegY: 180,
-          scale: 0.5,
-          tappable: false,
-          visible: true,
-          name: "player-01-\(id)"
-        )
-        addComponent(creature, LECSPPlayer())
+        let onWakeActions = getComponent(id.id, LECSPOnWake.self)
+
+        if let actions = onWakeActions, actions.set.contains(.createsPlayerDoll) {
+          let sourceEntityPosition = getComponent(id.id, LECSPPosition3d.self)!
+          let playerPostion = F3(
+            x: sourceEntityPosition.x,
+            y: sourceEntityPosition.y,
+            z: 0.5
+          )
+          let creature = createCreature(
+            color: VRTMColorA(F3(0, 1, 1)),
+            model: "square-bella.usdz",
+            onWake: [],
+            position: playerPostion,
+            radius: 0.5,
+            rotationDegY: 180,
+            scale: 0.5,
+            tappable: false,
+            visible: true,
+            name: "player-01-\(id)"
+          )
+          addComponent(creature, LECSPPlayer())
+        }
       case .touched(let id):
         let behaviors = getComponent(
           id.id,
