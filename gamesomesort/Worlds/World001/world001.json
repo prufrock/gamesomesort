@@ -1,5 +1,20 @@
 {
     "entities": {
+        "creatures": {
+           "1": {
+               "color": [0.0, 0.0, 0.0],
+               "onWake": [],
+               "name": "playerDoll",
+               "model": "square-bella.usdz",
+               "type": "playerDoll",
+               "position": [0.0, 0.0, 0.5],
+               "radius": 0.5,
+               "rotationDegY": 180,
+               "scale": 0.5,
+               "tappable": false,
+               "visible": true
+           }
+        },
         "tiles": {
             "0": {
                 "color": [0.5, 0.5, 0.5],
@@ -10,7 +25,7 @@
                 "scale": 0.95,
                 "tappable": true,
                 "visible": true,
-                "z": 1.001
+                "z": 1.0
             },
             "1": {
                 "color": [0.0, 0.9, 0.3],
@@ -21,11 +36,35 @@
                 "scale": 0.95,
                 "tappable": true,
                 "visible": true,
-                "z": 1.001
+                "z": 1.0
             }
         },
-        "creatures": {},
-        "things": {}
+        "things": {
+            "0": {
+                "color": [0.0, 0.0, 0.0],
+                "onWake": [],
+                "model": "",
+                "radius": 0.0,
+                "rotationDegY": 0,
+                "scale": 0.0,
+                "type": "nothing",
+                "tappable": false,
+                "visible": false,
+                "z": 0.9
+            },
+            "1": {
+                "color": [0.3, 0.0, 0.9],
+                "onWake": ["createsPlayerDoll"],
+                "model": "button-one",
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.5,
+                "type": "playerStart",
+                "tappable": false,
+                "visible": true,
+                "z": 0.75
+            }
+        }
     },
     "hud": {
         "buttons": [
@@ -47,7 +86,7 @@
                 "model": "brick-sphere.usdz",
                 "position": [4.0, -2, 1.0],
                 "radius": 0.5,
-                "rotationDegrees": 0,
+                "rotationDegrees": 90,
                 "tappable": true,
                 "visible": true
             }
@@ -64,7 +103,7 @@
             "path": "w001L001"
         }
     },
+    "stepList": ["awaken", "handleInput", "handleEvents"],
     "name": "one level",
-    "stepList": ["handleInput", "handleEvents"],
     "worldVector": [1, -1, 1]
 }

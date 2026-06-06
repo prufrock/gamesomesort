@@ -85,9 +85,14 @@ extension LECSWorld {
     scale: Float,
     tappable: Bool,
     visible: Bool,
-    name: String = "creature"
+    name: String? = nil
   ) -> LECSEntityId {
-    let thing = createEntity("\(name)-\(position.x)-\(position.y)")
+    let thing: LECSEntityId
+    if let name {
+      thing = createEntity(name)
+    } else {
+      thing = createEntity("creature-\(position.x)-\(position.y)")
+    }
     addComponent(thing, LECSPPosition3d(position))
     addComponent(thing, LECSPRadius(radius))
     addComponent(thing, LECSPColor(color: color))
