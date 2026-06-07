@@ -57,7 +57,11 @@ public class TBDGWorld {
       stepList: worldConfig.stepList,
       context: StepSelector.Context(
         ecs: ecs,
-        input: TBDGame.Input(events: input.events, screenDimensions: screenDimensions)
+        config: Config(level: levelConfig, world: worldConfig),
+        input: TBDGame.Input(
+          events: input.events,
+          screenDimensions: screenDimensions
+        )
       )
     )
   }

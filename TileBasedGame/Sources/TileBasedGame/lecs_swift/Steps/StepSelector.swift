@@ -29,6 +29,7 @@ struct StepSelector {
 
   struct Context {
     let ecs: LECSWorld
+    let config: Config
     let input: TBDGame.Input
   }
 
