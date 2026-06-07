@@ -84,6 +84,31 @@ extension LECSWorld {
 
   @discardableResult
   func createCreature(
+    from config: GCFGCreature,
+    at sourcePosition: LECSPPosition3d,
+    name: String? = nil
+  ) -> LECSEntityId {
+    let playerPostion = F3(
+      x: sourcePosition.x + config.position.x,
+      y: sourcePosition.y + config.position.y,
+      z: sourcePosition.z + config.position.z
+    )
+    return createCreature(
+      color: config.color.vrtma,
+      model: config.model,
+      onWake: config.onWake,
+      position: playerPostion,
+      radius: config.radius,
+      rotationDegY: config.rotationDegY,
+      scale: config.scale,
+      tappable: config.tappable,
+      visible: config.visible,
+      name: name
+    )
+  }
+
+  @discardableResult
+  func createCreature(
     color: VRTMColorA,
     model: String,
     onWake: [GCFGOnWakeAction],

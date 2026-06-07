@@ -47,6 +47,4 @@ public struct GCFGThing: Decodable {
     case nothing
     case playerStart
   }
-
-
 }

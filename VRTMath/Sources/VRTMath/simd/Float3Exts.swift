@@ -16,6 +16,10 @@ public extension Float3 {
     F2(x: x, y: y)
   }
 
+  var vrtma: VRTMColorA {
+    VRTMColorA(self)
+  }
+
   static func quaternion(_ rotation: Float3) -> simd_quatf {
     Float4x4.rotate(rotation).q
   }

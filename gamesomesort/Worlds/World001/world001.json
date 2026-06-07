@@ -3,14 +3,13 @@
         "creatures": {
            "1": {
                "color": [0.0, 0.0, 0.0],
-               "onWake": [],
-               "name": "playerDoll",
+               "onWake": [{"queuesToPlayer":{}}],
                "model": "square-bella.usdz",
-               "type": "playerDoll",
-               "position": [0.0, 0.0, 0.5],
+               "position": [0.0, 0.0, -0.1],
                "radius": 0.5,
                "rotationDegY": 180,
                "scale": 0.5,
+               "type": "playerDoll",
                "tappable": false,
                "visible": true
            }
