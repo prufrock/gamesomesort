@@ -64,6 +64,8 @@ extension LECSWorld {
         switch item {
         case .creates(creatureId: let creatureId):
           return LECSPOnWake.Action.creates(creatureId: creatureId)
+        case .queuesToPlayer:
+          return LECSPOnWake.Action.queuesToPlayer
         }
       }
       addComponent(thing, LECSPOnWake(actions: Set(actions)))
@@ -107,6 +109,15 @@ extension LECSWorld {
     addComponent(thing, LECSPModel(model))
 
     if onWake.isNotEmpty {
+      let actions: [LECSPOnWake.Action] = onWake.map{ item in
+        switch item {
+        case .creates(creatureId: let creatureId):
+          return LECSPOnWake.Action.creates(creatureId: creatureId)
+        case .queuesToPlayer:
+          return LECSPOnWake.Action.queuesToPlayer
+        }
+      }
+      addComponent(thing, LECSPOnWake(actions: Set(actions)))
       addComponent(thing, LECSPTimerSleep())
     }
 

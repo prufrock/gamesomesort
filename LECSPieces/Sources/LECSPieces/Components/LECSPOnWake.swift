@@ -20,5 +20,6 @@ public struct LECSPOnWake: LECSComponent {
 
   public enum Action: Decodable, Hashable {
     case creates(creatureId: String)
+    case queuesToPlayer
   }
 }

@@ -7,4 +7,5 @@
 
 public enum GCFGOnWakeAction: Codable {
   case creates(creatureId: String)
+  case queuesToPlayer
 }

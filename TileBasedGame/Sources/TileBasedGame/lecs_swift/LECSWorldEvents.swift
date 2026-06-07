@@ -51,7 +51,7 @@ extension LECSWorld {
             let creature = createCreature(
               color: VRTMColorA(F3(0, 1, 1)),
               model: "square-bella.usdz",
-              onWake: [],
+              onWake: [.queuesToPlayer],
               position: playerPostion,
               radius: 0.5,
               rotationDegY: 180,
@@ -61,6 +61,8 @@ extension LECSWorld {
               name: "player-01-\(id)"
             )
             addComponent(creature, LECSPPlayer())
+          } else if case .queuesToPlayer = action {
+            print("queuesToPlayer")
           }
         }
       case .touched(let id):
