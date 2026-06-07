@@ -18,7 +18,7 @@ public struct LECSPOnWake: LECSComponent {
     self.set = actions
   }
 
-  public enum Action: String, Decodable, Hashable {
-    case createsPlayerDoll
+  public enum Action: Decodable, Hashable {
+    case creates(creatureId: String)
   }
 }

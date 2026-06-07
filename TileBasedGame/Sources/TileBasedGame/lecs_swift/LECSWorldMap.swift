@@ -60,7 +60,13 @@ extension LECSWorld {
 
     if onWake.isNotEmpty {
       addComponent(thing, LECSPTimerSleep())
-      addComponent(thing, LECSPOnWake(actions: Set(onWake.map{ LECSPOnWake.Action(rawValue: $0.rawValue)! })))
+      let actions: [LECSPOnWake.Action] = onWake.map{ item in
+        switch item {
+        case .creates(creatureId: let creatureId):
+          return LECSPOnWake.Action.creates(creatureId: creatureId)
+        }
+      }
+      addComponent(thing, LECSPOnWake(actions: Set(actions)))
     }
 
     if visible {

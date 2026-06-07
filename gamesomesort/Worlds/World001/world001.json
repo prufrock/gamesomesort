@@ -54,7 +54,7 @@
             },
             "1": {
                 "color": [0.3, 0.0, 0.9],
-                "onWake": ["createsPlayerDoll"],
+                "onWake": [{"creates": {"creatureId": "1"}}],
                 "model": "button-one",
                 "radius": 0.5,
                 "rotationDegY": 0,
