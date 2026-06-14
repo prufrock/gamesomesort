@@ -9,38 +9,38 @@ import VRTMath
 
 public struct GCFGThing: Decodable {
   public let color: F3
-  public let onWake: [GCFGOnWakeAction]
   public let model: String
-  public let type: ThingTypes
+  public let onWake: [GCFGOnWakeAction]
+  public let position: F3
   public let radius: Float
   public let rotationDegY: Float
   public let scale: Float
   public let tappable: Bool
+  public let type: ThingTypes
   public let visible: Bool
-  public let z: Float
 
   public init(
     color: F3,
     onWake: [GCFGOnWakeAction],
     model: String,
-    type: ThingTypes,
+    position: F3,
     radius: Float,
     rotationDegY: Float,
     scale: Float,
     tappable: Bool,
+    type: ThingTypes,
     visible: Bool,
-    z: Float
   ) {
     self.color = color
-    self.onWake = onWake
     self.model = model
-    self.type = type
+    self.onWake = onWake
+    self.position = position
     self.radius = radius
     self.rotationDegY = rotationDegY
     self.scale = scale
     self.tappable = tappable
+    self.type = type
     self.visible = visible
-    self.z = z
   }
 
   public enum ThingTypes: String, Decodable {

@@ -16,8 +16,8 @@
         "creatures": {
             "0": {
                 "color": [0.0, 0.0, 0.0],
-                "onWake": [],
                 "model": "box-golem.usdz",
+                "onWake": [],
                 "position": [0.0, 0.0, 0.0],
                 "radius": 0.5,
                 "rotationDegY": 180,
@@ -30,15 +30,15 @@
         "things": {
             "1": {
                 "color": [0.0, 0.9, 0.3],
-                "onWake": [{"creates": {"creatureId": "1"}}],
                 "model": "button-one",
+                "onWake": [{"creates": {"creatureId": "1"}}],
+                "position": [0.0, 0.0, 1.0],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.5,
                 "type": "playerStart",
                 "tappable": true,
                 "visible": true,
-                "z": 1.0
             }
         }
     },
