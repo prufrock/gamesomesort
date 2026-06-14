@@ -34,7 +34,7 @@ import Foundation
 
   #expect(world.entities.creatures.count == 1)
   #expect(
-    world.entities.creatures[levelOne[creature: 0, 0]!]!.name == "absence"
+    world.entities.creatures[levelOne[creature: 0, 0]!]!.type == "absence"
   )
 }
 

@@ -15,13 +15,22 @@
         },
         "creatures": {
             "0": {
-                "name": "absence"
+                "color": [0.0, 0.0, 0.0],
+                "onWake": [],
+                "model": "box-golem.usdz",
+                "position": [0.0, 0.0, 0.0],
+                "radius": 0.5,
+                "rotationDegY": 180,
+                "scale": 0.25,
+                "type": "absence",
+                "tappable": false,
+                "visible": false
             }
         },
         "things": {
             "1": {
                 "color": [0.0, 0.9, 0.3],
-                "onWake": ["createsPlayerDoll"],
+                "onWake": [{"creates": {"creatureId": "1"}}],
                 "model": "button-one",
                 "radius": 0.5,
                 "rotationDegY": 0,
