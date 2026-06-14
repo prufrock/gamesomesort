@@ -152,7 +152,7 @@ struct TBDGLevel {
           color: VRTMColorA(thingCfg.color),
           model: thingCfg.model,
           onWake: thingCfg.onWake,
-          position: F3(x.f, y.f, thingCfg.z),
+          position: F3(x.f, y.f, 0.0) + thingCfg.position,
           radius: thingCfg.radius,
           rotationDegY: thingCfg.rotationDegY,
           scale: thingCfg.scale,

@@ -3,14 +3,14 @@
         "creatures": {
            "1": {
                "color": [0.0, 0.0, 0.0],
-               "onWake": [{"queuesToPlayer":{}}],
                "model": "square-bella.usdz",
+               "onWake": [{"queuesToPlayer":{}}],
                "position": [0.0, 0.0, -0.1],
                "radius": 0.5,
                "rotationDegY": 180,
                "scale": 0.5,
-               "type": "playerDoll",
                "tappable": false,
+               "type": "playerDoll",
                "visible": true
            }
         },
@@ -41,27 +41,27 @@
         "things": {
             "0": {
                 "color": [0.0, 0.0, 0.0],
-                "onWake": [],
                 "model": "",
+                "onWake": [],
+                "position": [0, 0, 0.9],
                 "radius": 0.0,
                 "rotationDegY": 0,
                 "scale": 0.0,
-                "type": "nothing",
                 "tappable": false,
+                "type": "nothing",
                 "visible": false,
-                "z": 0.9
             },
             "1": {
                 "color": [0.3, 0.0, 0.9],
-                "onWake": [{"creates": {"creatureId": "1"}}],
                 "model": "button-one",
+                "onWake": [{"creates": {"creatureId": "1"}}],
+                "position": [0, 0, 0.75],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.5,
-                "type": "playerStart",
                 "tappable": false,
+                "type": "playerStart",
                 "visible": true,
-                "z": 0.75
             }
         }
     },
