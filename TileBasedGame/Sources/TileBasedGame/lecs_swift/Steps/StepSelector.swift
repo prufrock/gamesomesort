@@ -10,10 +10,10 @@ import GameConfiguration
 
 struct StepSelector {
 
-  func run(stepList: [GCFGWorld.StepId], context: Context) -> GameCommands {
+  func run(context: Context) -> GameCommands {
     var gameCommands = GameCommands()
 
-    stepList.forEach { work in
+    context.config.world.stepList.forEach { work in
       switch work {
       case .awaken:
         gameCommands.append(awaken(context: context))

@@ -14,7 +14,6 @@ import Testing
 import VRTMath
 @testable import TileBasedGame
 
-
 @Test func `change the screen dimensions`() {
   let world = startWorld()
 
@@ -66,112 +65,13 @@ import VRTMath
 }
 
 private func startWorld() -> TBDGWorld {
-  let worldCfg = GCFGWorld(
-    entities: GCFGEntities(
-      creatures: [:],
-      things: [
-        0: GCFGThing(
-          color: [0.0, 0.0, 0.0],
-          onWake: [],
-          model: "",
-          type: .nothing,
-          radius: 0.0,
-          rotationDegY: 0,
-          scale: 0.0,
-          tappable: false,
-          visible: false,
-          z: 1.0
-        ),
-        1: GCFGThing(
-          color: [0.3, 0.0, 0.9],
-          onWake: [.createsPlayerDoll],
-          model: "",
-          type: .playerStart,
-          radius: 0.5,
-          rotationDegY: 0,
-          scale: 0.0,
-          tappable: false,
-          visible: false,
-          z: 1.0
-        )
-      ],
-      tiles: [
-        0: GCFGTile(
-          color: [0.5, 0.5, 0.5],
-          model: "button-one",
-          name: "floor",
-          radius: 0.5,
-          rotationDegY: 0,
-          scale: 0.95,
-          tappable: true,
-          visible: true,
-          z: 1.0
-        )
-      ]
-    ),
-    hud: GCFGWorld.HUD(
-      buttons: [
-        GCFGWorld.HUD
-          .Button(
-            behaviors: ["exit"],
-            color: [0, 0, 0],
-            name: "exitButton",
-            model: "square",
-            position: [1.0, -2, 1.0],
-            radius: 1.5,
-            rotationDegrees: 0,
-            tappable: true,
-            visible: true
-          )
-      ],
-      input: GCFGWorld.HUD.Input(
-        tap: GCFGWorld.HUD.Input.Tap(radius: 1.0)
-      )
-    ),
-    levels: [
-      "world_one_level_001": GCFGWorld.LevelPath(
-        name: "world one level 001", 
-        path: "world_one_level_001"
-      )
-    ],
-    name: "world_one_level",
-    stepList: [.awaken, .handleInput, .handleEvents],
-    worldVector: [1, -1, 1]
-  )
-
-  let levelOneCfg: GCFGLevel = GCFGLevel(
-    map: GCFGLevel.Map(
-      creatures: [
-        0, 0,
-        0, 0
-      ],
-      things: [
-        1, 0,
-        0, 0
-      ],
-      tiles: [
-        0, 0,
-        0, 0
-      ],
-      width: 2,
-    ),
-    playerCamera: GCFGLevel.Camera(
-      farPlane: 10.0,
-      nearPlane: 0.1,
-      position: [3.5, 4, -7.25],
-      viewAngleDegrees: 90.0,
-    ),
-    sun: GCFGLevel.Light.Sun(
-      color: [1, 1, 1],
-      position: [0, 0, -9],
-    )
-  )
+  let helper = TestHelpers()
 
   let ecs = LECSCreateWorld(archetypeSize: 100)
 
   let world = TBDGWorld(
-    worldConfig: worldCfg,
-    levelConfig: levelOneCfg,
+    worldConfig: helper.worldCfg,
+    levelConfig: helper.levelOneCfg,
     ecs: ecs
   )
 
