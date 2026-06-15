@@ -21,8 +21,8 @@ public struct GCFGThing: Decodable {
 
   public init(
     color: F3,
-    onWake: [GCFGOnWakeAction],
     model: String,
+    onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
     rotationDegY: Float,
