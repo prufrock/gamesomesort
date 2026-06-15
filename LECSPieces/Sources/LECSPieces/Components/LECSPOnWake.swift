@@ -14,7 +14,7 @@ public struct LECSPOnWake: LECSComponent {
     self.set = []
   }
 
-  public init(actions: Set<Action>) {
+  public init(_ actions: Set<Action>) {
     self.set = actions
   }
 

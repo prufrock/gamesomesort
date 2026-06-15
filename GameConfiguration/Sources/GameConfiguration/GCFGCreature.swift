@@ -9,8 +9,8 @@ import VRTMath
 
 public struct GCFGCreature: Decodable {
   public let color: F3
-  public let onWake: [GCFGOnWakeAction]
   public let model: String
+  public let onWake: [GCFGOnWakeAction]
   public let position: F3
   public let radius: Float
   public let rotationDegY: Float
@@ -21,8 +21,8 @@ public struct GCFGCreature: Decodable {
 
   public init(
     color: F3,
-    onWake: [GCFGOnWakeAction],
     model: String,
+    onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
     rotationDegY: Float,
@@ -32,8 +32,8 @@ public struct GCFGCreature: Decodable {
     visible: Bool,
   ) {
     self.color = color
-    self.onWake = onWake
     self.model = model
+    self.onWake = onWake
     self.position = position
     self.radius = radius
     self.rotationDegY = rotationDegY

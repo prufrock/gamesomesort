@@ -54,7 +54,6 @@ public class TBDGWorld {
   ) -> any DSQueue<TBDGWorld.Commands> {
 
     return StepSelector().run(
-      stepList: worldConfig.stepList,
       context: StepSelector.Context(
         ecs: ecs,
         config: Config(level: levelConfig, world: worldConfig),

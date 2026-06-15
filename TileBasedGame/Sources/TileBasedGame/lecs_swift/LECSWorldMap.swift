@@ -68,7 +68,7 @@ extension LECSWorld {
           return LECSPOnWake.Action.queuesToPlayer
         }
       }
-      addComponent(thing, LECSPOnWake(actions: Set(actions)))
+      addComponent(thing, LECSPOnWake(Set(actions)))
     }
 
     if visible {
@@ -142,7 +142,7 @@ extension LECSWorld {
           return LECSPOnWake.Action.queuesToPlayer
         }
       }
-      addComponent(thing, LECSPOnWake(actions: Set(actions)))
+      addComponent(thing, LECSPOnWake(Set(actions)))
       addComponent(thing, LECSPTimerSleep())
     }
 

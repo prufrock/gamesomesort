@@ -6,12 +6,41 @@
 //
 
 import GameConfiguration
+import LECSPieces
+import lecs_swift
+@testable import TileBasedGame
+import VRTMath
 
 
 struct TestHelpers {
   let worldCfg = GCFGWorld(
     entities: GCFGEntities(
-      creatures: [:],
+      creatures: [
+        0: GCFGCreature(
+          color: [0.0, 0.0, 0.0],
+          model: "",
+          onWake: [],
+          position: [0.0, 0.0, 1.0],
+          radius: 0.0,
+          rotationDegY: 0,
+          scale: 0.0,
+          tappable: false,
+          type: "nobody",
+          visible: false,
+        ),
+        1: GCFGCreature(
+          color: [0.0, 0.0, 0.0],
+          model: "player",
+          onWake: [],
+          position: [0.0, 0.0, 1.0],
+          radius: 0.0,
+          rotationDegY: 0,
+          scale: 0.0,
+          tappable: false,
+          type: "player",
+          visible: false,
+        )
+      ],
       things: [
         0: GCFGThing(
           color: [0.0, 0.0, 0.0],
@@ -109,4 +138,35 @@ struct TestHelpers {
       position: [0, 0, -9],
     )
   )
+
+  func initComponents(ecs: LECSWorld) {
+    let componentHolder = ecs.createEntity("componentHolder")
+
+    func ini(_ component: LECSComponent.Type) {
+      ecs.addComponent(componentHolder, component.init())
+      ecs.removeComponent(componentHolder, component: component)
+    }
+
+    ini(LECSPEvent.self)
+    ini(LECSPTimerSleep.self)
+    ini(LECSPPlayer.self)
+
+    initPlayerCamera(ecs: ecs)
+  }
+
+  private func initPlayerCamera(ecs: LECSWorld) {
+    let playerCamera = ecs.createEntity(E_NAME_CAMERA_PLAYER)
+    ecs.addComponent(
+      playerCamera,
+      LECSPCameraFirstPerson(
+        fov: 60.f * DEG2RAD,
+        nearPlane: 0.1,
+        farPlane: 10
+      )
+    )
+    ecs.addComponent(playerCamera, LECSPAspect(aspect: 1.0))
+    ecs.addComponent(playerCamera, LECSPPosition3d())
+    let worldVector: F3 = [1, -1, 1]
+    ecs.addComponent(playerCamera, LECSPScale3d(worldVector))
+  }
 }

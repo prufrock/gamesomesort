@@ -19,15 +19,12 @@ struct StepHandleEventsTests {
   init() {
     let helpers = TestHelpers()
     ecs = LECSCreateWorld(archetypeSize: 100)
+    helpers.initComponents(ecs: ecs)
     context = StepSelector.Context(
       ecs: ecs,
       config: Config(level: helpers.levelOneCfg, world: helpers.worldCfg),
       input: TBDGame.Input(),
     )
-
-    let componentHolder = ecs.createEntity("componentHolder")
-    ecs.addComponent(componentHolder, LECSPEvent())
-    ecs.removeComponent(componentHolder, component: LECSPEvent.self)
   }
 
   @Test func `when nothing happens, no events`() {
@@ -73,10 +70,35 @@ struct StepHandleEventsTests {
     let entity = ecs.createEntity("sleepingEntity")
     ecs.addComponent(entity, LECSPTimerSleep())
     ecs.addComponent(entity, LECSPOnWake())
+    let entityEvent = ecs.createEntity("tapEvent")
+    ecs.addComponent(entityEvent, LECSPEvent(event: .awake(LECSId(entity))))
 
     let stepSelector = StepSelector()
-    var events = stepSelector.run(context: context)
+    var _ = stepSelector.handleEvents(context: context)
 
     #expect(ecs.hasComponent(entity, LECSPTimerSleep.self) == false)
+  }
+
+  @Test func `when an entity wakes up and creates a creature`() {
+    let entity = ecs.createEntity("sleepingEntity")
+    ecs.addComponent(entity, LECSPTimerSleep())
+    ecs.addComponent(entity, LECSPOnWake([.creates(creatureId: "1")]))
+    ecs.addComponent(entity, LECSPPosition3d(0, 0, 0))
+    let entityEvent = ecs.createEntity("tapEvent")
+    ecs.addComponent(entityEvent, LECSPEvent(event: .awake(LECSId(entity))))
+
+    let stepSelector = StepSelector()
+    var _ = stepSelector.handleEvents(context: context)
+
+    var playerCount = 0
+    ecs.select([LECSPModel.self]) { row, columns in
+      let model = row.component(at: 0, columns, LECSPModel.self)
+
+      if model.name == "player" {
+        playerCount += 1
+      }
+    }
+
+    #expect(playerCount == 1, "One player is created.")
   }
 }
