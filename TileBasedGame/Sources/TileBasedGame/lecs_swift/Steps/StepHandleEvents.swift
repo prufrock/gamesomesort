@@ -42,6 +42,29 @@ extension StepSelector {
             ecs.addComponent(creature, LECSPPlayer())
           } else if case .queuesToPlayer = action {
             print("queuesToPlayer")
+            let sourceEntityPosition = ecs.getComponent(id.id, LECSPPosition3d.self)!
+            let offsets: [F3] = [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, -1, 0],
+              [-1, 0, 0]
+            ]
+            for offset in offsets {
+              let thing: LECSEntityId
+              let position: F3 = F3(
+                sourceEntityPosition.x + offset.x,
+                sourceEntityPosition.y + offset.y,
+                sourceEntityPosition.z + offset.z
+              )
+              thing = ecs.createEntity("movebtn-\(position.x)-\(position.y)")
+              ecs.addComponent(thing, LECSPPosition3d(position))
+              ecs.addComponent(thing, LECSPRadius(0.5))
+              ecs.addComponent(thing, LECSPColor(color: .init(.blue)))
+              ecs.addComponent(thing, LECSPScale3d(F3(repeating: 1.0)))
+              ecs.addComponent(thing, LECSPQuaternion(Float4x4.rotateY(0 * DEG2RAD).q))
+              ecs.addComponent(thing, LECSPModel("button-one"))
+              ecs.addComponent(thing, LECSPTag.Visible())
+            }
           }
         }
       case .touched(let id):
