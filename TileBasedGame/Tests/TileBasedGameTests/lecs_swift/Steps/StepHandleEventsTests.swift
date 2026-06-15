@@ -68,4 +68,15 @@ struct StepHandleEventsTests {
     let command = events.dequeue()!
     #expect(command.self == .startWorld(world: "world001"))
   }
+
+  @Test func `when there's an awake event remove the timer`() {
+    let entity = ecs.createEntity("sleepingEntity")
+    ecs.addComponent(entity, LECSPTimerSleep())
+    ecs.addComponent(entity, LECSPOnWake())
+
+    let stepSelector = StepSelector()
+    var events = stepSelector.run(context: context)
+
+    #expect(ecs.hasComponent(entity, LECSPTimerSleep.self) == false)
+  }
 }
