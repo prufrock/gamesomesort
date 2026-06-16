@@ -21,5 +21,6 @@ public struct LECSPOnWake: LECSComponent {
   public enum Action: Decodable, Hashable {
     case creates(creatureId: String)
     case queuesToPlayer
+    case createsMoveBtns(up: Int, down: Int, left: Int, right: Int)
   }
 }

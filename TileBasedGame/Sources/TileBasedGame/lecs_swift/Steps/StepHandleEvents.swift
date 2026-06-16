@@ -40,30 +40,18 @@ extension StepSelector {
               name: "player-01-\(id)"
             )
             ecs.addComponent(creature, LECSPPlayer())
-          } else if case .queuesToPlayer = action {
-            print("queuesToPlayer")
+          } else if case .createsMoveBtns(
+            up: let up, down: let down, left: let left, right: let right
+          ) = action {
+            print("createsMoveBtns")
             let sourceEntityPosition = ecs.getComponent(id.id, LECSPPosition3d.self)!
-            let offsets: [F3] = [
-              [1, 0, 0],
-              [0, 1, 0],
-              [0, -1, 0],
-              [-1, 0, 0]
-            ]
-            for offset in offsets {
-              let thing: LECSEntityId
-              let position: F3 = F3(
-                sourceEntityPosition.x + offset.x,
-                sourceEntityPosition.y + offset.y,
-                sourceEntityPosition.z + offset.z
+            let things: [Int] = [up, down, left, right]
+            for thing in things {
+              ecs.createThing(
+                from: worldCfg[thing: thing]!,
+                at: sourceEntityPosition,
+                name: "moveUp-\(id.id)-\(thing)"
               )
-              thing = ecs.createEntity("movebtn-\(position.x)-\(position.y)")
-              ecs.addComponent(thing, LECSPPosition3d(position))
-              ecs.addComponent(thing, LECSPRadius(0.5))
-              ecs.addComponent(thing, LECSPColor(color: .init(.blue)))
-              ecs.addComponent(thing, LECSPScale3d(F3(repeating: 1.0)))
-              ecs.addComponent(thing, LECSPQuaternion(Float4x4.rotateY(0 * DEG2RAD).q))
-              ecs.addComponent(thing, LECSPModel("button-one"))
-              ecs.addComponent(thing, LECSPTag.Visible())
             }
           }
         }

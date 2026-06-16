@@ -4,7 +4,7 @@
            "1": {
                "color": [0.0, 0.0, 0.0],
                "model": "square-bella.usdz",
-               "onWake": [{"queuesToPlayer":{}}],
+               "onWake": [{"createsMoveBtns":{"up":2,"down":3,"left":4,"right":5}}],
                "position": [0.0, 0.0, -0.1],
                "radius": 0.5,
                "rotationDegY": 180,

@@ -159,6 +159,8 @@ struct TBDGLevel {
           tappable: true,
           visible: true
         )
+      case .moveUp, .moveDown, .moveLeft, .moveRight:
+        break
       }
     }
   }

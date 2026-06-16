@@ -65,6 +65,18 @@ struct TestHelpers {
           tappable: false,
           type: .playerStart,
           visible: false,
+        ),
+        2: GCFGThing(
+          color: [0.3, 0.0, 0.9],
+          model: "button-one",
+          onWake: [],
+          position: [0.0, -1.0, 1.0],
+          radius: 0.5,
+          rotationDegY: 0,
+          scale: 1.0,
+          tappable: true,
+          type: .moveUp,
+          visible: false,
         )
       ],
       tiles: [

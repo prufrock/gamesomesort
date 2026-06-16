@@ -39,6 +39,31 @@ extension LECSWorld {
 
   @discardableResult
   func createThing(
+    from config: GCFGThing,
+    at sourcePosition: LECSPPosition3d,
+    name: String? = nil
+  ) -> LECSEntityId {
+    let playerPostion = F3(
+      x: sourcePosition.x + config.position.x,
+      y: sourcePosition.y + config.position.y,
+      z: sourcePosition.z + config.position.z
+    )
+    return createThing(
+      color: config.color.vrtma,
+      model: config.model,
+      onWake: config.onWake,
+      position: playerPostion,
+      radius: config.radius,
+      rotationDegY: config.rotationDegY,
+      scale: config.scale,
+      tappable: config.tappable,
+      visible: config.visible,
+      name: name ?? ""
+    )
+  }
+
+  @discardableResult
+  func createThing(
     color: VRTMColorA,
     model: String,
     onWake: [GCFGOnWakeAction],
@@ -66,6 +91,8 @@ extension LECSWorld {
           return LECSPOnWake.Action.creates(creatureId: creatureId)
         case .queuesToPlayer:
           return LECSPOnWake.Action.queuesToPlayer
+        case .createsMoveBtns(up: let up, down: let down, left: let left, right: let right):
+          return LECSPOnWake.Action.createsMoveBtns(up: up, down: down, left: left, right: right)
         }
       }
       addComponent(thing, LECSPOnWake(Set(actions)))
@@ -140,6 +167,8 @@ extension LECSWorld {
           return LECSPOnWake.Action.creates(creatureId: creatureId)
         case .queuesToPlayer:
           return LECSPOnWake.Action.queuesToPlayer
+        case .createsMoveBtns(up: let up, down: let down, left: let left, right: let right):
+          return LECSPOnWake.Action.createsMoveBtns(up: up, down: down, left: left, right: right)
         }
       }
       addComponent(thing, LECSPOnWake(Set(actions)))
