@@ -15,6 +15,14 @@ public struct GCFGWorld: Decodable {
   public let stepList: [GCFGWorld.StepId]
   public let worldVector: F3
 
+  public subscript(thing id: Int) -> GCFGThing? {
+    get { entities.things[id] }
+  }
+
+  public subscript(creature id: Int) -> GCFGCreature? {
+    get { entities.creatures[id] }
+  }
+
   public init(
     entities: GCFGEntities,
     hud: HUD,

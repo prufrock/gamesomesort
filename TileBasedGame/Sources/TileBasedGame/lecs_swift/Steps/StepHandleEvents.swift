@@ -35,7 +35,7 @@ extension StepSelector {
             // Create it relative to the thing that created it.
             let sourceEntityPosition = ecs.getComponent(id.id, LECSPPosition3d.self)!
             let creature = ecs.createCreature(
-              from: worldCfg.entities.creatures[Int(creatureId)!]!,
+              from: worldCfg[creature: Int(creatureId)!]!,
               at: sourceEntityPosition,
               name: "player-01-\(id)"
             )
