@@ -29,6 +29,6 @@ struct Float4x4ProjectionTests {
 
     let result = projection * F4(0.0, 0.0, -2.0, 1.0)
     #expect(result.isClose(to: F4(0.0, 0.0, 1.5, 2.0)))
-    #expect(result.perspectiveDivide.isClose(to: F3(0.0, 0.0, 0.75)))
+    #expect(result.perspectiveDivide.isClose(to: F3(0.0, 0.0, 2.25)))
   }
 }

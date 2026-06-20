@@ -33,7 +33,8 @@ extension Float3 where Scalar: Real {
     relativeTolerance: Scalar = Scalar.ulpOfOne.squareRoot()
   ) -> Bool {
     return self.x.isApproximatelyEqual(to: other.x, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance) &&
-    self.y.isApproximatelyEqual(to: other.y, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance)
+    self.y.isApproximatelyEqual(to: other.y, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance) &&
+    self.z.isApproximatelyEqual(to: other.z, absoluteTolerance: absoluteTolerance, relativeTolerance: relativeTolerance)
   }
 
   /// Test if self and other are close enough with specified tolerances.
