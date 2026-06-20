@@ -130,8 +130,8 @@ struct TBDGLevel {
         radius: tileCfg.radius,
         rotationDegY: tileCfg.rotationDegY,
         scale: tileCfg.scale,
-        tappable: true,
-        visible: true
+        tappable: tileCfg.tappable,
+        visible: tileCfg.visible
       )
     }
   }
