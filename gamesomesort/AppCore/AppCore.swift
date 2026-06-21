@@ -48,7 +48,7 @@ class AppCore {
         }
       }
     )
-    var world001Path = levels[0].worlds["world001"]?.path
+    let world001Path = levels[0].worlds["world001"]?.path
     sync(
       LoadJsonFileCommand(
         fileDescriptor: SVCFileDescriptor(name: world001Path!, ext: .json),

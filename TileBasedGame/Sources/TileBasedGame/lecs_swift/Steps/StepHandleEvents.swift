@@ -13,7 +13,6 @@ import VRTMath
 extension StepSelector {
   func handleEvents(context: Context) -> GameCommands {
     let ecs = context.ecs
-    let worldCfg = context.config.world
     var gameCommands = GameCommands()
 
     ecs.select([LECSId.self, LECSPEvent.self]) { row, columns in
