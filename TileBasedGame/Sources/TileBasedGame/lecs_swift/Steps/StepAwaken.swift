@@ -19,7 +19,6 @@ extension StepSelector {
       let timer = row.component(at: c(), columns, LECSPTimerSleep.self)
 
       if timer.expired() {
-        print("awakeEvent-\(id)")
         ctx.ecs.createEvent(name: "awakeEvent-\(id)", type: .awake(id))
       }
     }

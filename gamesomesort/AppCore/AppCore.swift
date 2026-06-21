@@ -49,7 +49,6 @@ class AppCore {
       }
     )
     var world001Path = levels[0].worlds["world001"]?.path
-    print("world001Path \(world001Path)")
     sync(
       LoadJsonFileCommand(
         fileDescriptor: SVCFileDescriptor(name: world001Path!, ext: .json),

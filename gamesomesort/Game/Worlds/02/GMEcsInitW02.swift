@@ -138,8 +138,6 @@ struct GMEcsInitW02: GMEcsStarter {
     case .nothing:
       //no-op
       break
-    default:
-      print("Oh dang, unknown thing at (\(x),\(y))")
     }
   }
 

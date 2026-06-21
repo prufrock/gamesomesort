@@ -68,7 +68,6 @@ class GMGame {
                 fileURLWithPath: "~/Music/gamesomesort/Worlds/World001"
               )
             ) { (worldData: GCFGWorld) in
-              print("worldData \(worldData)")
               worldCfg = worldData
 
             }
@@ -84,7 +83,6 @@ class GMGame {
                 fileURLWithPath: "~/Music/gamesomesort/Worlds/World001"
               )
             ) { (levelData: GCFGLevel) in
-              print("levelData \(levelData)")
               levelCfg = levelData
             }
           )
@@ -95,7 +93,6 @@ class GMGame {
               decodeType: GCFGWorld.self,
               bundle: .main
             ) { (worldData: GCFGWorld) in
-              print("worldData \(worldData)")
               worldCfg = worldData
 
             }
@@ -109,7 +106,6 @@ class GMGame {
               decodeType: GCFGLevel.self,
               bundle: .main
             ) { (levelData: GCFGLevel) in
-              print("levelData \(levelData)")
               levelCfg = levelData
             }
           )
