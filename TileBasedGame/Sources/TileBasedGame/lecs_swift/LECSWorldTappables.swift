@@ -48,10 +48,10 @@ extension LECSWorld {
   }
 
   func createTappable(
-    behaviors: Array<String>,
     color: F3,
     model: String,
     name: String,
+    onTap: Array<String>,
     position: F3,
     radius: Float,
     rotationDegY: Float,
@@ -61,7 +61,7 @@ extension LECSWorld {
   ) {
     let entity = createEntity(name)
     addComponent(
-      entity, LECSPHUD.Button.OnTap(Set(behaviors))
+      entity, LECSPHUD.Button.OnTap(Set(onTap))
     )
     addComponent(entity, LECSPPosition3d(position))
     addComponent(entity, LECSPScale3d(F3(repeating: scale)))

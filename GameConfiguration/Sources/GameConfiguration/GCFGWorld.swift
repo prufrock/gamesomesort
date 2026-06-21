@@ -66,7 +66,7 @@ extension GCFGWorld {
 
 extension GCFGWorld.HUD {
   public struct Button: Decodable {
-    public let behaviors: [String]
+    public let onTap: [String]
     public let color: F3
     public let name: String
     public let model: String
@@ -77,17 +77,17 @@ extension GCFGWorld.HUD {
     public let visible: Bool
 
     public init(
-      behaviors: [String],
       color: F3,
       name: String,
       model: String,
+      onTap: [String],
       position: F3,
       radius: Float,
       rotationDegrees: Float,
       tappable: Bool,
       visible: Bool
     ) {
-      self.behaviors = behaviors
+      self.onTap = onTap
       self.color = color
       self.name = name
       self.model = model

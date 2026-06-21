@@ -33,17 +33,17 @@ extension StepSelector {
           worldCfg: context.config.world
         )
       case .touched(let id):
-        let behaviors = ecs.getComponent(
+        let onTap = ecs.getComponent(
           id.id,
           LECSPHUD.Button.OnTap.self
         )
-        if let behaviors {
-          if behaviors.list.contains("exit") {
+        if let onTap {
+          if onTap.list.contains("exit") {
             gameCommands.enqueue(.start(level: 0))
-          } else if behaviors.list.contains("reload") {
+          } else if onTap.list.contains("reload") {
             gameCommands.enqueue(.startWorld(world: "world001"))
           } else {
-            print("The button \(id) has no known behaviors: \(behaviors.list)")
+            print("The button \(id) has no known onTaps: \(onTap.list)")
           }
         }
       }

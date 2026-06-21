@@ -32,10 +32,10 @@ struct LECSWorldTappablesTests {
     var tappables = Array<LECSId>()
 
     ecs.createTappable(
-        behaviors: [],
         color: F3(0,0,0),
         model: "button",
         name: "button",
+        onTap: [],
         position: F3(0,0,0),
         radius: 0.0,
         rotationDegY: 0,

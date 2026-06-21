@@ -97,10 +97,10 @@ struct TestHelpers {
       buttons: [
         GCFGWorld.HUD
           .Button(
-            behaviors: ["exit"],
             color: [0, 0, 0],
             name: "exitButton",
             model: "square",
+            onTap: ["exit"],
             position: [1.0, -2, 1.0],
             radius: 1.5,
             rotationDegrees: 0,

@@ -69,10 +69,10 @@
     "hud": {
         "buttons": [
             {
-                "behaviors": ["exit"],
                 "color": [1, 1, 1],
                 "name": "exitButton",
                 "model": "brick-sphere.usdz",
+                "onTap": ["exit"],
                 "position": [1.0, -2, 1.0],
                 "radius": 0.5,
                 "rotationDegrees": 0,
@@ -80,10 +80,10 @@
                 "visible": true
             },
             {
-                "behaviors": ["reload"],
                 "color": [1, 1, 1],
                 "name": "reloadButton",
                 "model": "brick-sphere.usdz",
+                "onTap": ["reload"],
                 "position": [4.0, -2, 1.0],
                 "radius": 0.5,
                 "rotationDegrees": 90,

@@ -76,10 +76,10 @@ struct TBDGLevel {
     let cfg = world.worldConfig.hud.buttons
     cfg.forEach { button in
       world.ecs.createTappable(
-          behaviors: button.behaviors,
           color: button.color,
           model: button.model,
           name: button.name,
+          onTap: button.onTap,
           position: button.position,
           radius: button.radius,
           rotationDegY: button.rotationDegrees,

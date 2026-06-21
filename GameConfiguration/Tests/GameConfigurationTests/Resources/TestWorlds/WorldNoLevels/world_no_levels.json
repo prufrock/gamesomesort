@@ -7,10 +7,10 @@
     "hud": {
         "buttons": [
             {
-                "behaviors": [],
                 "color": [0, 0, 0],
                 "name": "exitButton",
                 "model": "square",
+                "onTap": [],
                 "position": [0, 0, 0],
                 "radius": 1.0,
                 "rotationDegrees": 0,
