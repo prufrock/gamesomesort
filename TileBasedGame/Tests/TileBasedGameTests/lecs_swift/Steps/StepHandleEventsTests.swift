@@ -36,7 +36,7 @@ struct StepHandleEventsTests {
 
   @Test func `when a button is touched with an exit behavior recieve start(level)`() {
     let buttonEntity = ecs.createEntity("buttonEntity")
-    ecs.addComponent(buttonEntity, LECSPHUD.Button.Behaviors(["exit"]))
+    ecs.addComponent(buttonEntity, LECSPHUD.Button.OnTap(["exit"]))
 
     let entityEvent = ecs.createEntity("tapEvent")
     ecs.addComponent(entityEvent, LECSPEvent(event: .touched(LECSId(buttonEntity))))
@@ -52,7 +52,7 @@ struct StepHandleEventsTests {
 
   @Test func `when a button is touched with a reload behavior receive startWorld`() {
     let buttonEntity = ecs.createEntity("buttonEntity")
-    ecs.addComponent(buttonEntity, LECSPHUD.Button.Behaviors(["reload"]))
+    ecs.addComponent(buttonEntity, LECSPHUD.Button.OnTap(["reload"]))
 
     let entityEvent = ecs.createEntity("tapEvent")
     ecs.addComponent(entityEvent, LECSPEvent(event: .touched(LECSId(buttonEntity))))

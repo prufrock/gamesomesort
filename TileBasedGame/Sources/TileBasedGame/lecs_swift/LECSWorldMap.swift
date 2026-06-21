@@ -33,7 +33,7 @@ extension LECSWorld {
     }
     if tappable {
       addComponent(tile, LECSPTag.Tappable())
-      addComponent(tile, LECSPHUD.Button.Behaviors([]))
+      addComponent(tile, LECSPHUD.Button.OnTap([]))
     }
   }
 
@@ -103,7 +103,7 @@ extension LECSWorld {
     }
     if tappable {
       addComponent(thing, LECSPTag.Tappable())
-      addComponent(thing, LECSPHUD.Button.Behaviors([]))
+      addComponent(thing, LECSPHUD.Button.OnTap([]))
     }
 
     return thing
@@ -180,7 +180,7 @@ extension LECSWorld {
     }
     if tappable {
       addComponent(thing, LECSPTag.Tappable())
-      addComponent(thing, LECSPHUD.Button.Behaviors([]))
+      addComponent(thing, LECSPHUD.Button.OnTap([]))
     }
 
     return thing

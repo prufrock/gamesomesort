@@ -14,7 +14,7 @@ public extension LECSPHUD {
 }
 
 public extension LECSPHUD.Button {
-  struct Behaviors: LECSComponent {
+  struct OnTap: LECSComponent {
     public let list: Set<String>
 
     public init() {

@@ -35,7 +35,7 @@ extension StepSelector {
       case .touched(let id):
         let behaviors = ecs.getComponent(
           id.id,
-          LECSPHUD.Button.Behaviors.self
+          LECSPHUD.Button.OnTap.self
         )
         if let behaviors {
           if behaviors.list.contains("exit") {
