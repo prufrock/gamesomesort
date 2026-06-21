@@ -19,6 +19,7 @@ struct TestHelpers {
         0: GCFGCreature(
           color: [0.0, 0.0, 0.0],
           model: "",
+          onTap: [],
           onWake: [],
           position: [0.0, 0.0, 1.0],
           radius: 0.0,
@@ -31,6 +32,7 @@ struct TestHelpers {
         1: GCFGCreature(
           color: [0.0, 0.0, 0.0],
           model: "player",
+          onTap: [],
           onWake: [],
           position: [0.0, 0.0, 1.0],
           radius: 0.0,
@@ -45,6 +47,7 @@ struct TestHelpers {
         0: GCFGThing(
           color: [0.0, 0.0, 0.0],
           model: "",
+          onTap: [],
           onWake: [],
           position: [0.0, 0.0, 1.0],
           radius: 0.0,
@@ -57,6 +60,7 @@ struct TestHelpers {
         1: GCFGThing(
           color: [0.3, 0.0, 0.9],
           model: "",
+          onTap: [],
           onWake: [.creates(creatureId: "1")],
           position: [0.0, 0.0, 1.0],
           radius: 0.5,
@@ -69,6 +73,7 @@ struct TestHelpers {
         2: GCFGThing(
           color: [0.3, 0.0, 0.9],
           model: "button-one",
+          onTap: [],
           onWake: [],
           position: [0.0, -1.0, 1.0],
           radius: 0.5,
@@ -84,6 +89,7 @@ struct TestHelpers {
           color: [0.5, 0.5, 0.5],
           model: "button-one",
           name: "floor",
+          onTap: [],
           position: [0.0, 0.0, 1.0],
           radius: 0.5,
           rotationDegY: 0,

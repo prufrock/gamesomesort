@@ -3,14 +3,15 @@
         "creatures": {
            "1": {
                "color": [0.0, 0.0, 0.0],
-               "model": "square-bella.usdz",
-               "onWake": [{"createsMoveBtns":{"up":2,"down":3,"left":4,"right":5}}],
+               "onWake": [{"createsMoveBtns": {"up":2,"down":3,"left":4,"right":5}}],
+               "model": "box-golem.usdz",
+               "onTap": [],
                "position": [0.0, 0.0, -0.1],
                "radius": 0.5,
                "rotationDegY": 180,
-               "scale": 0.5,
-               "tappable": false,
+               "scale": 0.25,
                "type": "playerDoll",
+               "tappable": false,
                "visible": true
            }
         },
@@ -19,50 +20,105 @@
                 "color": [0.5, 0.5, 0.5],
                 "model": "button-one",
                 "name": "floor",
+                "onTap": [],
                 "position": [0.0, 0.0, 1.0],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.95,
-                "tappable": true,
-                "visible": true,
-                "z": 1.0
+                "tappable": false,
+                "visible": true
             },
             "1": {
                 "color": [0.0, 0.9, 0.3],
                 "model": "button-one",
                 "name": "wall",
+                "onTap": [],
                 "position": [0.0, 0.0, 1.0],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.95,
-                "tappable": true,
-                "visible": true,
+                "tappable": false,
+                "visible": true
             }
         },
         "things": {
             "0": {
                 "color": [0.0, 0.0, 0.0],
                 "model": "",
+                "onTap": [],
                 "onWake": [],
-                "position": [0, 0, 0.9],
+                "position": [0.0, 0.0, 0.9],
                 "radius": 0.0,
                 "rotationDegY": 0,
                 "scale": 0.0,
                 "tappable": false,
                 "type": "nothing",
-                "visible": false,
+                "visible": false
             },
             "1": {
                 "color": [0.3, 0.0, 0.9],
                 "model": "button-one",
+                "onTap": [],
                 "onWake": [{"creates": {"creatureId": "1"}}],
-                "position": [0, 0, 0.75],
+                "position": [0.0, 0.0, 0.75],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.5,
                 "tappable": false,
                 "type": "playerStart",
-                "visible": true,
+                "visible": true
+            },
+            "2": {
+                "color": [0.8, 0.6, 0.0],
+                "model": "button-one",
+                "onTap": ["moveUp"],
+                "onWake": [],
+                "position": [0.0, -1.0, -0.1],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.8,
+                "tappable": true,
+                "type": "moveUp",
+                "visible": true
+            },
+            "3": {
+                "color": [0.8, 0.6, 0.0],
+                "model": "button-one",
+                "onTap": ["moveDown"],
+                "onWake": [],
+                "position": [0.0, 1.0, -0.1],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.8,
+                "tappable": true,
+                "type": "moveDown",
+                "visible": true
+            },
+            "4": {
+                "color": [0.8, 0.6, 0.0],
+                "model": "button-one",
+                "onTap": ["moveLeft"],
+                "onWake": [],
+                "position": [-1.0, 0.0, -0.1],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.8,
+                "tappable": true,
+                "type": "moveLeft",
+                "visible": true
+            },
+            "5": {
+                "color": [0.8, 0.6, 0.0],
+                "model": "button-one",
+                "onTap": ["moveRight"],
+                "onWake": [],
+                "position": [1.0, 0.0, -0.1],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.8,
+                "tappable": true,
+                "type": "moveRight",
+                "visible": true
             }
         }
     },
@@ -70,8 +126,8 @@
         "buttons": [
             {
                 "color": [1, 1, 1],
-                "name": "exitButton",
                 "model": "brick-sphere.usdz",
+                "name": "exitButton",
                 "onTap": ["exit"],
                 "position": [1.0, -2, 1.0],
                 "radius": 0.5,
@@ -81,8 +137,8 @@
             },
             {
                 "color": [1, 1, 1],
-                "name": "reloadButton",
                 "model": "brick-sphere.usdz",
+                "name": "reloadButton",
                 "onTap": ["reload"],
                 "position": [4.0, -2, 1.0],
                 "radius": 0.5,

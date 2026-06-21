@@ -51,6 +51,7 @@ extension LECSWorld {
     return createThing(
       color: config.color.vrtma,
       model: config.model,
+      onTap: config.onTap,
       onWake: config.onWake,
       position: playerPostion,
       radius: config.radius,
@@ -66,6 +67,7 @@ extension LECSWorld {
   func createThing(
     color: VRTMColorA,
     model: String,
+    onTap: [String],
     onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
@@ -103,7 +105,7 @@ extension LECSWorld {
     }
     if tappable {
       addComponent(thing, LECSPTag.Tappable())
-      addComponent(thing, LECSPHUD.Button.OnTap([]))
+      addComponent(thing, LECSPHUD.Button.OnTap(Set(onTap)))
     }
 
     return thing
@@ -123,6 +125,7 @@ extension LECSWorld {
     return createCreature(
       color: config.color.vrtma,
       model: config.model,
+      onTap: config.onTap,
       onWake: config.onWake,
       position: relativePos,
       radius: config.radius,
@@ -138,6 +141,7 @@ extension LECSWorld {
   func createCreature(
     color: VRTMColorA,
     model: String,
+    onTap: [String],
     onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
@@ -180,7 +184,7 @@ extension LECSWorld {
     }
     if tappable {
       addComponent(thing, LECSPTag.Tappable())
-      addComponent(thing, LECSPHUD.Button.OnTap([]))
+      addComponent(thing, LECSPHUD.Button.OnTap(Set(onTap)))
     }
 
     return thing
