@@ -14,6 +14,7 @@ import VRTMath
 
 struct TestHelpers {
   let worldCfg = GCFGWorld(
+    actionMode: .staticTurns,
     entities: GCFGEntities(
       creatures: [
         0: GCFGCreature(

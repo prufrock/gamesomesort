@@ -1,4 +1,5 @@
 {
+    "actionMode": "staticTurns",
     "entities": {
         "creatures": {
            "1": {
