@@ -8,6 +8,7 @@
 import VRTMath
 
 public struct GCFGWorld: Decodable {
+  public let actionMode: ActionMode
   public let entities: GCFGEntities
   public let hud: HUD
   public let levels: [String: LevelPath]
@@ -24,6 +25,7 @@ public struct GCFGWorld: Decodable {
   }
 
   public init(
+    actionMode: ActionMode,
     entities: GCFGEntities,
     hud: HUD,
     levels: [String : LevelPath],
@@ -31,6 +33,7 @@ public struct GCFGWorld: Decodable {
     stepList: [GCFGWorld.StepId],
     worldVector: F3
   ) {
+    self.actionMode = actionMode
     self.entities = entities
     self.hud = hud
     self.levels = levels
