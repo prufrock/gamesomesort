@@ -91,10 +91,12 @@ extension LECSWorld {
         switch item {
         case .creates(creatureId: let creatureId):
           return LECSPOnWake.Action.creates(creatureId: creatureId)
-        case .queuesToPlayer:
-          return LECSPOnWake.Action.queuesToPlayer
         case .createsMoveBtns(up: let up, down: let down, left: let left, right: let right):
           return LECSPOnWake.Action.createsMoveBtns(up: up, down: down, left: left, right: right)
+        case .levelStart:
+          return LECSPOnWake.Action.levelStart
+        case .queuesToPlayer:
+          return LECSPOnWake.Action.queuesToPlayer
         }
       }
       addComponent(thing, LECSPOnWake(Set(actions)))
@@ -173,6 +175,8 @@ extension LECSWorld {
           return LECSPOnWake.Action.queuesToPlayer
         case .createsMoveBtns(up: let up, down: let down, left: let left, right: let right):
           return LECSPOnWake.Action.createsMoveBtns(up: up, down: down, left: left, right: right)
+        case .levelStart:
+          return .nothing
         }
       }
       addComponent(thing, LECSPOnWake(Set(actions)))
