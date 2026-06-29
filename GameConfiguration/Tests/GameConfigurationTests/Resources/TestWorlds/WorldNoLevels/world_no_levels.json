@@ -27,6 +27,7 @@
     },
     "levels": {},
     "name": "no levels",
+    "onWake": [{"levelStart": {}}],
     "stepList": [],
     "worldVector": [1, 1, 1]
 }

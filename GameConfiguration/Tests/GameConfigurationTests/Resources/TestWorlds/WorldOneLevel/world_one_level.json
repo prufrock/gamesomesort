@@ -61,6 +61,7 @@
         }
     },
     "name": "world one level",
+    "onWake": [{"levelStart": {}}],
     "stepList": ["handleInput", "handleEvents"],
     "worldVector": [1, 1, 1]
 }
