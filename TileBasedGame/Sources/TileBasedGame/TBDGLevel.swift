@@ -18,6 +18,8 @@ struct TBDGLevel {
 
   func reset() {
     initComponents()
+    world.id = initWorld()
+
     initButtons()
     initPlayerCamera()
     initPointLight()
@@ -25,6 +27,14 @@ struct TBDGLevel {
     initTapLocation()
     initTiles()
     initThings()
+  }
+
+  private func initWorld() -> LECSId {
+    let ecs = world.ecs
+
+    let id = ecs.createEntity(world.worldConfig.name)
+
+    return LECSId(id)
   }
 
   private func initComponents() {
