@@ -317,6 +317,12 @@ class LECSWorldFixedSize: LECSWorld {
     }
 }
 
+public extension LECSEntityId {
+    var lecsId: LECSId {
+        LECSId(self)
+    }
+}
+
 
 private struct LECSSystem {
     let componentIds: [LECSComponentId]
