@@ -26,8 +26,6 @@ extension LECSPOnWake.Action {
         creature: worldCfg[creature: Int(creatureId)!]!,
         ecs: ecs
       )
-    case .queuesToPlayer:
-      LECSPOnWake.queuesToPlayer()
     case .createsMoveBtns(
       up: let up, down: let down, left: let left, right: let right
     ):
@@ -41,6 +39,8 @@ extension LECSPOnWake.Action {
         ],
         ecs: ecs
       )
+    case .queuesToPlayer:
+      LECSPOnWake.queuesToPlayer()
     }
   }
 }
