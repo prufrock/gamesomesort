@@ -18,8 +18,9 @@ struct TBDGLevel {
 
   func reset() {
     initComponents()
-    world.id = initWorld()
+    initWorld()
 
+    //TODO: consider doing this in response to world events
     initButtons()
     initPlayerCamera()
     initPointLight()
@@ -29,12 +30,29 @@ struct TBDGLevel {
     initThings()
   }
 
-  private func initWorld() -> LECSId {
+  private func initWorld() {
     let ecs = world.ecs
 
     let id = ecs.createEntity(world.worldConfig.name)
 
-    return LECSId(id)
+    let onWake = world.worldConfig.onWake
+
+    if onWake.isNotEmpty {
+      ecs.addComponent(id, LECSPTimerSleep())
+      let actions: [LECSPOnWake.Action] = onWake.map{ item in
+        switch item {
+        case .creates(creatureId: let creatureId):
+          return .nothing
+        case .createsMoveBtns(up: let up, down: let down, left: let left, right: let right):
+          return .nothing
+        case .levelStart:
+          return 
+        case .queuesToPlayer:
+          return .nothing
+        }
+      }
+      ecs.addComponent(id, LECSPOnWake(Set(actions)))
+    }
   }
 
   private func initComponents() {
