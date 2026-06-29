@@ -13,6 +13,7 @@ public struct GCFGWorld: Decodable {
   public let hud: HUD
   public let levels: [String: LevelPath]
   public let name: String
+  public let onWake: [GCFGOnWakeAction]
   public let stepList: [GCFGWorld.StepId]
   public let worldVector: F3
 
@@ -30,6 +31,7 @@ public struct GCFGWorld: Decodable {
     hud: HUD,
     levels: [String : LevelPath],
     name: String,
+    onWake: [GCFGOnWakeAction],
     stepList: [GCFGWorld.StepId],
     worldVector: F3
   ) {
@@ -38,6 +40,7 @@ public struct GCFGWorld: Decodable {
     self.hud = hud
     self.levels = levels
     self.name = name
+    self.onWake = onWake
     self.stepList = stepList
     self.worldVector = worldVector
   }

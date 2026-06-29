@@ -7,6 +7,6 @@
 
 public enum GCFGOnWakeAction: Codable {
   case creates(creatureId: String)
-  case queuesToPlayer
   case createsMoveBtns(up: Int, down: Int, left: Int, right: Int)
+  case queuesToPlayer, startLevel
 }
