@@ -19,7 +19,9 @@ public let E_NAME_TAP_LOCATION = "tapLocation"
 
 public class TBDGWorld {
   public let ecs: LECSWorld
-  public var id: LECSId? = nil
+  public var id: LECSId? {
+    ecs.entity(worldConfig.name)?.lecsId
+  }
   let worldConfig: GCFGWorld
   let levelConfig: GCFGLevel
   private var screenDimensions = VRTMScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
