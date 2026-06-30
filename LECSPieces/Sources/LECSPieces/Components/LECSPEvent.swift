@@ -21,8 +21,8 @@ public struct LECSPEvent: LECSComponent {
 
 public extension LECSPEvent {
   enum EventType {
+    case awake(LECSId)
     case none
     case touched(LECSId)
-    case awake(LECSId)
   }
 }
