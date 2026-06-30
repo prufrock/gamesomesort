@@ -32,6 +32,8 @@ extension StepSelector {
           ecs: ecs,
           worldCfg: context.config.world
         )
+      case .levelStarted:
+        break
       case .touched(let id):
         let onTap = ecs.getComponent(
           id.id,

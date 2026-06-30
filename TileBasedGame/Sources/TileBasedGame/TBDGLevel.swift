@@ -41,12 +41,12 @@ struct TBDGLevel {
       ecs.addComponent(id, LECSPTimerSleep())
       let actions: [LECSPOnWake.Action] = onWake.map{ item in
         switch item {
-        case .creates(creatureId: let creatureId):
+        case .creates(creatureId: _):
           return .nothing
-        case .createsMoveBtns(up: let up, down: let down, left: let left, right: let right):
+        case .createsMoveBtns(up: _, down: _, left: _, right: _):
           return .nothing
         case .levelStart:
-          return 
+          return .levelStart
         case .queuesToPlayer:
           return .nothing
         }

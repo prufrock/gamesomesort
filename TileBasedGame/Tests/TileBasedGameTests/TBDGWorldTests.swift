@@ -39,7 +39,7 @@ import VRTMath
   }()
 }
 
-@Test func `exit the world`() {
+@Test func `start world and exit`() {
   let world = startWorld()
 
   world.update(VRTMScreenDimensions(
@@ -54,6 +54,17 @@ import VRTMath
   var commands = world.update(
     timeStep: 0.01, input: input
   )
+
+  // check for on wake events
+  var levelStarted = false
+  world.ecs.select([LECSPEvent.self]) { row, columns in
+    let event: LECSPEvent = row.component(at: 0, columns, LECSPEvent.self)
+
+    if event.event == .levelStarted {
+      levelStarted = true
+    }
+    #expect(levelStarted)
+  }
 
   #expect(commands.dequeue() == .start(level: 0))
 

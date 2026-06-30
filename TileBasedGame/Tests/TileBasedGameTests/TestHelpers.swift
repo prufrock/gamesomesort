@@ -126,6 +126,7 @@ struct TestHelpers {
       )
     ],
     name: "world_one_level",
+    onWake: [.levelStart],
     stepList: [.awaken, .handleInput, .handleEvents],
     worldVector: [1, -1, 1]
   )

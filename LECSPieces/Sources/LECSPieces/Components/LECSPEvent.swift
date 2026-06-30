@@ -20,7 +20,7 @@ public struct LECSPEvent: LECSComponent {
 }
 
 public extension LECSPEvent {
-  enum EventType {
+  enum EventType: Equatable {
     case awake(LECSId)
     case levelStarted
     case none

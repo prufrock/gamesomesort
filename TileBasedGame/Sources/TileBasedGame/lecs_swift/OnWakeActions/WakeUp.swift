@@ -39,8 +39,14 @@ extension LECSPOnWake.Action {
         ],
         ecs: ecs
       )
+    case .levelStart:
+      LECSPOnWake.levelStart(
+        ecs: ecs
+      )
     case .queuesToPlayer:
       LECSPOnWake.queuesToPlayer()
+    case .nothing:
+      break
     }
   }
 }
