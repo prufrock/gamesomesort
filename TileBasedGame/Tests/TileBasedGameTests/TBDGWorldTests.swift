@@ -56,15 +56,7 @@ import VRTMath
   )
 
   // check for on wake events
-  var levelStarted = false
-  world.ecs.select([LECSPEvent.self]) { row, columns in
-    let event: LECSPEvent = row.component(at: 0, columns, LECSPEvent.self)
-
-    if event.event == .levelStarted {
-      levelStarted = true
-    }
-    #expect(levelStarted)
-  }
+  expectEvent(event: .levelStarted, ecs: world.ecs)
 
   #expect(commands.dequeue() == .start(level: 0))
 
@@ -73,6 +65,18 @@ import VRTMath
     countPlayers += 1
   }
   #expect(countPlayers == 1)
+}
+
+func expectEvent(event: LECSPEvent.EventType, ecs: LECSWorld) {
+  var levelStarted = false
+  ecs.select([LECSPEvent.self]) { row, columns in
+    let event: LECSPEvent = row.component(at: 0, columns, LECSPEvent.self)
+
+    if event.event == .levelStarted {
+      levelStarted = true
+    }
+    #expect(levelStarted)
+  }
 }
 
 private func startWorld() -> TBDGWorld {
