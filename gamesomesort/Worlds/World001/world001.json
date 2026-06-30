@@ -162,5 +162,6 @@
     },
     "stepList": ["awaken", "handleInput", "handleEvents"],
     "name": "one level",
+    "onWake": [{"levelStart": {}}],
     "worldVector": [1, -1, 1]
 }

@@ -33,6 +33,13 @@ extension StepSelector {
           worldCfg: context.config.world
         )
       case .levelStarted:
+        let id = ecs.createEntity("playerTurnStarted")
+        ecs.addComponent(id, LECSPEvent(event: .levelStarted))
+        // displayCommandsForActiveDolls
+      case .playerTurnEnded:
+        let id = ecs.createEntity("playerTurnStarted")
+        ecs.addComponent(id, LECSPEvent(event: .levelStarted))
+      case .playerTurnStarted:
         break
       case .touched(let id):
         let onTap = ecs.getComponent(

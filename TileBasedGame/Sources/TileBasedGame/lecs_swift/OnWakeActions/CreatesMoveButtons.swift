@@ -15,13 +15,13 @@ extension LECSPOnWake {
     buttons: [GCFGThing],
     ecs: LECSWorld
   ) {
-    let sourceEntityPosition = ecs.getComponent(id.id, LECSPPosition3d.self)!
-    for button in buttons {
-      ecs.createThing(
-        from: button,
-        at: sourceEntityPosition,
-        name: "thing-\(button.type)"
-      )
-    }
+//    let sourceEntityPosition = ecs.getComponent(id.id, LECSPPosition3d.self)!
+//    for button in buttons {
+//      ecs.createThing(
+//        from: button,
+//        at: sourceEntityPosition,
+//        name: "thing-\(button.type)"
+//      )
+//    }
   }
 }

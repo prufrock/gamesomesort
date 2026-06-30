@@ -23,6 +23,8 @@ public extension LECSPEvent {
   enum EventType: Equatable {
     case awake(LECSId)
     case levelStarted
+    case playerTurnEnded
+    case playerTurnStarted
     case none
     case touched(LECSId)
   }
