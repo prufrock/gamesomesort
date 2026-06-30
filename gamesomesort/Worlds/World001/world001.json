@@ -4,7 +4,7 @@
         "creatures": {
            "1": {
                "color": [0.0, 0.0, 0.0],
-               "onWake": [{"createsMoveBtns": {"up":2,"down":3,"left":4,"right":5}}],
+               "onWake": [],
                "model": "box-golem.usdz",
                "onTap": [],
                "position": [0.0, 0.0, -0.1],

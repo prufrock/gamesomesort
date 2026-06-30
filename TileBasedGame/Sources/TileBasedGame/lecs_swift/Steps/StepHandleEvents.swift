@@ -33,14 +33,47 @@ extension StepSelector {
           worldCfg: context.config.world
         )
       case .levelStarted:
+        print("levelStarted")
         let id = ecs.createEntity("playerTurnStarted")
-        ecs.addComponent(id, LECSPEvent(event: .levelStarted))
-        // displayCommandsForActiveDolls
+        ecs.addComponent(id, LECSPEvent(event: .playerTurnStarted))
+
       case .playerTurnEnded:
+        print("playerTurnEnded")
         let id = ecs.createEntity("playerTurnStarted")
-        ecs.addComponent(id, LECSPEvent(event: .levelStarted))
+        ecs.addComponent(id, LECSPEvent(event: .playerTurnStarted))
+        var players: [(LECSId, LECSPPlayer)] = []
+        //TODO: consider adhoc updates/systems.
+        ecs.select([LECSId.self, LECSPPlayer.self]) { rows, components in
+          let count = counter()
+          let id = rows.component(at: count(), components, LECSId.self)
+          let player = rows.component(at: count(), components, LECSPPlayer.self)
+          players.append((id, player))
+        }
+        players.forEach { (playerId, player) in
+          ecs.addComponent(
+            playerId.id, LECSPPlayer(order: player.order, moved: false)
+          )
+        }
       case .playerTurnStarted:
-        break
+        print("playerTurnEnded")
+        // displayCommandsForActiveDolls
+        ecs.select([LECSId.self, LECSPPlayer.self]) { row, components in
+          let count = counter()
+          let playerId = row.component(at: count(), components, LECSId.self)
+          let player = row.component(at: count(), components, LECSPPlayer.self)
+          if player.moved == false {
+            let sourceEntityPosition = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
+            let buttons: [Int] = [2]//[2, 3, 4, 5]
+            for button in buttons {
+              let thing = context.config.world[thing: button]!
+              ecs.createThing(
+                from: thing,
+                at: sourceEntityPosition,
+                name: "thing-\(thing.type)"
+              )
+            }
+          }
+        }
       case .touched(let id):
         let onTap = ecs.getComponent(
           id.id,
@@ -52,69 +85,48 @@ extension StepSelector {
           } else if onTap.list.contains("reload") {
             gameCommands.enqueue(.startWorld(world: "world001"))
           } else if onTap.list.contains("moveUp") {
-            print("move the player")
-            var playerIds: [LECSId] = []
-            ecs.select([LECSId.self, LECSPModel.self]) { row, columns in
+            print("move the player up")
+            var playerIds: [(LECSId, LECSPPlayer)] = []
+            ecs.select([LECSId.self, LECSPPlayer.self]) { row, columns in
               let id = row.component(at: 0, columns, LECSId.self)
-              let model = row.component(at: 1, columns, LECSPModel.self)
+              let player = row.component(at: 1, columns, LECSPPlayer.self)
 
-              if model.name.contains("golem") {
-                playerIds.append(id)
-              }
+              playerIds.append((id, player))
             }
-            playerIds.forEach { playerId in
+            playerIds.forEach { (playerId, player) in
               let oPos = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
               let nPos = oPos + [0.0, -1.0, 0.0]
               ecs.addComponent(playerId.id, nPos)
+              ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true))
             }
-          } else if onTap.list.contains("moveDown") {
-            print("move the player")
-            var playerIds: [LECSId] = []
-            ecs.select([LECSId.self, LECSPModel.self]) { row, columns in
-              let id = row.component(at: 0, columns, LECSId.self)
-              let model = row.component(at: 1, columns, LECSPModel.self)
 
-              if model.name.contains("golem") {
-                playerIds.append(id)
+            // delete all the move buttons
+            var moveButtons: [LECSId] = []
+            ecs.select([LECSId.self, LECSPHUD.Button.OnTap.self]) { rows, components in
+              let count = counter()
+              let btnId = rows.component(at: count(), components, LECSId.self)
+              let onTap = rows.component(at: count(), components, LECSPHUD.Button.OnTap.self)
+              // hack to find the buttons for now
+              if onTap.list.contains("moveUp") {
+                moveButtons.append(btnId)
               }
             }
-            playerIds.forEach { playerId in
-              let oPos = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
-              let nPos = oPos + [0.0, 1.0, 0.0]
-              ecs.addComponent(playerId.id, nPos)
-            }
-          } else if onTap.list.contains("moveLeft") {
-            print("move the player")
-            var playerIds: [LECSId] = []
-            ecs.select([LECSId.self, LECSPModel.self]) { row, columns in
-              let id = row.component(at: 0, columns, LECSId.self)
-              let model = row.component(at: 1, columns, LECSPModel.self)
+            moveButtons.forEach { ecs.deleteEntity($0.id) }
 
-              if model.name.contains("golem") {
-                playerIds.append(id)
+            // check for all out of moves, but should be handled by an event
+            var playersMoved = 0
+            var playerCount = 0
+            ecs.select([LECSPPlayer.self]) { row, columns in
+              let player = row.component(at: 0, columns, LECSPPlayer.self)
+              playerCount += 1
+              if player.moved {
+                playersMoved += 1
               }
             }
-            playerIds.forEach { playerId in
-              let oPos = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
-              let nPos = oPos + [-1.0, 0.0, 0.0]
-              ecs.addComponent(playerId.id, nPos)
+            if playersMoved == playerCount {
+              let id = ecs.createEntity("playerTurnEnded")
+              ecs.addComponent(id, LECSPEvent(event: .playerTurnEnded))
             }
-          } else if onTap.list.contains("moveRight") {
-              print("move the player")
-              var playerIds: [LECSId] = []
-              ecs.select([LECSId.self, LECSPModel.self]) { row, columns in
-                let id = row.component(at: 0, columns, LECSId.self)
-                let model = row.component(at: 1, columns, LECSPModel.self)
-
-                if model.name.contains("golem") {
-                  playerIds.append(id)
-                }
-              }
-              playerIds.forEach { playerId in
-                let oPos = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
-                let nPos = oPos + [1.0, 0.0, 0.0]
-                ecs.addComponent(playerId.id, nPos)
-              }
           } else {
             print("The button \(id) has no known onTaps: \(onTap.list)")
           }
