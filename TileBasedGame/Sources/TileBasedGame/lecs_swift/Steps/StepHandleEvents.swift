@@ -91,15 +91,16 @@ extension StepSelector {
             gameCommands.enqueue(.start(level: 0))
           } else if onTap.list.contains("reload") {
             gameCommands.enqueue(.startWorld(world: "world001"))
-          } else if onTap.list.contains("moveUp") {
+          } else if onTap.list.contains("move") {
             let targetPlayer = ecs.getComponent(id.id, LECSPPlayerOwner.self)!
             print("move the player \(targetPlayer.owner.id) up")
             let player = ecs.getComponent(targetPlayer.owner.id, LECSPPlayer.self)!
             let playerIds: [(LECSId, LECSPPlayer)] = [(targetPlayer.owner, player)]
 
             playerIds.forEach { (playerId, player) in
+              let btnPos = ecs.getComponent(id.id, LECSPPosition3d.self)!
               let oPos = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
-              let nPos = oPos + [0.0, -1.0, 0.0]
+              let nPos = oPos + [btnPos.x - oPos.x, btnPos.y - oPos.y, 0.0]
               ecs.addComponent(playerId.id, nPos)
               ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true))
               // delete this dolls move buttons
