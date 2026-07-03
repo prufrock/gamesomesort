@@ -67,6 +67,7 @@ struct TBDGLevel {
     ini(LECSPEvent.self)
     ini(LECSPTimerSleep.self)
     ini(LECSPPlayer.self)
+    ini(LECSPPlayerOwner.self)
   }
 
   private func initPlayerCamera() {

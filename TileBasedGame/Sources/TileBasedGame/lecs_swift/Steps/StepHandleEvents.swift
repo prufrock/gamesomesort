@@ -55,7 +55,7 @@ extension StepSelector {
           )
         }
       case .playerTurnStarted:
-        print("playerTurnEnded")
+        print("playerTurnStarted")
         // at the start of a turn
         // displayCommandsForActiveDolls
         ecs.select([LECSId.self, LECSPPlayer.self]) { row, components in
@@ -67,10 +67,14 @@ extension StepSelector {
             let buttons: [Int] = [2]//[2, 3, 4, 5]
             for button in buttons {
               let thing = context.config.world[thing: button]!
-              ecs.createThing(
+              let moveButton = ecs.createThing(
                 from: thing,
                 at: sourceEntityPosition,
                 name: "thing-\(thing.type)"
+              )
+              ecs.addComponent(
+                moveButton,
+                LECSPPlayerOwner(playerId)
               )
             }
           }
@@ -80,6 +84,7 @@ extension StepSelector {
           id.id,
           LECSPHUD.Button.OnTap.self
         )
+        // Maybe this should be more general?
         if let onTap {
           if onTap.list.contains("exit") {
             gameCommands.enqueue(.start(level: 0))
@@ -87,32 +92,18 @@ extension StepSelector {
             gameCommands.enqueue(.startWorld(world: "world001"))
           } else if onTap.list.contains("moveUp") {
             print("move the player up")
-            var playerIds: [(LECSId, LECSPPlayer)] = []
-            ecs.select([LECSId.self, LECSPPlayer.self]) { row, columns in
-              let id = row.component(at: 0, columns, LECSId.self)
-              let player = row.component(at: 1, columns, LECSPPlayer.self)
+            let targetPlayer = ecs.getComponent(id.id, LECSPPlayerOwner.self)!
+            let player = ecs.getComponent(targetPlayer.owner.id, LECSPPlayer.self)!
+            let playerIds: [(LECSId, LECSPPlayer)] = [(targetPlayer.owner, player)]
 
-              playerIds.append((id, player))
-            }
             playerIds.forEach { (playerId, player) in
               let oPos = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
               let nPos = oPos + [0.0, -1.0, 0.0]
               ecs.addComponent(playerId.id, nPos)
               ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true))
+              // delete this dolls move buttons
+              ecs.deleteEntity(id.id)
             }
-
-            // delete all the move buttons
-            var moveButtons: [LECSId] = []
-            ecs.select([LECSId.self, LECSPHUD.Button.OnTap.self]) { rows, components in
-              let count = counter()
-              let btnId = rows.component(at: count(), components, LECSId.self)
-              let onTap = rows.component(at: count(), components, LECSPHUD.Button.OnTap.self)
-              // hack to find the buttons for now
-              if onTap.list.contains("moveUp") {
-                moveButtons.append(btnId)
-              }
-            }
-            moveButtons.forEach { ecs.deleteEntity($0.id) }
 
             // check for all out of moves, but should be handled by an event
             var playersMoved = 0
