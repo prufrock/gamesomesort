@@ -67,16 +67,24 @@ extension StepSelector {
             let buttons: [Int] = [2, 3, 4, 5]
             for button in buttons {
               let thing = context.config.world[thing: button]!
-              let moveButton = ecs.createThing(
-                from: thing,
-                at: sourceEntityPosition,
-                name: "thing-\(thing.type)"
+              let position = F3(
+                x: sourceEntityPosition.x + thing.position.x,
+                y: sourceEntityPosition.y + thing.position.y,
+                z: sourceEntityPosition.z + thing.position.z
               )
-              ecs.addComponent(
-                moveButton,
-                LECSPPlayerOwner(playerId)
-              )
-              ecs.addComponent(moveButton, LECSPTag.GroupA())
+
+              if context.config.level[tile: Int(position.x), Int(position.y)] == 0 {
+                let moveButton = ecs.createThing(
+                  from: thing,
+                  at: sourceEntityPosition,
+                  name: "thing-\(thing.type)"
+                )
+                ecs.addComponent(
+                  moveButton,
+                  LECSPPlayerOwner(playerId)
+                )
+                ecs.addComponent(moveButton, LECSPTag.GroupA())
+              }
             }
           }
         }

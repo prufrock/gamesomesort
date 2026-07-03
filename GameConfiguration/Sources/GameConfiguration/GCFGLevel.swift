@@ -23,15 +23,24 @@ public struct GCFGLevel: Decodable {
   }
 
   public subscript(creature x: Int, y: Int) -> Int? {
-    get { map.creatures[y * map.width + x] }
+    get {
+      guard x >= 0, y >= 0, x < map.width, y < map.height else { return nil }
+      return map.creatures[y * map.width + x]
+    }
   }
 
   public subscript(tile x: Int, y: Int) -> Int? {
-    get { map.tiles[y * map.width + x] }
+    get {
+      guard x >= 0, y >= 0, x < map.width, y < map.height else { return nil }
+      return map.tiles[y * map.width + x]
+    }
   }
 
   public subscript(thing x: Int, y: Int) -> Int? {
-    get { map.things[y * map.width + x] }
+    get {
+      guard x >= 0, y >= 0, x < map.width, y < map.height else { return nil }
+      return map.things[y * map.width + x]
+    }
   }
 
   public struct Camera: Decodable {
