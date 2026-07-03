@@ -64,7 +64,7 @@ extension StepSelector {
           let player = row.component(at: count(), components, LECSPPlayer.self)
           if player.moved == false {
             let sourceEntityPosition = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
-            let buttons: [Int] = [2]//[2, 3, 4, 5]
+            let buttons: [Int] = [2, 3, 4, 5]
             for button in buttons {
               let thing = context.config.world[thing: button]!
               let moveButton = ecs.createThing(
@@ -76,6 +76,7 @@ extension StepSelector {
                 moveButton,
                 LECSPPlayerOwner(playerId)
               )
+              ecs.addComponent(moveButton, LECSPTag.GroupA())
             }
           }
         }
@@ -91,8 +92,8 @@ extension StepSelector {
           } else if onTap.list.contains("reload") {
             gameCommands.enqueue(.startWorld(world: "world001"))
           } else if onTap.list.contains("moveUp") {
-            print("move the player up")
             let targetPlayer = ecs.getComponent(id.id, LECSPPlayerOwner.self)!
+            print("move the player \(targetPlayer.owner.id) up")
             let player = ecs.getComponent(targetPlayer.owner.id, LECSPPlayer.self)!
             let playerIds: [(LECSId, LECSPPlayer)] = [(targetPlayer.owner, player)]
 
@@ -102,7 +103,16 @@ extension StepSelector {
               ecs.addComponent(playerId.id, nPos)
               ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true))
               // delete this dolls move buttons
-              ecs.deleteEntity(id.id)
+              ecs.select(
+                [LECSId.self, LECSPPlayerOwner.self, LECSPTag.GroupA.self]
+              ) { rows, components in
+                let count =  counter()
+                let id = rows.component(at: count(), components, LECSId.self)
+                let btnPlayer = rows.component(at: count(), components, LECSPPlayerOwner.self)
+                if btnPlayer.owner == targetPlayer.owner {
+                  ecs.deleteEntity(id.id)
+                }
+              }
             }
 
             // check for all out of moves, but should be handled by an event
