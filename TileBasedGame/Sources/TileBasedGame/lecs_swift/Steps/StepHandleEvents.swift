@@ -56,6 +56,7 @@ extension StepSelector {
         }
       case .playerTurnStarted:
         print("playerTurnEnded")
+        // at the start of a turn
         // displayCommandsForActiveDolls
         ecs.select([LECSId.self, LECSPPlayer.self]) { row, components in
           let count = counter()

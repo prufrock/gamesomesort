@@ -43,7 +43,7 @@ extension LECSWorld {
     at sourcePosition: LECSPPosition3d,
     name: String? = nil
   ) -> LECSEntityId {
-    let playerPostion = F3(
+    let position = F3(
       x: sourcePosition.x + config.position.x,
       y: sourcePosition.y + config.position.y,
       z: sourcePosition.z + config.position.z
@@ -53,7 +53,7 @@ extension LECSWorld {
       model: config.model,
       onTap: config.onTap,
       onWake: config.onWake,
-      position: playerPostion,
+      position: position,
       radius: config.radius,
       rotationDegY: config.rotationDegY,
       scale: config.scale,
