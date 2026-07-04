@@ -90,6 +90,7 @@ struct TestHelpers {
           color: [0.5, 0.5, 0.5],
           model: "button-one",
           name: "floor",
+          onEnter: [],
           onTap: [],
           position: [0.0, 0.0, 1.0],
           radius: 0.5,

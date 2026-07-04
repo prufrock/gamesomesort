@@ -11,6 +11,7 @@ public struct GCFGTile: Decodable {
   public let color: F3
   public let model: String
   public let name: String
+  public let onEnter: [GCFGOnEnterAction]
   public let onTap: [String]
   public let position: F3
   public let radius: Float
@@ -23,6 +24,7 @@ public struct GCFGTile: Decodable {
     color: F3,
     model: String,
     name: String,
+    onEnter: [GCFGOnEnterAction],
     onTap: [String],
     position: F3,
     radius: Float,
@@ -34,6 +36,7 @@ public struct GCFGTile: Decodable {
     self.color = color
     self.model = model
     self.name = name
+    self.onEnter = onEnter
     self.onTap = onTap
     self.position = position
     self.radius = radius
