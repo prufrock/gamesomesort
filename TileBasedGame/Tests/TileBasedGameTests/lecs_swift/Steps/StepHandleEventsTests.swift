@@ -63,7 +63,7 @@ struct StepHandleEventsTests {
     #expect(events.count == 1)
 
     let command = events.dequeue()!
-    #expect(command.self == .startWorld(world: "world001"))
+    #expect(command.self == .startWorld(world: "world001", level: "w001L001"))
   }
 
   @Test func `when there's an awake event remove the timer`() {

@@ -26,6 +26,7 @@
             0, 0, 0, 0, 0, 0, 0, 1
         ]
     },
+    "name": "w001L001",
     "playerCamera": {
         "farPlane": 10.0,
         "flipY": true,

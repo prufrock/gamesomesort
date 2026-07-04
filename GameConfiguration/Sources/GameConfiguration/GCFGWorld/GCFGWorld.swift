@@ -21,6 +21,10 @@ public struct GCFGWorld: Decodable {
     get { entities.things[id] }
   }
 
+  public subscript(tile id: Int) -> GCFGTile? {
+    get { entities.tiles[id] }
+  }
+
   public subscript(creature id: Int) -> GCFGCreature? {
     get { entities.creatures[id] }
   }

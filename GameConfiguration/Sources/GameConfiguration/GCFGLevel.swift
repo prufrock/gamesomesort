@@ -9,15 +9,18 @@ import VRTMath
 
 public struct GCFGLevel: Decodable {
   public let map: Map
+  public let name: String
   public let playerCamera: Camera
   public let sun: Light.Sun
 
   public init(
     map: Map,
+    name: String,
     playerCamera: Camera,
     sun: Light.Sun
   ) {
     self.map = map
+    self.name = name
     self.playerCamera = playerCamera
     self.sun = sun
   }

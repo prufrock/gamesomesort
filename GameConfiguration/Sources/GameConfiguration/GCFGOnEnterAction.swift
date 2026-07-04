@@ -7,4 +7,5 @@
 
 public enum GCFGOnEnterAction: Codable {
   case gotoLevel(levelId: String)
+  case pass
 }

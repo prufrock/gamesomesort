@@ -52,10 +52,10 @@ class GMGame {
         if case let .start(level) = command {
           initWorld(worldNumber: level)
         }
-        if case let .startWorld(world) = command {
+        if case let .startWorld(world, level) = command {
           //TODO: this a mess, you should feel bad and clean it up!
           let world001Path = levels[0].worlds[world]?.path
-          let selectedLevel = "w001L001"
+          let selectedLevel = level
 
           var worldCfg: GCFGWorld! = nil
           var levelCfg: GCFGLevel! = nil

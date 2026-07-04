@@ -73,17 +73,21 @@ extension StepSelector {
                 z: sourceEntityPosition.z + thing.position.z
               )
 
-              if context.config.level[tile: Int(position.x), Int(position.y)] == 0 {
-                let moveButton = ecs.createThing(
-                  from: thing,
-                  at: sourceEntityPosition,
-                  name: "thing-\(thing.type)"
-                )
-                ecs.addComponent(
-                  moveButton,
-                  LECSPPlayerOwner(playerId)
-                )
-                ecs.addComponent(moveButton, LECSPTag.GroupA())
+              if let tileId = context.config.level[tile: Int(position.x), Int(position.y)] {
+                let tileCfg = context.config.world[tile: tileId]!
+                
+                if tileCfg.onEnter.isNotEmpty {
+                  let moveButton = ecs.createThing(
+                    from: thing,
+                    at: sourceEntityPosition,
+                    name: "thing-\(thing.type)"
+                  )
+                  ecs.addComponent(
+                    moveButton,
+                    LECSPPlayerOwner(playerId)
+                  )
+                  ecs.addComponent(moveButton, LECSPTag.GroupA())
+                }
               }
             }
           }
@@ -98,7 +102,12 @@ extension StepSelector {
           if onTap.list.contains("exit") {
             gameCommands.enqueue(.start(level: 0))
           } else if onTap.list.contains("reload") {
-            gameCommands.enqueue(.startWorld(world: "world001"))
+            gameCommands.enqueue(
+              .startWorld(
+                world: context.config.world.name,
+                level: context.config.level.name
+              )
+            )
           } else if onTap.list.contains("move") {
             let targetPlayer = ecs.getComponent(id.id, LECSPPlayerOwner.self)!
             print("move the player \(targetPlayer.owner.id) up")
@@ -109,6 +118,25 @@ extension StepSelector {
               let btnPos = ecs.getComponent(id.id, LECSPPosition3d.self)!
               let oPos = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
               let nPos = oPos + [btnPos.x - oPos.x, btnPos.y - oPos.y, 0.0]
+              // check for exit
+              let tileId = context.config.level[tile: Int(nPos.x), Int(nPos.y)]!
+              let tileCfg = context.config.world[tile: tileId]!
+
+              tileCfg.onEnter.forEach { enterAction in
+                switch enterAction {
+                case .gotoLevel(let levelId):
+                  print("gotoLevel \(levelId)")
+                  gameCommands.enqueue(
+                    .startWorld(
+                      world: context.config.world.name,
+                      level: levelId
+                    )
+                  )
+                case .pass:
+                  break
+                }
+              }
+
               ecs.addComponent(playerId.id, nPos)
               ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true))
               // delete this dolls move buttons

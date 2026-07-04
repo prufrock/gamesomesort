@@ -8,6 +8,6 @@
 public extension TBDGWorld {
   enum Commands: Equatable {
     case start(level: Int)
-    case startWorld(world: String)
+    case startWorld(world: String, level: String)
   }
 }

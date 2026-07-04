@@ -134,8 +134,9 @@ class GMWorld00: GMWorld {
 
     if buttonTapped(name: config.game.world.world00.worldThreeButtonName) {
       let world = "world001"
-      print("open \(world)")
-      gameCommands.enqueue(.startWorld(world: world))
+      let level = "w001L001"
+      print("open \(world) level \(level)")
+      gameCommands.enqueue(.startWorld(world: world, level: level))
     }
 
     return gameCommands
