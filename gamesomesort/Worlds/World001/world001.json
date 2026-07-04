@@ -21,7 +21,7 @@
                 "color": [0.5, 0.5, 0.5],
                 "model": "button-one",
                 "name": "floor",
-                "onEnter": [],
+                "onEnter": [{"pass":  {}}],
                 "onTap": [],
                 "position": [0.0, 0.0, 1.0],
                 "radius": 0.5,
@@ -31,10 +31,49 @@
                 "visible": true
             },
             "1": {
-                "color": [0.0, 0.9, 0.3],
+                "color": [0.5, 0.5, 0.0],
                 "model": "button-one",
                 "name": "wall",
                 "onEnter": [],
+                "onTap": [],
+                "position": [0.0, 0.0, 0.4],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.95,
+                "tappable": false,
+                "visible": true
+            },
+            "2": {
+                "color": [0.0, 0.9, 0.0],
+                "model": "button-one",
+                "name": "exitLevel01",
+                "onEnter": [{"gotoLevel": {"levelId": "w001L002"}}],
+                "onTap": [],
+                "position": [0.0, 0.0, 1.0],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.95,
+                "tappable": false,
+                "visible": true
+            },
+            "3": {
+                "color": [0.0, 0.9, 0.0],
+                "model": "button-one",
+                "name": "exitLevel02",
+                "onEnter": [{"gotoLevel": {"levelId": "w001L003"}}],
+                "onTap": [],
+                "position": [0.0, 0.0, 1.0],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.95,
+                "tappable": false,
+                "visible": true
+            },
+            "4": {
+                "color": [0.0, 0.9, 0.0],
+                "model": "button-one",
+                "name": "exitLevel03",
+                "onEnter": [{"gotoLevel": {"levelId": "w001L001"}}],
                 "onTap": [],
                 "position": [0.0, 0.0, 1.0],
                 "radius": 0.5,
@@ -160,10 +199,18 @@
         "w001L001": {
             "name": "w001L001",
             "path": "w001L001"
+        },
+        "w001L002": {
+            "name": "w001L002",
+            "path": "w001L002"
+        },
+        "w001L003": {
+            "name": "w001L003",
+            "path": "w001L003"
         }
     },
-    "stepList": ["awaken", "handleInput", "handleEvents"],
-    "name": "one level",
+    "name": "world001",
     "onWake": [{"levelStart": {}}],
+    "stepList": ["awaken", "handleInput", "handleEvents"],
     "worldVector": [1, -1, 1]
 }
