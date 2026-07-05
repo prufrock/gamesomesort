@@ -33,6 +33,7 @@ struct gamesomesortApp: App {
               "brick-sphere.usdz",
               "ref-tile.usdz",
               "square-bella.usdz",
+              "tile-tree-three.usdz",
             ],
             tbdrRender: .tbdr
           ),
