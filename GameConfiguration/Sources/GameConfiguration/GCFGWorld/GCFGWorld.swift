@@ -7,6 +7,8 @@
 
 import VRTMath
 
+// TODO: upright tranforms for models
+
 public struct GCFGWorld: Decodable {
   public let actionMode: ActionMode
   public let entities: GCFGEntities

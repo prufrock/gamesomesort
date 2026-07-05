@@ -26,7 +26,7 @@ extension LECSWorld {
     addComponent(tile, LECSPRadius(radius))
     addComponent(tile, LECSPColor(color: color))
     addComponent(tile, LECSPScale3d(F3(repeating: scale)))
-    addComponent(tile, LECSPQuaternion(Float4x4.rotateY(rotationDegY).q))
+    addComponent(tile, LECSPQuaternion(Float4x4.rotateY(rotationDegY * DEG2RAD).q))
     addComponent(tile, LECSPModel(model))
     if visible {
       addComponent(tile, LECSPTag.Visible())

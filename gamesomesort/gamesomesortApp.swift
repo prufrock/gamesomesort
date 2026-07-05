@@ -31,6 +31,7 @@ struct gamesomesortApp: App {
             models: [
               "box-golem.usdz",
               "brick-sphere.usdz",
+              "ref-tile.usdz",
               "square-bella.usdz",
             ],
             tbdrRender: .tbdr
