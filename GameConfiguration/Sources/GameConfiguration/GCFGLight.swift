@@ -9,14 +9,14 @@ import VRTMath
 
 public struct GCFGLight: Decodable {
   public let attenuation: F3
-  public let color: Float
+  public let color: F3
   public let position: F3
   public let specularColor: Float
   public let type: LightType
 
   public init(
     attenuation: F3,
-    color: Float,
+    color: F3,
     position: F3,
     specularColor: Float,
     type: LightType
@@ -28,7 +28,7 @@ public struct GCFGLight: Decodable {
     self.type = type
   }
 
-  public enum LightType: Decodable {
+  public enum LightType: String, Decodable {
     case unused
     case Sun
     case Spot
