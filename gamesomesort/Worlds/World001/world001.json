@@ -18,7 +18,7 @@
         },
         "tiles": {
             "0": {
-                "color": [0.5, 0.5, 0.5],
+                "color": [0.139, 0.465, 0.242],
                 "model": "button-one",
                 "name": "floor",
                 "onEnter": [{"pass":  {}}],
@@ -26,20 +26,20 @@
                 "position": [0.0, 0.0, 1.0],
                 "radius": 0.5,
                 "rotationDegY": 0,
-                "scale": 0.95,
+                "scale": 1.0,
                 "tappable": false,
                 "visible": true
             },
             "1": {
                 "color": [0.5, 0.5, 0.0],
-                "model": "button-one",
+                "model": "tile-tree-three.usdz",
                 "name": "wall",
                 "onEnter": [],
                 "onTap": [],
-                "position": [0.0, 0.0, 0.4],
+                "position": [0.0, 0.0, 1.0],
                 "radius": 0.5,
-                "rotationDegY": 0,
-                "scale": 0.95,
+                "rotationDegY": 180,
+                "scale": 1.0,
                 "tappable": false,
                 "visible": true
             },
