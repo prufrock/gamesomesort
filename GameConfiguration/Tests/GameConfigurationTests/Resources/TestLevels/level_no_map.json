@@ -5,6 +5,7 @@
         "creatures": [],
         "things": []
     },
+    "name": "level_no_map",
     "playerCamera": {
         "farPlane": 10.0,
         "flipY": true,

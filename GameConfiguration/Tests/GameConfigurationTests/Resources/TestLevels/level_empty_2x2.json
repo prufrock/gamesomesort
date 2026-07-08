@@ -14,6 +14,7 @@
             0, 0
         ]
     },
+    "name": "level_empty_2x2",
     "playerCamera": {
         "farPlane": 10.0,
         "flipY": true,
