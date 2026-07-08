@@ -9,6 +9,7 @@ import VRTMath
 
 public struct GCFGTile: Decodable {
   public let color: F3
+  public let lights: [GCFGLight]
   public let model: String
   public let name: String
   public let onEnter: [GCFGOnEnterAction]
@@ -22,6 +23,7 @@ public struct GCFGTile: Decodable {
 
   public init(
     color: F3,
+    lights: [GCFGLight],
     model: String,
     name: String,
     onEnter: [GCFGOnEnterAction],
@@ -34,6 +36,7 @@ public struct GCFGTile: Decodable {
     visible: Bool,
   ) {
     self.color = color
+    self.lights = lights
     self.model = model
     self.name = name
     self.onEnter = onEnter
