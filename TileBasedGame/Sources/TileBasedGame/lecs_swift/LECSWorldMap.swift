@@ -13,6 +13,7 @@ import VRTMath
 extension LECSWorld {
   func createTile(
     color: VRTMColorA,
+    lights: [GCFGLight],
     model: String,
     position: F3,
     radius: Float,
@@ -30,6 +31,21 @@ extension LECSWorld {
     addComponent(tile, LECSPModel(model))
     if visible {
       addComponent(tile, LECSPTag.Visible())
+      lights.forEach {
+        var light = LECSPLight()
+        light.type = .Point
+        light.attenuation = $0.attenuation
+        light.specularColor = $0.specularColor
+        let color = LECSPColor($0.color)
+        // in object space, consider using dynamic transformations
+        let position = LECSPPosition3d(position + $0.position)
+        let id = createEntity(
+          "light-\(light.type)-\(color.color)-\(position.position)"
+        )
+        addComponent(id, light)
+        addComponent(id, color)
+        addComponent(id, position)
+      }
     }
     if tappable {
       addComponent(tile, LECSPTag.Tappable())

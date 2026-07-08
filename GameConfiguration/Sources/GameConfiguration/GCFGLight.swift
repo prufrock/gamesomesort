@@ -11,14 +11,14 @@ public struct GCFGLight: Decodable {
   public let attenuation: F3
   public let color: F3
   public let position: F3
-  public let specularColor: Float
+  public let specularColor: F3
   public let type: LightType
 
   public init(
     attenuation: F3,
     color: F3,
     position: F3,
-    specularColor: Float,
+    specularColor: F3,
     type: LightType
   ) {
     self.attenuation = attenuation

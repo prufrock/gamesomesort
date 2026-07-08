@@ -154,6 +154,7 @@ struct TBDGLevel {
 
       ecs.createTile(
         color: VRTMColorA(tileCfg.color),
+        lights: tileCfg.lights,
         model: tileCfg.model,
         position: F3(x.f, y.f, 0.0) + tileCfg.position,
         radius: tileCfg.radius,

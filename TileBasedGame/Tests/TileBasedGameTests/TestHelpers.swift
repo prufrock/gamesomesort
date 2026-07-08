@@ -88,6 +88,7 @@ struct TestHelpers {
       tiles: [
         0: GCFGTile(
           color: [0.5, 0.5, 0.5],
+          lights: [],
           model: "button-one",
           name: "floor",
           onEnter: [],
@@ -148,6 +149,7 @@ struct TestHelpers {
       ],
       width: 2,
     ),
+    name: "world one level 001",
     playerCamera: GCFGLevel.Camera(
       farPlane: 10.0,
       nearPlane: 0.1,

@@ -19,6 +19,7 @@
         "tiles": {
             "0": {
                 "color": [0.139, 0.465, 0.242],
+                "lights": [],
                 "model": "button-one",
                 "name": "floor",
                 "onEnter": [{"pass":  {}}],
@@ -32,6 +33,7 @@
             },
             "1": {
                 "color": [0.5, 0.5, 0.0],
+                "lights": [],
                 "model": "tile-tree-three.usdz",
                 "name": "wall",
                 "onEnter": [],
@@ -45,6 +47,7 @@
             },
             "2": {
                 "color": [0.0, 0.9, 0.0],
+                "lights": [],
                 "model": "button-one",
                 "name": "exitLevel01",
                 "onEnter": [{"gotoLevel": {"levelId": "w001L002"}}],
@@ -58,6 +61,7 @@
             },
             "3": {
                 "color": [0.0, 0.9, 0.0],
+                "lights": [],
                 "model": "button-one",
                 "name": "exitLevel02",
                 "onEnter": [{"gotoLevel": {"levelId": "w001L003"}}],
@@ -71,6 +75,7 @@
             },
             "4": {
                 "color": [0.0, 0.9, 0.0],
+                "lights": [],
                 "model": "button-one",
                 "name": "exitLevel03",
                 "onEnter": [{"gotoLevel": {"levelId": "w001L001"}}],
