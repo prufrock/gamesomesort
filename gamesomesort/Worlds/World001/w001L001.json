@@ -35,7 +35,7 @@
         "viewAngleDegrees": 90.0
     },
     "sun": {
-        "color": [1, 1, 1],
-        "position": [0, 3, -5]
+        "color": [0.7, 0.7, 0.9],
+        "position": [-3, 3, -4]
     }
 }
