@@ -10,10 +10,6 @@ import VRTMath
 import LECSPieces
 
 extension LECSWorld {
-  func entity(_ name: String) -> LECSEntityId? {
-    entity(named: LECSName(name))
-  }
-
   func gmCameraFirstPerson(_ name: String) -> GMCameraFirstPerson? {
     guard
       let playerCamera = entity("playerCamera"),
