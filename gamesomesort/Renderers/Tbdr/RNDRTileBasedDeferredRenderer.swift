@@ -173,7 +173,13 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
     updateLighting(ecs: ecs, params: &params)
 
-    shadowRenderPass?.draw(commandBuffer: commandBuffer, world: ecs, uniforms: uniforms, params: params, context: self)
+    shadowRenderPass?.draw(
+      commandBuffer: commandBuffer,
+      world: ecs,
+      uniforms: uniforms,
+      params: params,
+      context: self
+    )
 
     switch config.services.renderService.tbdrRender {
     case .forward:
