@@ -28,12 +28,9 @@ typedef struct {
 } SHDRUniforms;
 
 typedef struct {
-  uint width;
-  uint height;
   uint tiling;
   uint lightCount;
   vector_float3 cameraPosition;
-  float scaleFactor;
 } SHDRParams;
 
 typedef enum {
