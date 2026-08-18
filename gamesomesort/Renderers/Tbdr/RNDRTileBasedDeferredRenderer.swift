@@ -112,8 +112,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       colorPixelFormat: pixelFormat,
       depthPixelFormat: depthStencilPixelFormat,
       library: library,
-      controllerTexture: controllerTexture,
-      tiled: true
+      controllerTexture: controllerTexture
     )
   }
 

@@ -47,7 +47,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     depthPixelFormat: MTLPixelFormat,
     library: MTLLibrary,
     controllerTexture: ControllerTexture,
-    tiled: Bool,
     debugLights: Bool = false
   ) {
     self.device = device
@@ -58,7 +57,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
       library: library,
-      tiled: tiled
     )
     depthStencilState = Self.buildDepthStencilState(device: device)
 
@@ -69,14 +67,12 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
       library: library,
-      tiled: tiled,
     )
     pointLightPipeline = Self.buildPointLightPipelineState(
       device: device,
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
       library: library,
-      tiled: tiled
     )
 
     // lighting debugging pipelines
@@ -154,16 +150,13 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     colorPixelFormat: MTLPixelFormat,
     depthPixelFormat: MTLPixelFormat,
     library: MTLLibrary,
-    tiled: Bool = false
   ) -> MTLRenderPipelineState {
     return try! device.makeRenderPipelineState(
       descriptor: MTLRenderPipelineDescriptor().apply {
         $0.vertexFunction = library.makeFunction(name: "tbr_vertex_main")
         $0.fragmentFunction = library.makeFunction(name: "tbr_fragment_gBuffer")
         $0.colorAttachments[0].pixelFormat = .invalid
-        if tiled {
-          $0.colorAttachments[0].pixelFormat = colorPixelFormat
-        }
+        $0.colorAttachments[0].pixelFormat = colorPixelFormat
         $0.depthAttachmentPixelFormat = .depth32Float_stencil8
         $0.stencilAttachmentPixelFormat = .depth32Float_stencil8
         $0.vertexDescriptor = MTLVertexDescriptor.defaultLayout
@@ -177,7 +170,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     colorPixelFormat: MTLPixelFormat,
     depthPixelFormat: MTLPixelFormat,
     library: MTLLibrary,
-    tiled: Bool = false
   ) -> MTLRenderPipelineState {
     return try! device.makeRenderPipelineState(
       descriptor: MTLRenderPipelineDescriptor().apply {
@@ -186,7 +178,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
           fatalError("unable to load vertex_quad")
         }
         $0.vertexFunction = vertexFunction
-        let fragment = tiled ? "tbr_fragment_tiled_deferredSun" : "tbr_fragment_deferredSun"
+        let fragment = "tbr_fragment_tiled_deferredSun"
         let fragmentFunction = library.makeFunction(name: fragment)
         if fragmentFunction == nil {
           fatalError("unable to load \(fragment)")
@@ -195,9 +187,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         $0.colorAttachments[0].pixelFormat = colorPixelFormat
         $0.depthAttachmentPixelFormat = .depth32Float_stencil8
         $0.stencilAttachmentPixelFormat = .depth32Float_stencil8
-        if tiled {
-          $0.setGBufferPixelFormats()
-        }
+        $0.setGBufferPixelFormats()
       }
     )
   }
@@ -207,7 +197,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     colorPixelFormat: MTLPixelFormat,
     depthPixelFormat: MTLPixelFormat,
     library: MTLLibrary,
-    tiled: Bool = false
   ) -> MTLRenderPipelineState {
     return try! device.makeRenderPipelineState(
       descriptor: MTLRenderPipelineDescriptor().apply {
@@ -216,7 +205,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         }
         $0.vertexFunction = vertexFunction
 
-        let fragment = tiled ? "tbr_fragment_tiled_pointLight" : "tbr_fragment_pointLight"
+        let fragment = "tbr_fragment_tiled_pointLight"
         guard let fragmentFunction = library.makeFunction(name: fragment) else {
           fatalError("tbr_fragment_pointLight function not found")
         }
@@ -235,9 +224,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
         attachment.destinationAlphaBlendFactor = .zero
         attachment.sourceRGBBlendFactor = .one
         attachment.sourceAlphaBlendFactor = .one
-        if tiled {
-          $0.setGBufferPixelFormats()
-        }
+        $0.setGBufferPixelFormats()
       }
     )
   }
