@@ -233,7 +233,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
         options: []
       )
     }
-    params.lightCount = UInt32(lights.count)
   }
 }
 
