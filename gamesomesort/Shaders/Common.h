@@ -28,7 +28,6 @@ typedef struct {
 } SHDRUniforms;
 
 typedef struct {
-  uint tiling;
   uint lightCount;
   vector_float3 cameraPosition;
 } SHDRParams;

@@ -14,7 +14,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let device: MTLDevice
   private let commandQueue: MTLCommandQueue
   private let library: MTLLibrary
-  private var forwardRenderPass: RNDRForwardRenderPass? = nil
   private var shadowRenderPass: RNDRShadowRenderPass? = nil
   private var tbdrPass: RNDRTiledDeferredRenderPass? = nil
 
@@ -108,14 +107,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       controllerTexture: controllerTexture,
     )
 
-    forwardRenderPass = RNDRForwardRenderPass(
-      device: device,
-      colorPixelFormat: pixelFormat,
-      depthPixelFormat: depthStencilPixelFormat,
-      library: library,
-      controllerTexture: controllerTexture
-    )
-
     tbdrPass = RNDRTiledDeferredRenderPass(
       device: device,
       colorPixelFormat: pixelFormat,
@@ -181,31 +172,16 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       context: self
     )
 
-    switch config.services.renderService.tbdrRender {
-    case .forward:
-      if var forwardRenderPass {
-        forwardRenderPass.shadowTexture = shadowRenderPass?.shadowTexture
-        forwardRenderPass.descriptor = renderDescriptor.currentRenderPassDescriptor
-        forwardRenderPass.draw(
-          commandBuffer: commandBuffer,
-          ecs: ecs,
-          uniforms: uniforms,
-          params: params,
-          context: self
-        )
-      }
-    case .tbdr:
-      if var tbdrPass {
-        tbdrPass.shadowTexture = shadowRenderPass!.shadowTexture
-        tbdrPass.descriptor = renderDescriptor.currentRenderPassDescriptor
-        tbdrPass.draw(
-          commandBuffer: commandBuffer,
-          ecs: ecs,
-          uniforms: uniforms,
-          params: params,
-          context: self,
-        )
-      }
+    if var tbdrPass {
+      tbdrPass.shadowTexture = shadowRenderPass!.shadowTexture
+      tbdrPass.descriptor = renderDescriptor.currentRenderPassDescriptor
+      tbdrPass.draw(
+        commandBuffer: commandBuffer,
+        ecs: ecs,
+        uniforms: uniforms,
+        params: params,
+        context: self,
+      )
     }
 
     commandBuffer.present(renderDescriptor.currentDrawable)
@@ -275,8 +251,4 @@ protocol RNDRContext {
   var sunLightBuffer: MTLBuffer? { get }
   var controllerTexture: ControllerTexture { get }
   var controllerModel: ControllerModel { get }
-}
-
-enum RNDRTBDRRenderType: Int {
-  case forward, tbdr
 }

@@ -11,7 +11,6 @@ class GEOModel: GEOUprightable {
   var upright = GEOTransform()
   var meshes: [GEOMesh] = []
   var name: String = "Untitled"
-  var tiling: UInt32 = 1
 
   init() {}
 

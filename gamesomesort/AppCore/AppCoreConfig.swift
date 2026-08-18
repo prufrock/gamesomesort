@@ -164,7 +164,6 @@ struct AppCoreConfig {
       let clearColor: (Double, Double, Double, Double)
       let depthStencilPixelFormat: MTLPixelFormat = .depth32Float  // The pixel format for the MTLViews depth stencil.
       let models: [String]
-      let tbdrRender: RNDRTBDRRenderType
     }
 
     struct FileService {
@@ -194,8 +193,7 @@ extension AppCoreConfig {
       renderService: AppCoreConfig.Services.RenderService(
         type: .ersatz,
         clearColor: (0.3, 0.0, 0.3, 1.0),
-        models: [],
-        tbdrRender: .forward
+        models: []
       ),
       fileService: AppCoreConfig.Services.FileService(
         levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(

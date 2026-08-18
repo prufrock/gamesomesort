@@ -77,26 +77,26 @@ fragment float4 tbr_fragment_main(
                                    address::repeat
                                    );
   if (!is_null_texture(baseColorTexture)) {
-    material.baseColor = baseColorTexture.sample(textureSampler, in.uv * params.tiling).rgb;
+    material.baseColor = baseColorTexture.sample(textureSampler, in.uv).rgb;
   }
 
   if (!is_null_texture(roughnessTexture)) {
-    material.roughness = roughnessTexture.sample(textureSampler, in.uv * params.tiling).r;
+    material.roughness = roughnessTexture.sample(textureSampler, in.uv).r;
   }
 
   if (!is_null_texture(metallicTexture)) {
-    material.metallic = metallicTexture.sample(textureSampler, in.uv * params.tiling).r;
+    material.metallic = metallicTexture.sample(textureSampler, in.uv).r;
   }
 
   if (!is_null_texture(aoTexture)) {
-    material.ambientOcclusion = aoTexture.sample(textureSampler, in.uv * params.tiling).r;
+    material.ambientOcclusion = aoTexture.sample(textureSampler, in.uv).r;
   }
 
   float3 normal;
   if (is_null_texture(normalTexture)) {
     normal = in.worldNormal;
   } else {
-    normal = normalTexture.sample(textureSampler, in.uv * params.tiling).rgb;
+    normal = normalTexture.sample(textureSampler, in.uv).rgb;
     normal = normal * 2 - 1;
     normal = float3x3(in.worldTangent, in.worldBitangent, in.worldNormal) * normal;
   }

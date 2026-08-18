@@ -34,8 +34,7 @@ struct gamesomesortApp: App {
               "ref-tile.usdz",
               "square-bella.usdz",
               "tile-tree-three.usdz",
-            ],
-            tbdrRender: .tbdr
+            ]
           ),
           fileService: AppCoreConfig.Services.FileService(
             levelsFile: AppCoreConfig.Services.FileService.FileDescriptor(
