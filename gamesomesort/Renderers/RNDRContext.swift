@@ -9,10 +9,6 @@ import MetalKit
 
 // Shared information needed for rendering.
 protocol RNDRContext {
-  // TODO: remove once moved to the separate light buffers
-  var lights: [SHDRLight] { get }
-  // TODO: remove once moved to the separate light buffers
-  var lightBuffer: MTLBuffer? { get }
   var pointLights: [SHDRLight] { get }
   var pointLightBuffer: MTLBuffer? { get }
   var sunLights: [SHDRLight] { get }

@@ -21,9 +21,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
   var controllerTexture = ControllerTexture()
   var controllerModel: ControllerModel
-  // TODO: remove once moved to the separate light buffers
-  var lights: [SHDRLight] = []
-  var lightBuffer: MTLBuffer? = nil
+
   var sunLights: [SHDRLight] = []
   var sunLightBuffer: MTLBuffer? = nil
   var pointLights: [SHDRLight] = []
@@ -188,18 +186,15 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   }
 
   func updateLighting(ecs: LECSWorld, params: inout SHDRParams) {
-    lights = ecs.lights
-    lightBuffer = device.makeBuffer(
-      bytes: &lights,
-      length: MemoryLayout<SHDRLight>.stride * lights.count,
-      options: []
-    )!
+    let lights = ecs.lights
+
     sunLights = lights.filter { $0.type == Sun }
     sunLightBuffer = device.makeBuffer(
       bytes: &sunLights,
       length: MemoryLayout<SHDRLight>.stride * sunLights.count,
       options: []
-    )!
+    )
+
     pointLights = lights.filter { $0.type == Point }
     if pointLights.isNotEmpty {
       pointLightBuffer = device.makeBuffer(

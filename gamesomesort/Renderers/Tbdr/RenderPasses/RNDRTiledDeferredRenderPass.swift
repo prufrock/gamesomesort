@@ -289,7 +289,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     // Render the lights
     drawLightingRenderPass(
       renderEncoder: renderEncoder,
-      ecs: ecs,
       uniforms: uniforms,
       params: params,
       context: context
@@ -321,7 +320,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
   private func drawLightingRenderPass(
     renderEncoder: MTLRenderCommandEncoder,
-    ecs: LECSWorld,
     uniforms: SHDRUniforms,
     params: SHDRParams,
     context: RNDRContext
@@ -337,14 +335,12 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
     drawSunLight(
       renderEncoder: renderEncoder,
-      ecs: ecs,
       params: params,
       context: context
     )
 
     drawPointLight(
       renderEncoder: renderEncoder,
-      ecs: ecs,
       params: params,
       context: context
     )
@@ -352,7 +348,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
   private func drawSunLight(
     renderEncoder: MTLRenderCommandEncoder,
-    ecs: LECSWorld,
     params: SHDRParams,
     context: RNDRContext
   ) {
@@ -381,7 +376,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
   func drawPointLight(
     renderEncoder: MTLRenderCommandEncoder,
-    ecs: LECSWorld,
     params: SHDRParams,
     context: RNDRContext
   ) {
