@@ -67,12 +67,6 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
     renderEncoder.setDepthStencilState(depthStencilState)
     renderEncoder.setRenderPipelineState(pipelineState)
 
-    renderEncoder.setFragmentBuffer(
-      context.lightBuffer!,
-      offset: 0,
-      index: LightBuffer.index
-    )
-
     let models = world.gameObjects(context: context)
     for model in models {
       renderEncoder.pushDebugGroup("model \(model.name)")

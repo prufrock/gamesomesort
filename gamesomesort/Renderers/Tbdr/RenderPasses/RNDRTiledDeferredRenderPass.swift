@@ -23,11 +23,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   private let pointLightPipeline: MTLRenderPipelineState
   private let lightingDepthStencilState: MTLDepthStencilState?
 
-  // MARK: Debug lights vars
-  let debugLights: Bool
-  private let linePipelineState: MTLRenderPipelineState
-  private let pointPipelineState: MTLRenderPipelineState
-
   // Don't let a reference to the shadow texture here keep it alive.
   weak var shadowTexture: MTLTexture?
 
@@ -46,11 +41,9 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     colorPixelFormat: MTLPixelFormat,
     depthPixelFormat: MTLPixelFormat,
     library: MTLLibrary,
-    controllerTexture: ControllerTexture,
-    debugLights: Bool = false
+    controllerTexture: ControllerTexture
   ) {
     self.device = device
-    self.debugLights = debugLights
 
     gBufferPipelineState = Self.buildGBufferPipelineState(
       device: device,
@@ -73,20 +66,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
       library: library,
-    )
-
-    // lighting debugging pipelines
-    linePipelineState = Self.buildLightDebugLinePipelineState(
-      device: device,
-      colorPixelFormat: colorPixelFormat,
-      depthPixelFormat: depthPixelFormat,
-      library: library
-    )
-    pointPipelineState = Self.buildLightDebugPointPipelineState(
-      device: device,
-      colorPixelFormat: colorPixelFormat,
-      depthPixelFormat: depthPixelFormat,
-      library: library
     )
   }
 
@@ -306,18 +285,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
       params: params,
       context: context
     )
-
-    if debugLights {
-      RNDRDebugLights
-        .draw(
-          device: device,
-          lights: context.lights,
-          encoder: renderEncoder,
-          uniforms: uniforms,
-          linePipelineState: linePipelineState,
-          pointPipelineState: pointPipelineState
-        )
-    }
 
     // Render the lights
     drawLightingRenderPass(
