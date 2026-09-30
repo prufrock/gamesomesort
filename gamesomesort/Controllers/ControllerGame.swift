@@ -7,6 +7,7 @@
 
 import Combine
 import MetalKit
+import RenderObjects
 import VRTMath
 
 @MainActor
@@ -111,10 +112,13 @@ extension ControllerGame: MTKViewDelegate {
       game?.update(timeStep: timeStep, input: input)
     }
 
+    let scene: ROScene? = game?.scene
+
     appCore.sync(
       SVCCommandRender.Render(
         renderDescriptor: createRenderDescriptor(view: view),
-        ecs: game!.world.ecs
+        ecs: game!.world.ecs,
+        scene: scene!
       )
     )
   }

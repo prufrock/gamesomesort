@@ -6,6 +6,7 @@
 //
 import LECSPieces
 import MetalKit
+import RenderObjects
 import VRTMath
 import lecs_swift
 
@@ -114,8 +115,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     )
   }
 
-  func createUniforms(_ ecs: LECSWorld) -> SHDRUniforms {
-    let camera = ecs.gmCameraFirstPerson("playerCamera")!
+  func createUniforms(_ ecs: LECSWorld, _ scene: ROScene) -> SHDRUniforms {
+    let camera = GMCameraFirstPerson(camera: scene.cameraPlayerOne)
     var uniforms = SHDRUniforms()
 
     uniforms.viewMatrix = camera.viewMatrix
@@ -147,7 +148,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     return params
   }
 
-  func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor) {
+  func render(ecs: LECSWorld, scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
         """
@@ -156,7 +157,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       )
     }
 
-    let uniforms = self.createUniforms(ecs)
+    let uniforms = self.createUniforms(ecs, scene)
     var params = self.createParams(ecs)
 
     updateLighting(ecs: ecs, params: &params)

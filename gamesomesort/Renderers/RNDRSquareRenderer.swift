@@ -7,6 +7,7 @@
 
 import MetalKit
 import lecs_swift
+import RenderObjects
 import VRTMath
 
 ///  At what point does the processing required to load the renderer require putting it behind a loading screen?
@@ -67,7 +68,7 @@ class RNDRSquareRenderer: RNDRRenderer {
     squareRenderer.initPipelines(device: device, library: library, pixelFormat: pixelFormat)
   }
 
-  func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor) {
+  func render(ecs: LECSWorld, scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
         """

@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 6/17/25.
 //
 
+import RenderObjects
 import VRTMath
 
 struct GMCameraFirstPerson: GMCamera {
@@ -28,6 +29,26 @@ struct GMCameraFirstPerson: GMCamera {
 
   var world: Float4x4 {
     Float4x4.translate(position).rotate(quaternion).scale(scale)
+  }
+
+  init(transform: GEOTransform, aspect: Float, fov: Float, near: Float, far: Float) {
+    self.transform = transform
+    self.aspect = aspect
+    self.fov = fov
+    self.near = near
+    self.far = far
+  }
+
+  init(camera: ROCameraFirstPerson) {
+    transform = GEOTransform(
+      position: camera.transform.position,
+      quaternion: camera.transform.quaternion,
+      scale: camera.transform.scale
+    )
+    aspect = camera.aspect
+    fov = camera.fov
+    near = camera.near
+    far = camera.far
   }
 }
 

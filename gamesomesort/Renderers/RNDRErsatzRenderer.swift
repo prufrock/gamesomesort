@@ -7,11 +7,12 @@
 
 import MetalKit
 import lecs_swift
+import RenderObjects
 import VRTMath
 
 /// Does nothing, useful for testing in iCloud which doesn't support Metal.
 class RNDRErsatzRenderer: RNDRRenderer {
-  public func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor) {
+  public func render(ecs: LECSWorld, scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
     //no-op
   }
 

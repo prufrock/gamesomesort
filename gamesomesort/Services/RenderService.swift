@@ -22,6 +22,7 @@ class RenderService {
 
     activeRenderer.render(
       ecs: command.ecs,
+      scene: command.scene,
       to: command.renderDescriptor,
     )
   }

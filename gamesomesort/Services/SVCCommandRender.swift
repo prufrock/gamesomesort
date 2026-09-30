@@ -7,8 +7,9 @@
 
 import MetalKit
 import lecs_swift
-import VRTMath
+import RenderObjects
 import SVCDefinitions
+import VRTMath
 
 enum SVCCommandRender {
   struct ChangeWorld: SVCDServiceCommand {
@@ -27,5 +28,6 @@ enum SVCCommandRender {
   struct Render: SVCDServiceCommand {
     let renderDescriptor: SVCRenderDescriptor
     let ecs: LECSWorld
+    let scene: ROScene
   }
 }

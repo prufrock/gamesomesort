@@ -7,12 +7,13 @@
 
 import Foundation
 import MetalKit
+import RenderObjects
 import lecs_swift
 import VRTMath
 
 protocol RNDRRenderer {
   func resize(_ dmensions: VRTMScreenDimensions)
-  func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor)
+  func render(ecs: LECSWorld, scene: ROScene, to renderDescriptor: SVCRenderDescriptor)
   // The pixel format has to be derived from the view, where it's main actor isolated, so just passing the pixelFormat
   // without the whole view avoid problems with that.
   func initializePipelines(pixelFormat: MTLPixelFormat)

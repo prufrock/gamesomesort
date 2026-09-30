@@ -10,8 +10,10 @@ import GameConfiguration
 import SVCFile
 //TODO: remove by moving into a TBDGame factory
 import TileBasedGame
+import RenderObjects
 import VRTMath
 import lecs_swift
+import LECSPieces
 
 /// Game manages all of the logic of the game. The World is a part of Game because there may be time when Game needs to
 /// change World or interrupt it. If World wants to change itself, like change levels, or do something to Game it needs to
@@ -23,6 +25,31 @@ class GMGame {
   private var screenDimensions = VRTMScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
   private var elapsedTime: Float = 0
   private var selectedLevel: Int? = nil
+  public var scene: ROScene {
+
+    let ecs = world.ecs
+
+    let camera = {
+      let playerCamera = ecs.entity("playerCamera")!
+      let cameraComponent = ecs.getComponent(playerCamera, LECSPCameraFirstPerson.self)!
+      let cameraPosition = ecs.getComponent(playerCamera, LECSPPosition3d.self)!
+      let aspectRatio = ecs.getComponent(playerCamera, LECSPAspect.self)!
+      let cameraScale = ecs.getComponent(playerCamera, LECSPScale3d.self)!
+
+      return ROCameraFirstPerson(
+        transform: ROTransform(
+          position: cameraPosition.position,
+          quaternion: Float4x4.identity.q,
+          scale: cameraScale.scale
+        ),
+        aspect: aspectRatio.aspect,
+        fov: cameraComponent.fov,
+        near: cameraComponent.nearPlane,
+        far: cameraComponent.farPlane
+      )
+    }()
+    return ROSceneFlat(cameraPlayerOne: camera)
+  }
 
   init(appCore: AppCore, levels: [GMTileMap]) {
     self.appCore = appCore

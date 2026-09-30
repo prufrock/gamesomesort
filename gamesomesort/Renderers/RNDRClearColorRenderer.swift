@@ -7,6 +7,7 @@
 
 import MetalKit
 import lecs_swift
+import RenderObjects
 import VRTMath
 
 class RNDRClearColorRenderer: NSObject, RNDRRenderer {
@@ -48,7 +49,7 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
     // no-op
   }
 
-  func render(ecs: LECSWorld, to renderDescriptor: SVCRenderDescriptor) {
+  func render(ecs: LECSWorld, scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
 
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
