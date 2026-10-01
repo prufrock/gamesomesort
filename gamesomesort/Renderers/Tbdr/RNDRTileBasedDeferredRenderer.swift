@@ -115,40 +115,9 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     )
   }
 
-  func createUniforms(_ ecs: LECSWorld, _ scene: ROScene) -> SHDRUniforms {
-    let camera = GMCameraFirstPerson(camera: scene.cameraPlayerOne)
-    var uniforms = SHDRUniforms()
-
-    uniforms.viewMatrix = camera.viewMatrix
-    uniforms.projectionMatrix = camera.projection
-
-    let sunlight = ecs.entity("sun")!
-    let position = ecs.getComponent(sunlight, LECSPPosition3d.self)!
-    let shadowCamera = camera.createShadowCamera(lightPosition: position.position)
-    uniforms.shadowProjectionMatrix = shadowCamera.projection
-    let upVector = config.game.upVector
-    uniforms.shadowViewMatrix =
-      Float4x4.scale(camera.scale)
-      * Float4x4.lookAtProjection(
-        eye: shadowCamera.position,
-        center: shadowCamera.center,
-        up: upVector
-      )
-
-    return uniforms
-  }
-
-  func createParams(_ ecs: LECSWorld) -> SHDRParams {
-    let camera = ecs.gmCameraFirstPerson("playerCamera")!
-
-    var params = SHDRParams()
-
-    params.cameraPosition = camera.position
-
-    return params
-  }
-
   func render(ecs: LECSWorld, scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
+    let scene = RNDRScene(scene: scene)
+
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
         """
@@ -157,16 +126,13 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       )
     }
 
-    let uniforms = self.createUniforms(ecs, scene)
-    var params = self.createParams(ecs)
-
-    updateLighting(ecs: ecs, params: &params)
+    updateLighting(ecs: ecs)
 
     shadowRenderPass?.draw(
       commandBuffer: commandBuffer,
       world: ecs,
-      uniforms: uniforms,
-      params: params,
+      uniforms: scene.uniforms,
+      params: scene.params,
       context: self
     )
 
@@ -176,8 +142,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       tbdrPass.draw(
         commandBuffer: commandBuffer,
         ecs: ecs,
-        uniforms: uniforms,
-        params: params,
+        uniforms: scene.uniforms,
+        params: scene.params,
         context: self,
       )
     }
@@ -186,7 +152,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     commandBuffer.commit()
   }
 
-  func updateLighting(ecs: LECSWorld, params: inout SHDRParams) {
+  func updateLighting(ecs: LECSWorld) {
     let lights = ecs.lights
 
     sunLights = lights.filter { $0.type == Sun }

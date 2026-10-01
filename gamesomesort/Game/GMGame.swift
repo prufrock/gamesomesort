@@ -48,7 +48,21 @@ class GMGame {
         far: cameraComponent.farPlane
       )
     }()
-    return ROSceneFlat(cameraPlayerOne: camera)
+
+    let sun: ROLight = {
+      let sun = ecs.entity("sun")!
+      let position = ecs.getComponent(sun, LECSPPosition3d.self)!
+
+      return ROLight(
+        position: position.position
+      )
+    }()
+
+    return ROSceneFlat(
+      cameraPlayerOne: camera,
+      sun: sun,
+      upVector: appCore.config.game.upVector
+    )
   }
 
   init(appCore: AppCore, levels: [GMTileMap]) {
