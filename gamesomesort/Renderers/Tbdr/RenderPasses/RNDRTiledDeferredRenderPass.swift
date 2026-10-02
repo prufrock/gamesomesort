@@ -246,8 +246,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   func draw(
     commandBuffer: MTLCommandBuffer,
     ecs: LECSWorld,
-    uniforms: SHDRUniforms,
-    params: SHDRParams,
+    scene: RNDRScene,
     context: RNDRContext
   ) {
     guard let currentDescriptor = descriptor else {
@@ -281,16 +280,14 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     drawGBufferRenderPass(
       renderEncoder: renderEncoder,
       ecs: ecs,
-      uniforms: uniforms,
-      params: params,
+      scene: scene,
       context: context
     )
 
     // Render the lights
     drawLightingRenderPass(
       renderEncoder: renderEncoder,
-      uniforms: uniforms,
-      params: params,
+      scene: scene,
       context: context
     )
     renderEncoder.endEncoding()
@@ -299,8 +296,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   private func drawGBufferRenderPass(
     renderEncoder: MTLRenderCommandEncoder,
     ecs: LECSWorld,
-    uniforms: SHDRUniforms,
-    params: SHDRParams,
+    scene: RNDRScene,
     context: RNDRContext
   ) {
     renderEncoder.label = "Tiled Geometry Buffer Render Pass"
@@ -313,20 +309,19 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     let models = ecs.gameObjects(context: context)
     for model in models {
       renderEncoder.pushDebugGroup("model \(model.name)")
-      model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
+      model.render(encoder: renderEncoder, scene: scene)
       renderEncoder.popDebugGroup()
     }
   }
 
   private func drawLightingRenderPass(
     renderEncoder: MTLRenderCommandEncoder,
-    uniforms: SHDRUniforms,
-    params: SHDRParams,
+    scene: RNDRScene,
     context: RNDRContext
   ) {
     renderEncoder.label = "Tiled Lighting render pass"
     renderEncoder.setDepthStencilState(lightingDepthStencilState)
-    var uniforms = uniforms
+    var uniforms = scene.uniforms
     renderEncoder.setVertexBytes(
       &uniforms,
       length: MemoryLayout<SHDRUniforms>.stride,
@@ -335,13 +330,13 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
     drawSunLight(
       renderEncoder: renderEncoder,
-      params: params,
+      params: scene.params,
       context: context
     )
 
     drawPointLight(
       renderEncoder: renderEncoder,
-      params: params,
+      params: scene.params,
       context: context
     )
   }

@@ -17,13 +17,11 @@ struct RNDRGameObject: GEOTransformable {
 
   func render(
     encoder: MTLRenderCommandEncoder,
-    uniforms: SHDRUniforms,
-    params: SHDRParams
+    scene: RNDRScene
   ) {
     model.render(
       encoder: encoder,
-      uniforms: uniforms,
-      params: params,
+      scene: scene,
       gameObject: self
     )
   }

@@ -11,12 +11,11 @@ import VRTMath
 extension GEOModel {
   func render(
     encoder: MTLRenderCommandEncoder,
-    uniforms: SHDRUniforms,
-    params: SHDRParams,
+    scene: RNDRScene,
     gameObject: RNDRGameObject? = nil
   ) {
-    var uniforms = uniforms
-    var params = params
+    var uniforms = scene.uniforms
+    var params = scene.params
 
     let baseColor: F3? = gameObject?.baseColor
     let transforms = (gameObject?.transform ?? GEOTransform()) * self.upright

@@ -131,8 +131,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     shadowRenderPass?.draw(
       commandBuffer: commandBuffer,
       world: ecs,
-      uniforms: scene.uniforms,
-      params: scene.params,
+      scene: scene,
       context: self
     )
 
@@ -142,8 +141,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       tbdrPass.draw(
         commandBuffer: commandBuffer,
         ecs: ecs,
-        uniforms: scene.uniforms,
-        params: scene.params,
+        scene: scene,
         context: self,
       )
     }

@@ -5,8 +5,8 @@
 //  Created by David Kanenwisher on 7/29/25.
 //
 
-import MetalKit
 import lecs_swift
+import MetalKit
 
 struct RNDRShadowRenderPass: RNDRRenderPass {
   let label: String = "Shadow Render Pass"
@@ -50,8 +50,7 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
   func draw(
     commandBuffer: MTLCommandBuffer,
     world: LECSWorld,
-    uniforms: SHDRUniforms,
-    params: SHDRParams,
+    scene: RNDRScene,
     context: RNDRContext
   ) {
     guard let descriptor = descriptor else { return }
@@ -70,7 +69,7 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
     let models = world.gameObjects(context: context)
     for model in models {
       renderEncoder.pushDebugGroup("model \(model.name)")
-      model.render(encoder: renderEncoder, uniforms: uniforms, params: params)
+      model.render(encoder: renderEncoder, scene: scene)
       renderEncoder.popDebugGroup()
     }
 
