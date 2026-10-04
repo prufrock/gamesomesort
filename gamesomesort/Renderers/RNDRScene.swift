@@ -14,6 +14,9 @@ struct RNDRScene {
   var cameraPlayerOne: GMCameraFirstPerson {
     GMCameraFirstPerson(camera: scene.cameraPlayerOne)
   }
+  var lights: [ROLight] {
+    scene.lights
+  }
   var params: SHDRParams = SHDRParams()
   var uniforms: SHDRUniforms = SHDRUniforms()
   var upVector: F3 {

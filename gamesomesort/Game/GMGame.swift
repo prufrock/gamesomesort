@@ -49,17 +49,43 @@ class GMGame {
       )
     }()
 
-    let sun: ROLight = {
+    let sun: ROPosition = {
       let sun = ecs.entity("sun")!
       let position = ecs.getComponent(sun, LECSPPosition3d.self)!
 
-      return ROLight(
+      return ROPosition(
         position: position.position
       )
     }()
 
+    let lights: [ROLight] = {
+      var lights: [ROLight] = []
+      ecs.select([LECSPPosition3d.self, LECSPLight.self, LECSPColor.self]) { row, columns in
+        let position = row.component(at: 0, columns, LECSPPosition3d.self)
+        let light = row.component(at: 1, columns, LECSPLight.self)
+        let color = row.component(at: 2, columns, LECSPColor.self)
+
+        let roLight = ROLight(
+          attenuation: light.attenuation,
+          color: color.f3,
+          coneAngle: light.coneAngle,
+          coneAttenuation: light.coneAttenuation,
+          coneDirection: light.coneDirection,
+          position: position.position,
+          radius: 0,
+          specularColor: light.specularColor,
+          type: ROLight.LightType(rawValue: light.type.rawValue) ?? ROLight.LightType.unused
+        )
+
+        lights.append(roLight)
+      }
+
+      return lights
+    }()
+
     return ROSceneFlat(
       cameraPlayerOne: camera,
+      lights: lights,
       sun: sun,
       upVector: appCore.config.game.upVector
     )

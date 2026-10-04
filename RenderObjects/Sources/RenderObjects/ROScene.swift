@@ -9,6 +9,7 @@ import VRTMath
 
 public protocol ROScene {
   var cameraPlayerOne: ROCameraFirstPerson {get}
-  var sun: ROLight {get}
+  var lights: [ROLight] {get}
+  var sun: ROPosition {get}
   var upVector: F3 {get}
 }

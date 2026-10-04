@@ -6,6 +6,7 @@
 //
 
 import lecs_swift
+import RenderObjects
 import VRTMath
 import LECSPieces
 
@@ -35,6 +36,12 @@ extension LECSWorld {
 }
 
 extension LECSPLight.LightType {
+  var lightType: LightType {
+    .init(UInt32(self.rawValue))
+  }
+}
+
+extension ROLight.LightType {
   var lightType: LightType {
     .init(UInt32(self.rawValue))
   }

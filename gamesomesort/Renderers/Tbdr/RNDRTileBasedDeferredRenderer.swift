@@ -126,7 +126,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       )
     }
 
-    updateLighting(ecs: ecs)
+    updateLighting(scene: scene)
 
     shadowRenderPass?.draw(
       commandBuffer: commandBuffer,
@@ -150,17 +150,41 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     commandBuffer.commit()
   }
 
-  func updateLighting(ecs: LECSWorld) {
-    let lights = ecs.lights
+  func updateLighting(scene: RNDRScene) {
+    let lights = scene.lights
 
-    sunLights = lights.filter { $0.type == Sun }
+    sunLights = lights.filter { $0.type == .Sun }.map {
+      SHDRLight(
+        type: LightType(UInt32($0.type.rawValue)),
+        position: $0.position,
+        color: $0.color,
+        specularColor: $0.specularColor,
+        radius: $0.radius,
+        attenuation: $0.attenuation,
+        coneAngle: $0.coneAngle,
+        coneDirection: $0.coneDirection,
+        coneAttenutation: $0.coneAttenuation
+      )
+    }
     sunLightBuffer = device.makeBuffer(
       bytes: &sunLights,
       length: MemoryLayout<SHDRLight>.stride * sunLights.count,
       options: []
     )
 
-    pointLights = lights.filter { $0.type == Point }
+    pointLights = lights.filter { $0.type == .Point }.map {
+      SHDRLight(
+        type: LightType(UInt32($0.type.rawValue)),
+        position: $0.position,
+        color: $0.color,
+        specularColor: $0.specularColor,
+        radius: $0.radius,
+        attenuation: $0.attenuation,
+        coneAngle: $0.coneAngle,
+        coneDirection: $0.coneDirection,
+        coneAttenutation: $0.coneAttenuation
+      )
+    }
     if pointLights.isNotEmpty {
       pointLightBuffer = device.makeBuffer(
         bytes: &pointLights,
