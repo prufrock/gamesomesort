@@ -7,7 +7,6 @@
 
 import MetalKit
 import VRTMath
-import lecs_swift
 
 struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   let label = "Tiled Deferred Render Pass"
@@ -245,7 +244,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
   func draw(
     commandBuffer: MTLCommandBuffer,
-    ecs: LECSWorld,
     scene: RNDRScene,
     context: RNDRContext
   ) {
@@ -279,7 +277,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
     drawGBufferRenderPass(
       renderEncoder: renderEncoder,
-      ecs: ecs,
       scene: scene,
       context: context
     )
@@ -295,7 +292,6 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
   private func drawGBufferRenderPass(
     renderEncoder: MTLRenderCommandEncoder,
-    ecs: LECSWorld,
     scene: RNDRScene,
     context: RNDRContext
   ) {
@@ -306,8 +302,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
-    let models = ecs.gameObjects(context: context)
-    for model in models {
+    for model in scene.gameObjects {
       renderEncoder.pushDebugGroup("model \(model.name)")
       model.render(encoder: renderEncoder, scene: scene)
       renderEncoder.popDebugGroup()

@@ -164,6 +164,15 @@ struct AppCoreConfig {
       let clearColor: (Double, Double, Double, Double)
       let depthStencilPixelFormat: MTLPixelFormat = .depth32Float  // The pixel format for the MTLViews depth stencil.
       let models: [String]
+
+      var mtlClearColor: MTLClearColor {
+        .init(
+          red: clearColor.0,
+          green: clearColor.1,
+          blue: clearColor.2,
+          alpha: clearColor.3
+        )
+      }
     }
 
     struct FileService {

@@ -49,7 +49,7 @@ class RNDRClearColorRenderer: NSObject, RNDRRenderer {
     // no-op
   }
 
-  func render(ecs: LECSWorld, scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
+  func render(scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
 
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(

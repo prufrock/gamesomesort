@@ -10,10 +10,13 @@ import VRTMath
 
 struct RNDRScene {
   private let scene: ROScene
+  private let controllerModel: ControllerModel
 
   var cameraPlayerOne: GMCameraFirstPerson {
     GMCameraFirstPerson(camera: scene.cameraPlayerOne)
   }
+  let gameObjects: [RNDRGameObject]
+
   var lights: [ROLight] {
     scene.lights
   }
@@ -23,8 +26,25 @@ struct RNDRScene {
     scene.upVector
   }
 
-  init(scene: ROScene) {
+  init(
+    scene: ROScene,
+    controllerModel: ControllerModel
+  ) {
     self.scene = scene
+    self.controllerModel = controllerModel
+
+    gameObjects = scene.gameObjects.map {
+      RNDRGameObject(
+        name: $0.name,
+        transform: GEOTransform(
+          position: $0.transform.position,
+          quaternion: $0.transform.quaternion,
+          scale: $0.transform.scale
+        ),
+        model: controllerModel.models[$0.name]!,
+        baseColor: $0.color
+      )
+    }
 
     uniforms.viewMatrix = cameraPlayerOne.viewMatrix
     uniforms.projectionMatrix = cameraPlayerOne.projection

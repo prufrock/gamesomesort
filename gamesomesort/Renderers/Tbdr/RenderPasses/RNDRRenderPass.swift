@@ -6,9 +6,7 @@
 //
 
 import MetalKit
-import lecs_swift
 import VRTMath
-import LECSPieces
 
 protocol RNDRRenderPass {
 

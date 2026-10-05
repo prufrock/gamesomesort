@@ -83,8 +83,43 @@ class GMGame {
       return lights
     }()
 
+    let gameObjects: [ROGameObject] = {
+      var collectedObjects: [ROGameObject] = []
+      ecs.select(
+        [
+          LECSPModel.self,
+          LECSPPosition3d.self,
+          LECSPScale3d.self,
+          LECSPQuaternion.self,
+          LECSPColor.self,
+          LECSPTag.Visible.self,
+        ]
+      ) { row, columns in
+        let model = row.component(at: 0, columns, LECSPModel.self)
+        let position = row.component(at: 1, columns, LECSPPosition3d.self)
+        let scale = row.component(at: 2, columns, LECSPScale3d.self)
+        let quaternion = row.component(at: 3, columns, LECSPQuaternion.self)
+        let color = row.component(at: 4, columns, LECSPColor.self)
+
+        let gameObject = ROGameObject(
+          color: color.f3,
+          model: model.name,
+          name: model.name,
+          transform: ROTransform(
+            position: position.position,
+            quaternion: quaternion.quaternion,
+            scale: scale.scale
+          ),
+        )
+
+        collectedObjects.append(gameObject)
+      }
+      return collectedObjects
+    }()
+
     return ROSceneFlat(
       cameraPlayerOne: camera,
+      gameObjects: gameObjects,
       lights: lights,
       sun: sun,
       upVector: appCore.config.game.upVector

@@ -4,11 +4,9 @@
 //
 //  Created by David Kanenwisher on 7/14/25.
 //
-import LECSPieces
 import MetalKit
 import RenderObjects
 import VRTMath
-import lecs_swift
 
 class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   private let config: AppCoreConfig
@@ -115,8 +113,8 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
     )
   }
 
-  func render(ecs: LECSWorld, scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
-    let scene = RNDRScene(scene: scene)
+  func render(scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
+    let scene = RNDRScene(scene: scene, controllerModel: controllerModel)
 
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
@@ -130,7 +128,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
 
     shadowRenderPass?.draw(
       commandBuffer: commandBuffer,
-      world: ecs,
       scene: scene,
       context: self
     )
@@ -140,7 +137,6 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       tbdrPass.descriptor = renderDescriptor.currentRenderPassDescriptor
       tbdrPass.draw(
         commandBuffer: commandBuffer,
-        ecs: ecs,
         scene: scene,
         context: self,
       )

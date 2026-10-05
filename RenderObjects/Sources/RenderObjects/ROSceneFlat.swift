@@ -9,17 +9,20 @@ import VRTMath
 
 public struct ROSceneFlat: ROScene {
   public let cameraPlayerOne: ROCameraFirstPerson
+  public let gameObjects: [ROGameObject]
   public let lights: [ROLight]
   public let sun: ROPosition
   public let upVector: F3
 
   public init(
     cameraPlayerOne: ROCameraFirstPerson,
+    gameObjects: [ROGameObject],
     lights: [ROLight],
     sun: ROPosition,
     upVector: F3
   ) {
     self.cameraPlayerOne = cameraPlayerOne
+    self.gameObjects = gameObjects
     self.lights = lights
     self.sun = sun
     self.upVector = upVector

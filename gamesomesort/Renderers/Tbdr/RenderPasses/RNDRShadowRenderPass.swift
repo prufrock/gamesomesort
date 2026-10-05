@@ -5,7 +5,6 @@
 //  Created by David Kanenwisher on 7/29/25.
 //
 
-import lecs_swift
 import MetalKit
 
 struct RNDRShadowRenderPass: RNDRRenderPass {
@@ -49,7 +48,6 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
 
   func draw(
     commandBuffer: MTLCommandBuffer,
-    world: LECSWorld,
     scene: RNDRScene,
     context: RNDRContext
   ) {
@@ -66,8 +64,7 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
     renderEncoder.setDepthStencilState(depthStencilState)
     renderEncoder.setRenderPipelineState(pipelineState)
 
-    let models = world.gameObjects(context: context)
-    for model in models {
+    for model in scene.gameObjects {
       renderEncoder.pushDebugGroup("model \(model.name)")
       model.render(encoder: renderEncoder, scene: scene)
       renderEncoder.popDebugGroup()

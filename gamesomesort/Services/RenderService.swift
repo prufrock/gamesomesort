@@ -21,7 +21,6 @@ class RenderService {
     let activeRenderer: RNDRRenderer = renderer ?? initRenderer()
 
     activeRenderer.render(
-      ecs: command.ecs,
       scene: command.scene,
       to: command.renderDescriptor,
     )
@@ -63,8 +62,6 @@ class RenderService {
       newRenderer = RNDRErsatzRenderer()
     case .metal:
       newRenderer = RNDRErsatzRenderer()
-    case .square:
-      newRenderer = RNDRSquareRenderer(config: config)
     case .tileBased:
       newRenderer = RNDRTileBasedDeferredRenderer(config: config)
     }
@@ -74,5 +71,5 @@ class RenderService {
 }
 
 enum RenderServiceType {
-  case clearColor, ersatz, metal, square, tileBased
+  case clearColor, ersatz, metal, tileBased
 }
