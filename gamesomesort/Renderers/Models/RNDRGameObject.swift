@@ -66,3 +66,16 @@ struct RNDRGameObject: GEOTransformable {
     }
   }
 }
+
+extension Array where Element == RNDRGameObject {
+  func render(
+    encoder: MTLRenderCommandEncoder,
+    scene: RNDRScene
+  ) {
+    self.forEach { gameObject in
+      encoder.pushDebugGroup("model \(gameObject.name)")
+      gameObject.render(encoder: encoder, scene: scene)
+      encoder.popDebugGroup()
+    }
+  }
+}

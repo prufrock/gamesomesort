@@ -302,11 +302,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
-    for model in scene.gameObjects {
-      renderEncoder.pushDebugGroup("model \(model.name)")
-      model.render(encoder: renderEncoder, scene: scene)
-      renderEncoder.popDebugGroup()
-    }
+    scene.gameObjects.render(encoder: renderEncoder, scene: scene)
   }
 
   private func drawLightingRenderPass(
