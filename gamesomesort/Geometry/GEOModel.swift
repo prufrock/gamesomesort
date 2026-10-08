@@ -11,6 +11,7 @@ class GEOModel: GEOUprightable {
   var upright = GEOTransform()
   var meshes: [GEOMesh] = []
   let name: String
+  let renderInstanced: Bool
 
   /// Create a new GEOModel instance.
   /// - Parameters:
@@ -18,11 +19,13 @@ class GEOModel: GEOUprightable {
   ///   - controllerTexture: The texture controller to read textures from.
   ///   - device: The device used to load and render the model.
   ///   - upright: The transformation needed to bring the model into upright space.
+  ///   - renderInstanced: Whether to use instanced render.
   init(
     name: String,
     controllerTexture: ControllerTexture,
     device: MTLDevice,
-    upright: GEOTransform
+    upright: GEOTransform,
+    renderInstanced: Bool
   ) {
     guard let assertUrl = Bundle.main.url(forResource: name, withExtension: nil) else {
       fatalError("Model \(name) not found")
@@ -47,6 +50,7 @@ class GEOModel: GEOUprightable {
     }
     self.name = name
     self.upright = upright
+    self.renderInstanced = renderInstanced
   }
 
   // Initialize a model that uses a primitive
@@ -55,7 +59,8 @@ class GEOModel: GEOUprightable {
     primitiveType: GEOPrimitive,
     controllerTexture: ControllerTexture,
     device: MTLDevice,
-    upright: GEOTransform
+    upright: GEOTransform,
+    renderInstanced: Bool
   ) {
     precondition(!name.isEmpty, "Name must not be empty")
     let mdlMesh = Self.createMesh(primitiveType: primitiveType, device: device)
@@ -70,6 +75,7 @@ class GEOModel: GEOUprightable {
     self.meshes = [mesh]
     self.name = name
     self.upright = upright
+    self.renderInstanced = renderInstanced
   }
 
   func setTexture(name: String, type: SHDRTextureIndices, controllerTexture: ControllerTexture, device: MTLDevice) {

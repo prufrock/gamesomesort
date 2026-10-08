@@ -30,14 +30,15 @@ class ControllerModel {
     self.worldUprightTransforms = worldUprightTransforms
   }
 
-  func loadModel(_ name: String) {
+  func loadModel(_ config: AppCoreConfig.Services.RenderService.ModelConfig) {
     let model = GEOModel(
-      name: name,
+      name: config.name,
       controllerTexture: controllerTexture,
       device: device,
-      upright: self.uprightFor(model: name)
+      upright: self.uprightFor(model: config.name),
+      renderInstanced: config.renderInstanced
     )
-    models[name] = model
+    models[config.name] = model
   }
 
   @discardableResult
@@ -47,7 +48,8 @@ class ControllerModel {
       primitiveType: primitiveType,
       controllerTexture: controllerTexture,
       device: device,
-      upright: self.uprightFor(model: name)
+      upright: self.uprightFor(model: name),
+      renderInstanced: true
     )
     models[name] = model
 

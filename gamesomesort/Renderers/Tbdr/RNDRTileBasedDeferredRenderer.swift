@@ -82,7 +82,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
       worldUprightTransforms: worldUprightTransforms
     )
 
-    config.services.renderService.models.forEach {
+    config.services.renderService.modelConfig.forEach {
       controllerModel.loadModel($0)
     }
 

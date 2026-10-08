@@ -28,12 +28,13 @@ struct gamesomesortApp: App {
           renderService: AppCoreConfig.Services.RenderService(
             type: .tileBased,
             clearColor: (0.3, 0.0, 0.3, 1.0),
-            models: [
-              "box-golem.usdz",
-              "brick-sphere.usdz",
-              "ref-tile.usdz",
-              "square-bella.usdz",
-              "tile-tree-three.usdz",
+            modelConfig: [
+              // Don't use instanced rendering for now, to keep non-instanced rendering tested
+              .init(name: "box-golem.usdz", renderInstanced: false),
+              .init(name: "brick-sphere.usdz", renderInstanced: true),
+              .init(name: "ref-tile.usdz", renderInstanced: true),
+              .init(name: "square-bella.usdz", renderInstanced: true),
+              .init(name: "tile-tree-three.usdz", renderInstanced: true),
             ]
           ),
           fileService: AppCoreConfig.Services.FileService(
