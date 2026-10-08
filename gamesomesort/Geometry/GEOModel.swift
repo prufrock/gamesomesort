@@ -10,9 +10,7 @@ import MetalKit
 class GEOModel: GEOUprightable {
   var upright = GEOTransform()
   var meshes: [GEOMesh] = []
-  var name: String = "Untitled"
-
-  init() {}
+  let name: String
 
   /// Create a new GEOModel instance.
   /// - Parameters:
@@ -51,6 +49,29 @@ class GEOModel: GEOUprightable {
     self.upright = upright
   }
 
+  // Initialize a model that uses a primitive
+  init(
+    name: String,
+    primitiveType: GEOPrimitive,
+    controllerTexture: ControllerTexture,
+    device: MTLDevice,
+    upright: GEOTransform
+  ) {
+    precondition(!name.isEmpty, "Name must not be empty")
+    let mdlMesh = Self.createMesh(primitiveType: primitiveType, device: device)
+    mdlMesh.vertexDescriptor = MDLVertexDescriptor.defaultLayout
+    mdlMesh.addTangentBasis(
+      forTextureCoordinateAttributeNamed: MDLVertexAttributeTextureCoordinate,
+      tangentAttributeNamed: MDLVertexAttributeTangent,
+      bitangentAttributeNamed: MDLVertexAttributeBitangent
+    )
+    let mtkMesh = try! MTKMesh(mesh: mdlMesh, device: device)
+    let mesh = GEOMesh(mdlMesh: mdlMesh, mtkMesh: mtkMesh, controllerTexture: controllerTexture, device: device)
+    self.meshes = [mesh]
+    self.name = name
+    self.upright = upright
+  }
+
   func setTexture(name: String, type: SHDRTextureIndices, controllerTexture: ControllerTexture, device: MTLDevice) {
     if let texture = controllerTexture.loadTexture(name: name, device: device) {
       switch type {
@@ -67,29 +88,8 @@ enum GEOPrimitive {
   case plane, sphere, icosahedron
 }
 
-extension GEOModel {
-  convenience init(
-    name: String,
-    primitiveType: GEOPrimitive,
-    controllerTexture: ControllerTexture,
-    device: MTLDevice,
-    upright: GEOTransform
-  ) {
-    let mdlMesh = Self.createMesh(primitiveType: primitiveType, device: device)
-    mdlMesh.vertexDescriptor = MDLVertexDescriptor.defaultLayout
-    mdlMesh.addTangentBasis(
-      forTextureCoordinateAttributeNamed: MDLVertexAttributeTextureCoordinate,
-      tangentAttributeNamed: MDLVertexAttributeTangent,
-      bitangentAttributeNamed: MDLVertexAttributeBitangent
-    )
-    let mtkMesh = try! MTKMesh(mesh: mdlMesh, device: device)
-    let mesh = GEOMesh(mdlMesh: mdlMesh, mtkMesh: mtkMesh, controllerTexture: controllerTexture, device: device)
-    self.init()
-    self.meshes = [mesh]
-    self.name = name
-    self.upright = upright
-  }
 
+extension GEOModel {
   static func createMesh(primitiveType: GEOPrimitive, device: MTLDevice) -> MDLMesh {
     let allocator = MTKMeshBufferAllocator(device: device)
     switch primitiveType {

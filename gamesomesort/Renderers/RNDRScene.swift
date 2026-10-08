@@ -16,6 +16,8 @@ struct RNDRScene {
     GMCameraFirstPerson(camera: scene.cameraPlayerOne)
   }
   let gameObjects: [RNDRGameObject]
+  // Group models together, so they can use instanced renderering
+  let modelGroups: [String: [RNDRGameObject]]
 
   var lights: [ROLight] {
     scene.lights
@@ -33,8 +35,9 @@ struct RNDRScene {
     self.scene = scene
     self.controllerModel = controllerModel
 
+    var tempModelGroups: [String: [RNDRGameObject]] = [:]
     gameObjects = scene.gameObjects.map {
-      RNDRGameObject(
+      let robj = RNDRGameObject(
         name: $0.name,
         transform: GEOTransform(
           position: $0.transform.position,
@@ -44,7 +47,12 @@ struct RNDRScene {
         model: controllerModel.models[$0.name]!,
         baseColor: $0.color
       )
+
+      tempModelGroups[robj.model.name, default: []].append(robj)
+
+      return robj
     }
+    self.modelGroups = tempModelGroups
 
     uniforms.viewMatrix = cameraPlayerOne.viewMatrix
     uniforms.projectionMatrix = cameraPlayerOne.projection
