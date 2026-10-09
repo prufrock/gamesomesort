@@ -18,6 +18,7 @@ struct GBufferOut {
 };
 
 struct VertexIn {
+  // position of the vertex in the model
   float4 position [[attribute(Position)]];
   float3 normal [[attribute(Normal)]];
   float2 uv [[attribute(UV)]];
@@ -52,6 +53,33 @@ vertex VertexOut tbr_vertex_main(
     .worldTangent = uniforms.normalMatrix * in.tangent,
     .worldBitangent = uniforms.normalMatrix * in.bitangent,
     .shadowPosition = uniforms.shadowProjectionMatrix * uniforms.shadowViewMatrix * uniforms.modelMatrix * in.position
+  };
+  return out;
+}
+
+vertex VertexOut tbr_vertex_instanced_main(
+                                 VertexIn in [[stage_in]],
+                                 constant SHDRUniforms &uniforms [[buffer(UniformsBuffer)]],
+                                 constant matrix_float4x4 *indexedModelMatrix [[buffer(ModelMatrixBuffer)]],
+                                 uint iid [[instance_id]]
+                                 )
+{
+  float4 position = uniforms.projectionMatrix * uniforms.viewMatrix * indexedModelMatrix[iid] * in.position;
+  float4 worldPosition = indexedModelMatrix[iid] * in.position;
+  float3x3 normalMatrix = float3x3(
+                                   indexedModelMatrix[iid][0].xyz,
+                                   indexedModelMatrix[iid][1].xyz,
+                                   indexedModelMatrix[iid][2].xyz
+  );
+  VertexOut out {
+    .position = position,
+    .normal = in.normal,
+    .uv = in.uv,
+    .worldPosition = worldPosition.xyz / worldPosition.w,
+    .worldNormal = normalMatrix * in.normal,
+    .worldTangent = normalMatrix * in.tangent,
+    .worldBitangent = normalMatrix * in.bitangent,
+    .shadowPosition = uniforms.shadowProjectionMatrix * uniforms.shadowViewMatrix * indexedModelMatrix[iid] * in.position
   };
   return out;
 }

@@ -73,18 +73,20 @@ struct RNDRGameObject: GEOTransformable {
   ) {
     var uniforms = scene.uniforms
     var params = scene.params
+    var transforms = scene.modelGroupTransforms[model.name]!
 
     let baseColor: F3? = baseColor
-    let modelMatrix = scene.modelGroupTransforms[model.name]![index]
 
     if let baseColor {
       model.meshes[0].submeshes[0].material.baseColor = baseColor
     }
 
-    uniforms.modelMatrix = modelMatrix
-    uniforms.normalMatrix = modelMatrix.upperLeft
-
     encoder.setVertexBytes(&uniforms, length: MemoryLayout<SHDRUniforms>.stride, index: UniformsBuffer.index)
+    encoder.setVertexBytes(
+      &transforms,
+      length: MemoryLayout<Float4x4>.stride * transforms.count,
+      index: ModelMatrixBuffer.index
+    )
 
     encoder.setFragmentBytes(&params, length: MemoryLayout<SHDRParams>.stride, index: ParamsBuffer.index)
 
@@ -112,7 +114,8 @@ struct RNDRGameObject: GEOTransformable {
           indexCount: submesh.indexCount,
           indexType: submesh.indexType,
           indexBuffer: submesh.indexBuffer,
-          indexBufferOffset: submesh.indexBufferOffset
+          indexBufferOffset: submesh.indexBufferOffset,
+          instanceCount: transforms.count
         )
       }
     }
@@ -126,13 +129,26 @@ extension Array where Element == RNDRGameObject {
   ) {
     self.forEachIndexed { i, gameObject in
       encoder.pushDebugGroup("model \(gameObject.name)")
-      gameObject.renderInstanced(
+      gameObject.render(
         encoder: encoder,
         scene: scene,
-        index: i
       )
       encoder.popDebugGroup()
     }
+  }
+
+  func renderInstanced(
+    encoder: MTLRenderCommandEncoder,
+    scene: RNDRScene
+  ) {
+    let gameObject = self[0]
+    encoder.pushDebugGroup("model \(gameObject.model.name)")
+    gameObject.renderInstanced(
+      encoder: encoder,
+      scene: scene,
+      index: 0
+    )
+    encoder.popDebugGroup()
   }
 }
 

@@ -15,6 +15,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   private let device: MTLDevice
 
   private let gBufferPipelineState: MTLRenderPipelineState
+  private let gBufferInstancedPipelineState: MTLRenderPipelineState
   private let depthStencilState: MTLDepthStencilState?
 
   // lighting pipelines
@@ -45,6 +46,12 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     self.device = device
 
     gBufferPipelineState = Self.buildGBufferPipelineState(
+      device: device,
+      colorPixelFormat: colorPixelFormat,
+      depthPixelFormat: depthPixelFormat,
+      library: library,
+    )
+    gBufferInstancedPipelineState = Self.buildGBufferInstancedPipelineState(
       device: device,
       colorPixelFormat: colorPixelFormat,
       depthPixelFormat: depthPixelFormat,
@@ -132,6 +139,26 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     return try! device.makeRenderPipelineState(
       descriptor: MTLRenderPipelineDescriptor().apply {
         $0.vertexFunction = library.makeFunction(name: "tbr_vertex_main")
+        $0.fragmentFunction = library.makeFunction(name: "tbr_fragment_gBuffer")
+        $0.colorAttachments[0].pixelFormat = .invalid
+        $0.colorAttachments[0].pixelFormat = colorPixelFormat
+        $0.depthAttachmentPixelFormat = .depth32Float_stencil8
+        $0.stencilAttachmentPixelFormat = .depth32Float_stencil8
+        $0.vertexDescriptor = MTLVertexDescriptor.defaultLayout
+        $0.setGBufferPixelFormats()
+      }
+    )
+  }
+
+  private static func buildGBufferInstancedPipelineState(
+    device: MTLDevice,
+    colorPixelFormat: MTLPixelFormat,
+    depthPixelFormat: MTLPixelFormat,
+    library: MTLLibrary,
+  ) -> MTLRenderPipelineState {
+    return try! device.makeRenderPipelineState(
+      descriptor: MTLRenderPipelineDescriptor().apply {
+        $0.vertexFunction = library.makeFunction(name: "tbr_vertex_instanced_main")
         $0.fragmentFunction = library.makeFunction(name: "tbr_fragment_gBuffer")
         $0.colorAttachments[0].pixelFormat = .invalid
         $0.colorAttachments[0].pixelFormat = colorPixelFormat
@@ -297,20 +324,17 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
   ) {
     renderEncoder.label = "Tiled Geometry Buffer Render Pass"
     renderEncoder.setDepthStencilState(depthStencilState)
-    renderEncoder.setRenderPipelineState(gBufferPipelineState)
     renderEncoder.setStencilReferenceValue(0)
-
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
-    // scene.gameObjects.render(encoder: renderEncoder, scene: scene)
     // refactor this
+    renderEncoder.setRenderPipelineState(gBufferPipelineState)
     scene.modelKeys.forEach { key in
-      if scene.modelGroups[key]?.first?.model.renderInstanced ?? false {
-        // instanced render
-        scene.modelGroups[key]?.render(encoder: renderEncoder, scene: scene)
-      } else {
-        scene.modelGroups[key]?.render(encoder: renderEncoder, scene: scene)
-      }
+      scene.modelGroups[key]?.render(encoder: renderEncoder, scene: scene)
+    }
+    renderEncoder.setRenderPipelineState(gBufferInstancedPipelineState)
+    scene.modelKeysInstanced.forEach { key in
+      scene.modelGroups[key]?.renderInstanced(encoder: renderEncoder, scene: scene)
     }
   }
 

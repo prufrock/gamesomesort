@@ -18,6 +18,7 @@ struct RNDRScene {
   let gameObjects: [RNDRGameObject]
   // Group models together, so they can use instanced renderering
   let modelKeys: Set<String>
+  let modelKeysInstanced: Set<String>
   let modelGroups: [String: [RNDRGameObject]]
   let modelGroupTransforms: [String: [Float4x4]]
 
@@ -38,6 +39,7 @@ struct RNDRScene {
     self.controllerModel = controllerModel
 
     var tempModelKeys: Set<String> = []
+    var tempModelKeysInstanced: Set<String> = []
     var tempModelGroups: [String: [RNDRGameObject]] = [:]
     var tempModelGroupTransforms: [String: [Float4x4]] = [:]
     gameObjects = scene.gameObjects.map {
@@ -53,7 +55,11 @@ struct RNDRScene {
         baseColor: $0.color
       )
 
-      tempModelKeys.insert(robj.model.name)
+      if robj.model.renderInstanced {
+        tempModelKeysInstanced.insert(robj.model.name)
+      } else {
+        tempModelKeys.insert(robj.model.name)
+      }
       tempModelGroups[robj.model.name, default: []].append(robj)
       tempModelGroupTransforms[robj.model.name, default: []].append(
         (robj.transform.modelMatrix * robj.model.upright.modelMatrix)
@@ -62,6 +68,7 @@ struct RNDRScene {
       return robj
     }
     self.modelKeys = tempModelKeys
+    self.modelKeysInstanced = tempModelKeysInstanced
     self.modelGroups = tempModelGroups
     self.modelGroupTransforms = tempModelGroupTransforms
 
