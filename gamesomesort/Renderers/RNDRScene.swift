@@ -17,6 +17,7 @@ struct RNDRScene {
   }
   let gameObjects: [RNDRGameObject]
   // Group models together, so they can use instanced renderering
+  let modelKeys: Set<String>
   let modelGroups: [String: [RNDRGameObject]]
 
   var lights: [ROLight] {
@@ -35,6 +36,7 @@ struct RNDRScene {
     self.scene = scene
     self.controllerModel = controllerModel
 
+    var tempModelKeys: Set<String> = []
     var tempModelGroups: [String: [RNDRGameObject]] = [:]
     gameObjects = scene.gameObjects.map {
       let robj = RNDRGameObject(
@@ -48,10 +50,12 @@ struct RNDRScene {
         baseColor: $0.color
       )
 
+      tempModelKeys.insert(robj.model.name)
       tempModelGroups[robj.model.name, default: []].append(robj)
 
       return robj
     }
+    self.modelKeys = tempModelKeys
     self.modelGroups = tempModelGroups
 
     uniforms.viewMatrix = cameraPlayerOne.viewMatrix

@@ -302,7 +302,16 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
 
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
-    scene.gameObjects.render(encoder: renderEncoder, scene: scene)
+//    scene.gameObjects.render(encoder: renderEncoder, scene: scene)
+    // refactor this
+    scene.modelKeys.forEach { key in
+      if scene.modelGroups[key]?.first?.model.renderInstanced ?? false {
+        // instanced render
+        scene.modelGroups[key]?.render(encoder: renderEncoder, scene: scene)
+      } else {
+        scene.modelGroups[key]?.render(encoder: renderEncoder, scene: scene)
+      }
+    }
   }
 
   private func drawLightingRenderPass(
