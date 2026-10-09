@@ -19,6 +19,7 @@ struct RNDRScene {
   // Group models together, so they can use instanced renderering
   let modelKeys: Set<String>
   let modelGroups: [String: [RNDRGameObject]]
+  let modelGroupTransforms: [String: [Float4x4]]
 
   var lights: [ROLight] {
     scene.lights
@@ -38,9 +39,11 @@ struct RNDRScene {
 
     var tempModelKeys: Set<String> = []
     var tempModelGroups: [String: [RNDRGameObject]] = [:]
+    var tempModelGroupTransforms: [String: [Float4x4]] = [:]
     gameObjects = scene.gameObjects.map {
       let robj = RNDRGameObject(
         name: $0.name,
+        // might not need with tempModelGroupTransforms
         transform: GEOTransform(
           position: $0.transform.position,
           quaternion: $0.transform.quaternion,
@@ -52,11 +55,15 @@ struct RNDRScene {
 
       tempModelKeys.insert(robj.model.name)
       tempModelGroups[robj.model.name, default: []].append(robj)
+      tempModelGroupTransforms[robj.model.name, default: []].append(
+        (robj.transform.modelMatrix * robj.model.upright.modelMatrix)
+      )
 
       return robj
     }
     self.modelKeys = tempModelKeys
     self.modelGroups = tempModelGroups
+    self.modelGroupTransforms = tempModelGroupTransforms
 
     uniforms.viewMatrix = cameraPlayerOne.viewMatrix
     uniforms.projectionMatrix = cameraPlayerOne.projection

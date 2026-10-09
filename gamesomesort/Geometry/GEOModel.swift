@@ -94,7 +94,6 @@ enum GEOPrimitive {
   case plane, sphere, icosahedron
 }
 
-
 extension GEOModel {
   static func createMesh(primitiveType: GEOPrimitive, device: MTLDevice) -> MDLMesh {
     let allocator = MTKMeshBufferAllocator(device: device)

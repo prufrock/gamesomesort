@@ -65,6 +65,58 @@ struct RNDRGameObject: GEOTransformable {
       }
     }
   }
+
+  func renderInstanced(
+    encoder: MTLRenderCommandEncoder,
+    scene: RNDRScene,
+    index: Int
+  ) {
+    var uniforms = scene.uniforms
+    var params = scene.params
+
+    let baseColor: F3? = baseColor
+    let modelMatrix = scene.modelGroupTransforms[model.name]![index]
+
+    if let baseColor {
+      model.meshes[0].submeshes[0].material.baseColor = baseColor
+    }
+
+    uniforms.modelMatrix = modelMatrix
+    uniforms.normalMatrix = modelMatrix.upperLeft
+
+    encoder.setVertexBytes(&uniforms, length: MemoryLayout<SHDRUniforms>.stride, index: UniformsBuffer.index)
+
+    encoder.setFragmentBytes(&params, length: MemoryLayout<SHDRParams>.stride, index: ParamsBuffer.index)
+
+    for mesh in model.meshes {
+      for (index, verteBuffer) in mesh.vertexBuffers.enumerated() {
+        encoder.setVertexBuffer(verteBuffer, offset: 0, index: index)
+      }
+
+      for submesh in mesh.submeshes {
+
+        var material = submesh.material
+        encoder.setFragmentBytes(&material, length: MemoryLayout<SHDRMaterial>.stride, index: MaterialBuffer.index)
+
+        encoder.setFragmentTexture(submesh.textures.baseColor, index: BaseColor.index)
+        encoder.setFragmentTexture(submesh.textures.normal, index: NormalTexture.index)
+        encoder.setFragmentTexture(submesh.textures.roughness, index: RoughnessTexture.index)
+        encoder.setFragmentTexture(submesh.textures.metallic, index: MetallicTexture.index)
+        encoder.setFragmentTexture(submesh.textures.aoTexture, index: AOTexture.index)
+        // Being explicit for a little bit, because of an unexpected issue with stencils...
+        encoder.setFrontFacing(.clockwise)
+        encoder.setCullMode(.back)
+
+        encoder.drawIndexedPrimitives(
+          type: .triangle,
+          indexCount: submesh.indexCount,
+          indexType: submesh.indexType,
+          indexBuffer: submesh.indexBuffer,
+          indexBufferOffset: submesh.indexBufferOffset
+        )
+      }
+    }
+  }
 }
 
 extension Array where Element == RNDRGameObject {
@@ -72,10 +124,22 @@ extension Array where Element == RNDRGameObject {
     encoder: MTLRenderCommandEncoder,
     scene: RNDRScene
   ) {
-    self.forEach { gameObject in
+    self.forEachIndexed { i, gameObject in
       encoder.pushDebugGroup("model \(gameObject.name)")
-      gameObject.render(encoder: encoder, scene: scene)
+      gameObject.renderInstanced(
+        encoder: encoder,
+        scene: scene,
+        index: i
+      )
       encoder.popDebugGroup()
+    }
+  }
+}
+
+extension Array {
+  func forEachIndexed(_ body: (Int, Element) throws -> Void) rethrows {
+    for (index, item) in self.enumerated() {
+      try body(index, item)
     }
   }
 }

@@ -14,6 +14,7 @@ struct GEOTransform {
 }
 
 extension GEOTransform {
+  // transforms the model from models space into world space
   var modelMatrix: Float4x4 {
     let translation = Float4x4.translate(position)
     let rotation = Float4x4(quaternion)
