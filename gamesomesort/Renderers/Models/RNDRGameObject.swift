@@ -69,11 +69,10 @@ struct RNDRGameObject: GEOTransformable {
   func renderInstanced(
     encoder: MTLRenderCommandEncoder,
     scene: RNDRScene,
-    index: Int
   ) {
     var uniforms = scene.uniforms
     var params = scene.params
-    var transforms = scene.modelGroupTransforms[model.name]!
+    let transforms = scene.modelGroupTransforms[model.name]!
 
     let baseColor: F3? = baseColor
 
@@ -83,7 +82,7 @@ struct RNDRGameObject: GEOTransformable {
 
     encoder.setVertexBytes(&uniforms, length: MemoryLayout<SHDRUniforms>.stride, index: UniformsBuffer.index)
     encoder.setVertexBytes(
-      &transforms,
+      transforms,
       length: MemoryLayout<Float4x4>.stride * transforms.count,
       index: ModelMatrixBuffer.index
     )
@@ -141,12 +140,13 @@ extension Array where Element == RNDRGameObject {
     encoder: MTLRenderCommandEncoder,
     scene: RNDRScene
   ) {
-    let gameObject = self[0]
+    guard let gameObject = self.first else {
+      return
+    }
     encoder.pushDebugGroup("model \(gameObject.model.name)")
     gameObject.renderInstanced(
       encoder: encoder,
       scene: scene,
-      index: 0
     )
     encoder.popDebugGroup()
   }
