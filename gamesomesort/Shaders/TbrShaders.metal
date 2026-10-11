@@ -37,6 +37,18 @@ struct VertexOut {
   float4 shadowPosition;
 };
 
+struct VertexInstancedOut {
+  float4 position [[position]];
+  float3 normal;
+  float2 uv;
+  float3 worldPosition;
+  float3 worldNormal;
+  float3 worldTangent;
+  float3 worldBitangent;
+  float4 shadowPosition;
+  uint instanceId;
+};
+
 vertex VertexOut tbr_vertex_main(
                                  VertexIn in [[stage_in]],
                                  constant SHDRUniforms &uniforms [[buffer(UniformsBuffer)]]
@@ -57,7 +69,7 @@ vertex VertexOut tbr_vertex_main(
   return out;
 }
 
-vertex VertexOut tbr_vertex_instanced_main(
+vertex VertexInstancedOut tbr_vertex_instanced_main(
                                  VertexIn in [[stage_in]],
                                  constant SHDRUniforms &uniforms [[buffer(UniformsBuffer)]],
                                  constant matrix_float4x4 *indexedModelMatrix [[buffer(ModelMatrixBuffer)]],
@@ -71,7 +83,7 @@ vertex VertexOut tbr_vertex_instanced_main(
                                    indexedModelMatrix[iid][1].xyz,
                                    indexedModelMatrix[iid][2].xyz
   );
-  VertexOut out {
+  VertexInstancedOut out {
     .position = position,
     .normal = in.normal,
     .uv = in.uv,
@@ -79,7 +91,8 @@ vertex VertexOut tbr_vertex_instanced_main(
     .worldNormal = normalMatrix * in.normal,
     .worldTangent = normalMatrix * in.tangent,
     .worldBitangent = normalMatrix * in.bitangent,
-    .shadowPosition = uniforms.shadowProjectionMatrix * uniforms.shadowViewMatrix * indexedModelMatrix[iid] * in.position
+    .shadowPosition = uniforms.shadowProjectionMatrix * uniforms.shadowViewMatrix * indexedModelMatrix[iid] * in.position,
+    .instanceId = iid
   };
   return out;
 }
@@ -167,6 +180,53 @@ fragment GBufferOut tbr_fragment_gBuffer(
     }
   } else {
     out.albedo = float4(material.baseColor, 1.0);
+  }
+
+  float3 normal;
+  if (is_null_texture(normalTexture)) {
+    normal = in.worldNormal;
+  } else {
+    normal = normalTexture.sample(textureSampler, in.uv).rgb;
+    normal = normal * 2 - 1;
+    normal = float3x3(in.worldTangent, in.worldBitangent, in.worldNormal) * normal;
+  }
+  normal = normalize(normal);
+
+  // Figure out if the fragment is in shadow.
+  // The alpha value of the albedo isn't used, so the shadow value can be stored there.
+  out.albedo.a = calculateShadow(in.shadowPosition, shadowTexture);
+  out.normal = float4(normal, 1.0);
+  out.position = float4(in.worldPosition, 1.0);
+
+  return out;
+}
+
+fragment GBufferOut tbr_fragment_instanced_gBuffer(
+                                 VertexInstancedOut in [[stage_in]],
+                                 depth2d<float> shadowTexture [[texture(ShadowTexture)]],
+                                 constant SHDRMaterial &material [[buffer(MaterialBuffer)]],
+                                 texture2d<float> baseColorTexture [[texture(BaseColor)]],
+                                 texture2d<float> normalTexture [[texture(NormalTexture)]],
+                                 constant float3 *baseColors [[buffer(ColorBuffer)]]
+                                 )
+{
+  // additional textures like metalillic & roughness likely added to GBufferOut
+  GBufferOut out;
+
+  constexpr sampler textureSampler(
+                                   filter::linear,
+                                   mip_filter::linear,
+                                   max_anisotropy(8),
+                                   address::repeat
+                                   );
+  if (!is_null_texture(baseColorTexture)) {
+    out.albedo = baseColorTexture.sample(textureSampler, in.uv).rgba;
+    // discard if the albedo is below this threshold
+    if (out.albedo.a < 0.01) {
+      discard_fragment();
+    }
+  } else {
+    out.albedo = float4(baseColors[in.instanceId], 1.0);
   }
 
   float3 normal;

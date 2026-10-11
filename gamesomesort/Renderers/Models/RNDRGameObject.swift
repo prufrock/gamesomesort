@@ -73,6 +73,7 @@ struct RNDRGameObject: GEOTransformable {
     var uniforms = scene.uniforms
     var params = scene.params
     let transforms = scene.modelGroupTransforms[model.name]!
+    var modelGroupBaseColors = scene.modelGroupBaseColors[model.name]!
 
     let baseColor: F3? = baseColor
 
@@ -104,6 +105,11 @@ struct RNDRGameObject: GEOTransformable {
         encoder.setFragmentTexture(submesh.textures.roughness, index: RoughnessTexture.index)
         encoder.setFragmentTexture(submesh.textures.metallic, index: MetallicTexture.index)
         encoder.setFragmentTexture(submesh.textures.aoTexture, index: AOTexture.index)
+        encoder.setFragmentBytes(
+          &modelGroupBaseColors,
+          length: MemoryLayout<Float3>.stride * modelGroupBaseColors.count,
+          index: ColorBuffer.index
+        )
         // Being explicit for a little bit, because of an unexpected issue with stencils...
         encoder.setFrontFacing(.clockwise)
         encoder.setCullMode(.back)

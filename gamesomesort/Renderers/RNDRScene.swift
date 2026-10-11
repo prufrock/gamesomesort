@@ -21,6 +21,7 @@ struct RNDRScene {
   let modelKeysInstanced: Set<String>
   let modelGroups: [String: [RNDRGameObject]]
   let modelGroupTransforms: [String: [Float4x4]]
+  let modelGroupBaseColors: [String: [F3]]
 
   var lights: [ROLight] {
     scene.lights
@@ -42,6 +43,7 @@ struct RNDRScene {
     var tempModelKeysInstanced: Set<String> = []
     var tempModelGroups: [String: [RNDRGameObject]] = [:]
     var tempModelGroupTransforms: [String: [Float4x4]] = [:]
+    var tempModelGroupBaseColors: [String: [F3]] = [:]
     gameObjects = scene.gameObjects.map {
       let robj = RNDRGameObject(
         name: $0.name,
@@ -64,6 +66,9 @@ struct RNDRScene {
       tempModelGroupTransforms[robj.model.name, default: []].append(
         (robj.transform.modelMatrix * robj.model.upright.modelMatrix)
       )
+      tempModelGroupBaseColors[robj.model.name, default: []].append(
+        robj.baseColor
+      )
 
       return robj
     }
@@ -71,6 +76,7 @@ struct RNDRScene {
     self.modelKeysInstanced = tempModelKeysInstanced
     self.modelGroups = tempModelGroups
     self.modelGroupTransforms = tempModelGroupTransforms
+    self.modelGroupBaseColors = tempModelGroupBaseColors
 
     uniforms.viewMatrix = cameraPlayerOne.viewMatrix
     uniforms.projectionMatrix = cameraPlayerOne.projection

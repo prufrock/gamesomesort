@@ -159,7 +159,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     return try! device.makeRenderPipelineState(
       descriptor: MTLRenderPipelineDescriptor().apply {
         $0.vertexFunction = library.makeFunction(name: "tbr_vertex_instanced_main")
-        $0.fragmentFunction = library.makeFunction(name: "tbr_fragment_gBuffer")
+        $0.fragmentFunction = library.makeFunction(name: "tbr_fragment_instanced_gBuffer")
         $0.colorAttachments[0].pixelFormat = .invalid
         $0.colorAttachments[0].pixelFormat = colorPixelFormat
         $0.depthAttachmentPixelFormat = .depth32Float_stencil8
