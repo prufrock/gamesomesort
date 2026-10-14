@@ -317,6 +317,14 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     renderEncoder.endEncoding()
   }
 
+  func renderIndividual(renderEncoder: MTLRenderCommandEncoder) {
+    renderEncoder.setRenderPipelineState(gBufferPipelineState)
+  }
+
+  func renderInstanced(renderEncoder: MTLRenderCommandEncoder) {
+    renderEncoder.setRenderPipelineState(gBufferInstancedPipelineState)
+  }
+
   private func drawGBufferRenderPass(
     renderEncoder: MTLRenderCommandEncoder,
     scene: RNDRScene,
@@ -328,14 +336,7 @@ struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
     renderEncoder.setFragmentTexture(shadowTexture, index: ShadowTexture.index)
 
     // refactor this
-    renderEncoder.setRenderPipelineState(gBufferPipelineState)
-    scene.modelKeys.forEach { key in
-      scene.modelGroups[key]?.render(encoder: renderEncoder, scene: scene)
-    }
-    renderEncoder.setRenderPipelineState(gBufferInstancedPipelineState)
-    scene.modelKeysInstanced.forEach { key in
-      scene.modelGroups[key]?.renderInstanced(encoder: renderEncoder, scene: scene)
-    }
+    scene.render(encoder: renderEncoder, renderPass: self)
   }
 
   private func drawLightingRenderPass(

@@ -65,66 +65,6 @@ struct RNDRGameObject: GEOTransformable {
       }
     }
   }
-
-  func renderInstanced(
-    encoder: MTLRenderCommandEncoder,
-    scene: RNDRScene,
-  ) {
-    var uniforms = scene.uniforms
-    var params = scene.params
-    let transforms = scene.modelGroupTransforms[model.name]!
-    var modelGroupBaseColors = scene.modelGroupBaseColors[model.name]!
-
-    let baseColor: F3? = baseColor
-
-    if let baseColor {
-      model.meshes[0].submeshes[0].material.baseColor = baseColor
-    }
-
-    encoder.setVertexBytes(&uniforms, length: MemoryLayout<SHDRUniforms>.stride, index: UniformsBuffer.index)
-    encoder.setVertexBytes(
-      transforms,
-      length: MemoryLayout<Float4x4>.stride * transforms.count,
-      index: ModelMatrixBuffer.index
-    )
-
-    encoder.setFragmentBytes(&params, length: MemoryLayout<SHDRParams>.stride, index: ParamsBuffer.index)
-
-    for mesh in model.meshes {
-      for (index, verteBuffer) in mesh.vertexBuffers.enumerated() {
-        encoder.setVertexBuffer(verteBuffer, offset: 0, index: index)
-      }
-
-      for submesh in mesh.submeshes {
-
-        var material = submesh.material
-        encoder.setFragmentBytes(&material, length: MemoryLayout<SHDRMaterial>.stride, index: MaterialBuffer.index)
-
-        encoder.setFragmentTexture(submesh.textures.baseColor, index: BaseColor.index)
-        encoder.setFragmentTexture(submesh.textures.normal, index: NormalTexture.index)
-        encoder.setFragmentTexture(submesh.textures.roughness, index: RoughnessTexture.index)
-        encoder.setFragmentTexture(submesh.textures.metallic, index: MetallicTexture.index)
-        encoder.setFragmentTexture(submesh.textures.aoTexture, index: AOTexture.index)
-        encoder.setFragmentBytes(
-          &modelGroupBaseColors,
-          length: MemoryLayout<Float3>.stride * modelGroupBaseColors.count,
-          index: ColorBuffer.index
-        )
-        // Being explicit for a little bit, because of an unexpected issue with stencils...
-        encoder.setFrontFacing(.clockwise)
-        encoder.setCullMode(.back)
-
-        encoder.drawIndexedPrimitives(
-          type: .triangle,
-          indexCount: submesh.indexCount,
-          indexType: submesh.indexType,
-          indexBuffer: submesh.indexBuffer,
-          indexBufferOffset: submesh.indexBufferOffset,
-          instanceCount: transforms.count
-        )
-      }
-    }
-  }
 }
 
 extension Array where Element == RNDRGameObject {
@@ -140,21 +80,6 @@ extension Array where Element == RNDRGameObject {
       )
       encoder.popDebugGroup()
     }
-  }
-
-  func renderInstanced(
-    encoder: MTLRenderCommandEncoder,
-    scene: RNDRScene
-  ) {
-    guard let gameObject = self.first else {
-      return
-    }
-    encoder.pushDebugGroup("model \(gameObject.model.name)")
-    gameObject.renderInstanced(
-      encoder: encoder,
-      scene: scene,
-    )
-    encoder.popDebugGroup()
   }
 }
 

@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 9/30/26.
 //
 
+import Metal
 import RenderObjects
 import VRTMath
 
@@ -92,5 +93,30 @@ struct RNDRScene {
       )
 
     self.params = SHDRParams(lightCount: 0, cameraPosition: cameraPlayerOne.position)
+  }
+
+  func render(
+    encoder: MTLRenderCommandEncoder,
+    renderPass: RNDRTiledDeferredRenderPass
+  ) {
+    renderPass.renderIndividual(renderEncoder: encoder)
+    modelKeys.forEach { modelName in
+      if let model = controllerModel.models[modelName] {
+        for (index, transform) in modelGroupTransforms[model.name]!.enumerated() {
+          model.render(
+            encoder: encoder,
+            scene: self,
+            transform: transform,
+            baseColor: modelGroupBaseColors[model.name]![index]
+          )
+        }
+      }
+    }
+    renderPass.renderInstanced(renderEncoder: encoder)
+    modelKeysInstanced.forEach { modelName in
+      if let model = controllerModel.models[modelName] {
+        model.renderInstanced(encoder: encoder, scene: self)
+      }
+    }
   }
 }

@@ -64,9 +64,13 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
     renderEncoder.setDepthStencilState(depthStencilState)
     renderEncoder.setRenderPipelineState(pipelineState)
 
-    for model in scene.gameObjects {
-      renderEncoder.pushDebugGroup("model \(model.name)")
-      model.render(encoder: renderEncoder, scene: scene)
+    for gameObject in scene.gameObjects {
+      renderEncoder.pushDebugGroup("model \(gameObject.name)")
+      gameObject.model.render(
+        encoder: renderEncoder,
+        scene: scene,
+        gameObject: gameObject
+      )
       renderEncoder.popDebugGroup()
     }
 
