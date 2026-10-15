@@ -11,7 +11,8 @@ import VRTMath
 
 struct RNDRScene {
   private let scene: ROScene
-  private let controllerModel: ControllerModel
+  // find a way to avoid making this public
+  let controllerModel: ControllerModel
 
   var cameraPlayerOne: GMCameraFirstPerson {
     GMCameraFirstPerson(camera: scene.cameraPlayerOne)
@@ -22,7 +23,6 @@ struct RNDRScene {
   let modelKeysInstanced: Set<String>
   let modelGroups: [String: [RNDRGameObject]]
   let modelGroupTransforms: [String: [Float4x4]]
-  let modelGroupTransformsBuffer: [String: MTLBuffer]
   let modelGroupBaseColors: [String: [F3]]
 
   var lights: [ROLight] {
@@ -79,14 +79,10 @@ struct RNDRScene {
     self.modelKeysInstanced = tempModelKeysInstanced
     self.modelGroups = tempModelGroups
     self.modelGroupTransforms = tempModelGroupTransforms
-    self.modelGroupTransformsBuffer = Dictionary(
-      uniqueKeysWithValues: tempModelKeysInstanced.compactMap { key in
-        let transforms = tempModelGroupTransforms[key]!
-        let bufferSize = transforms.count * MemoryLayout<Float4x4>.stride
-        let buffer = device.makeBuffer(bytes: transforms, length: bufferSize, options: [])!
-        return (key, buffer)
-      }
-    )
+    tempModelKeysInstanced.forEach { key in
+      let transforms = tempModelGroupTransforms[key]!
+      controllerModel.updateTransformsBuffer(forModel: key, with: transforms)
+    }
     self.modelGroupBaseColors = tempModelGroupBaseColors
 
     uniforms.viewMatrix = cameraPlayerOne.viewMatrix

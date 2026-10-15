@@ -78,7 +78,7 @@ extension GEOModel {
 
     encoder.setVertexBytes(&uniforms, length: MemoryLayout<SHDRUniforms>.stride, index: UniformsBuffer.index)
     encoder.setVertexBuffer(
-      scene.modelGroupTransformsBuffer[name]!,
+      scene.controllerModel.transformBuffers[name]!,
       offset: 0,
       index: ModelMatrixBuffer.index
     )

@@ -15,6 +15,12 @@ class ControllerModel {
   private var controllerTexture: ControllerTexture
   private var worldBasis: F3
   private var worldUprightTransforms: [String: GEOTransform]
+  // experimenting with buffers
+  private var maxBufferObjects: Int = 500
+  private var maxBufferSize: Int {
+    MemoryLayout<Float4x4>.stride * maxBufferObjects
+  }
+  private(set) var transformBuffers: [String: MTLBuffer] = [:]
 
   private(set) var models: [String: GEOModel] = [:]
 
@@ -39,6 +45,7 @@ class ControllerModel {
       renderInstanced: config.renderInstanced
     )
     models[config.name] = model
+    transformBuffers[config.name] = device.makeBuffer(length: maxBufferSize)
   }
 
   @discardableResult
@@ -52,8 +59,28 @@ class ControllerModel {
       renderInstanced: true
     )
     models[name] = model
+    transformBuffers[name] = device.makeBuffer(length: maxBufferSize)
 
     return model
+  }
+
+  func updateTransformsBuffer(forModel name: String, with transforms: [Float4x4]) {
+    guard !transforms.isEmpty else {
+      return
+    }
+
+    // Fail if there are too many
+    let requestedSize = MemoryLayout<Float4x4>.stride * transforms.count
+    if requestedSize > maxBufferSize {
+      fatalError("Tried to add \(requestedSize) transforms, max is \(maxBufferSize).")
+    }
+
+    let destPointer = transformBuffers[name]!.contents()
+
+    transforms.withUnsafeBytes { rawBuffer in
+      let sourcePointer = rawBuffer.baseAddress!
+      memcpy(destPointer, sourcePointer, requestedSize)
+    }
   }
 
   private func uprightFor(model name: String) -> GEOTransform {
