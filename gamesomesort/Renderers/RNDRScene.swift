@@ -22,6 +22,7 @@ struct RNDRScene {
   let modelKeysInstanced: Set<String>
   let modelGroups: [String: [RNDRGameObject]]
   let modelGroupTransforms: [String: [Float4x4]]
+  let modelGroupTransformsBuffer: [String: MTLBuffer]
   let modelGroupBaseColors: [String: [F3]]
 
   var lights: [ROLight] {
@@ -35,7 +36,8 @@ struct RNDRScene {
 
   init(
     scene: ROScene,
-    controllerModel: ControllerModel
+    controllerModel: ControllerModel,
+    device: MTLDevice
   ) {
     self.scene = scene
     self.controllerModel = controllerModel
@@ -77,6 +79,14 @@ struct RNDRScene {
     self.modelKeysInstanced = tempModelKeysInstanced
     self.modelGroups = tempModelGroups
     self.modelGroupTransforms = tempModelGroupTransforms
+    self.modelGroupTransformsBuffer = Dictionary(
+      uniqueKeysWithValues: tempModelKeysInstanced.compactMap { key in
+        let transforms = tempModelGroupTransforms[key]!
+        let bufferSize = transforms.count * MemoryLayout<Float4x4>.stride
+        let buffer = device.makeBuffer(bytes: transforms, length: bufferSize, options: [])!
+        return (key, buffer)
+      }
+    )
     self.modelGroupBaseColors = tempModelGroupBaseColors
 
     uniforms.viewMatrix = cameraPlayerOne.viewMatrix

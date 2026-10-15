@@ -77,9 +77,9 @@ extension GEOModel {
     var modelGroupBaseColors = scene.modelGroupBaseColors[name]!
 
     encoder.setVertexBytes(&uniforms, length: MemoryLayout<SHDRUniforms>.stride, index: UniformsBuffer.index)
-    encoder.setVertexBytes(
-      transforms,
-      length: MemoryLayout<Float4x4>.stride * transforms.count,
+    encoder.setVertexBuffer(
+      scene.modelGroupTransformsBuffer[name]!,
+      offset: 0,
       index: ModelMatrixBuffer.index
     )
 

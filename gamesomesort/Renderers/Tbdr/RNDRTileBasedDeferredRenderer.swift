@@ -114,7 +114,7 @@ class RNDRTileBasedDeferredRenderer: RNDRRenderer, RNDRContext {
   }
 
   func render(scene: ROScene, to renderDescriptor: SVCRenderDescriptor) {
-    let scene = RNDRScene(scene: scene, controllerModel: controllerModel)
+    let scene = RNDRScene(scene: scene, controllerModel: controllerModel, device: device)
 
     guard let commandBuffer = commandQueue.makeCommandBuffer() else {
       fatalError(
