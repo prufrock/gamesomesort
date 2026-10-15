@@ -103,7 +103,7 @@ struct RNDRScene {
 
   func render(
     encoder: MTLRenderCommandEncoder,
-    renderPass: RNDRTiledDeferredRenderPass
+    renderPass: RNDRPassRendersSingleOrInstancedEncoder
   ) {
     renderPass.renderIndividual(renderEncoder: encoder)
     modelKeys.forEach { modelName in

@@ -21,3 +21,13 @@ vertex float4 vertex_depth(
   matrix_float4x4 mvp = uniforms.shadowProjectionMatrix * uniforms.shadowViewMatrix * uniforms.modelMatrix;
   return mvp * in.position;
 }
+
+vertex float4 vertex_depth_instanced(
+                                     const VertexIn in [[stage_in]],
+                                     constant SHDRUniforms &uniforms [[buffer(UniformsBuffer)]],
+                                     constant matrix_float4x4 *indexedModelMatrix [[buffer(ModelMatrixBuffer)]],
+                                     uint iid [[instance_id]]
+                                     ) {
+  matrix_float4x4 mvp = uniforms.shadowProjectionMatrix * uniforms.shadowViewMatrix * indexedModelMatrix[iid];
+  return mvp * in.position;
+}

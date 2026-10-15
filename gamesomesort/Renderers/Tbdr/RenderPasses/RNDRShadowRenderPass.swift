@@ -7,11 +7,12 @@
 
 import MetalKit
 
-struct RNDRShadowRenderPass: RNDRRenderPass {
+struct RNDRShadowRenderPass: RNDRRenderPass, RNDRPassRendersSingleOrInstancedEncoder {
   let label: String = "Shadow Render Pass"
   var descriptor: MTLRenderPassDescriptor? = MTLRenderPassDescriptor()
   var depthStencilState: MTLDepthStencilState?
   var pipelineState: MTLRenderPipelineState
+  var pipelineStateInstanced: MTLRenderPipelineState
   var shadowTexture: MTLTexture?
 
   init(
@@ -21,7 +22,18 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
     controllerTexture: ControllerTexture
   ) {
     depthStencilState = Self.buildDepthStencilState(device: device)
-    pipelineState = Self.buildPipelineState(device: device, depthPixelFormat: depthPixelFormat, library: library)
+    pipelineState = Self.buildPipelineState(
+      device: device,
+      depthPixelFormat: depthPixelFormat,
+      library: library,
+      instanced: false
+    )
+    pipelineStateInstanced = Self.buildPipelineState(
+      device: device,
+      depthPixelFormat: depthPixelFormat,
+      library: library,
+      instanced: true
+    )
     // write the shadow calculations to here
     shadowTexture = Self.makeTexture(
       device: device,
@@ -34,11 +46,16 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
   private static func buildPipelineState(
     device: MTLDevice,
     depthPixelFormat: MTLPixelFormat,
-    library: MTLLibrary
+    library: MTLLibrary,
+    instanced: Bool
   ) -> MTLRenderPipelineState {
     return try! device.makeRenderPipelineState(
       descriptor: MTLRenderPipelineDescriptor().apply {
-        $0.vertexFunction = library.makeFunction(name: "vertex_depth")
+        if instanced {
+          $0.vertexFunction = library.makeFunction(name: "vertex_depth_instanced")
+        } else {
+          $0.vertexFunction = library.makeFunction(name: "vertex_depth")
+        }
         $0.colorAttachments[0].pixelFormat = .invalid
         $0.depthAttachmentPixelFormat = depthPixelFormat
         $0.vertexDescriptor = .defaultLayout
@@ -64,16 +81,16 @@ struct RNDRShadowRenderPass: RNDRRenderPass {
     renderEncoder.setDepthStencilState(depthStencilState)
     renderEncoder.setRenderPipelineState(pipelineState)
 
-    for gameObject in scene.gameObjects {
-      renderEncoder.pushDebugGroup("model \(gameObject.name)")
-      gameObject.model.render(
-        encoder: renderEncoder,
-        scene: scene,
-        gameObject: gameObject
-      )
-      renderEncoder.popDebugGroup()
-    }
+    scene.render(encoder: renderEncoder, renderPass: self)
 
     renderEncoder.endEncoding()
+  }
+
+  func renderIndividual(renderEncoder: MTLRenderCommandEncoder) {
+    renderEncoder.setRenderPipelineState(pipelineState)
+  }
+
+  func renderInstanced(renderEncoder: MTLRenderCommandEncoder) {
+    renderEncoder.setRenderPipelineState(pipelineStateInstanced)
   }
 }

@@ -8,7 +8,7 @@
 import MetalKit
 import VRTMath
 
-struct RNDRTiledDeferredRenderPass: RNDRRenderPass {
+struct RNDRTiledDeferredRenderPass: RNDRRenderPass, RNDRPassRendersSingleOrInstancedEncoder {
   let label = "Tiled Deferred Render Pass"
   var descriptor: MTLRenderPassDescriptor?
 
