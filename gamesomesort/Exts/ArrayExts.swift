@@ -11,4 +11,10 @@ extension Array {
       Array(self[$0..<Swift.min($0 + size, count)])
     }
   }
+
+  func forEachIndexed(_ body: (Int, Element) throws -> Void) rethrows {
+    for (index, item) in self.enumerated() {
+      try body(index, item)
+    }
+  }
 }

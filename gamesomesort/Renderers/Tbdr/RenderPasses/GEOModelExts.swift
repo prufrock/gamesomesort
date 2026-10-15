@@ -12,16 +12,6 @@ extension GEOModel {
   func render(
     encoder: MTLRenderCommandEncoder,
     scene: RNDRScene,
-    gameObject: RNDRGameObject? = nil
-  ) {
-    let baseColor: F3 = gameObject?.baseColor ?? [1, 1, 1]
-    let transform = ((gameObject?.transform ?? GEOTransform()) * self.upright).modelMatrix
-    render(encoder: encoder, scene: scene, transform: transform, baseColor: baseColor)
-  }
-
-  func render(
-    encoder: MTLRenderCommandEncoder,
-    scene: RNDRScene,
     transform: Float4x4,
     baseColor: F3
   ) {

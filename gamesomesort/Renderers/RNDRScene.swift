@@ -17,11 +17,9 @@ struct RNDRScene {
   var cameraPlayerOne: GMCameraFirstPerson {
     GMCameraFirstPerson(camera: scene.cameraPlayerOne)
   }
-  let gameObjects: [RNDRGameObject]
   // Group models together, so they can use instanced renderering
   let modelKeys: Set<String>
   let modelKeysInstanced: Set<String>
-  let modelGroups: [String: [RNDRGameObject]]
   let modelGroupTransforms: [String: [Float4x4]]
   let modelGroupBaseColors: [String: [F3]]
 
@@ -44,40 +42,30 @@ struct RNDRScene {
 
     var tempModelKeys: Set<String> = []
     var tempModelKeysInstanced: Set<String> = []
-    var tempModelGroups: [String: [RNDRGameObject]] = [:]
     var tempModelGroupTransforms: [String: [Float4x4]] = [:]
     var tempModelGroupBaseColors: [String: [F3]] = [:]
-    gameObjects = scene.gameObjects.map {
-      let robj = RNDRGameObject(
-        name: $0.name,
-        // might not need with tempModelGroupTransforms
-        transform: GEOTransform(
-          position: $0.transform.position,
-          quaternion: $0.transform.quaternion,
-          scale: $0.transform.scale
-        ),
-        model: controllerModel.models[$0.name]!,
-        baseColor: $0.color
+    scene.gameObjects.forEach {
+      let transform = GEOTransform(
+        position: $0.transform.position,
+        quaternion: $0.transform.quaternion,
+        scale: $0.transform.scale
       )
+      let model = controllerModel.models[$0.name]!
 
-      if robj.model.renderInstanced {
-        tempModelKeysInstanced.insert(robj.model.name)
+      if model.renderInstanced {
+        tempModelKeysInstanced.insert(model.name)
       } else {
-        tempModelKeys.insert(robj.model.name)
+        tempModelKeys.insert(model.name)
       }
-      tempModelGroups[robj.model.name, default: []].append(robj)
-      tempModelGroupTransforms[robj.model.name, default: []].append(
-        (robj.transform.modelMatrix * robj.model.upright.modelMatrix)
+      tempModelGroupTransforms[model.name, default: []].append(
+        (transform.modelMatrix * model.upright.modelMatrix)
       )
-      tempModelGroupBaseColors[robj.model.name, default: []].append(
-        robj.baseColor
+      tempModelGroupBaseColors[model.name, default: []].append(
+        $0.color
       )
-
-      return robj
     }
     self.modelKeys = tempModelKeys
     self.modelKeysInstanced = tempModelKeysInstanced
-    self.modelGroups = tempModelGroups
     self.modelGroupTransforms = tempModelGroupTransforms
     tempModelKeysInstanced.forEach { key in
       let transforms = tempModelGroupTransforms[key]!
