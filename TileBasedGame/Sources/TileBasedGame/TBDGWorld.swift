@@ -62,7 +62,8 @@ public class TBDGWorld {
         config: Config(level: levelConfig, world: worldConfig),
         input: TBDGame.Input(
           events: input.events,
-          screenDimensions: screenDimensions
+          screenDimensions: screenDimensions,
+          timeStep: input.timeStep
         )
       )
     )

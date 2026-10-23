@@ -67,7 +67,7 @@ struct GMEcsInitW01: GMEcsStarter {
     ecs.addComponent(
       firstEmitter,
       CTBalloonEmitter(
-        rate: 20.1,
+        rate: 60.0,
         timer: 0.0
       )
     )
@@ -77,7 +77,7 @@ struct GMEcsInitW01: GMEcsStarter {
     ecs.addComponent(
       secondEmitter,
       CTBalloonEmitter(
-        rate: 10.3,
+        rate: 90.0,
         timer: 0.0
       )
     )
@@ -87,7 +87,7 @@ struct GMEcsInitW01: GMEcsStarter {
     ecs.addComponent(
       thirdEmitter,
       CTBalloonEmitter(
-        rate: 18.7,
+        rate: 120.0,
         timer: 0.0
       )
     )

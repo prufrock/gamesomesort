@@ -86,12 +86,12 @@ class ControllerInput {
     updateFrameSizeSubject.send(size)
   }
 
-  func update() -> TBDGame.Input {
+  func update(timeStep: Float) -> TBDGame.Input {
     defer {
       events = DSQueueArray<TBDGame.Input.Events>()
     }
 
-    return TBDGame.Input(events: events)
+    return TBDGame.Input(events: events, timeStep: timeStep)
   }
 }
 

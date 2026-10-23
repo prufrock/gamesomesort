@@ -16,6 +16,7 @@ class ControllerGame: NSObject {
   private var fps: Double = 0
 
   private var lastFrameTime = CACurrentMediaTime()
+  private var accumulatedTime: Float = 0
 
   private(set) var game: GMGame?
   private var tapLocation: CGPoint = .zero
@@ -107,9 +108,15 @@ extension ControllerGame: MTKViewDelegate {
     let worldSteps = (elapsedTime / appCore.config.platform.worldTimeStep).rounded(.up)
     // The amount of time to move forward per calculation.
     let timeStep = elapsedTime / worldSteps
-    for _ in 0..<Int(worldSteps) {
-      let input = controllerInput.update()
+
+    accumulatedTime += elapsedTime
+
+    if accumulatedTime >= appCore.config.platform.worldTimeStep {
+      let input = controllerInput.update(timeStep: timeStep)
       game?.update(timeStep: timeStep, input: input)
+      accumulatedTime = accumulatedTime - appCore.config.platform.worldTimeStep
+    } else {
+      print("not enough accumulatedTime \(accumulatedTime)")
     }
 
     let scene: ROScene? = game?.scene

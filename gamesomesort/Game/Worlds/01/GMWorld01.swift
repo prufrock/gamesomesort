@@ -154,7 +154,7 @@ class GMWorld01: GMWorld {
       var emitter = row.component(at: 1, columns, CTBalloonEmitter.self)
 
       // TODO: get the delta from outer update loop
-      emitter.update(0.01)
+      emitter.update(1.0)
       if emitter.emit() {
         let balloon = world.createEntity(UUID.init().uuidString)
         world.addComponent(balloon, position)
@@ -167,7 +167,7 @@ class GMWorld01: GMWorld {
         world.addComponent(balloon, CTTagBalloon())
         world.addComponent(
           balloon,
-          LECSVelocity2d(x: 0.0, y: -1 * (emitter.rate * 0.0004))
+          LECSVelocity2d(x: 0.0, y: -0.001 * (emitter.rate))
         )
       }
       return [position, emitter]
