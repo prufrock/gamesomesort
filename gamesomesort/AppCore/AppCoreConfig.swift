@@ -150,8 +150,8 @@ struct AppCoreConfig {
 
   // Configuring how the platform interacts with the Game
   struct Platform {
-    let maximumTimeStep: Float  // the maximum length of a time step
-    let worldTimeStep: Float  // number of steps to take each frame
+    let maxTimeStepUs: UInt64  // the maximum length of a time step in microseconds
+    let stepDurationUs: UInt64  // the duration of a step in microseconds
     let scaleFactor: Float  // Used to convert points to pixels, depends on the platform
   }
 
@@ -199,8 +199,8 @@ struct AppCoreConfig {
 extension AppCoreConfig {
   static let testDefault: AppCoreConfig = .init(
     platform: AppCoreConfig.Platform(
-      maximumTimeStep: 1 / 20,  // don't step bigger than this (minimum of 20 fps)
-      worldTimeStep: 1 / 120,  // 120 steps a second
+      maxTimeStepUs: 1 / 20,  // don't step bigger than this (minimum of 20 fps)
+      stepDurationUs: 1 / 120,  // 120 steps a second
       scaleFactor: 1.0
     ),
     services: AppCoreConfig.Services(

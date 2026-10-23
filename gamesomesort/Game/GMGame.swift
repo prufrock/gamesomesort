@@ -25,7 +25,11 @@ class GMGame {
   private var screenDimensions = VRTMScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
   private var elapsedTime: Float = 0
   private var selectedLevel: Int? = nil
-  public var scene: ROScene {
+  public var scene: ROScene? {
+
+    guard elapsedTime > 0 else {
+      return nil
+    }
 
     let ecs = world.ecs
 
@@ -147,7 +151,7 @@ class GMGame {
     // reset frequently, just for testing
     if elapsedTime < appCore.config.game.timeLimit {
       var commands = world.update(timeStep: timeStep, input: input)
-      elapsedTime += timeStep
+      elapsedTime += 1
       if !commands.isEmpty {
         //TODO: Convert to switch
         let command = commands.dequeue()

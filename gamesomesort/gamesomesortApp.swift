@@ -20,8 +20,8 @@ struct gamesomesortApp: App {
     self.appCore = AppCore(
       AppCoreConfig(
         platform: AppCoreConfig.Platform(
-          maximumTimeStep: 1 / 20,  // don't step bigger than this (minimum of 20 fps)
-          worldTimeStep: 1 / 120,  // 120 steps a second
+          maxTimeStepUs: 250_000,  // don't step bigger than this
+          stepDurationUs: 16_666,  // fixed time duration for 60 fps, each tick his this many μs
           scaleFactor: scaleFactor
         ),
         services: AppCoreConfig.Services(

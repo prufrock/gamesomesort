@@ -15,8 +15,10 @@ class ControllerGame: NSObject {
   private let appCore: AppCore
   private var fps: Double = 0
 
-  private var lastFrameTime = CACurrentMediaTime()
-  private var accumulatedTime: Float = 0
+  // The last time a the game was updated.
+  private var lastFrameTimeUs: UInt64 = 0
+  // The amount of time accumulated so far.
+  private var accumulatedTime: UInt64 = 0
 
   private(set) var game: GMGame?
   private var tapLocation: CGPoint = .zero
@@ -99,34 +101,40 @@ extension ControllerGame: MTKViewDelegate {
   func draw(in view: MTKView) {
     bootGame(view: view)
 
-    // run the clock
-    let time = CACurrentMediaTime()
-    // the time that has passed since the last frame, if it's longer than the maximumTimeStep just use that. If the
-    // elapsed time is greater than the maximum it can mess up collision checks.
-    let elapsedTime = min(appCore.config.platform.maximumTimeStep, Float(time - lastFrameTime))
-    // The number of steps that fit into the amount of time elapsed.
-    let worldSteps = (elapsedTime / appCore.config.platform.worldTimeStep).rounded(.up)
-    // The amount of time to move forward per calculation.
-    let timeStep = elapsedTime / worldSteps
+    // check the time and convert to integer microseconds
+    let currentUs = UInt64(CACurrentMediaTime() * 1_000_000)
+    // Initialize last frame time.
+    if lastFrameTimeUs == 0 { lastFrameTimeUs = currentUs }
 
+    // The time that has passed since the last frame, fall back to the maximum time step
+    // to avoid unexpected behavior.
+    let elapsedTime = min(
+      appCore.config.platform.maxTimeStepUs,
+      currentUs - lastFrameTimeUs
+    )
+    // Now that we have the elapsed time, the currentTime can set the lastFrameTime.
+    lastFrameTimeUs = currentUs
+
+    // Fill the bucket with time.
     accumulatedTime += elapsedTime
-
-    if accumulatedTime >= appCore.config.platform.worldTimeStep {
-      let input = controllerInput.update(timeStep: timeStep)
-      game?.update(timeStep: timeStep, input: input)
-      accumulatedTime = accumulatedTime - appCore.config.platform.worldTimeStep
-    } else {
-      print("not enough accumulatedTime \(accumulatedTime)")
+    // Then empty the bucket, until there aren't any more steps left.
+    // This allows the game to know every time update is called the same amount of time has passed: stepDurationUs.
+    while accumulatedTime >= appCore.config.platform.stepDurationUs {
+      let input = controllerInput.update(timeStep: 0)
+      game?.update(timeStep: 0, input: input)
+      // Remove the spent time from the bucket.
+      accumulatedTime = accumulatedTime - appCore.config.platform.stepDurationUs
     }
 
-    let scene: ROScene? = game?.scene
-
-    appCore.sync(
-      SVCCommandRender.Render(
-        renderDescriptor: createRenderDescriptor(view: view),
-        ecs: game!.world.ecs,
-        scene: scene!
+    // Only render if there's something to render.
+    if let scene = game?.scene {
+      appCore.sync(
+        SVCCommandRender.Render(
+          renderDescriptor: createRenderDescriptor(view: view),
+          ecs: game!.world.ecs,
+          scene: scene
+        )
       )
-    )
+    }
   }
 }
