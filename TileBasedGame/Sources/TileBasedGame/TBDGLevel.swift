@@ -68,6 +68,8 @@ struct TBDGLevel {
     ini(LECSPTimerSleep.self)
     ini(LECSPPlayer.self)
     ini(LECSPPlayerOwner.self)
+    ini(LECSPPosition3d.self)
+    ini(LECSPVelocity3d.self)
   }
 
   private func initPlayerCamera() {
@@ -192,6 +194,19 @@ struct TBDGLevel {
         )
       case .moveUp, .moveDown, .moveLeft, .moveRight:
         break
+      case .prop:
+        ecs.createThing(
+          color: VRTMColorA(thingCfg.color),
+          model: thingCfg.model,
+          onTap: thingCfg.onTap,
+          onWake: thingCfg.onWake,
+          position: F3(x.f, y.f, 0.0) + thingCfg.position,
+          radius: thingCfg.radius,
+          rotationDegY: thingCfg.rotationDegY,
+          scale: thingCfg.scale,
+          tappable: true,
+          visible: true
+        )
       }
     }
   }

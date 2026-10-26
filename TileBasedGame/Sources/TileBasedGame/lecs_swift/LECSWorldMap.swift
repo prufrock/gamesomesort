@@ -83,7 +83,7 @@ extension LECSWorld {
   func createThing(
     color: VRTMColorA,
     model: String,
-    onTap: [String],
+    onTap: [GCFGOnTapAction],
     onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
@@ -103,7 +103,7 @@ extension LECSWorld {
 
     if onWake.isNotEmpty {
       addComponent(thing, LECSPTimerSleep())
-      let actions: [LECSPOnWake.Action] = onWake.map{ item in
+      let actions: [LECSPOnWake.Action] = onWake.map { item in
         switch item {
         case .creates(creatureId: let creatureId):
           return LECSPOnWake.Action.creates(creatureId: creatureId)
@@ -121,9 +121,11 @@ extension LECSWorld {
     if visible {
       addComponent(thing, LECSPTag.Visible())
     }
+    
     if tappable {
       addComponent(thing, LECSPTag.Tappable())
-      addComponent(thing, LECSPHUD.Button.OnTap(Set(onTap)))
+      addComponent(thing, LECSPHUD.Button.OnTap(onTap.toSetOfLECSPOnTapAction()))
+
     }
 
     return thing
@@ -159,7 +161,7 @@ extension LECSWorld {
   func createCreature(
     color: VRTMColorA,
     model: String,
-    onTap: [String],
+    onTap: [GCFGOnTapAction],
     onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
@@ -183,7 +185,7 @@ extension LECSWorld {
     addComponent(thing, LECSPModel(model))
 
     if onWake.isNotEmpty {
-      let actions: [LECSPOnWake.Action] = onWake.map{ item in
+      let actions: [LECSPOnWake.Action] = onWake.map { item in
         switch item {
         case .creates(creatureId: let creatureId):
           return LECSPOnWake.Action.creates(creatureId: creatureId)
@@ -204,7 +206,7 @@ extension LECSWorld {
     }
     if tappable {
       addComponent(thing, LECSPTag.Tappable())
-      addComponent(thing, LECSPHUD.Button.OnTap(Set(onTap)))
+      addComponent(thing, LECSPHUD.Button.OnTap(onTap.toSetOfLECSPOnTapAction()))
     }
 
     return thing

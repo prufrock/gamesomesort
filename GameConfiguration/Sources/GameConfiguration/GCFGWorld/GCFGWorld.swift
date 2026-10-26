@@ -79,7 +79,7 @@ extension GCFGWorld {
 extension GCFGWorld.HUD {
   public struct Button: Decodable {
     public let color: F3
-    public let onTap: [String]
+    public let onTap: [GCFGOnTapAction]
     public let name: String
     public let model: String
     public let position: F3
@@ -92,7 +92,7 @@ extension GCFGWorld.HUD {
       color: F3,
       name: String,
       model: String,
-      onTap: [String],
+      onTap: [GCFGOnTapAction],
       position: F3,
       radius: Float,
       rotationDegrees: Float,

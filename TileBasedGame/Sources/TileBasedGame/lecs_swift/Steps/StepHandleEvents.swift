@@ -98,17 +98,18 @@ extension StepSelector {
           LECSPHUD.Button.OnTap.self
         )
         // Maybe this should be more general?
-        if let onTap {
-          if onTap.list.contains("exit") {
+        onTap?.list.forEach { action in
+          switch action {
+          case .exit:
             gameCommands.enqueue(.start(level: 0))
-          } else if onTap.list.contains("reload") {
+          case .reload:
             gameCommands.enqueue(
               .startWorld(
                 world: context.config.world.name,
                 level: context.config.level.name
               )
             )
-          } else if onTap.list.contains("move") {
+          case .move:
             let targetPlayer = ecs.getComponent(id.id, LECSPPlayerOwner.self)!
             print("move the player \(targetPlayer.owner.id) up")
             let player = ecs.getComponent(targetPlayer.owner.id, LECSPPlayer.self)!
@@ -166,8 +167,9 @@ extension StepSelector {
               let id = ecs.createEntity("playerTurnEnded")
               ecs.addComponent(id, LECSPEvent(event: .playerTurnEnded))
             }
-          } else {
-            print("The button \(id) has no known onTaps: \(onTap.list)")
+          case .moveConstant(velocity: let velocity):
+            print("move with velocity \(velocity)")
+            ecs.addComponent(id.id, LECSPVelocity3d(velocity))
           }
         }
       }

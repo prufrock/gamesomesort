@@ -5,6 +5,7 @@
 //  Created by David Kanenwisher on 5/17/26.
 //
 
+import GameConfiguration
 import lecs_swift
 import VRTMath
 import LECSPieces
@@ -51,7 +52,7 @@ extension LECSWorld {
     color: F3,
     model: String,
     name: String,
-    onTap: Array<String>,
+    onTap: [GCFGOnTapAction],
     position: F3,
     radius: Float,
     rotationDegY: Float,
@@ -60,9 +61,7 @@ extension LECSWorld {
     visible: Bool
   ) {
     let entity = createEntity(name)
-    addComponent(
-      entity, LECSPHUD.Button.OnTap(Set(onTap))
-    )
+    addComponent(entity, LECSPHUD.Button.OnTap(onTap.toSetOfLECSPOnTapAction()))
     addComponent(entity, LECSPPosition3d(position))
     addComponent(entity, LECSPScale3d(F3(repeating: scale)))
     addComponent(entity, LECSPColor(color))

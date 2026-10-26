@@ -10,7 +10,7 @@ import VRTMath
 public struct GCFGThing: Decodable {
   public let color: F3
   public let model: String
-  public let onTap: [String]
+  public let onTap: [GCFGOnTapAction]
   public let onWake: [GCFGOnWakeAction]
   public let position: F3
   public let radius: Float
@@ -23,7 +23,7 @@ public struct GCFGThing: Decodable {
   public init(
     color: F3,
     model: String,
-    onTap: [String],
+    onTap: [GCFGOnTapAction],
     onWake: [GCFGOnWakeAction],
     position: F3,
     radius: Float,
@@ -50,5 +50,6 @@ public struct GCFGThing: Decodable {
     case nothing
     case playerStart
     case moveUp, moveDown, moveLeft, moveRight
+    case prop
   }
 }
