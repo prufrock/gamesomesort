@@ -200,7 +200,7 @@
             "6": {
                 "color": [1, 1, 1],
                 "model": "brick-sphere.usdz",
-                "onTap": [{"moveConstant": {"velocity": [0, -0.01, 0]}}],
+                "onTap": [{"moveConstant": {"velocity": [0, 0.01, 0]}}],
                 "onWake": [],
                 "position": [1.0, 0.0, -0.1],
                 "radius": 0.5,
