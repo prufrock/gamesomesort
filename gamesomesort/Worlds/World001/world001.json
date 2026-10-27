@@ -259,6 +259,6 @@
     },
     "name": "world001",
     "onWake": [{"levelStart": {}}],
-    "stepList": ["awaken", "handleInput", "handleEvents"],
+    "stepList": ["physics", "awaken", "handleInput", "handleEvents"],
     "worldVector": [1, -1, 1]
 }

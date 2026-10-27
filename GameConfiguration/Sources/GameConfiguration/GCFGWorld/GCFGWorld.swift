@@ -137,5 +137,6 @@ extension GCFGWorld {
     case awaken
     case handleEvents
     case handleInput
+    case physics
   }
 }
