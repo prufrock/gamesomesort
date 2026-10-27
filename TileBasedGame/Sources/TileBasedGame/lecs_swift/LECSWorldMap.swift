@@ -45,6 +45,7 @@ extension LECSWorld {
         addComponent(id, light)
         addComponent(id, color)
         addComponent(id, position)
+        addComponent(id, LECSPVelocity3d($0.velocity))
       }
     }
     if tappable {

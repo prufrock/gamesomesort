@@ -13,19 +13,22 @@ public struct GCFGLight: Decodable {
   public let position: F3
   public let specularColor: F3
   public let type: LightType
+  public let velocity: F3
 
   public init(
     attenuation: F3,
     color: F3,
     position: F3,
     specularColor: F3,
-    type: LightType
+    type: LightType,
+    velocity: F3
   ) {
     self.attenuation = attenuation
     self.color = color
     self.position = position
     self.specularColor = specularColor
     self.type = type
+    self.velocity = velocity
   }
 
   public enum LightType: String, Decodable {
