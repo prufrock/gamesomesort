@@ -24,6 +24,7 @@ public class TBDGWorld {
   }
   let worldConfig: GCFGWorld
   let levelConfig: GCFGLevel
+  private var stepSelector: StepSelector? = nil
   private var screenDimensions = VRTMScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
 
   public init(
@@ -56,16 +57,27 @@ public class TBDGWorld {
     input: TBDGame.Input
   ) -> any DSQueue<TBDGWorld.Commands> {
 
-    return StepSelector().run(
-      context: StepSelector.Context(
-        ecs: ecs,
-        config: Config(level: levelConfig, world: worldConfig),
-        input: TBDGame.Input(
-          events: input.events,
-          screenDimensions: screenDimensions,
-          timeStep: input.timeStep
-        )
+    let context = StepSelector.Context(
+      ecs: ecs,
+      config: Config(level: levelConfig, world: worldConfig),
+      input: TBDGame.Input(
+        events: input.events,
+        screenDimensions: screenDimensions,
+        timeStep: input.timeStep
       )
+    )
+
+    let selector: StepSelector
+    if let existing = stepSelector {
+      selector = existing
+    } else {
+      let created = StepSelector(context: context)
+      stepSelector = created
+      selector = created
+    }
+
+    return selector.run(
+      context: context
     )
   }
 }
