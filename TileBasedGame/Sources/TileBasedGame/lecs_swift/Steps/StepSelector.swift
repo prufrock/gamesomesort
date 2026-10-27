@@ -23,7 +23,7 @@ struct StepSelector {
       case .handleInput:
         (key, StepNoop())
       case .physics:
-        (key, Physics())
+        (key, Physics(context: context))
       }
     })
   }
