@@ -18,5 +18,8 @@ public struct GCFGAnimation: Decodable {
   public enum Motion: Decodable {
     // Set a velocity for continual movement
     case linear(velocity: F3)
+    // A sinusoidal animation
+    // Start with just velicity and unconfigurable wave
+    case sine(velocity: F3)
   }
 }

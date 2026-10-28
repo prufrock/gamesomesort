@@ -48,6 +48,12 @@ extension LECSWorld {
         switch ($0.animation.motion) {
         case .linear(let velocity):
           addComponent(id, LECSPVelocity3d(velocity))
+        case .sine(let velocity):
+          print("sine \(velocity)")
+          // abuse velocity system for a minute
+          addComponent(id, LECSPAnchorPosition(position.position))
+          addComponent(id, LECSPVelocity3d(velocity))
+          addComponent(id, LECSPAnimation(motion: .sine(velocity: velocity)))
         }
       }
     }
