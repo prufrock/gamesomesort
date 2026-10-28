@@ -8,27 +8,27 @@
 import VRTMath
 
 public struct GCFGLight: Decodable {
+  public let animation: GCFGAnimation
   public let attenuation: F3
   public let color: F3
   public let position: F3
   public let specularColor: F3
   public let type: LightType
-  public let velocity: F3
 
   public init(
+    animation: GCFGAnimation,
     attenuation: F3,
     color: F3,
     position: F3,
     specularColor: F3,
     type: LightType,
-    velocity: F3
   ) {
+    self.animation = animation
     self.attenuation = attenuation
     self.color = color
     self.position = position
     self.specularColor = specularColor
     self.type = type
-    self.velocity = velocity
   }
 
   public enum LightType: String, Decodable {
@@ -39,4 +39,3 @@ public struct GCFGLight: Decodable {
     case Ambient
   }
 }
-

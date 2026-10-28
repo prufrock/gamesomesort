@@ -45,7 +45,10 @@ extension LECSWorld {
         addComponent(id, light)
         addComponent(id, color)
         addComponent(id, position)
-        addComponent(id, LECSPVelocity3d($0.velocity))
+        switch ($0.animation.motion) {
+        case .linear(let velocity):
+          addComponent(id, LECSPVelocity3d(velocity))
+        }
       }
     }
     if tappable {

@@ -26,7 +26,8 @@
                         "position": [0, 0.0, -0.1],
                         "specularColor": [0.6, 0.6, 0.6],
                         "type": "Point",
-                        "velocity": [0, 0, 0]
+                        "velocity": [0, 0, 0],
+                        "animation": {"motion": {"linear": {"velocity": [0, 0.01, 0]}}}
                     }
                 ],
                 "model": "button-one",
@@ -49,7 +50,8 @@
                         "position": [0.1, -0.4, -0.5],
                         "specularColor": [0.6, 0.6, 0.6],
                         "type": "Point",
-                        "velocity": [0, 0.01, 0]
+                        "velocity": [0, 0.01, 0],
+                        "animation": {"motion": {"linear": {"velocity": [0, 0.01, 0]}}}
                     },
                     {
                         "attenuation": [0.2, 3, 50],
@@ -57,7 +59,8 @@
                         "position": [0, 0.2, -0.5],
                         "specularColor": [0.6, 0.6, 0.6],
                         "type": "Point",
-                        "velocity": [0, 0.01, 0]
+                        "velocity": [0, 0.01, 0],
+                        "animation": {"motion": {"linear": {"velocity": [0, 0.01, 0]}}}
                     },
                     {
                         "attenuation": [0.2, 3, 0.1],
@@ -65,7 +68,8 @@
                         "position": [0.1, 0.2, -0.5],
                         "specularColor": [0.6, 0.6, 0.6],
                         "type": "Point",
-                        "velocity": [0, 0.01, 0]
+                        "velocity": [0, 0.01, 0],
+                        "animation": {"motion": {"linear": {"velocity": [0, 0.01, 0]}}}
                     }
                 ],
                 "model": "tile-tree-three.usdz",
