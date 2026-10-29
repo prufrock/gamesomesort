@@ -181,6 +181,7 @@ struct TBDGLevel {
         break
       case .playerStart:
         ecs.createThing(
+          animation: thingCfg.animation,
           color: VRTMColorA(thingCfg.color),
           model: thingCfg.model,
           onTap: thingCfg.onTap,
@@ -196,6 +197,7 @@ struct TBDGLevel {
         break
       case .prop:
         ecs.createThing(
+          animation: thingCfg.animation,
           color: VRTMColorA(thingCfg.color),
           model: thingCfg.model,
           onTap: thingCfg.onTap,

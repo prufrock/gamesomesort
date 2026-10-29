@@ -45,17 +45,20 @@ extension LECSWorld {
         addComponent(id, light)
         addComponent(id, color)
         addComponent(id, position)
-        switch ($0.animation?.motion) {
+        switch ($0.animation) {
         case .none:
           // lets not let systems and selects waste time processing these.
           break
         case .linear(let velocity):
           addComponent(id, LECSPVelocity3d(velocity))
-        case .sine(let velocity):
+        case .sine(let oscillator):
           // abuse velocity system for a minute
-          addComponent(id, LECSPAnchorPosition(position.position))
-          addComponent(id, LECSPVelocity3d(velocity))
-          addComponent(id, LECSPAnimation(motion: .sine(velocity: velocity)))
+          addComponent(id, LECSPVelocity3d())
+          let anchor = oscillator.scale ? F3(repeating: scale) : position.position
+          addComponent(
+            id,
+            LECSPAnimation(motion: .sine(oscillator: oscillator.toLECSP(anchor: anchor)))
+          )
         }
       }
     }
@@ -77,6 +80,7 @@ extension LECSWorld {
       z: sourcePosition.z + config.position.z
     )
     return createThing(
+      animation: config.animation,
       color: config.color.vrtma,
       model: config.model,
       onTap: config.onTap,
@@ -93,6 +97,7 @@ extension LECSWorld {
 
   @discardableResult
   func createThing(
+    animation: GCFGAnimation?,
     color: VRTMColorA,
     model: String,
     onTap: [GCFGOnTapAction],
@@ -137,7 +142,22 @@ extension LECSWorld {
     if tappable {
       addComponent(thing, LECSPTag.Tappable())
       addComponent(thing, LECSPHUD.Button.OnTap(onTap.toSetOfLECSPOnTapAction()))
+    }
 
+    switch (animation) {
+    case .none:
+      // lets not let systems and selects waste time processing these.
+      break
+    case .linear(let velocity):
+      addComponent(thing, LECSPVelocity3d(velocity))
+    case .sine(let oscillator):
+      // abuse velocity system for a minute
+      addComponent(thing, LECSPVelocity3d())
+      let anchor = oscillator.scale ? F3(repeating: scale) : position
+      addComponent(
+        thing,
+        LECSPAnimation(motion: .sine(oscillator: oscillator.toLECSP(anchor: anchor)))
+      )
     }
 
     return thing

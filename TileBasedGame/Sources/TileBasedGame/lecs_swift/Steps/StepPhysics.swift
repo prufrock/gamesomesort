@@ -37,35 +37,34 @@ struct Physics: StepSelector.Step {
   init(context ctx: StepSelector.Context) {
     velocitySystemId = ctx.ecs.addSystemWorldScoped(
       "velocity",
-      selector: [LECSId.self, LECSPVelocity3d.self, LECSPPosition3d.self]
+      selector: [LECSId.self, LECSPVelocity3d.self, LECSPScale3d.self, LECSPAnimation.self, LECSPPosition3d.self]
     )
     { world, row, columns in
       let c = counter()
       let id = row.component(at: c(), columns, LECSId.self)
       var velocity = row.component(at: c(), columns, LECSPVelocity3d.self)
+      var scale = row.component(at: c(), columns, LECSPScale3d.self)
+      let animation = row.component(at: c(), columns, LECSPAnimation.self)
       var position = row.component(at: c(), columns, LECSPPosition3d.self)
 
-      if let animation = world.getComponent(id.id, LECSPAnimation.self), let anchor = world.getComponent(id.id, LECSPAnchorPosition.self) {
-        switch animation.motion {
+      switch animation.motion {
         case .linear(let velocity):
           position = LECSPPosition3d(position.position + velocity)
-        case .sine(let s):
+        case .sine(let oscillator):
           // abuse velocity as the clock for now...
           let elapsedTime = velocity.x + 1
           velocity = LECSPVelocity3d([elapsedTime, 0, 0])
-          let oscillationPhase: Float = 0.0
-          let oscillationFrequency: Float = s.z
-          let oscillationAmplitude = F2(s.x, s.y)
-          let omega = 2.0 * Float.pi * oscillationFrequency
-          let waveFactor = sin(omega * Float(elapsedTime) + oscillationPhase)
-          let oscillationPosition = oscillationAmplitude * waveFactor
-          position = LECSPPosition3d(anchor.position + F3(oscillationPosition, 0))
-        }
-      } else {
-        position = LECSPPosition3d(position.position + velocity.velocity)
+          let omega = 2.0 * Float.pi * oscillator.frequency
+          let waveFactor = sin(omega * Float(elapsedTime) + oscillator.phase)
+          let oscillationPosition = oscillator.amplitude * waveFactor
+          if oscillator.scale {
+            scale = LECSPScale3d(oscillator.anchor + oscillationPosition)
+          } else {
+            position = LECSPPosition3d(oscillator.anchor + oscillationPosition)
+          }
       }
 
-      return [id, velocity, position]
+      return [id, velocity, scale, animation, position]
     }
   }
 

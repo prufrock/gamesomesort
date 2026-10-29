@@ -8,6 +8,7 @@
 import VRTMath
 
 public struct GCFGThing: Decodable {
+  public let animation: GCFGAnimation?
   public let color: F3
   public let model: String
   public let onTap: [GCFGOnTapAction]
@@ -21,6 +22,7 @@ public struct GCFGThing: Decodable {
   public let visible: Bool
 
   public init(
+    animation: GCFGAnimation?,
     color: F3,
     model: String,
     onTap: [GCFGOnTapAction],
@@ -33,6 +35,7 @@ public struct GCFGThing: Decodable {
     type: ThingTypes,
     visible: Bool,
   ) {
+    self.animation = animation
     self.color = color
     self.model = model
     self.onTap = onTap

@@ -26,7 +26,7 @@
                         "position": [0, 0.0, -0.1],
                         "specularColor": [0.6, 0.6, 0.6],
                         "type": "Point",
-                        "animation": {"motion": {"linear": {"velocity": [0, 0.01, 0]}}}
+                        "animation": null
                     }
                 ],
                 "model": "button-one",
@@ -49,7 +49,7 @@
                         "position": [0.1, -0.4, -0.5],
                         "specularColor": [0.6, 0.6, 0.6],
                         "type": "Point",
-                        "animation": {"motion": {"sine": {"velocity": [0.0, 0.0, 0.0]}}}
+                        "animation": null
                     },
                     {
                         "attenuation": [0.2, 3, 50],
@@ -57,7 +57,7 @@
                         "position": [0, 0.2, -0.5],
                         "specularColor": [0.6, 0.6, 0.6],
                         "type": "Point",
-                        "animation": {"motion": {"sine": {"velocity": [0.0, 0.5, 0.001]}}}
+                        "animation": null
                     },
                     {
                         "attenuation": [0.2, 3, 0.1],
@@ -65,7 +65,7 @@
                         "position": [0.1, 0.2, -0.5],
                         "specularColor": [0.6, 0.6, 0.6],
                         "type": "Point",
-                        "animation": {"motion": {"sine": {"velocity": [0.0, 0.5, 0.001]}}}
+                        "animation": null
                     }
                 ],
                 "model": "tile-tree-three.usdz",
@@ -124,6 +124,7 @@
         },
         "things": {
             "0": {
+                "animation": null,
                 "color": [0.0, 0.0, 0.0],
                 "model": "",
                 "onTap": [],
@@ -137,6 +138,7 @@
                 "visible": false
             },
             "1": {
+                "animation": null,
                 "color": [0.3, 0.0, 0.9],
                 "model": "button-one",
                 "onTap": [],
@@ -150,11 +152,12 @@
                 "visible": true
             },
             "2": {
+                "animation": {"sine": { "oscillator": {"amplitude": [0.15, 0.15, 0.15], "frequency": 0.004, "phase": 0, "scale": true}}},
                 "color": [0.8, 0.6, 0.0],
                 "model": "button-one",
                 "onTap": [{"move": {}}],
                 "onWake": [],
-                "position": [0.0, -1.0, -0.1],
+                "position": [0.0, -1.0, 0.3],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.8,
@@ -163,11 +166,12 @@
                 "visible": true
             },
             "3": {
+                "animation": {"sine": { "oscillator": {"amplitude": [0.15, 0.15, 0.15], "frequency": 0.004, "phase": 0, "scale": true}}},
                 "color": [0.8, 0.6, 0.0],
                 "model": "button-one",
                 "onTap": [{"move": {}}],
                 "onWake": [],
-                "position": [0.0, 1.0, -0.1],
+                "position": [0.0, 1.0, 0.3],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.8,
@@ -176,11 +180,12 @@
                 "visible": true
             },
             "4": {
+                "animation": {"sine": { "oscillator": {"amplitude": [0.15, 0.15, 0.15], "frequency": 0.004, "phase": 0, "scale": true}}},
                 "color": [0.8, 0.6, 0.0],
                 "model": "button-one",
                 "onTap": [{"move": {}}],
                 "onWake": [],
-                "position": [-1.0, 0.0, -0.1],
+                "position": [-1.0, 0.0, 0.3],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.8,
@@ -189,11 +194,12 @@
                 "visible": true
             },
             "5": {
+                "animation": {"sine": { "oscillator": {"amplitude": [0.15, 0.15, 0.15], "frequency": 0.004, "phase": 0, "scale": true}}},
                 "color": [0.8, 0.6, 0.0],
                 "model": "button-one",
                 "onTap": [{"move": {}}],
                 "onWake": [],
-                "position": [1.0, 0.0, -0.1],
+                "position": [1.0, 0.0, 0.3],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.8,
@@ -202,6 +208,7 @@
                 "visible": true
             },
             "6": {
+                "animation": {"sine": { "oscillator": {"amplitude": [1.0, 0, 0], "frequency": 0.001, "phase": 0, "scale": false}}},
                 "color": [1, 1, 1],
                 "model": "brick-sphere.usdz",
                 "onTap": [{"moveConstant": {"velocity": [0, 0.01, 0]}}],

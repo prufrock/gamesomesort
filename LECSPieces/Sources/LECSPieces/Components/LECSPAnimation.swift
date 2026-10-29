@@ -21,6 +21,22 @@ public struct LECSPAnimation: LECSComponent {
 
   public enum Motion {
     case linear(velocity: F3)
-    case sine(velocity: F3)
+    case sine(oscillator: Oscillator)
+  }
+
+  public struct Oscillator: Decodable {
+    public var amplitude: F3
+    public var anchor: F3
+    public var frequency: Float
+    public var phase: Float
+    public var scale: Bool
+
+    public init(amplitude: F3, anchor: F3, frequency: Float, phase: Float, scale: Bool) {
+      self.amplitude = amplitude
+      self.anchor = anchor
+      self.frequency = frequency
+      self.phase = phase
+      self.scale = scale
+    }
   }
 }
