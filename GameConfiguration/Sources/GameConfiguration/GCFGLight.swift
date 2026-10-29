@@ -8,7 +8,7 @@
 import VRTMath
 
 public struct GCFGLight: Decodable {
-  public let animation: GCFGAnimation
+  public let animation: GCFGAnimation?
   public let attenuation: F3
   public let color: F3
   public let position: F3
@@ -16,7 +16,7 @@ public struct GCFGLight: Decodable {
   public let type: LightType
 
   public init(
-    animation: GCFGAnimation,
+    animation: GCFGAnimation?,
     attenuation: F3,
     color: F3,
     position: F3,

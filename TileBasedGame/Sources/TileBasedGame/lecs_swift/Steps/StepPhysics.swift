@@ -62,7 +62,7 @@ struct Physics: StepSelector.Step {
           position = LECSPPosition3d(anchor.position + F3(oscillationPosition, 0))
         }
       } else {
-        //position = LECSPPosition3d(position.position + velocity.velocity)
+        position = LECSPPosition3d(position.position + velocity.velocity)
       }
 
       return [id, velocity, position]

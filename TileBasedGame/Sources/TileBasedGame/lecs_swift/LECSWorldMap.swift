@@ -45,11 +45,13 @@ extension LECSWorld {
         addComponent(id, light)
         addComponent(id, color)
         addComponent(id, position)
-        switch ($0.animation.motion) {
+        switch ($0.animation?.motion) {
+        case .none:
+          // lets not let systems and selects waste time processing these.
+          break
         case .linear(let velocity):
           addComponent(id, LECSPVelocity3d(velocity))
         case .sine(let velocity):
-          print("sine \(velocity)")
           // abuse velocity system for a minute
           addComponent(id, LECSPAnchorPosition(position.position))
           addComponent(id, LECSPVelocity3d(velocity))
