@@ -32,17 +32,24 @@ extension StepSelector {
 
 struct Physics: StepSelector.Step {
 
-  private let velocitySystemId: LECSSystemId
+  private let animationSystemId: LECSSystemId
 
   init(context ctx: StepSelector.Context) {
-    velocitySystemId = ctx.ecs.addSystemWorldScoped(
-      "velocity",
+    animationSystemId = ctx.ecs.addSystemWorldScoped(
+      "animation",
       selector: [LECSId.self, LECSPVelocity3d.self, LECSPScale3d.self, LECSPAnimation.self, LECSPPosition3d.self]
     )
     { world, row, columns in
+      // Fetch the clock for animations that need it.
+      // Is there a way to store this for run each of the system?
+      var clock: LECSPClock = LECSPClock()
+      world.select([LECSPClock.self]) { row, columns in
+        clock = row.component(at: 0, columns, LECSPClock.self)
+      }
+
       let c = counter()
       let id = row.component(at: c(), columns, LECSId.self)
-      var velocity = row.component(at: c(), columns, LECSPVelocity3d.self)
+      let velocity = row.component(at: c(), columns, LECSPVelocity3d.self)
       var scale = row.component(at: c(), columns, LECSPScale3d.self)
       let animation = row.component(at: c(), columns, LECSPAnimation.self)
       var position = row.component(at: c(), columns, LECSPPosition3d.self)
@@ -51,11 +58,8 @@ struct Physics: StepSelector.Step {
         case .linear(let velocity):
           position = LECSPPosition3d(position.position + velocity)
         case .sine(let oscillator):
-          // abuse velocity as the clock for now...
-          let elapsedTime = velocity.x + 1
-          velocity = LECSPVelocity3d([elapsedTime, 0, 0])
           let omega = 2.0 * Float.pi * oscillator.frequency
-          let waveFactor = sin(omega * Float(elapsedTime) + oscillator.phase)
+          let waveFactor = sin(omega * Float(clock.ticks) + oscillator.phase)
           let oscillationPosition = oscillator.amplitude * waveFactor
           if oscillator.scale {
             scale = LECSPScale3d(oscillator.anchor + oscillationPosition)
@@ -71,7 +75,7 @@ struct Physics: StepSelector.Step {
   func run(context ctx: StepSelector.Context) -> GameCommands {
     let ecs = ctx.ecs
     
-    ecs.processSystemWorldScoped(system: velocitySystemId)
+    ecs.processSystemWorldScoped(system: animationSystemId)
 
     return GameCommands()
   }

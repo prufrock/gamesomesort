@@ -24,17 +24,21 @@ public class TBDGWorld {
   }
   let worldConfig: GCFGWorld
   let levelConfig: GCFGLevel
+  // The length of tick in microseconds.
+  private var tickDurationUs: UInt64
   private var stepSelector: StepSelector? = nil
   private var screenDimensions = VRTMScreenDimensions(pixelSize: CGSize(), scaleFactor: 1.0)
 
   public init(
     worldConfig: GCFGWorld,
     levelConfig: GCFGLevel,
+    tickDurationUs: UInt64,
     ecs: LECSWorld
   ) {
     self.ecs = ecs
     self.worldConfig = worldConfig
     self.levelConfig = levelConfig
+    self.tickDurationUs = tickDurationUs
   }
 
   public func restart() {
@@ -56,14 +60,23 @@ public class TBDGWorld {
     timeStep: Float,
     input: TBDGame.Input
   ) -> any DSQueue<TBDGWorld.Commands> {
+    guard let id = id else {
+      fatalError("World not initialized in ECS.")
+    }
+
+    // Initialize the clock or tick.
+    if let clock = ecs.getComponent(id.id, LECSPClock.self) {
+      ecs.addComponent(id.id, clock.tick())
+    } else {
+      ecs.addComponent(id.id, LECSPClock(ticks: 0, tickLengthUs: tickDurationUs))
+    }
 
     let context = StepSelector.Context(
       ecs: ecs,
       config: Config(level: levelConfig, world: worldConfig),
       input: TBDGame.Input(
         events: input.events,
-        screenDimensions: screenDimensions,
-        timeStep: input.timeStep
+        screenDimensions: screenDimensions
       )
     )
 

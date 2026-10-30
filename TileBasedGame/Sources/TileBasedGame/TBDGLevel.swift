@@ -70,6 +70,8 @@ struct TBDGLevel {
     ini(LECSPPlayerOwner.self)
     ini(LECSPPosition3d.self)
     ini(LECSPVelocity3d.self)
+    ini(LECSPAnimation.self)
+    ini(LECSPClock.self)
   }
 
   private func initPlayerCamera() {

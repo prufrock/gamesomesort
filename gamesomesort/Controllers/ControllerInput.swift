@@ -91,7 +91,7 @@ class ControllerInput {
       events = DSQueueArray<TBDGame.Input.Events>()
     }
 
-    return TBDGame.Input(events: events, timeStep: timeStep)
+    return TBDGame.Input(events: events)
   }
 }
 

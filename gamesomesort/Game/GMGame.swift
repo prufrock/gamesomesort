@@ -220,6 +220,7 @@ class GMGame {
           let tbdgWorld = TBDGWorld(
             worldConfig: worldCfg!,
             levelConfig: levelCfg!,
+            tickDurationUs: appCore.config.platform.stepDurationUs,
             ecs: LECSCreateWorld(
               archetypeSize: self.appCore.config.game.world.ecsArchetypeSize
             )
