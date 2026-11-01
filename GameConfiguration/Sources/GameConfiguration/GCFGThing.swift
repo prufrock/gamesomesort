@@ -51,8 +51,9 @@ public struct GCFGThing: Decodable {
 
   public enum ThingTypes: String, Decodable {
     case nothing
-    case playerStart
+    case button
     case moveUp, moveDown, moveLeft, moveRight
+    case playerStart
     case prop
   }
 }

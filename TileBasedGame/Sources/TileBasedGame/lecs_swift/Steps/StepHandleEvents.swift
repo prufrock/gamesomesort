@@ -75,18 +75,35 @@ extension StepSelector {
 
               if let tileId = context.config.level[tile: Int(position.x), Int(position.y)] {
                 let tileCfg = context.config.world[tile: tileId]!
-                
+
                 if tileCfg.onEnter.isNotEmpty {
-                  let moveButton = ecs.createThing(
-                    from: thing,
-                    at: sourceEntityPosition,
-                    name: "thing-\(thing.type)"
-                  )
-                  ecs.addComponent(
-                    moveButton,
-                    LECSPPlayerOwner(playerId)
-                  )
-                  ecs.addComponent(moveButton, LECSPTag.GroupA())
+                  if let creatureId = context.config.level[creature: Int(position.x), Int(position.y)],
+                     let creature = context.config.world[creature: creatureId],
+                     let attackBtnCfg = context.config.world[thing: 7] {
+                    print("creature: \(creature.type)")
+                    let actionButton = ecs.createThing(
+                      from: attackBtnCfg,
+                      at: sourceEntityPosition + thing.position,
+                      name: "thing-\(thing.type)"
+                    )
+                    ecs.addComponent(
+                      actionButton,
+                      LECSPPlayerOwner(playerId)
+                    )
+                    ecs.addComponent(actionButton, LECSPTag.GroupA())
+                  } else {
+                    print("actionButton: \(thing.type)")
+                    let actionButton = ecs.createThing(
+                      from: thing,
+                      at: sourceEntityPosition,
+                      name: "thing-\(thing.type)"
+                    )
+                    ecs.addComponent(
+                      actionButton,
+                      LECSPPlayerOwner(playerId)
+                    )
+                    ecs.addComponent(actionButton, LECSPTag.GroupA())
+                  }
                 }
               }
             }
@@ -100,6 +117,8 @@ extension StepSelector {
         // Maybe this should be more general?
         onTap?.list.forEach { action in
           switch action {
+          case .affectTargetStat(value: let value):
+            print("affectTargetStat \(value)")
           case .exit:
             gameCommands.enqueue(.start(level: 0))
           case .reload:

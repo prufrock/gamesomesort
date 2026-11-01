@@ -20,6 +20,8 @@ public struct LECSPOnTap: LECSComponent {
   }
 
   public enum Action: Equatable, Hashable {
+    // case affectTargetStat(stat: GCFGCreature.Stats, value: Int)
+    case affectTargetStat(value: Int)
     case exit
     case moveConstant(velocity: F3)
     case move

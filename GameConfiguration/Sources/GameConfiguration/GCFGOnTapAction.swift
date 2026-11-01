@@ -7,8 +7,9 @@
 
 import VRTMath
 
-public enum GCFGOnTapAction: Codable {
+public enum GCFGOnTapAction: Decodable {
   case reload
+  case affectTargetStat(stat: GCFGCreature.Stats, value: Int)
   case moveConstant(velocity: F3)
   case move
   case exit

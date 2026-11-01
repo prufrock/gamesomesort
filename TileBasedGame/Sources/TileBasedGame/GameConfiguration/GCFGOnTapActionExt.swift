@@ -12,6 +12,8 @@ extension Array where Element == GCFGOnTapAction {
   func toSetOfLECSPOnTapAction() -> Set<LECSPOnTap.Action> {
     return Set(self.map { item in
       switch item {
+      case .affectTargetStat(stat: let stat, value: let value):
+        return LECSPOnTap.Action.affectTargetStat(value: value)
       case .exit:
         return LECSPOnTap.Action.exit
       case .move:

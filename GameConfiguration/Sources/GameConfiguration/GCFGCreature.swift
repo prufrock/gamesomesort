@@ -45,4 +45,8 @@ public struct GCFGCreature: Decodable {
     self.type = type
     self.visible = visible
   }
+
+  public enum Stats: Decodable {
+    case hitPoints
+  }
 }

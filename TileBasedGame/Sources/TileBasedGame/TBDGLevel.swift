@@ -180,6 +180,8 @@ struct TBDGLevel {
       let thingCfg = world.worldConfig.entities.things[thingId]!
 
       switch thingCfg.type {
+      case .button:
+        break
       case .nothing:
         break
       case .playerStart:
