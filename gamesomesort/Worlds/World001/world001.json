@@ -7,14 +7,27 @@
                "onWake": [],
                "model": "box-golem.usdz",
                "onTap": [],
-               "position": [0.0, 0.0, -0.1],
+               "position": [0.0, 0.0, 0.0],
                "radius": 0.5,
                "rotationDegY": 180,
                "scale": 0.25,
                "type": "playerDoll",
                "tappable": false,
                "visible": true
-           }
+           },
+            "2": {
+                "color": [0.5, 0.0, 0.5],
+                "onWake": [],
+                "model": "button-one",
+                "onTap": [],
+                "position": [0.0, 0.0, 0.99],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.25,
+                "type": "monster",
+                "tappable": false,
+                "visible": true
+            }
         },
         "tiles": {
             "0": {
@@ -143,7 +156,7 @@
                 "model": "button-one",
                 "onTap": [],
                 "onWake": [{"creates": {"creatureId": "1"}}],
-                "position": [0.0, 0.0, 0.75],
+                "position": [0.0, 0.0, 0.99],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.5,
@@ -157,7 +170,7 @@
                 "model": "button-one",
                 "onTap": [{"move": {}}],
                 "onWake": [],
-                "position": [0.0, -1.0, 0.3],
+                "position": [0.0, -1.0, 0.0],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.8,
@@ -171,7 +184,7 @@
                 "model": "button-one",
                 "onTap": [{"move": {}}],
                 "onWake": [],
-                "position": [0.0, 1.0, 0.3],
+                "position": [0.0, 1.0, 0.0],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.8,
@@ -185,7 +198,7 @@
                 "model": "button-one",
                 "onTap": [{"move": {}}],
                 "onWake": [],
-                "position": [-1.0, 0.0, 0.3],
+                "position": [-1.0, 0.0, 0.0],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.8,
@@ -199,7 +212,7 @@
                 "model": "button-one",
                 "onTap": [{"move": {}}],
                 "onWake": [],
-                "position": [1.0, 0.0, 0.3],
+                "position": [1.0, 0.0, 0.0],
                 "radius": 0.5,
                 "rotationDegY": 0,
                 "scale": 0.8,
@@ -219,6 +232,20 @@
                 "scale": 0.8,
                 "tappable": true,
                 "type": "prop",
+                "visible": true
+            },
+            "7": {
+                "animation": {"sine": { "oscillator": {"amplitude": [0.15, 0.15, 0.15], "frequency": 0.004, "phase": 0, "scale": true}}},
+                "color": [0.8, 0, 0.0],
+                "model": "button-one",
+                "onTap": [{"affectTargetStat": {"stat": {"hitPoints": {}}, "value": -1}}],
+                "onWake": [],
+                "position": [0.0, 0.0, 0.0],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.8,
+                "tappable": true,
+                "type": "button",
                 "visible": true
             }
         }
