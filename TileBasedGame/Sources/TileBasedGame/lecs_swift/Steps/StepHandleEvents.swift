@@ -66,44 +66,38 @@ extension StepSelector {
             let sourceEntityPosition = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
             let buttons: [Int] = [2, 3, 4, 5]
             for button in buttons {
-              let thing = context.config.world[thing: button]!
+              var btnCfg = context.config.world[thing: button]!
               let position = F3(
-                x: sourceEntityPosition.x + thing.position.x,
-                y: sourceEntityPosition.y + thing.position.y,
-                z: sourceEntityPosition.z + thing.position.z
+                x: sourceEntityPosition.x + btnCfg.position.x,
+                y: sourceEntityPosition.y + btnCfg.position.y,
+                z: sourceEntityPosition.z + btnCfg.position.z
               )
 
+              var positionAdjustment: F3 = [0, 0, 0]
               if let tileId = context.config.level[tile: Int(position.x), Int(position.y)] {
                 let tileCfg = context.config.world[tile: tileId]!
 
                 if tileCfg.onEnter.isNotEmpty {
                   if let creatureId = context.config.level[creature: Int(position.x), Int(position.y)],
-                     let creature = context.config.world[creature: creatureId],
-                     let attackBtnCfg = context.config.world[thing: 7] {
+                     let creature = context.config.world[creature: creatureId]
+                  {
                     print("creature: \(creature.type)")
-                    let actionButton = ecs.createThing(
-                      from: attackBtnCfg,
-                      at: sourceEntityPosition + thing.position,
-                      name: "thing-\(thing.type)"
-                    )
-                    ecs.addComponent(
-                      actionButton,
-                      LECSPPlayerOwner(playerId)
-                    )
-                    ecs.addComponent(actionButton, LECSPTag.GroupA())
+                    let attackButtonCfgId = 7
+                    positionAdjustment = btnCfg.position
+                    btnCfg = context.config.world[thing: attackButtonCfgId]!
                   } else {
-                    print("actionButton: \(thing.type)")
-                    let actionButton = ecs.createThing(
-                      from: thing,
-                      at: sourceEntityPosition,
-                      name: "thing-\(thing.type)"
-                    )
-                    ecs.addComponent(
-                      actionButton,
-                      LECSPPlayerOwner(playerId)
-                    )
-                    ecs.addComponent(actionButton, LECSPTag.GroupA())
+                    print("actionButton: \(btnCfg.type)")
                   }
+                  let actionButton = ecs.createThing(
+                    from: btnCfg,
+                    at: sourceEntityPosition + positionAdjustment,
+                    name: "thing-\(btnCfg.type)"
+                  )
+                  ecs.addComponent(
+                    actionButton,
+                    LECSPPlayerOwner(playerId)
+                  )
+                  ecs.addComponent(actionButton, LECSPTag.GroupA())
                 }
               }
             }
