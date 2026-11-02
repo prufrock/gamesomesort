@@ -32,4 +32,20 @@ extension LECSWorld {
       )
     )
   }
+
+  func findEntity(at position: F3, type: LECSPEntityType) -> LECSId? {
+    var entityId: LECSId? = nil
+    select([LECSId.self, LECSPPosition3d.self, LECSPEntity.self]) { row, columns in
+      let foundId = row.component(at: 0, columns, LECSId.self)
+      let foundPosition = row.component(at: 1, columns, LECSPPosition3d.self)
+      let foundEntity = row.component(at: 2, columns, LECSPEntity.self)
+
+      if foundPosition.x >= position.x && foundPosition.x <= position.x.rounded(.up)
+          && foundPosition.y >= position.y && foundPosition.y <= position.y.rounded(.up)
+          && foundEntity.type == type {
+        entityId = foundId
+      }
+    }
+    return entityId
+  }
 }

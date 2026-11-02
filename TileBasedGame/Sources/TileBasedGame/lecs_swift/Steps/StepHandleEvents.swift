@@ -79,48 +79,35 @@ extension StepSelector {
                 let tileCfg = context.config.world[tile: tileId]!
 
                 if tileCfg.onEnter.isNotEmpty {
-                  if let creatureId = context.config.level[creature: Int(position.x), Int(position.y)],
-                     let creature = context.config.world[creature: creatureId]
-                  {
-                    print("creature: \(creature.type)")
+                  // check to see if there's a creature there.
+                  var entityId = ecs.findEntity(at: position, type: .creature)
+                  if entityId != nil {
                     let attackButtonCfgId = 7
                     positionAdjustment = btnCfg.position
                     btnCfg = context.config.world[thing: attackButtonCfgId]!
                     buttonTargetType = .creature
                   } else {
-                    print("actionButton: \(btnCfg.type)")
+                    entityId = ecs.findEntity(at: position, type: .tile)
                   }
-                  let actionButton = ecs.createThing(
-                    from: btnCfg,
-                    at: sourceEntityPosition + positionAdjustment,
-                    name: "thing-\(btnCfg.type)"
-                  )
-
-                  // gotta find the entities
-                  var entityId = LECSId()
-                  ecs.select([LECSId.self, LECSPPosition3d.self, LECSPEntity.self]) { row, columns in
-                    let foundId = row.component(at: 0, columns, LECSId.self)
-                    let foundPosition = row.component(at: 1, columns, LECSPPosition3d.self)
-                    let foundEntity = row.component(at: 2, columns, LECSPEntity.self)
-
-                    if foundPosition.x >= position.x && foundPosition.x <= position.x.rounded(.up)
-                        && foundPosition.y >= position.y && foundPosition.y <= position.y.rounded(.up)
-                        && foundEntity.type == buttonTargetType {
-                      entityId = foundId
-                    }
-                  }
-                  ecs.addComponent(
-                    actionButton,
-                    LECSPPlayerOwner(playerId)
-                  )
-                  ecs.addComponent(
-                    actionButton,
-                    LECSPButtonTarget(
-                      id: entityId,
-                      type: buttonTargetType
+                  if let entityId {
+                    let actionButton = ecs.createThing(
+                      from: btnCfg,
+                      at: sourceEntityPosition + positionAdjustment,
+                      name: "thing-\(btnCfg.type)"
                     )
-                  )
-                  ecs.addComponent(actionButton, LECSPTag.GroupA())
+                    ecs.addComponent(
+                      actionButton,
+                      LECSPPlayerOwner(playerId)
+                    )
+                    ecs.addComponent(
+                      actionButton,
+                      LECSPButtonTarget(
+                        id: entityId,
+                        type: buttonTargetType
+                      )
+                    )
+                    ecs.addComponent(actionButton, LECSPTag.GroupA())
+                  }
                 }
               }
             }
