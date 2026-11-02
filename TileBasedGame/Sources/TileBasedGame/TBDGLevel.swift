@@ -226,6 +226,7 @@ struct TBDGLevel {
       let id = map[creature: x, y]
       if let cfg = world.worldConfig.entities.creatures[id] {
         ecs.createCreature(
+          card: cfg.card,
           color: VRTMColorA(cfg.color),
           model: cfg.model,
           onTap: cfg.onTap,

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LECSId: LECSComponent, Equatable {
+public struct LECSId: LECSComponent, Equatable, Hashable {
     public var id: UInt
 
     public init() {

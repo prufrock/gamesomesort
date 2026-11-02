@@ -8,6 +8,7 @@
 import VRTMath
 
 public struct GCFGCreature: Decodable {
+  public let card: GCFGCard?
   public let color: F3
   public let model: String
   public let onTap: [GCFGOnTapAction]
@@ -21,6 +22,7 @@ public struct GCFGCreature: Decodable {
   public let visible: Bool
 
   public init(
+    card: GCFGCard?,
     color: F3,
     model: String,
     onTap: [GCFGOnTapAction],
@@ -33,6 +35,7 @@ public struct GCFGCreature: Decodable {
     type: String,
     visible: Bool,
   ) {
+    self.card = card
     self.color = color
     self.model = model
     self.onTap = onTap

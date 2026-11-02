@@ -29,6 +29,8 @@ extension LECSWorld {
     addComponent(tile, LECSPScale3d(F3(repeating: scale)))
     addComponent(tile, LECSPQuaternion(Float4x4.rotateY(rotationDegY * DEG2RAD).q))
     addComponent(tile, LECSPModel(model))
+    addComponent(tile, LECSPEntity(type: .tile))
+
     if visible {
       addComponent(tile, LECSPTag.Visible())
       lights.forEach {
@@ -117,6 +119,7 @@ extension LECSWorld {
     addComponent(thing, LECSPScale3d(F3(repeating: scale)))
     addComponent(thing, LECSPQuaternion(Float4x4.rotateY(rotationDegY * DEG2RAD).q))
     addComponent(thing, LECSPModel(model))
+    addComponent(thing, LECSPEntity(type: .thing))
 
     if onWake.isNotEmpty {
       addComponent(thing, LECSPTimerSleep())
@@ -175,6 +178,7 @@ extension LECSWorld {
       z: sourcePosition.z + config.position.z
     )
     return createCreature(
+      card: config.card,
       color: config.color.vrtma,
       model: config.model,
       onTap: config.onTap,
@@ -191,6 +195,7 @@ extension LECSWorld {
 
   @discardableResult
   func createCreature(
+    card: GCFGCard?,
     color: VRTMColorA,
     model: String,
     onTap: [GCFGOnTapAction],
@@ -215,6 +220,11 @@ extension LECSWorld {
     addComponent(thing, LECSPScale3d(F3(repeating: scale)))
     addComponent(thing, LECSPQuaternion(Float4x4.rotateY(rotationDegY * DEG2RAD).q))
     addComponent(thing, LECSPModel(model))
+    addComponent(thing, LECSPEntity(type: .creature))
+
+    if let card = card {
+      addComponent(thing, LECSPCard(hitPoints: card.hitPoints))
+    }
 
     if onWake.isNotEmpty {
       let actions: [LECSPOnWake.Action] = onWake.map { item in

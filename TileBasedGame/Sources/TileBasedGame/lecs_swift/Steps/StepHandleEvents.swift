@@ -73,6 +73,7 @@ extension StepSelector {
                 z: sourceEntityPosition.z + btnCfg.position.z
               )
 
+              var buttonTargetType: LECSPEntityType = .tile
               var positionAdjustment: F3 = [0, 0, 0]
               if let tileId = context.config.level[tile: Int(position.x), Int(position.y)] {
                 let tileCfg = context.config.world[tile: tileId]!
@@ -85,6 +86,7 @@ extension StepSelector {
                     let attackButtonCfgId = 7
                     positionAdjustment = btnCfg.position
                     btnCfg = context.config.world[thing: attackButtonCfgId]!
+                    buttonTargetType = .creature
                   } else {
                     print("actionButton: \(btnCfg.type)")
                   }
@@ -93,9 +95,30 @@ extension StepSelector {
                     at: sourceEntityPosition + positionAdjustment,
                     name: "thing-\(btnCfg.type)"
                   )
+
+                  // gotta find the entities
+                  var entityId = LECSId()
+                  ecs.select([LECSId.self, LECSPPosition3d.self, LECSPEntity.self]) { row, columns in
+                    let foundId = row.component(at: 0, columns, LECSId.self)
+                    let foundPosition = row.component(at: 1, columns, LECSPPosition3d.self)
+                    let foundEntity = row.component(at: 2, columns, LECSPEntity.self)
+
+                    if foundPosition.x >= position.x && foundPosition.x <= position.x.rounded(.up)
+                        && foundPosition.y >= position.y && foundPosition.y <= position.y.rounded(.up)
+                        && foundEntity.type == buttonTargetType {
+                      entityId = foundId
+                    }
+                  }
                   ecs.addComponent(
                     actionButton,
                     LECSPPlayerOwner(playerId)
+                  )
+                  ecs.addComponent(
+                    actionButton,
+                    LECSPButtonTarget(
+                      id: entityId,
+                      type: buttonTargetType
+                    )
                   )
                   ecs.addComponent(actionButton, LECSPTag.GroupA())
                 }
@@ -112,7 +135,47 @@ extension StepSelector {
         onTap?.list.forEach { action in
           switch action {
           case .affectTargetStat(value: let value):
-            print("affectTargetStat \(value)")
+            if let sourcePlayer = ecs.getComponent(id.id, LECSPPlayerOwner.self),
+              let buttonTarget = ecs.getComponent(id.id, LECSPButtonTarget.self),
+                buttonTarget.type == .creature {
+              print("affectTargetStat \(value)")
+              if var creatureCard = ecs.getComponent(buttonTarget.id.id, LECSPCard.self) {
+                creatureCard.hitPoints += value
+                if creatureCard.hitPoints == 0 {
+                  ecs.deleteEntity(buttonTarget.id.id)
+                } else {
+                  ecs.addComponent(buttonTarget.id.id, creatureCard)
+                }
+
+                // mark the player as moved
+                ecs.addComponent(sourcePlayer.owner.id, LECSPPlayer(order: 1, moved: true))
+                // delete this dolls buttons
+                ecs.select(
+                  [LECSId.self, LECSPPlayerOwner.self, LECSPTag.GroupA.self]
+                ) { rows, components in
+                  let count =  counter()
+                  let id = rows.component(at: count(), components, LECSId.self)
+                  let btnPlayer = rows.component(at: count(), components, LECSPPlayerOwner.self)
+                  if btnPlayer.owner == sourcePlayer.owner {
+                    ecs.deleteEntity(id.id)
+                  }
+                }
+                // check for all out of moves, but should be handled by an event
+                var playersMoved = 0
+                var playerCount = 0
+                ecs.select([LECSPPlayer.self]) { row, columns in
+                  let player = row.component(at: 0, columns, LECSPPlayer.self)
+                  playerCount += 1
+                  if player.moved {
+                    playersMoved += 1
+                  }
+                }
+                if playersMoved == playerCount {
+                  let id = ecs.createEntity("playerTurnEnded")
+                  ecs.addComponent(id, LECSPEvent(event: .playerTurnEnded))
+                }
+              }
+            }
           case .exit:
             gameCommands.enqueue(.start(level: 0))
           case .reload:
@@ -153,7 +216,7 @@ extension StepSelector {
 
               ecs.addComponent(playerId.id, nPos)
               ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true))
-              // delete this dolls move buttons
+              // delete this dolls buttons
               ecs.select(
                 [LECSId.self, LECSPPlayerOwner.self, LECSPTag.GroupA.self]
               ) { rows, components in
