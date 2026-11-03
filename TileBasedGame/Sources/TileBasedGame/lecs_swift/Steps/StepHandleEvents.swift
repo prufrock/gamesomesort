@@ -39,14 +39,48 @@ extension StepSelector {
 
       case .playerTurnEnded:
         print("playerTurnEnded")
+        // start monster things
+        // select the entities to filter to non-player creatures
+        // it's a creature because it has a card, eventually players will have cards, maybe...
+        ecs.select([LECSId.self, LECSPCard.self, LECSPPosition3d.self]) { row, columns in
+          let count = counter()
+          let id = row.component(at: count(), columns, LECSId.self)
+          let _ = row.component(at: count(), columns, LECSPCard.self)
+          let position = row.component(at: count(), columns, LECSPPosition3d.self)
+
+          // make sure it's not a player
+          if ecs.getComponent(id.id, LECSPPlayer.self) == nil {
+            // look for something to attack, eventually behavior controlled
+            let directions: [F3] = [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0]]
+            directions.forEach { direction in
+              // check to see if it's a player
+              if let possiblePlayerId = ecs.findEntity(at: position.position + direction, type: .creature),
+                 let _ = ecs.getComponent(possiblePlayerId.id, LECSPPlayer.self),
+                 let playerScale = ecs.getComponent(possiblePlayerId.id, LECSPScale3d.self){
+                // attack the player, using scale for now...
+                ecs.addComponent(possiblePlayerId.id, LECSPScale3d(uniform: playerScale.scale.x - 0.1))
+                // game over if it reaches 0
+                if (playerScale.scale.x - 0.1) <= 0 {
+                  gameCommands.enqueue(
+                    .startWorld(
+                      world: context.config.world.name,
+                      level: context.config.world.levels.first?.value.path ?? ""
+                    )
+                  )
+                }
+              }
+            }
+          }
+        }
+        // end monster things
         let id = ecs.createEntity("playerTurnStarted")
         ecs.addComponent(id, LECSPEvent(event: .playerTurnStarted))
         var players: [(LECSId, LECSPPlayer)] = []
         //TODO: consider adhoc updates/systems.
-        ecs.select([LECSId.self, LECSPPlayer.self]) { rows, components in
+        ecs.select([LECSId.self, LECSPPlayer.self]) { rows, columns in
           let count = counter()
-          let id = rows.component(at: count(), components, LECSId.self)
-          let player = rows.component(at: count(), components, LECSPPlayer.self)
+          let id = rows.component(at: count(), columns, LECSId.self)
+          let player = rows.component(at: count(), columns, LECSPPlayer.self)
           players.append((id, player))
         }
         players.forEach { (playerId, player) in
@@ -202,6 +236,7 @@ extension StepSelector {
               }
 
               ecs.addComponent(playerId.id, nPos)
+
               ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true))
               // delete this dolls buttons
               ecs.select(

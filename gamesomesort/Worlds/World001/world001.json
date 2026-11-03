@@ -3,6 +3,7 @@
     "entities": {
         "creatures": {
            "1": {
+               "card": null,
                "color": [0.0, 0.0, 0.0],
                "onWake": [],
                "model": "box-golem.usdz",
@@ -16,6 +17,9 @@
                "visible": true
            },
             "2": {
+                "card": {
+                    "hitPoints": 2
+                },
                 "color": [0.5, 0.0, 0.5],
                 "onWake": [],
                 "model": "button-one",
