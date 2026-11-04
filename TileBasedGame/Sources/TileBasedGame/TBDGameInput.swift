@@ -13,6 +13,8 @@ public extension TBDGame {
   struct Input {
     public let events: any DSQueue<Events>
     public let screenDimensions: VRTMScreenDimensions
+    public let lastLevelData: Any?
+
 
     public enum Events {
       case tap(tapLocation: F2, lastTapTime: Double)
@@ -22,19 +24,23 @@ public extension TBDGame {
     public init() {
       events = DSQueueArray<Events>()
       screenDimensions = .init()
+      lastLevelData = nil
     }
 
     public init(events: any DSQueue<Events>) {
       self.events = events
       screenDimensions = .init()
+      lastLevelData = nil
     }
 
     public init(
       events: any DSQueue<Events>,
       screenDimensions: VRTMScreenDimensions,
+      lastLevelData: Any?
     ) {
       self.events = events
       self.screenDimensions = screenDimensions
+      self.lastLevelData = lastLevelData
     }
   }
 }

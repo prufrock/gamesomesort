@@ -22,6 +22,7 @@ public class TBDGWorld {
   public var id: LECSId? {
     ecs.entity(worldConfig.name)?.lecsId
   }
+  public let lastLevelData: Any?
   let worldConfig: GCFGWorld
   let levelConfig: GCFGLevel
   // The length of tick in microseconds.
@@ -33,12 +34,14 @@ public class TBDGWorld {
     worldConfig: GCFGWorld,
     levelConfig: GCFGLevel,
     tickDurationUs: UInt64,
-    ecs: LECSWorld
+    ecs: LECSWorld,
+    lastLevelData: Any?
   ) {
     self.ecs = ecs
     self.worldConfig = worldConfig
     self.levelConfig = levelConfig
     self.tickDurationUs = tickDurationUs
+    self.lastLevelData = lastLevelData
   }
 
   public func restart() {
@@ -76,7 +79,8 @@ public class TBDGWorld {
       config: Config(level: levelConfig, world: worldConfig),
       input: TBDGame.Input(
         events: input.events,
-        screenDimensions: screenDimensions
+        screenDimensions: screenDimensions,
+        lastLevelData: lastLevelData
       )
     )
 

@@ -158,7 +158,7 @@ class GMGame {
         if case let .start(level) = command {
           initWorld(worldNumber: level)
         }
-        if case let .startWorld(world, level) = command {
+        if case let .startWorld(world, level, lastLevelData) = command {
           //TODO: this a mess, you should feel bad and clean it up!
           let world001Path = levels[0].worlds[world]?.path
           let selectedLevel = level
@@ -223,7 +223,8 @@ class GMGame {
             tickDurationUs: appCore.config.platform.stepDurationUs,
             ecs: LECSCreateWorld(
               archetypeSize: self.appCore.config.game.world.ecsArchetypeSize
-            )
+            ),
+            lastLevelData: lastLevelData
           )
           tbdgWorld.restart()
           tbdgWorld.update(screenDimensions)

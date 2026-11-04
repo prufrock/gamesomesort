@@ -136,7 +136,7 @@ class GMWorld00: GMWorld {
       let world = "world001"
       let level = "w001L001"
       print("open \(world) level \(level)")
-      gameCommands.enqueue(.startWorld(world: world, level: level))
+      gameCommands.enqueue(.startWorld(world: world, level: level, data: nil))
     }
 
     return gameCommands

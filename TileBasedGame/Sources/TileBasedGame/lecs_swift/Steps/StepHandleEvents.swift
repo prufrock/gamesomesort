@@ -36,6 +36,18 @@ extension StepSelector {
         print("levelStarted")
         let id = ecs.createEntity("playerTurnStarted")
         ecs.addComponent(id, LECSPEvent(event: .playerTurnStarted))
+        if let lastLevelData = context.input.lastLevelData as? LevelHandOff {
+          let playerHealth: [Int] = [lastLevelData.playerOneHp, lastLevelData.playerTwoHp]
+
+          let playerCount = 0
+          ecs.select([LECSId.self, LECSPPlayer.self]) { row, columns in
+            let c = counter()
+            let id = row.component(at: c(), columns, LECSId.self)
+
+            let currentHealth = playerHealth[playerCount]
+            ecs.addComponent(id.id, LECSPScale3d(uniform: Float(currentHealth) / 100))
+          }
+        }
 
       case .playerTurnEnded:
         print("playerTurnEnded")
@@ -64,7 +76,8 @@ extension StepSelector {
                   gameCommands.enqueue(
                     .startWorld(
                       world: context.config.world.name,
-                      level: context.config.world.levels.first?.value.path ?? ""
+                      level: context.config.world.levels[context.config.level.name]?.path ?? "",
+                      data: nil
                     )
                   )
                 }
@@ -203,7 +216,8 @@ extension StepSelector {
             gameCommands.enqueue(
               .startWorld(
                 world: context.config.world.name,
-                level: context.config.level.name
+                level: context.config.level.name,
+                data: ecs.storeDataForNextLevel()
               )
             )
           case .move:
@@ -227,7 +241,8 @@ extension StepSelector {
                   gameCommands.enqueue(
                     .startWorld(
                       world: context.config.world.name,
-                      level: levelId
+                      level: levelId,
+                      data: ecs.storeDataForNextLevel()
                     )
                   )
                 case .pass:
@@ -275,4 +290,26 @@ extension StepSelector {
 
     return gameCommands
   }
+}
+
+extension LECSWorld {
+  func storeDataForNextLevel() -> LevelHandOff {
+    // not worrying too much about the order right now
+    var playerHp: [Int:Int] = [:]
+    var playerCount: Int = 0
+    select([LECSPScale3d.self, LECSPPlayer.self]) { row, columns in
+      let c = counter()
+      let scale = row.component(at: c(), columns, LECSPScale3d.self)
+
+      playerHp[playerCount] = Int(scale.x * 100)
+      playerCount += 1
+    }
+
+    return LevelHandOff(playerOneHp: playerHp[0] ?? 1, playerTwoHp: playerHp[1] ?? 1)
+  }
+}
+
+struct LevelHandOff {
+  let playerOneHp: Int
+  let playerTwoHp: Int
 }
