@@ -223,7 +223,13 @@ extension LECSWorld {
     addComponent(thing, LECSPEntity(type: .creature))
 
     if let card = card {
-      addComponent(thing, LECSPCard(hitPoints: card.hitPoints))
+      addComponent(
+        thing,
+        LECSPCard(
+          hitPoints: card.hitPoints,
+          movement: LECSPCard.Movement(direction: 1, step: 0, path: card.movement ?? [])
+        )
+      )
     }
 
     if onWake.isNotEmpty {

@@ -57,9 +57,10 @@ extension StepSelector {
         ecs.select([LECSId.self, LECSPCard.self, LECSPPosition3d.self]) { row, columns in
           let count = counter()
           let id = row.component(at: count(), columns, LECSId.self)
-          let _ = row.component(at: count(), columns, LECSPCard.self)
+          var card = row.component(at: count(), columns, LECSPCard.self)
           let position = row.component(at: count(), columns, LECSPPosition3d.self)
 
+          var spentTurn = false
           // make sure it's not a player
           if ecs.getComponent(id.id, LECSPPlayer.self) == nil {
             // look for something to attack, eventually behavior controlled
@@ -70,6 +71,7 @@ extension StepSelector {
                  let _ = ecs.getComponent(possiblePlayerId.id, LECSPPlayer.self),
                  let playerScale = ecs.getComponent(possiblePlayerId.id, LECSPScale3d.self){
                 // attack the player, using scale for now...
+                spentTurn = true
                 ecs.addComponent(possiblePlayerId.id, LECSPScale3d(uniform: playerScale.scale.x - 0.1))
                 // game over if it reaches 0
                 if (playerScale.scale.x - 0.1) <= 0 {
@@ -83,6 +85,31 @@ extension StepSelector {
                 }
               }
             }
+          }
+          // move if the turn hasn't been spent
+          if !spentTurn {
+            let movement = card.movement
+
+            var newDirection = movement.direction
+            var newPath = movement.path
+            var newStep = movement.step
+            if movement.step >= movement.path.count {
+              newDirection *= -1
+              newStep = 0
+            }
+            if newDirection == -1 {
+              newPath = movement.path.reversed()
+            }
+
+            let newPosition = position + (newPath[newStep] * F3(repeating: Float(newDirection)))
+            ecs.addComponent(id.id, newPosition)
+            card.movement = LECSPCard.Movement(
+              direction: newDirection,
+              step: newStep + 1,
+              path: movement.path
+            )
+            ecs.addComponent(id.id, card)
+            spentTurn = true
           }
         }
         // end monster things
