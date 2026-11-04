@@ -22,6 +22,8 @@ extension Array where Element == GCFGOnTapAction {
         return LECSPOnTap.Action.moveConstant(velocity: velocity)
       case .reload:
         return LECSPOnTap.Action.reload
+      case .wait:
+        return LECSPOnTap.Action.wait
       }
     })
   }

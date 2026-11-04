@@ -13,4 +13,5 @@ public enum GCFGOnTapAction: Decodable {
   case moveConstant(velocity: F3)
   case move
   case exit
+  case wait
 }

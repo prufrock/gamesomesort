@@ -33,7 +33,12 @@ extension StepSelector {
         tap.show()
         ecs.updateTappable(model: tap)
 
+        // think about a better way to handle these steps
+        var oneTap = false
         ecs.selectTappables { id, behaviors, position, radius in
+          if oneTap {
+            return
+          }
           let rectangle = VRTM2D.Rectangle(
             position: position.position.xy,
             radius: radius.radius
@@ -42,6 +47,7 @@ extension StepSelector {
           let tapped = rectangle.intersection(with: tap.rectangle) != nil
           if tapped {
             ecs.createEvent(name: "tapEvent-\(id)", type: .touched(id))
+            oneTap = true
           }
         }
       case .screenSizeChanged:

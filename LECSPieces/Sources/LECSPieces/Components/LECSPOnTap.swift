@@ -26,5 +26,6 @@ public struct LECSPOnTap: LECSComponent {
     case moveConstant(velocity: F3)
     case move
     case reload
+    case wait
   }
 }

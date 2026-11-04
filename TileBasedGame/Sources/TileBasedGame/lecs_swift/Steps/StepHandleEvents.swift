@@ -310,6 +310,37 @@ extension StepSelector {
           case .moveConstant(velocity: let velocity):
             print("move with velocity \(velocity)")
             ecs.addComponent(id.id, LECSPVelocity3d(velocity))
+          case .wait:
+            print("wait")
+            if var player = ecs.getComponent(id.id, LECSPPlayer.self) {
+              player.moved = true
+              ecs.addComponent(id.id, player)
+            }
+            // check for all out of moves, but should be handled by an event
+            var playersMoved = 0
+            var playerCount = 0
+            ecs.select([LECSPPlayer.self]) { row, columns in
+              let player = row.component(at: 0, columns, LECSPPlayer.self)
+              playerCount += 1
+              if player.moved {
+                playersMoved += 1
+              }
+            }
+            // delete this dolls buttons
+            ecs.select(
+              [LECSId.self, LECSPPlayerOwner.self, LECSPTag.GroupA.self]
+            ) { rows, components in
+              let count =  counter()
+              let btnId = rows.component(at: count(), components, LECSId.self)
+              let btnPlayer = rows.component(at: count(), components, LECSPPlayerOwner.self)
+              if btnPlayer.owner == id {
+                ecs.deleteEntity(btnId.id)
+              }
+            }
+            if playersMoved == playerCount {
+              let id = ecs.entity("playerTurnEnded") ?? ecs.createEntity("playerTurnEnded")
+              ecs.addComponent(id, LECSPEvent(event: .playerTurnEnded))
+            }
           }
         }
       }
