@@ -68,13 +68,19 @@ extension StepSelector {
             directions.forEach { direction in
               // check to see if it's a player
               if let possiblePlayerId = ecs.findEntity(at: position.position + direction, type: .creature),
-                 let _ = ecs.getComponent(possiblePlayerId.id, LECSPPlayer.self),
-                 let playerScale = ecs.getComponent(possiblePlayerId.id, LECSPScale3d.self){
+                 let player = ecs.getComponent(possiblePlayerId.id, LECSPPlayer.self),
+                 var playerScale = ecs.getComponent(possiblePlayerId.id, LECSPScale3d.self){
                 // attack the player, using scale for now...
                 spentTurn = true
-                ecs.addComponent(possiblePlayerId.id, LECSPScale3d(uniform: playerScale.scale.x - 0.1))
+                // don't attack a player who just moved, so they can move in and strike
+                if !player.moved {
+                  playerScale = LECSPScale3d(uniform: playerScale.scale.x - 0.1)
+                  ecs.addComponent(possiblePlayerId.id, playerScale)
+                  print("attacked player: \(possiblePlayerId.id)")
+                }
                 // game over if it reaches 0
-                if (playerScale.scale.x - 0.1) <= 0 {
+                if playerScale.scale.x <= 0 {
+                  print("GAME OVER")
                   gameCommands.enqueue(
                     .startWorld(
                       world: context.config.world.name,
@@ -82,13 +88,15 @@ extension StepSelector {
                       data: nil
                     )
                   )
+                } else {
+                  print("player[\(possiblePlayerId)] scale: \(playerScale.scale.x)")
                 }
               }
             }
           }
           // move if the turn hasn't been spent
-          if !spentTurn {
-            let movement = card.movement
+          let movement = card.movement
+          if !spentTurn && movement.path.isNotEmpty {
 
             var newDirection = movement.direction
             var newPath = movement.path
@@ -125,7 +133,7 @@ extension StepSelector {
         }
         players.forEach { (playerId, player) in
           ecs.addComponent(
-            playerId.id, LECSPPlayer(order: player.order, moved: false)
+            playerId.id, LECSPPlayer(order: player.order, moved: false, completedTurn: false)
           )
         }
       case .playerTurnStarted:
@@ -136,7 +144,7 @@ extension StepSelector {
           let count = counter()
           let playerId = row.component(at: count(), components, LECSId.self)
           let player = row.component(at: count(), components, LECSPPlayer.self)
-          if player.moved == false {
+          if player.completedTurn == false {
             let sourceEntityPosition = ecs.getComponent(playerId.id, LECSPPosition3d.self)!
             let buttons: [Int] = [2, 3, 4, 5]
             for button in buttons {
@@ -208,8 +216,11 @@ extension StepSelector {
                   ecs.addComponent(buttonTarget.id.id, creatureCard)
                 }
 
-                // mark the player as moved
-                ecs.addComponent(sourcePlayer.owner.id, LECSPPlayer(order: 1, moved: true))
+                // mark the player completedTurn
+                ecs.addComponent(
+                  sourcePlayer.owner.id,
+                  LECSPPlayer(order: 1, moved: false, completedTurn: true)
+                )
                 // delete this dolls buttons
                 ecs.select(
                   [LECSId.self, LECSPPlayerOwner.self, LECSPTag.GroupA.self]
@@ -222,16 +233,16 @@ extension StepSelector {
                   }
                 }
                 // check for all out of moves, but should be handled by an event
-                var playersMoved = 0
+                var playersCompletedTurns = 0
                 var playerCount = 0
                 ecs.select([LECSPPlayer.self]) { row, columns in
                   let player = row.component(at: 0, columns, LECSPPlayer.self)
                   playerCount += 1
-                  if player.moved {
-                    playersMoved += 1
+                  if player.completedTurn {
+                    playersCompletedTurns += 1
                   }
                 }
-                if playersMoved == playerCount {
+                if playersCompletedTurns == playerCount {
                   let id = ecs.createEntity("playerTurnEnded")
                   ecs.addComponent(id, LECSPEvent(event: .playerTurnEnded))
                 }
@@ -279,7 +290,7 @@ extension StepSelector {
 
               ecs.addComponent(playerId.id, nPos)
 
-              ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true))
+              ecs.addComponent(playerId.id, LECSPPlayer(order: 1, moved: true, completedTurn: true))
               // delete this dolls buttons
               ecs.select(
                 [LECSId.self, LECSPPlayerOwner.self, LECSPTag.GroupA.self]
@@ -294,16 +305,16 @@ extension StepSelector {
             }
 
             // check for all out of moves, but should be handled by an event
-            var playersMoved = 0
+            var playersCompletedTurns = 0
             var playerCount = 0
             ecs.select([LECSPPlayer.self]) { row, columns in
               let player = row.component(at: 0, columns, LECSPPlayer.self)
               playerCount += 1
-              if player.moved {
-                playersMoved += 1
+              if player.completedTurn {
+                playersCompletedTurns += 1
               }
             }
-            if playersMoved == playerCount {
+            if playersCompletedTurns == playerCount {
               let id = ecs.createEntity("playerTurnEnded")
               ecs.addComponent(id, LECSPEvent(event: .playerTurnEnded))
             }
@@ -313,17 +324,17 @@ extension StepSelector {
           case .wait:
             print("wait")
             if var player = ecs.getComponent(id.id, LECSPPlayer.self) {
-              player.moved = true
+              player.completedTurn = true
               ecs.addComponent(id.id, player)
             }
             // check for all out of moves, but should be handled by an event
-            var playersMoved = 0
+            var playersCompletedTurns = 0
             var playerCount = 0
             ecs.select([LECSPPlayer.self]) { row, columns in
               let player = row.component(at: 0, columns, LECSPPlayer.self)
               playerCount += 1
-              if player.moved {
-                playersMoved += 1
+              if player.completedTurn {
+                playersCompletedTurns += 1
               }
             }
             // delete this dolls buttons
@@ -337,7 +348,7 @@ extension StepSelector {
                 ecs.deleteEntity(btnId.id)
               }
             }
-            if playersMoved == playerCount {
+            if playersCompletedTurns == playerCount {
               let id = ecs.entity("playerTurnEnded") ?? ecs.createEntity("playerTurnEnded")
               ecs.addComponent(id, LECSPEvent(event: .playerTurnEnded))
             }

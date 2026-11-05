@@ -22,6 +22,6 @@ extension LECSPOnWake {
       at: sourceEntityPosition,
       name: "creature-\(creature.type)-\(id)"
     )
-    ecs.addComponent(creature, LECSPPlayer(order: 1, moved: false))
+    ecs.addComponent(creature, LECSPPlayer(order: 1, moved: false, completedTurn: false))
   }
 }

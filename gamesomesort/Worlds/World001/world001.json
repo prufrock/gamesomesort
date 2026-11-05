@@ -7,18 +7,36 @@
                "color": [0.0, 0.0, 0.0],
                "onWake": [],
                "model": "box-golem.usdz",
-               "onTap": [],
+               "onTap": [{"wait": {}}],
                "position": [0.0, 0.0, 0.0],
                "radius": 0.5,
                "rotationDegY": 180,
                "scale": 0.25,
                "type": "playerDoll",
-               "tappable": false,
+               "tappable": true,
                "visible": true
            },
             "2": {
                 "card": {
-                    "hitPoints": 2
+                    "hitPoints": 2,
+                    "movement": [[1,0,0], [1,0,0]]
+                },
+                "color": [0.5, 0.0, 0.5],
+                "onWake": [],
+                "model": "button-one",
+                "onTap": [],
+                "position": [0.0, 0.0, 0.99],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.25,
+                "type": "monster",
+                "tappable": false,
+                "visible": true
+            },
+            "3": {
+                "card": {
+                    "hitPoints": 2,
+                    "movement": [[1,0,0]]
                 },
                 "color": [0.5, 0.0, 0.5],
                 "onWake": [],
