@@ -31,6 +31,7 @@ struct gamesomesortApp: App {
             modelConfig: [
               // Don't use instanced rendering for now, to keep non-instanced rendering tested
               .init(name: "box-golem.usdz", renderInstanced: false),
+              .init(name: "doll-sword4.usdz", renderInstanced: true),
               .init(name: "brick-sphere.usdz", renderInstanced: true),
               .init(name: "ref-tile.usdz", renderInstanced: true),
               .init(name: "square-bella.usdz", renderInstanced: true),

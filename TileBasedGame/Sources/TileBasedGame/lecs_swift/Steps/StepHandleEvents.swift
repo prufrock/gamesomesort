@@ -70,8 +70,6 @@ extension StepSelector {
             visible: true
             )
           }
-
-          let currentHealth = playerHealth[playerCount]
         }
 
       case .playerTurnEnded:
