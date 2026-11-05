@@ -110,6 +110,11 @@ struct TBDGLevel {
   private func initButtons() {
     let cfg = world.worldConfig.hud.buttons
     cfg.forEach { button in
+      // for now if you can't tap it or see it skip
+      // added to have hp be created later
+      if !button.tappable && !button.visible {
+        return
+      }
       world.ecs.createTappable(
           color: button.color,
           model: button.model,
@@ -118,7 +123,7 @@ struct TBDGLevel {
           position: button.position,
           radius: button.radius,
           rotationDegY: button.rotationDegrees,
-          scale: 0.5,
+          scale: button.radius,
           tappable: button.tappable,
           visible: button.visible
         )

@@ -227,6 +227,7 @@ extension LECSWorld {
         thing,
         LECSPCard(
           hitPoints: card.hitPoints,
+          hitPointsTotal: card.hitPoints,
           movement: LECSPCard.Movement(direction: 1, step: 0, path: card.movement ?? [])
         )
       )

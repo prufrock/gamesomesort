@@ -36,17 +36,42 @@ extension StepSelector {
         print("levelStarted")
         let id = ecs.createEntity("playerTurnStarted")
         ecs.addComponent(id, LECSPEvent(event: .playerTurnStarted))
+        var playerHealth: [Int?] = [nil, nil]
         if let lastLevelData = context.input.lastLevelData as? LevelHandOff {
-          let playerHealth: [Int] = [lastLevelData.playerOneHp, lastLevelData.playerTwoHp]
+          playerHealth = [lastLevelData.playerOneHp, lastLevelData.playerTwoHp]
+        }
 
-          let playerCount = 0
-          ecs.select([LECSId.self, LECSPPlayer.self]) { row, columns in
-            let c = counter()
-            let id = row.component(at: c(), columns, LECSId.self)
+        let playerCount = 0
+        ecs.select([LECSId.self, LECSPPlayer.self, LECSPCard.self]) { row, columns in
+          let c = counter()
+          let id = row.component(at: c(), columns, LECSId.self)
+          let _ = row.component(at: c(), columns, LECSPPlayer.self)
+          var playerCard = row.component(at: c(), columns, LECSPCard.self)
+          let currentPlayerHealth = (playerHealth[playerCount] ?? playerCard.hitPointsTotal)
+          playerCard.hitPoints = currentPlayerHealth
+          ecs.addComponent(id.id, playerCard)
 
-            let currentHealth = playerHealth[playerCount]
-            ecs.addComponent(id.id, LECSPScale3d(uniform: Float(currentHealth) / 100))
+          let hpCfg = context.config.world.hud.buttons[2]
+          let hpButtonsTotal = playerCard.hitPointsTotal
+          for hpButton in 0...(hpButtonsTotal - 1) {
+            print("sl playerHealth \(playerCard.hitPoints)")
+            let color = hpButton >= playerCard.hitPoints ? [0,0,0] : hpCfg.color
+
+            ecs.createTappable(
+            color: color,
+            model: hpCfg.model,
+            name: "hp" + String(format: "%03d", (hpButton + playerCount * 100)),
+            onTap: hpCfg.onTap,
+            position: hpCfg.position + ([0.6 * hpButton.f, playerCount.f, 0]),
+            radius: hpCfg.radius,
+            rotationDegY: hpCfg.rotationDegrees,
+            scale: hpCfg.radius,
+            tappable: hpCfg.tappable,
+            visible: true
+            )
           }
+
+          let currentHealth = playerHealth[playerCount]
         }
 
       case .playerTurnEnded:
@@ -69,17 +94,24 @@ extension StepSelector {
               // check to see if it's a player
               if let possiblePlayerId = ecs.findEntity(at: position.position + direction, type: .creature),
                  let player = ecs.getComponent(possiblePlayerId.id, LECSPPlayer.self),
-                 var playerScale = ecs.getComponent(possiblePlayerId.id, LECSPScale3d.self){
+                 var playerCard = ecs.getComponent(possiblePlayerId.id, LECSPCard.self){
                 // attack the player, using scale for now...
                 spentTurn = true
                 // don't attack a player who just moved, so they can move in and strike
                 if !player.moved {
-                  playerScale = LECSPScale3d(uniform: playerScale.scale.x - 0.1)
-                  ecs.addComponent(possiblePlayerId.id, playerScale)
+                  playerCard.hitPoints = playerCard.hitPoints - 1
+                  ecs.addComponent(possiblePlayerId.id, playerCard)
                   print("attacked player: \(possiblePlayerId.id)")
+                  // update the players visible hp, is this an event thing or like rendering thing somehow?
+                  for hpButtonNumber in 0...(playerCard.hitPointsTotal - 1) {
+                    let hpButtonId = ecs.entity("hp" + String(format: "%03d", hpButtonNumber))!
+                    if (hpButtonNumber + 1) > playerCard.hitPoints {
+                      ecs.addComponent(hpButtonId, LECSPColor([0,0,0]))
+                    }
+                  }
                 }
                 // game over if it reaches 0
-                if playerScale.scale.x <= 0 {
+                if playerCard.hitPoints <= 0 {
                   print("GAME OVER")
                   gameCommands.enqueue(
                     .startWorld(
@@ -89,7 +121,7 @@ extension StepSelector {
                     )
                   )
                 } else {
-                  print("player[\(possiblePlayerId)] scale: \(playerScale.scale.x)")
+                  print("player[\(possiblePlayerId)] hp: \(playerCard.hitPoints)")
                 }
               }
             }
@@ -366,11 +398,11 @@ extension LECSWorld {
     // not worrying too much about the order right now
     var playerHp: [Int:Int] = [:]
     var playerCount: Int = 0
-    select([LECSPScale3d.self, LECSPPlayer.self]) { row, columns in
+    select([LECSPCard.self, LECSPPlayer.self]) { row, columns in
       let c = counter()
-      let scale = row.component(at: c(), columns, LECSPScale3d.self)
+      let card = row.component(at: c(), columns, LECSPCard.self)
 
-      playerHp[playerCount] = Int(scale.x * 100)
+      playerHp[playerCount] = card.hitPoints
       playerCount += 1
     }
 

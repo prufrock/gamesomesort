@@ -10,15 +10,18 @@ import VRTMath
 
 public struct LECSPCard: LECSComponent {
   public var hitPoints: Int
+  public var hitPointsTotal: Int
   public var movement: Movement
 
   public init() {
     hitPoints = 0
+    hitPointsTotal = 0
     movement = Movement()
   }
 
-  public init(hitPoints: Int, movement: Movement) {
+  public init(hitPoints: Int, hitPointsTotal: Int, movement: Movement) {
     self.hitPoints = hitPoints
+    self.hitPointsTotal = hitPointsTotal
     self.movement = movement
   }
 
