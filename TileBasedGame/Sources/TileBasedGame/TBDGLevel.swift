@@ -167,6 +167,7 @@ struct TBDGLevel {
         color: VRTMColorA(tileCfg.color),
         lights: tileCfg.lights,
         model: tileCfg.model,
+        name: tileCfg.name,
         position: F3(x.f, y.f, 0.0) + tileCfg.position,
         radius: tileCfg.radius,
         rotationDegY: tileCfg.rotationDegY,

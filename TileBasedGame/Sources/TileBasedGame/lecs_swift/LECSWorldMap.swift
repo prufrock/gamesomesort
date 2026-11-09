@@ -15,6 +15,7 @@ extension LECSWorld {
     color: VRTMColorA,
     lights: [GCFGLight],
     model: String,
+    name: String,
     position: F3,
     radius: Float,
     rotationDegY: Float,
@@ -23,6 +24,7 @@ extension LECSWorld {
     visible: Bool
   ) {
     let tile = createEntity("tile\(position.x)-\(position.y)")
+    addComponent(tile, LECSPTileName(name: name))
     addComponent(tile, LECSPPosition3d(position))
     addComponent(tile, LECSPRadius(radius))
     addComponent(tile, LECSPColor(color: color))

@@ -36,9 +36,46 @@ extension StepSelector {
         print("levelStarted")
         let id = ecs.createEntity("playerTurnStarted")
         ecs.addComponent(id, LECSPEvent(event: .playerTurnStarted))
+
+        // this should come from a config
+        var doorId = "enterLevel01"
         var playerHealth: [Int?] = [nil, nil]
         if let lastLevelData = context.input.lastLevelData as? LevelHandOff {
+          // set the player health
           playerHealth = [lastLevelData.playerOneHp, lastLevelData.playerTwoHp]
+          // grab the doorId
+          doorId = lastLevelData.doorId ?? doorId
+        }
+
+        // create the player, if there's a door
+
+        var tilePosition: LECSPPosition3d? = nil
+        ecs.select([LECSPPosition3d.self, LECSPTileName.self]) { row, columns in
+          let c = counter()
+          let position = row.component(at: c(), columns, LECSPPosition3d.self)
+          let tileName = row.component(at: c(), columns, LECSPTileName.self)
+          if tileName.name == doorId {
+            tilePosition = position
+          }
+        }
+
+        let playerDollId = 1
+        if let tilePosition,
+           let playerConfig = context.config.world.entities.creatures[playerDollId] {
+           let player = ecs.createCreature(
+            card: playerConfig.card,
+            color: VRTMColorA(playerConfig.color),
+            model: playerConfig.model,
+            onTap: playerConfig.onTap,
+            onWake: playerConfig.onWake,
+            position: tilePosition.position + playerConfig.position + [0,0,-0.1],
+            radius: playerConfig.radius,
+            rotationDegY: playerConfig.rotationDegY,
+            scale: playerConfig.scale,
+            tappable: playerConfig.tappable,
+            visible: playerConfig.visible
+          )
+          ecs.addComponent(player, LECSPPlayer(order: 1, moved: false, completedTurn: false))
         }
 
         let playerCount = 0
@@ -313,6 +350,15 @@ extension StepSelector {
                       data: ecs.storeDataForNextLevel()
                     )
                   )
+                case .gotoExit(let levelId, let doorId):
+                  print("gotoLevel: \(levelId) exitId: \(doorId)")
+                  gameCommands.enqueue(
+                    .startWorld(
+                      world: context.config.world.name,
+                      level: levelId,
+                      data: ecs.storeDataForNextLevel(doorId: doorId)
+                    )
+                  )
                 case .pass:
                   break
                 }
@@ -392,7 +438,7 @@ extension StepSelector {
 }
 
 extension LECSWorld {
-  func storeDataForNextLevel() -> LevelHandOff {
+  func storeDataForNextLevel(doorId: String? = nil) -> LevelHandOff {
     // not worrying too much about the order right now
     var playerHp: [Int:Int] = [:]
     var playerCount: Int = 0
@@ -404,11 +450,16 @@ extension LECSWorld {
       playerCount += 1
     }
 
-    return LevelHandOff(playerOneHp: playerHp[0] ?? 1, playerTwoHp: playerHp[1] ?? 1)
+    return LevelHandOff(
+      playerOneHp: playerHp[0] ?? 1,
+      playerTwoHp: playerHp[1] ?? 1,
+      doorId: doorId
+    )
   }
 }
 
 struct LevelHandOff {
   let playerOneHp: Int
   let playerTwoHp: Int
+  let doorId: String?
 }
