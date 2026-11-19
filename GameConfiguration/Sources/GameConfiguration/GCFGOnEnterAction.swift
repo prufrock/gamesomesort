@@ -8,5 +8,6 @@
 public enum GCFGOnEnterAction: Codable {
   case gotoLevel(levelId: String)
   case gotoExit(levelId: String, doorId: String)
+  case healFull
   case pass
 }

@@ -353,6 +353,18 @@ extension StepSelector {
                       data: ecs.storeDataForNextLevel(doorId: doorId)
                     )
                   )
+                case .healFull:
+                  print("healFull")
+                  if var playerCard = ecs.getComponent(playerId.id, LECSPCard.self) {
+                    playerCard.hitPoints = playerCard.hitPointsTotal
+                    ecs.addComponent(playerId.id, playerCard)
+                    // update the players visible hp, is this an event thing or like rendering thing somehow?
+                    for hpButtonNumber in 0...(playerCard.hitPointsTotal - 1) {
+                      let hpButtonId = ecs.entity("hp" + String(format: "%03d", hpButtonNumber))!
+                      ecs.addComponent(hpButtonId, LECSPColor([1,0,0]))
+                    }
+                  }
+
                 case .pass:
                   break
                 }

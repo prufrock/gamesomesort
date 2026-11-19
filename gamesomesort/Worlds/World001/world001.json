@@ -211,7 +211,91 @@
                 "model": "button-one",
                 "name": "doorL003D002",
                 "onEnter": [
-                    {"gotoLevel": {"levelId": "w001L001"}}
+                    {
+                        "gotoExit": {
+                            "levelId": "w001L004",
+                            "doorId": "doorL004D001"
+                        }
+                    }
+                ],
+                "onTap": [],
+                "position": [0.0, 0.0, 1.0],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.95,
+                "tappable": false,
+                "visible": true
+            },
+            "8": {
+                "color": [0.0, 0.9, 0.0],
+                "lights": [],
+                "model": "button-one",
+                "name": "doorL004D001",
+                "onEnter": [
+                    {
+                        "gotoExit": {
+                            "levelId": "w001L003",
+                            "doorId": "doorL003D002"
+                        }
+                    }
+                ],
+                "onTap": [],
+                "position": [0.0, 0.0, 1.0],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.95,
+                "tappable": false,
+                "visible": true
+            },
+            "9": {
+                "color": [0.0, 0.9, 0.0],
+                "lights": [],
+                "model": "button-one",
+                "name": "doorL003D003",
+                "onEnter": [
+                    {
+                        "gotoExit": {
+                            "levelId": "w001L005",
+                            "doorId": "doorL005D001"
+                        }
+                    }
+                ],
+                "onTap": [],
+                "position": [0.0, 0.0, 1.0],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.95,
+                "tappable": false,
+                "visible": true
+            },
+            "10": {
+                "color": [0.0, 0.9, 0.0],
+                "lights": [],
+                "model": "button-one",
+                "name": "doorL005D001",
+                "onEnter": [
+                    {
+                        "gotoExit": {
+                            "levelId": "w001L003",
+                            "doorId": "doorL003D003"
+                        }
+                    }
+                ],
+                "onTap": [],
+                "position": [0.0, 0.0, 1.0],
+                "radius": 0.5,
+                "rotationDegY": 0,
+                "scale": 0.95,
+                "tappable": false,
+                "visible": true
+            },
+            "12": {
+                "color": [0.8, 0.0, 0.0],
+                "lights": [],
+                "model": "button-one",
+                "name": "healFull",
+                "onEnter": [
+                    {"healFull": {}}
                 ],
                 "onTap": [],
                 "position": [0.0, 0.0, 1.0],
@@ -391,6 +475,14 @@
         "w001L003": {
             "name": "w001L003",
             "path": "w001L003"
+        },
+        "w001L004": {
+            "name": "w001L004",
+            "path": "w001L004"
+        },
+        "w001L005": {
+            "name": "w001L005",
+            "path": "w001L005"
         }
     },
     "name": "world001",
