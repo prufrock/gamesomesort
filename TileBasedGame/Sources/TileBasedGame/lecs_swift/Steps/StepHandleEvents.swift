@@ -148,13 +148,7 @@ extension StepSelector {
                 // game over if it reaches 0
                 if playerCard.hitPoints <= 0 {
                   print("GAME OVER")
-                  gameCommands.enqueue(
-                    .startWorld(
-                      world: context.config.world.name,
-                      level: context.config.world.levels[context.config.level.name]?.path ?? "",
-                      data: nil
-                    )
-                  )
+                  gameCommands.enqueue(.start(level: 0))
                 } else {
                   print("player[\(possiblePlayerId)] hp: \(playerCard.hitPoints)")
                 }
